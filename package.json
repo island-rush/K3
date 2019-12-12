@@ -1,0 +1,19 @@
+{
+  "name": "k3.3",
+  "version": "3.3.0",
+  "description": "Island Rush V3 with Typescript",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/island-rush/K3.3.git"
+  },
+  "author": "Spencer Adolph",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/island-rush/K3.3/issues"
+  },
+  "homepage": "https://github.com/island-rush/K3.3#readme"
+}
