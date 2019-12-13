@@ -1,18 +1,17 @@
 import { Request, Response } from "express";
-
-// const { Game } = require("../classes");
+import { Game } from "../classes";
 
 const toggleGameActive = async (req: Request, res: Response) => {
-    // if (!req.session.ir3 || !req.session.ir3.teacher || !req.session.ir3.gameId) {
-    // 	res.sendStatus(403); //TODO: redirect here?
-    // 	return;
-    // }
-    // const { gameId } = req.session.ir3;
-    // const thisGame = await new Game({ gameId }).init();
-    // const { gameActive } = thisGame;
-    // const newValue = (gameActive + 1) % 2;
-    // await thisGame.setGameActive(newValue);
-    // res.sendStatus(200);
+    if (!req.session.ir3 || !req.session.ir3.teacher || !req.session.ir3.gameId) {
+        res.sendStatus(403); //TODO: redirect here?
+        return;
+    }
+    const { gameId } = req.session.ir3;
+    const thisGame = await new Game({ gameId }).init();
+    const { gameActive } = thisGame;
+    const newValue = (gameActive + 1) % 2;
+    await thisGame.setGameActive(newValue);
+    res.sendStatus(200);
 };
 
 export default toggleGameActive;

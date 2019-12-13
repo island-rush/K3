@@ -11,6 +11,8 @@ import insertDatabaseTables from "./insertDatabaseTables";
 import setAdminPassword from "./setAdminPassword";
 import setTeamPasswords from "./setTeamPasswords";
 import toggleGameActive from "./toggleGameActive";
+import gameInitialPieces from "./gameInitialPieces";
+import gameInitialNews from "./gameInitialNews";
 
 export {
     adminLogin,
@@ -25,5 +27,7 @@ export {
     insertDatabaseTables,
     setAdminPassword,
     setTeamPasswords,
-    toggleGameActive
+    toggleGameActive,
+    gameInitialPieces,
+    gameInitialNews
 };
