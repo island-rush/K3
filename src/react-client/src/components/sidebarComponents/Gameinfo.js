@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { TYPE_OWNER_NAMES } from "../../constants/gameConstants";
 
-const gameinfoStyle: any = {
+const gameinfoStyle = {
     backgroundColor: "Yellow",
     position: "absolute",
     height: "80%",
@@ -15,7 +15,7 @@ const invisibleStyle = {
     display: "none"
 };
 
-const Gameinfo = ({ selected, gameInfo }: { selected: boolean; gameInfo: any }) => {
+const Gameinfo = ({ selected, gameInfo }) => {
     const { gameSection, gameInstructor, gameControllers, gamePhase, gameRound, gameSlice } = gameInfo;
     let gameControllerText = "";
     for (let x = 0; x < gameControllers.length; x++) {

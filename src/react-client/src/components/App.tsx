@@ -1,5 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { menuSelect, selectPosition, clearPieceSelection } from "../redux/actions";
+import Bottombar from "./bottombarComponents/Bottombar";
+import Sidebar from "./sidebarComponents/Sidebar";
+import Gameboard from "./gameboardComponents/Gameboard";
+import Zoombox from "./zoomboxComponents/Zoombox";
 
 const appStyle: any = {
     position: "relative",
@@ -14,9 +19,9 @@ const isPlanningStyle = {
 
 interface AppProps {
     gameboardMeta: any;
-    // selectPosition(): this;
-    // menuSelect: any;
-    // clearPieceSelection: any;
+    selectPosition(): any;
+    menuSelect(): any;
+    clearPieceSelection(): any;
 }
 
 class App extends Component<AppProps> {
@@ -26,45 +31,38 @@ class App extends Component<AppProps> {
 
         return (
             <div
-                // style={{
-                //     ...appStyle,
-                //     ...(gameboardMeta.planning.active ? isPlanningStyle : "")
-                // }}
+                style={{
+                    ...appStyle,
+                    ...(gameboardMeta.planning.active ? isPlanningStyle : "")
+                }}
                 onClick={event => {
                     event.preventDefault();
-                    // if (gameboardMeta.selectedMenuId === 0) {
-                    //     selectPosition(-1);
-                    // } else {
-                    //     menuSelect(0);
-                    // }
-                    // clearPieceSelection();
+                    if (gameboardMeta.selectedMenuId === 0) {
+                        selectPosition(-1);
+                    } else {
+                        menuSelect(0);
+                    }
+                    clearPieceSelection();
                     event.stopPropagation();
                 }}
             >
-                {/* <Bottombar />
+                <Bottombar />
                 <Gameboard />
                 <Zoombox />
-                <Sidebar selectedMenu={gameboardMeta.selectedMenuId} /> */}
+                <Sidebar selectedMenu={gameboardMeta.selectedMenuId} />
             </div>
         );
     }
 }
-
-// App.propTypes = {
-//     gameboardMeta: PropTypes.object.isRequired,
-//     selectPosition: PropTypes.func.isRequired,
-//     menuSelect: PropTypes.func.isRequired,
-//     clearPieceSelection: PropTypes.func.isRequired
-// };
 
 const mapStateToProps = ({ gameboardMeta }: { gameboardMeta: any }) => ({
     gameboardMeta
 });
 
 const mapActionsToProps = {
-    // selectPosition: selectPosition,
-    // menuSelect: menuSelect,
-    // clearPieceSelection: clearPieceSelection
+    selectPosition,
+    menuSelect,
+    clearPieceSelection
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(App);
+export default connect(mapStateToProps, mapActionsToProps)(App as any);

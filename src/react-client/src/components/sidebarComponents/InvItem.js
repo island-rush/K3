@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { TYPE_NAMES, TYPE_MOVES, TYPE_FUEL } from "../../constants/gameConstants";
 import { TYPE_IMAGES } from "../styleConstants";
 
-const invItemStyle: any = {
+const invItemStyle = {
     position: "relative",
     backgroundColor: "blue",
     width: "20%",
@@ -14,7 +14,7 @@ const invItemStyle: any = {
     backgroundRepeat: "no-repeat"
 };
 
-const InvItem = ({ invItem, invItemClick }: { invItem: any; invItemClick: any }) => {
+const InvItem = ({ invItem, invItemClick }) => {
     const { invItemTypeId } = invItem;
 
     const name = TYPE_NAMES[invItemTypeId];
