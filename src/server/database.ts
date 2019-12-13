@@ -4,7 +4,7 @@
  * Exports the pool for use in other files (Classes)
  */
 
-const mysql = require("mysql2/promise");
+import mysql from "mysql2/promise";
 
 // Normal Defaults
 const host = process.env.DB_HOSTNAME || "localhost";

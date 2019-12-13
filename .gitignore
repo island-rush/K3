@@ -1,2 +1,8 @@
 node_modules
 dist
+
+# sessions
+session-store.db
+
+# files for personal use and testing (these should not appear in official repository)
+scratch.sql
