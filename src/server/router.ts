@@ -73,7 +73,8 @@ router.get("/game.html", (req: Request, res: Response) => {
     if (process.env.NODE_ENV == "production") {
         res.sendFile(path.join(__dirname, "/../react-client/build/index.html"));
     } else {
-        res.redirect("http://localhost:3000"); // Use this redirect while working on react frontend
+        // res.redirect("http://localhost:3000"); // Use this redirect while working on react frontend
+        res.sendFile(path.join(__dirname, "/../react-client/build/index.html"));
     }
 });
 

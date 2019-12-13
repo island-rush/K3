@@ -1,7 +1,7 @@
 {
-    "name": "k3.3",
+    "name": "island-rush-v3-ts",
     "version": "3.3.0",
-    "description": "Island Rush V3 with Typescript",
+    "description": "Island Rush V3 is a Military Strategy Teaching Tool/Game.",
     "main": "server.js",
     "scripts": {
         "start": "node ./dist/server.js",
