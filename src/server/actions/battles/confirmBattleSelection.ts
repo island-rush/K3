@@ -1,12 +1,20 @@
 const { Game, Event } = require("../../classes");
-import { BATTLE_FIGHT_RESULTS, UPDATE_FLAGS } from "../../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../client/src/constants/otherConstants";
+import { BATTLE_FIGHT_RESULTS, UPDATE_FLAGS } from "../../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { BLUE_TEAM_ID, RED_TEAM_ID, WAITING_STATUS, NOT_WAITING_STATUS, TYPE_MAIN, COMBAT_PHASE_ID } from "../../../client/src/constants/gameConstants";
+import {
+    BLUE_TEAM_ID,
+    RED_TEAM_ID,
+    WAITING_STATUS,
+    NOT_WAITING_STATUS,
+    TYPE_MAIN,
+    COMBAT_PHASE_ID
+} from "../../../react-client/src/constants/gameConstants";
+import { Socket } from "socket.io";
 const sendUserFeedback = require("../sendUserFeedback");
 const giveNextEvent = require("../giveNextEvent");
 
-const confirmBattleSelection = async (socket, payload) => {
+const confirmBattleSelection = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
     const { friendlyPieces } = payload;
 
