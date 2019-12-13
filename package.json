@@ -6,7 +6,10 @@
     "scripts": {
         "start": "node dist/server.js",
         "dev": "nodemon src/server.ts",
-        "build": "tsc -p . && copyfiles -u 1 ./src/**/*.html ./src/**/*.sql ./src/**/*.css  ./src/**/*.png ./src/**/*.ico ./dist"
+        "compileBackend": "tsc -p .",
+        "buildClient": "cd ./src/client && npm run build && cd ../..",
+        "moveFrontend": "copyfiles -u 1 ./src/client/build/*.* ./dist",
+        "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend"
     },
     "repository": {
         "type": "git",
