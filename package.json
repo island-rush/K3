@@ -4,11 +4,13 @@
     "description": "Island Rush V3 with Typescript",
     "main": "server.js",
     "scripts": {
-        "start": "node dist/server.js",
-        "dev": "nodemon src/server.ts",
+        "start": "node ./dist/server.js",
+        "devBackend": "nodemon ./src/server.ts",
+        "devFrontend": "cd ./src/client && npm start",
+        "dev": "concurrently \"npm:devBackend\" \"npm:devFrontend\"",
         "compileBackend": "tsc -p .",
         "buildClient": "cd ./src/client && npm run build && cd ../..",
-        "moveFrontend": "copyfiles -u 1 ./src/client/build/*.* ./dist",
+        "moveFrontend": "copyfiles -u 1 ./src/client/build/**/*.* ./dist",
         "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend"
     },
     "repository": {
@@ -29,6 +31,7 @@
         "@types/mysql2": "github:types/mysql2",
         "@types/node": "^12.12.17",
         "@types/socket.io": "^2.1.4",
+        "concurrently": "^5.0.1",
         "copyfiles": "^2.1.1",
         "nodemon": "^2.0.2",
         "ts-node": "^8.5.4",
