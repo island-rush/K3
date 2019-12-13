@@ -4,10 +4,10 @@
  */
 
 //Create the server
-import express from "express";
-import http from "http";
-const app = express();
-const server = http.createServer(app);
+import express, { Application } from "express";
+import http, { Server } from "http";
+const app: Application = express();
+const server: Server = http.createServer(app);
 
 //Session Setup
 import session from "express-session";
