@@ -1,8 +1,7 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { TYPE_AIR, TYPE_SEA, TYPE_LAND, TYPE_SPECIAL } from "../../../constants/gameConstants";
 
-const popupStyle = {
+const popupStyle: any = {
     backgroundColor: "white",
     width: "50%",
     height: "30%",
@@ -11,22 +10,27 @@ const popupStyle = {
     position: "absolute"
 };
 
-const titleStyle = {
+const titleStyle: any = {
     textAlign: "center"
 };
 
-const buttonStyle = {
+const buttonStyle: any = {
     float: "left",
     backgroundColor: "grey",
     margin: "5%",
     padding: "5%"
 };
 
-const invisibleStyle = {
+const invisibleStyle: any = {
     display: "none"
 };
 
-const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, gameboardMeta }) => {
+interface Props {
+    raiseMoraleSelectCommanderType: any;
+    gameboardMeta: any;
+}
+
+const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, gameboardMeta }: Props) => {
     const { raiseMoralePopupActive } = gameboardMeta.planning;
 
     return (
@@ -74,11 +78,6 @@ const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, gameboardMet
             </div>
         </div>
     );
-};
-
-SelectCommanderTypePopup.propTypes = {
-    raiseMoraleSelectCommanderType: PropTypes.func.isRequired, //from parent
-    gameboardMeta: PropTypes.object.isRequired //from parent
 };
 
 export default SelectCommanderTypePopup;

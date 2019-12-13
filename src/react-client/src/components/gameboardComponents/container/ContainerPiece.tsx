@@ -1,9 +1,8 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { TYPE_NAMES } from "../../../constants/gameConstants";
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from "../../styleConstants";
 
-const containerPieceStyle = {
+const containerPieceStyle: any = {
     backgroundRepeat: "no-repeat",
     backgroundSize: "90% 90%",
     backgroundPosition: "center",
@@ -15,7 +14,13 @@ const containerPieceStyle = {
     position: "relative"
 };
 
-function ContainerPiece({ piece, container, clickFunction }) {
+interface Props {
+    piece: any;
+    container: any;
+    clickFunction: any;
+}
+
+function ContainerPiece({ piece, container, clickFunction }: Props) {
     return (
         <div
             style={{ ...containerPieceStyle, ...TYPE_IMAGES[piece.pieceTypeId], ...TYPE_TEAM_BORDERS[piece.pieceTeamId] }}
@@ -28,11 +33,5 @@ function ContainerPiece({ piece, container, clickFunction }) {
         />
     );
 }
-
-ContainerPiece.propTypes = {
-    piece: PropTypes.object.isRequired,
-    container: PropTypes.object.isRequired,
-    clickFunction: PropTypes.func.isRequired
-};
 
 export default ContainerPiece;

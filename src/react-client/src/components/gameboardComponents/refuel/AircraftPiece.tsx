@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { TYPE_IMAGES } from "../../styleConstants";
 import { TYPE_FUEL, AIR_REFUELING_SQUADRON_ID } from "../../../constants/gameConstants";
 
-const aircraftPieceStyle = {
+const aircraftPieceStyle: any = {
     backgroundColor: "white",
     height: "15%",
     width: "96%",
@@ -12,7 +11,7 @@ const aircraftPieceStyle = {
     borderRadius: "2%"
 };
 
-const boxStyle = {
+const boxStyle: any = {
     backgroundRepeat: "no-repeat",
     backgroundSize: "90% 90%",
     backgroundPosition: "center",
@@ -24,12 +23,19 @@ const boxStyle = {
     position: "relative"
 };
 
-const textDivStyle = {
+const textDivStyle: any = {
     position: "relative",
     float: "left"
 };
 
-class AircraftPiece extends Component {
+interface Props {
+    aircraftPiece: any;
+    aircraftPieceIndex: any;
+    aircraftClick: any;
+    undoFuelSelection: any;
+}
+
+class AircraftPiece extends Component<Props> {
     render() {
         const { aircraftPiece, aircraftPieceIndex, aircraftClick, undoFuelSelection } = this.props;
         const { pieceFuel, pieceTypeId } = aircraftPiece;
@@ -75,12 +81,5 @@ class AircraftPiece extends Component {
         );
     }
 }
-
-AircraftPiece.propTypes = {
-    aircraftPiece: PropTypes.object.isRequired,
-    aircraftPieceIndex: PropTypes.number.isRequired,
-    aircraftClick: PropTypes.func.isRequired,
-    undoFuelSelection: PropTypes.func.isRequired
-};
 
 export default AircraftPiece;

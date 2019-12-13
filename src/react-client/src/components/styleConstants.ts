@@ -46,7 +46,7 @@ TYPE_IMAGES[DRONE_SWARMS_TYPE_ID] = { backgroundImage: `url("${unitImagesPath}/d
 TYPE_IMAGES[INSURGENCY_TYPE_ID] = { backgroundImage: `url("${unitImagesPath}/insurgency.png")` };
 TYPE_IMAGES[RAISE_MORALE_TYPE_ID] = { backgroundImage: `url("${unitImagesPath}/raiseMorale.png")` };
 
-const DICE_IMAGES = {
+const DICE_IMAGES: any = {
     1: { backgroundImage: `url("${diceImagePath}/1.png")` },
     2: { backgroundImage: `url("${diceImagePath}/2.png")` },
     3: { backgroundImage: `url("${diceImagePath}/3.png")` },
@@ -55,11 +55,11 @@ const DICE_IMAGES = {
     6: { backgroundImage: `url("${diceImagePath}/6.png")` }
 };
 
-const ARROW_IMAGE = {
+const ARROW_IMAGE: any = {
     backgroundImage: `url("${graphicsPath}/arrow.png")`
 };
 
-const LEFT_CONTROLS_IMAGES = {
+const LEFT_CONTROLS_IMAGES: any = {
     start: { backgroundImage: `url("${buttonImagesPath}/iconPlanning.png")` },
     undo: { backgroundImage: `url("${buttonImagesPath}/iconUndo.png")` },
     cancel: { backgroundImage: `url("${buttonImagesPath}/iconCancel.png")` },
@@ -69,15 +69,15 @@ const LEFT_CONTROLS_IMAGES = {
     }
 };
 
-const BATTLE_POPUP_IMAGES = {
+const BATTLE_POPUP_IMAGES: any = {
     minIcon: { backgroundImage: `url("${graphicsPath}/battleIcon.png")` }
 };
 
-const NEWS_POPUP_IMAGES = {
+const NEWS_POPUP_IMAGES: any = {
     minIcon: { backgroundImage: `url("${graphicsPath}/newsIcon.png")` }
 };
 
-const REFUEL_POPUP_IMAGES = {
+const REFUEL_POPUP_IMAGES: any = {
     minIcon: { backgroundImage: `url("${graphicsPath}/refuelIcon.png")` }
 };
 
@@ -97,7 +97,7 @@ let TYPE_TEAM_BORDERS: any = {};
 TYPE_TEAM_BORDERS[BLUE_TEAM_ID] = { boxShadow: "0px 0px 0px 2px rgba(0, 111, 255, 0.67) inset" };
 TYPE_TEAM_BORDERS[RED_TEAM_ID] = { boxShadow: "0px 0px 0px 2px rgba(255, 0, 0, 0.55) inset" };
 
-const SELECTED_BORDERS = [
+const SELECTED_BORDERS: any = [
     { border: "2px solid red" }, //selected
     { border: "2px solid black" } //not selected
 ];

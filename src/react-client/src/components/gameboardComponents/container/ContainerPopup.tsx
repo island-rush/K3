@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import ContainerPiece from "./ContainerPiece";
 import { TRANSPORT_TYPE_ID } from "../../../constants/gameConstants";
 
-const containerPopupStyle = {
+const containerPopupStyle: any = {
     position: "absolute",
     display: "block",
     width: "80%",
@@ -15,7 +14,7 @@ const containerPopupStyle = {
     zIndex: 4
 };
 
-const leftSectionStyle = {
+const leftSectionStyle: any = {
     position: "relative",
     overflow: "scroll",
     float: "left",
@@ -25,7 +24,7 @@ const leftSectionStyle = {
     margin: "1%"
 };
 
-const rightSectionStyle = {
+const rightSectionStyle: any = {
     position: "relative",
     overflow: "scroll",
     backgroundColor: "grey",
@@ -35,7 +34,7 @@ const rightSectionStyle = {
     margin: "1%"
 };
 
-const confirmButtonStyle = {
+const confirmButtonStyle: any = {
     position: "absolute",
     display: "block",
     width: "7%",
@@ -49,21 +48,31 @@ const confirmButtonStyle = {
     backgroundRepeat: "no-repeat"
 };
 
-const invisibleStyle = {
+const invisibleStyle: any = {
     display: "none"
 };
 
-class ContainerPopup extends Component {
+interface Props {
+    container: any;
+    pieceClose: any;
+    outerPieceClick: any;
+    innerPieceClick: any;
+    innerTransportPieceClick: any;
+}
+
+class ContainerPopup extends Component<Props> {
     render() {
         const { container, pieceClose, outerPieceClick, innerPieceClick, innerTransportPieceClick } = this.props;
 
         //Don't need to check for null (probably should) since empty array is still valid
-        const outsidePieces = container.outerPieces.map((piece, index) => <ContainerPiece key={index} piece={piece} container={container} clickFunction={outerPieceClick} />);
+        const outsidePieces = container.outerPieces.map((piece: any, index: number) => (
+            <ContainerPiece key={index} piece={piece} container={container} clickFunction={outerPieceClick} />
+        ));
 
         const innerPieces =
             container.containerPiece === null
                 ? null
-                : container.containerPiece.pieceContents.pieces.map((piece, index) => (
+                : container.containerPiece.pieceContents.pieces.map((piece: any, index: number) => (
                       <ContainerPiece
                           key={index}
                           piece={piece}
@@ -95,13 +104,5 @@ class ContainerPopup extends Component {
         );
     }
 }
-
-ContainerPopup.propTypes = {
-    container: PropTypes.object.isRequired, //from the gameboardMeta (parent Gameboard gives this)
-    pieceClose: PropTypes.func.isRequired,
-    outerPieceClick: PropTypes.func.isRequired,
-    innerPieceClick: PropTypes.func.isRequired,
-    innerTransportPieceClick: PropTypes.func.isRequired
-};
 
 export default ContainerPopup;

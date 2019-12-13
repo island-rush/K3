@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { HexGrid, Layout, Hexagon } from "react-hexgrid";
+const { HexGrid, Layout, Hexagon } = require("react-hexgrid"); //TODO: create type declaration for react-hexgrid
 import BattlePopup from "./battle/BattlePopup";
 import NewsPopup from "./NewsPopup";
 import ContainerPopup from "./container/ContainerPopup";
@@ -17,7 +16,14 @@ import {
     raiseMoraleSelectCommanderType,
     pieceClose
 } from "../../redux/actions";
-import { TYPE_HIGH_LOW, REMOTE_SENSING_RANGE, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, RED_TEAM_ID, BLUE_TEAM_ID } from "../../constants/gameConstants";
+import {
+    TYPE_HIGH_LOW,
+    REMOTE_SENSING_RANGE,
+    COMM_INTERRUPT_RANGE,
+    GOLDEN_EYE_RANGE,
+    RED_TEAM_ID,
+    BLUE_TEAM_ID
+} from "../../constants/gameConstants";
 import { distanceMatrix } from "../../constants/distanceMatrix";
 import {
     IGNORE_TITLE_TYPES,
@@ -31,7 +37,7 @@ import {
     FLAG_ISLAND_OWNERSHIP
 } from "../../constants/gameboardConstants";
 
-const gameboardStyle = {
+const gameboardStyle: any = {
     backgroundColor: "blue",
     width: "94%",
     height: "88%",
@@ -46,7 +52,7 @@ const subDivStyle = {
 };
 
 //These functions organize the hexagons into the proper rows/columns to make the shape of the board (based on the index of the position (0->726))
-const qIndexSolver = index => {
+const qIndexSolver = (index: number) => {
     if (index < 81) {
         //above zoombox
         if (index % 27 < 14) {
@@ -65,7 +71,7 @@ const qIndexSolver = index => {
     }
 };
 
-const rIndexSolver = index => {
+const rIndexSolver = (index: number) => {
     if (index < 81) {
         if (index % 27 < 14) {
             return (index % 27) - Math.floor(index / 27);
@@ -81,7 +87,7 @@ const rIndexSolver = index => {
     }
 };
 
-const patternSolver = (position, gameInfo, positionIndex) => {
+const patternSolver = (position: any, gameInfo: any, positionIndex: number) => {
     const { type, pieces } = position; //position comes from the gameboard state
     const { highPieces, lowPieces } = TYPE_HIGH_LOW;
     let redHigh = 0,
@@ -106,8 +112,8 @@ const patternSolver = (position, gameInfo, positionIndex) => {
         }
     }
 
-    if (ALL_FLAG_LOCATIONS.includes(parseInt(positionIndex))) {
-        const flagNum = ALL_FLAG_LOCATIONS.indexOf(parseInt(positionIndex));
+    if (ALL_FLAG_LOCATIONS.includes(positionIndex)) {
+        const flagNum = ALL_FLAG_LOCATIONS.indexOf(positionIndex);
         const islandOwner = gameInfo["flag" + flagNum];
         const finalType = islandOwner === BLUE_TEAM_ID ? "blue" : islandOwner === RED_TEAM_ID ? "red" : "flag";
         return finalType + redHigh + redLow + blueHigh + blueLow;
@@ -116,7 +122,7 @@ const patternSolver = (position, gameInfo, positionIndex) => {
     return type + redHigh + redLow + blueHigh + blueLow; //This resolves what image is shown on the board (see ./images/positionImages)
 };
 
-const titleSolver = (position, gameInfo, positionIndex) => {
+const titleSolver = (position: any, gameInfo: any, positionIndex: number) => {
     const { type } = position;
     //ignore titles for types 'land' and 'water'
 
@@ -124,7 +130,7 @@ const titleSolver = (position, gameInfo, positionIndex) => {
         return "";
     }
 
-    if (!ALL_FLAG_LOCATIONS.includes(parseInt(positionIndex))) {
+    if (!ALL_FLAG_LOCATIONS.includes(positionIndex)) {
         //No points info, simple titles
         switch (type) {
             case AIRFIELD_TYPE:
@@ -143,7 +149,20 @@ const titleSolver = (position, gameInfo, positionIndex) => {
     return "Island Flag\n" + islandTitle + "\nPoints: " + ISLAND_POINTS[islandNum];
 };
 
-class Gameboard extends Component {
+interface Props {
+    gameInfo: any;
+    gameboard: any;
+    gameboardMeta: any;
+    selectPosition: any;
+    newsPopupMinimizeToggle: any;
+    raiseMoraleSelectCommanderType: any;
+    pieceClose: any;
+    outerPieceClick: any;
+    innerPieceClick: any;
+    innerTransportPieceClick: any;
+}
+
+class Gameboard extends Component<Props> {
     render() {
         const {
             gameInfo,
@@ -161,12 +180,12 @@ class Gameboard extends Component {
         //prettier-ignore
         const {confirmedGoldenEye, confirmedCommInterrupt, confirmedBioWeapons, confirmedInsurgency, confirmedRods, confirmedRemoteSense, selectedPosition, news, battle, container, planning, selectedPiece, confirmedPlans, highlightedPositions } = gameboardMeta;
 
-        let planningPositions = []; //all of the positions part of a plan
-        let containerPositions = []; //specific positions part of a plan of type container
-        let battlePositions = []; //position(s) involved in a battle
-        let remoteSensedPositions = [];
-        let commInterruptPositions = [];
-        let goldenEyePositions = [];
+        let planningPositions: any = []; //all of the positions part of a plan
+        let containerPositions: any = []; //specific positions part of a plan of type container
+        let battlePositions: any = []; //position(s) involved in a battle
+        let remoteSensedPositions: any = [];
+        let commInterruptPositions: any = [];
+        let goldenEyePositions: any = [];
 
         for (let x = 0; x < planning.moves.length; x++) {
             const { type, positionId } = planning.moves[x];
@@ -237,12 +256,12 @@ class Gameboard extends Component {
             <Hexagon
                 key={positionIndex}
                 posId={0}
-                q={qIndexSolver(positionIndex)}
-                r={rIndexSolver(positionIndex)}
+                q={qIndexSolver(parseInt(positionIndex))}
+                r={rIndexSolver(parseInt(positionIndex))}
                 s={-999}
-                fill={patternSolver(gameboard[positionIndex], gameInfo, positionIndex)}
+                fill={patternSolver(gameboard[positionIndex], gameInfo, parseInt(positionIndex))}
                 //TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
-                onClick={event => {
+                onClick={(event: any) => {
                     event.preventDefault();
                     selectPosition(positionIndex);
                     event.stopPropagation();
@@ -275,7 +294,7 @@ class Gameboard extends Component {
                         : ""
                 }
                 //TODO: pass down what the highlighting means into the title
-                title={titleSolver(gameboard[positionIndex], gameInfo, positionIndex)}
+                title={titleSolver(gameboard[positionIndex], gameInfo, parseInt(positionIndex))}
             />
         ));
 
@@ -307,20 +326,7 @@ class Gameboard extends Component {
     }
 }
 
-Gameboard.propTypes = {
-    gameboard: PropTypes.array.isRequired,
-    gameboardMeta: PropTypes.object.isRequired,
-    selectPosition: PropTypes.func.isRequired,
-    newsPopupMinimizeToggle: PropTypes.func.isRequired,
-    raiseMoraleSelectCommanderType: PropTypes.func.isRequired,
-    gameInfo: PropTypes.object.isRequired,
-    pieceClose: PropTypes.func.isRequired,
-    outerPieceClick: PropTypes.func.isRequired,
-    innerPieceClick: PropTypes.func.isRequired,
-    innerTransportPieceClick: PropTypes.func.isRequired
-};
-
-const mapStateToProps = ({ gameboard, gameboardMeta, gameInfo }) => ({
+const mapStateToProps = ({ gameboard, gameboardMeta, gameInfo }: { gameboard: any; gameboardMeta: any; gameInfo: any }) => ({
     gameboard,
     gameboardMeta,
     gameInfo

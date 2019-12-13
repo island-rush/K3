@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { TYPE_IMAGES, DICE_IMAGES, ARROW_IMAGE } from "../../styleConstants";
 import { TYPE_NAMES } from "../../../constants/gameConstants";
 
-const battlePieceStyle = {
+const battlePieceStyle: any = {
     backgroundColor: "white",
     height: "15%",
     width: "96%",
@@ -13,14 +12,14 @@ const battlePieceStyle = {
 };
 
 //TODO: could probably refactor how this is called to a cleaner way...
-const battlePieceWonStyle = [
+const battlePieceWonStyle: any = [
     {},
     {
         border: "2px solid red"
     }
 ];
 
-const boxStyle = {
+const boxStyle: any = {
     backgroundRepeat: "no-repeat",
     backgroundSize: "90% 90%",
     backgroundPosition: "center",
@@ -32,7 +31,7 @@ const boxStyle = {
     position: "relative"
 };
 
-const diceBoxStyle = {
+const diceBoxStyle: any = {
     backgroundRepeat: "no-repeat",
     backgroundSize: "90% 90%",
     backgroundPosition: "center",
@@ -44,12 +43,22 @@ const diceBoxStyle = {
     position: "relative"
 };
 
-const selected = [
+const selected: any = [
     { border: "2px solid red" }, //selected
     { border: "2px solid black" } //not selected
 ];
 
-class BattlePiece extends Component {
+interface Props {
+    isFriendly: any;
+    battlePieceClick: any;
+    targetPieceClick: any;
+    enemyBattlePieceClick: any;
+    battlePiece: any;
+    battlePieceIndex: any;
+    isSelected: any;
+}
+
+class BattlePiece extends Component<Props> {
     render() {
         const { isFriendly, battlePieceClick, targetPieceClick, enemyBattlePieceClick, battlePiece, battlePieceIndex, isSelected } = this.props;
 
@@ -88,9 +97,15 @@ class BattlePiece extends Component {
                 </div>
             );
 
-        const diceBox1 = battlePiece.diceRoll == null ? null : <div title={battlePiece.diceRoll1} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll1] }} />;
+        const diceBox1 =
+            battlePiece.diceRoll == null ? null : (
+                <div title={battlePiece.diceRoll1} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll1] }} />
+            );
 
-        const diceBox2 = battlePiece.diceRoll == null ? null : <div title={battlePiece.diceRoll2} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll2] }} />;
+        const diceBox2 =
+            battlePiece.diceRoll == null ? null : (
+                <div title={battlePiece.diceRoll2} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll2] }} />
+            );
 
         return (
             <div style={{ ...battlePieceStyle, ...battlePieceWonStyle[battlePiece.win != null && battlePiece.win ? 1 : 0] }}>
@@ -103,15 +118,5 @@ class BattlePiece extends Component {
         );
     }
 }
-
-BattlePiece.propTypes = {
-    isFriendly: PropTypes.bool.isRequired,
-    battlePiece: PropTypes.object.isRequired,
-    battlePieceIndex: PropTypes.number.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    battlePieceClick: PropTypes.func.isRequired,
-    enemyBattlePieceClick: PropTypes.func.isRequired,
-    targetPieceClick: PropTypes.func.isRequired
-};
 
 export default BattlePiece;

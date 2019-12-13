@@ -1,11 +1,17 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import BattlePiece from "./BattlePiece";
 import { BATTLE_POPUP_IMAGES } from "../../styleConstants";
-import { battlePopupMinimizeToggle, battlePieceClick, targetPieceClick, enemyBattlePieceClick, confirmBattleSelections, clearOldBattle } from "../../../redux/actions";
+import {
+    battlePopupMinimizeToggle,
+    battlePieceClick,
+    targetPieceClick,
+    enemyBattlePieceClick,
+    confirmBattleSelections,
+    clearOldBattle
+} from "../../../redux/actions";
 
-const battlePopupStyle = {
+const battlePopupStyle: any = {
     position: "absolute",
     display: "block",
     width: "80%",
@@ -17,7 +23,7 @@ const battlePopupStyle = {
     zIndex: 4
 };
 
-const battlePopupMinimizeStyle = {
+const battlePopupMinimizeStyle: any = {
     position: "absolute",
     display: "block",
     width: "7%",
@@ -31,13 +37,13 @@ const battlePopupMinimizeStyle = {
     backgroundRepeat: "no-repeat"
 };
 
-const isMinimizedStyle = {
+const isMinimizedStyle: any = {
     border: "2px solid red",
     top: "35%",
     margin: "2%"
 };
 
-const leftBattleStyle = {
+const leftBattleStyle: any = {
     position: "relative",
     overflow: "scroll",
     float: "left",
@@ -47,7 +53,7 @@ const leftBattleStyle = {
     margin: "1%"
 };
 
-const rightBattleStyle = {
+const rightBattleStyle: any = {
     position: "relative",
     overflow: "scroll",
     backgroundColor: "grey",
@@ -57,22 +63,40 @@ const rightBattleStyle = {
     margin: "1%"
 };
 
-const battleButtonStyle = {
+const battleButtonStyle: any = {
     position: "absolute",
     bottom: "-7%",
     right: "2%"
 };
 
-const invisibleStyle = {
+const invisibleStyle: any = {
     display: "none"
 };
 
-class BattlePopup extends Component {
+interface Props {
+    battlePieceClick: any;
+    enemyBattlePieceClick: any;
+    targetPieceClick: any;
+    confirmBattleSelections: any;
+    battle: any;
+    clearOldBattle: any;
+    battlePopupMinimizeToggle: any;
+}
+
+class BattlePopup extends Component<Props> {
     render() {
-        const { battlePieceClick, enemyBattlePieceClick, targetPieceClick, confirmBattleSelections, battle, clearOldBattle, battlePopupMinimizeToggle } = this.props;
+        const {
+            battlePieceClick,
+            enemyBattlePieceClick,
+            targetPieceClick,
+            confirmBattleSelections,
+            battle,
+            clearOldBattle,
+            battlePopupMinimizeToggle
+        } = this.props;
         const { selectedBattlePiece, friendlyPieces, enemyPieces } = battle;
 
-        const friendlyBattlePieces = friendlyPieces.map((battlePiece, index) => (
+        const friendlyBattlePieces = friendlyPieces.map((battlePiece: any, index: number) => (
             <BattlePiece
                 isFriendly={true} //indicates left side battle piece functionality
                 battlePieceClick={battlePieceClick}
@@ -85,7 +109,7 @@ class BattlePopup extends Component {
             />
         ));
 
-        const enemyBattlePieces = enemyPieces.map((battlePiece, index) => (
+        const enemyBattlePieces = enemyPieces.map((battlePiece: any, index: number) => (
             <BattlePiece
                 isFriendly={false} //indicates right side battle piece functionality
                 battlePieceClick={battlePieceClick}
@@ -127,7 +151,11 @@ class BattlePopup extends Component {
                     />
                 </div>
                 <div
-                    style={{ ...(battle.isMinimized ? battlePopupMinimizeStyle : invisibleStyle), ...BATTLE_POPUP_IMAGES.minIcon, ...isMinimizedStyle }}
+                    style={{
+                        ...(battle.isMinimized ? battlePopupMinimizeStyle : invisibleStyle),
+                        ...BATTLE_POPUP_IMAGES.minIcon,
+                        ...isMinimizedStyle
+                    }}
                     onClick={event => {
                         event.preventDefault();
                         battlePopupMinimizeToggle();
@@ -139,17 +167,7 @@ class BattlePopup extends Component {
     }
 }
 
-BattlePopup.propTypes = {
-    battle: PropTypes.object.isRequired,
-    battlePieceClick: PropTypes.func.isRequired,
-    enemyBattlePieceClick: PropTypes.func.isRequired,
-    targetPieceClick: PropTypes.func.isRequired,
-    confirmBattleSelections: PropTypes.func.isRequired,
-    clearOldBattle: PropTypes.func.isRequired,
-    battlePopupMinimizeToggle: PropTypes.func.isRequired
-};
-
-const mapStateToProps = ({ gameboardMeta }) => ({
+const mapStateToProps = ({ gameboardMeta }: { gameboardMeta: any }) => ({
     battle: gameboardMeta.battle
 });
 

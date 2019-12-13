@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { TYPE_IMAGES, SELECTED_BORDERS } from "../../styleConstants";
 
 const tankerPieceStyle = {
@@ -23,7 +22,14 @@ const boxStyle = {
     position: "relative"
 };
 
-class TankerPiece extends Component {
+interface Props {
+    tankerPiece: any;
+    tankerPieceIndex: any;
+    isSelected: any;
+    tankerClick: any;
+}
+
+class TankerPiece extends Component<Props> {
     render() {
         const { tankerPiece, tankerPieceIndex, isSelected, tankerClick } = this.props;
 
@@ -54,12 +60,5 @@ class TankerPiece extends Component {
         );
     }
 }
-
-TankerPiece.propTypes = {
-    tankerPiece: PropTypes.object.isRequired,
-    tankerPieceIndex: PropTypes.number.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    tankerClick: PropTypes.func.isRequired
-};
 
 export default TankerPiece;
