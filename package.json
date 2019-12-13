@@ -51,5 +51,10 @@
         "semi": true,
         "singleQuote": false,
         "printWidth": 150
+    },
+    "nodemonConfig": {
+        "ignore": [
+            "src/client/*"
+        ]
     }
 }

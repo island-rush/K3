@@ -167,8 +167,9 @@ class Game {
             inserts = [gameSection, gameInstructor, gameAdminPasswordHash, gameSection, gameInstructor];
         }
 
-        const [rows, fields] = await pool.query(queryString, inserts);
-        if (rows[0].affectedRows == 0) return;
+        const [result, fields] = await pool.query(queryString, inserts);
+
+        if (result.affectedRows == 0) return;
 
         const thisGame = await new Game({ gameSection, gameInstructor }).init(); //could not init, but since we don't know who is using this function, return the full game
 

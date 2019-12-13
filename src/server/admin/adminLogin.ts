@@ -1,4 +1,4 @@
-// import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from "../pages/errorTypes";
+import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from "../pages/errorTypes";
 import { Request, Response } from "express";
 import { Game } from "../classes";
 import md5 from "md5";
@@ -10,7 +10,7 @@ const adminLogin = async (req: Request, res: Response) => {
 
     const { adminSection, adminInstructor, adminPassword } = req.body;
     if (!adminSection || !adminInstructor || !adminPassword) {
-        // res.redirect(`/index.html?error=${BAD_REQUEST_TAG}`);
+        res.redirect(`/index.html?error=${BAD_REQUEST_TAG}`);
         return;
     }
 
@@ -23,13 +23,13 @@ const adminLogin = async (req: Request, res: Response) => {
 
     const thisGame = await new Game({ gameSection: adminSection, gameInstructor: adminInstructor }).init();
     if (!thisGame) {
-        // res.redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
+        res.redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
         return;
     }
 
     const { gameAdminPassword, gameId } = thisGame;
     if (gameAdminPassword != inputPasswordHash) {
-        // res.redirect(`/index.html?error=${LOGIN_TAG}`);
+        res.redirect(`/index.html?error=${LOGIN_TAG}`);
         return;
     }
 

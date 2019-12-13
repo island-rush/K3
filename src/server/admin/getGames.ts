@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { Game } from "../classes";
 
-// import { ACCESS_TAG } from "../pages/errorTypes";
+import { ACCESS_TAG } from "../pages/errorTypes";
 
 const getGames = async (req: Request, res: Response) => {
     if (!req.session.ir3 || !req.session.ir3.courseDirector) {
-        // res.redirect(`/index.html?error=${ACCESS_TAG}`);
+        res.redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
     }
     try {

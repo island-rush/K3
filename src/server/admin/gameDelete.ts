@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { Game } from "../classes";
 
-// import { ACCESS_TAG } from "../pages/errorTypes";
+import { ACCESS_TAG } from "../pages/errorTypes";
 
 const gameDelete = async (req: Request, res: Response) => {
     if (!req.session.ir3 || !req.session.ir3.courseDirector) {
-        // res.status(403).redirect(`/index.html?error=${ACCESS_TAG}`);
+        res.status(403).redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
     }
     //TODO: delete all sockets assosiated with the game that was deleted?

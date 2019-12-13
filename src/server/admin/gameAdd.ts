@@ -2,17 +2,17 @@ import { Request, Response } from "express";
 import { Game } from "../classes";
 import md5 from "md5";
 
-// import { ACCESS_TAG, BAD_REQUEST_TAG } from "../pages/errorTypes";
+import { ACCESS_TAG, BAD_REQUEST_TAG } from "../pages/errorTypes";
 
 const gameAdd = async (req: Request, res: Response) => {
     if (!req.session.ir3 || !req.session.ir3.courseDirector) {
-        // res.redirect(403, `/index.html?error=${ACCESS_TAG}`); //TODO: this is different from gameDelete.js status.redirect....
+        res.redirect(403, `/index.html?error=${ACCESS_TAG}`); //TODO: this is different from gameDelete.js status.redirect....
         return;
     }
     const { adminSection, adminInstructor, adminPassword } = req.body;
     if (!adminSection || !adminInstructor || !adminPassword) {
         //TODO: better errors on CD (could have same as index) (status?)
-        // res.redirect(`/index.html?error=${BAD_REQUEST_TAG}`);
+        res.redirect(`/index.html?error=${BAD_REQUEST_TAG}`);
         return;
     }
     const adminPasswordHashed = md5(adminPassword);

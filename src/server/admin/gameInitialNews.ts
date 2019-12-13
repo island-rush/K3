@@ -1,4 +1,4 @@
-const pool = require("../database");
+import pool from "../database";
 
 type NewsOptions = {
     newsTitle?: string;

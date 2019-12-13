@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
 import { Game } from "../classes";
 
-// import { ACCESS_TAG } from "../pages/errorTypes";
+import { ACCESS_TAG } from "../pages/errorTypes";
 
 const getNews = async (req: Request, res: Response) => {
     if (!req.session.ir3 || !req.session.ir3.teacher || !req.session.ir3.gameId) {
-        // res.redirect(`/index.html?error=${ACCESS_TAG}`);
+        res.redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
     }
     const { gameId } = req.session.ir3;
@@ -14,7 +14,7 @@ const getNews = async (req: Request, res: Response) => {
         res.send(results);
     } catch (error) {
         console.error(error);
-        //RODO: this wouldn't happen, need database to get to teacher page anyways
+        //TODO: this wouldn't happen, need database to get to teacher page anyways
         res.status(500).send([
             {
                 newsId: 69,

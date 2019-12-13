@@ -5,6 +5,7 @@
  */
 
 import { Router, Request, Response } from "express";
+import path from "path";
 import {
     dbStatus,
     adminLogin,
@@ -20,6 +21,7 @@ import {
     toggleGameActive,
     gameReset
 } from "./admin";
+import { LOGIN_TAG, DATABASE_TAG } from "./pages/errorTypes";
 
 const router: Router = Router();
 
@@ -49,7 +51,7 @@ router.get("/credits.html", (req: Request, res: Response) => {
 
 router.get("/teacher.html", (req: Request, res: Response) => {
     if (!req.session.ir3 || !req.session.ir3.teacher || !req.session.ir3.gameId) {
-        // res.redirect(`/index.html?error=${LOGIN_TAG}`);
+        res.redirect(`/index.html?error=${LOGIN_TAG}`);
         return;
     }
     res.sendFile(__dirname + "/pages/teacher.html");
@@ -57,22 +59,22 @@ router.get("/teacher.html", (req: Request, res: Response) => {
 
 router.get("/courseDirector.html", (req: Request, res: Response) => {
     if (!req.session.ir3 || !req.session.ir3.courseDirector) {
-        // res.redirect(`/index.html?error=${LOGIN_TAG}`);
+        res.redirect(`/index.html?error=${LOGIN_TAG}`);
         return;
     }
     res.sendFile(__dirname + "/pages/courseDirector.html");
 });
 
 router.get("/game.html", (req: Request, res: Response) => {
-    // if (!req.session.ir3 || !req.session.ir3.gameId || !req.session.ir3.gameTeam || !req.session.ir3.gameControllers) {
-    //     res.redirect(`/index.html?error=${LOGIN_TAG}`);
-    //     return;
-    // }
-    // if (process.env.NODE_ENV == "production") {
-    //     res.sendFile(path.join(__dirname, "/../client/build/index.html"));
-    // } else {
-    //     res.redirect("http://localhost:3000"); // Use this redirect while working on react frontend
-    // }
+    if (!req.session.ir3 || !req.session.ir3.gameId || !req.session.ir3.gameTeam || !req.session.ir3.gameControllers) {
+        res.redirect(`/index.html?error=${LOGIN_TAG}`);
+        return;
+    }
+    if (process.env.NODE_ENV == "production") {
+        res.sendFile(path.join(__dirname, "/../client/build/index.html"));
+    } else {
+        res.redirect("http://localhost:3000"); // Use this redirect while working on react frontend
+    }
 });
 
 // --------------------------------------
@@ -93,7 +95,7 @@ router.post("/adminLoginVerify", (req: Request, res: Response) => {
         adminLogin(req, res);
     } catch (error) {
         console.error(error);
-        // res.status(500).redirect(`/index.html?error=${DATABASE_TAG}`);
+        res.status(500).redirect(`/index.html?error=${DATABASE_TAG}`);
     }
 });
 
@@ -102,7 +104,7 @@ router.post("/gameLoginVerify", (req: Request, res: Response) => {
         gameLogin(req, res);
     } catch (error) {
         console.error(error);
-        // res.status(500).redirect(`./index.html?error=${DATABASE_TAG}`);
+        res.status(500).redirect(`./index.html?error=${DATABASE_TAG}`);
     }
 });
 
