@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 
-// import { SET_USERFEEDBACK } from "../../client/src/redux/actions/actionTypes";
-// import { SOCKET_SERVER_SENDING_ACTION } from "../../client/src/constants/otherConstants";
+// import { SET_USERFEEDBACK } from "../../react-client/src/redux/actions/actionTypes";
+// import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 
 const sendUserFeedback = async (socket: Socket, userFeedback: string) => {
     // const serverAction = {

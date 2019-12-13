@@ -28,7 +28,7 @@ app.use(express.urlencoded({ extended: true })); //parses data and puts into req
 //TODO: Use middleware or reverse proxy to serve static files -> aka, anything with res.sendFile()
 import router from "./server/router";
 app.use("/", router);
-// app.use(express.static(__dirname + "/client/build"));
+// app.use(express.static(__dirname + "/react-client/build"));
 
 //Socket Setup
 import { Socket } from "socket.io";

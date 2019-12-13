@@ -6,11 +6,11 @@
     "scripts": {
         "start": "node ./dist/server.js",
         "devBackend": "nodemon ./src/server.ts",
-        "devFrontend": "cd ./src/client && npm start",
+        "devFrontend": "cd ./src/react-client && npm start",
         "dev": "concurrently \"npm:devBackend\" \"npm:devFrontend\"",
         "compileBackend": "tsc -p .",
-        "buildClient": "cd ./src/client && npm run build && cd ../..",
-        "moveFrontend": "copyfiles -u 1 ./src/client/build/**/*.* ./dist",
+        "buildClient": "cd ./src/react-client && npm run build && cd ../..",
+        "moveFrontend": "copyfiles -u 1 ./src/react-client/build/**/*.* ./dist",
         "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend"
     },
     "repository": {
@@ -54,7 +54,7 @@
     },
     "nodemonConfig": {
         "ignore": [
-            "src/client/*"
+            "src/react-client/*"
         ]
     }
 }

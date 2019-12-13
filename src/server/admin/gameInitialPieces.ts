@@ -21,7 +21,7 @@ import {
     TACTICAL_AIRLIFT_SQUADRON_TYPE_ID,
     SOF_TEAM_TYPE_ID,
     C_130_TYPE_ID
-} from "../../client/src/constants/gameConstants";
+} from "../../react-client/src/constants/gameConstants";
 
 type PieceOptions = {
     pieceContainerId?: number;
