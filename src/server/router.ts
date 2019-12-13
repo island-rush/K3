@@ -5,6 +5,7 @@
  */
 
 import { Router, Request, Response } from "express";
+import { dbStatus, adminLogin, gameLogin } from "./admin";
 
 const router: Router = Router();
 
@@ -65,30 +66,30 @@ router.get("/game.html", (req: Request, res: Response) => {
 // --------------------------------------
 
 router.get("/databaseStatus", (req: Request, res: Response) => {
-    // try {
-    //     databaseStatus(req, res);
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).send(error.code);
-    // }
+    try {
+        dbStatus(req, res);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error.code);
+    }
 });
 
 router.post("/adminLoginVerify", (req: Request, res: Response) => {
-    // try {
-    //     adminLoginVerify(req, res);
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).redirect(`/index.html?error=${DATABASE_TAG}`);
-    // }
+    try {
+        adminLogin(req, res);
+    } catch (error) {
+        console.error(error);
+        // res.status(500).redirect(`/index.html?error=${DATABASE_TAG}`);
+    }
 });
 
 router.post("/gameLoginVerify", (req: Request, res: Response) => {
-    // try {
-    //     gameLoginVerify(req, res);
-    // } catch (error) {
-    //     console.error(error);
-    //     res.status(500).redirect(`./index.html?error=${DATABASE_TAG}`);
-    // }
+    try {
+        gameLogin(req, res);
+    } catch (error) {
+        console.error(error);
+        // res.status(500).redirect(`./index.html?error=${DATABASE_TAG}`);
+    }
 });
 
 router.post("/gameAdd", (req: Request, res: Response) => {
