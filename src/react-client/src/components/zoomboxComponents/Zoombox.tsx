@@ -24,12 +24,11 @@ interface Props {
     selectPiece: any;
     clearPieceSelection: any;
     pieceOpen: any;
-    pieceClose: any;
 }
 
 class Zoombox extends Component<Props> {
     render() {
-        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, pieceClose } = this.props;
+        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen } = this.props;
 
         const isVisible = selectedPos !== -1;
 
@@ -38,7 +37,6 @@ class Zoombox extends Component<Props> {
             : gameboard[selectedPos].pieces.map((piece: any, index: number) => (
                   <Piece
                       pieceOpen={pieceOpen}
-                      pieceClose={pieceClose}
                       pieceClick={selectPiece}
                       selected={selectedPiece !== null && selectedPiece.pieceId === piece.pieceId}
                       topLevel={true}

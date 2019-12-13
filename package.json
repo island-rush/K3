@@ -9,6 +9,7 @@
         "devFrontend": "cd ./src/react-client && npm start",
         "dev": "concurrently \"npm:devBackend\" \"npm:devFrontend\"",
         "compileBackend": "tsc -p .",
+        "typecheckFrontend": "cd ./src/react-client && tsc",
         "buildClient": "cd ./src/react-client && npm run build && cd ../..",
         "moveFrontend": "copyfiles -u 1 ./src/react-client/build/**/*.* ./dist",
         "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend"

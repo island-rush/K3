@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-const { HexGrid, Layout, Hexagon } = require("react-hexgrid"); //TODO: create type declaration for react-hexgrid
 import BattlePopup from "./battle/BattlePopup";
 import NewsPopup from "./NewsPopup";
 import ContainerPopup from "./container/ContainerPopup";
@@ -36,6 +35,7 @@ import {
     ALL_FLAG_LOCATIONS,
     FLAG_ISLAND_OWNERSHIP
 } from "../../constants/gameboardConstants";
+const { HexGrid, Layout, Hexagon } = require("react-hexgrid"); //TODO: create type declaration for react-hexgrid
 
 const gameboardStyle: any = {
     backgroundColor: "blue",
@@ -311,7 +311,7 @@ class Gameboard extends Component<Props> {
 
                 {/* TODO: more parent level connect to redux, less children connect, pass down relevant functions from here (try not to mix redux and parent passing) */}
                 <NewsPopup news={news} newsPopupMinimizeToggle={newsPopupMinimizeToggle} />
-                <BattlePopup battle={battle} />
+                <BattlePopup />
                 <RefuelPopup />
                 <SelectCommanderTypePopup gameboardMeta={gameboardMeta} raiseMoraleSelectCommanderType={raiseMoraleSelectCommanderType} />
                 <ContainerPopup
