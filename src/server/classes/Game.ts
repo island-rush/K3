@@ -1,6 +1,24 @@
 import pool from "../database";
 import { gameInitialPieces, gameInitialNews } from "../admin";
-import { Field, RowDataPacket } from "mysql2";
+import { BLUE_TEAM_ID, RED_TEAM_ID, CAPTURE_TYPES, NEWS_PHASE_ID, AIR_REFUELING_SQUADRON_ID } from "../../react-client/src/constants/gameConstants";
+import {
+    MONTAVILLE_ISLAND_ID,
+    LION_ISLAND_ID,
+    EAGLE_ISLAND_ID,
+    KEONI_ISLAND_ID,
+    SHOR_ISLAND_ID,
+    TAMU_ISLAND_ID,
+    RICO_ISLAND_ID,
+    FULLER_ISLAND_ID,
+    NOYARC_ISLAND_ID,
+    HR_REPUBLIC_ISLAND_ID,
+    DRAGON_ISLAND_ID,
+    ISLAND_POINTS,
+    ALL_FLAG_LOCATIONS
+} from "../../react-client/src/constants/gameboardConstants";
+import { POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "../actions/eventConstants";
+import { INITIAL_GAMESTATE } from "../../react-client/src/redux/actions/actiontypes";
+import { InvItem, Plan, Capability, Event, ShopItem, Piece } from "../classes";
 
 type GameOptions = {
     gameId?: number;
@@ -213,6 +231,274 @@ class Game {
         const inserts = [newGameRound, this.gameId];
         await pool.query(queryString, inserts);
         this.gameRound = newGameRound;
+    }
+
+    async updateFlags() {
+        let didUpdateFlags = false;
+        //only certain pieces can capture
+        //see if any pieces are currently residing on flags by themselves, and if so, set the island# in the database and update 'this' object correspondingly
+        let queryString = "SELECT * FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?) AND pieceTypeId in (?)";
+        let inserts = [this.gameId, ALL_FLAG_LOCATIONS, CAPTURE_TYPES];
+        let [results, fields] = await pool.query(queryString, inserts);
+
+        if (results.length === 0) {
+            return;
+        }
+
+        //need to set all positions that have pieces on them (that are different from current values?)
+        //update if only 1 team's pieces there, AND if not already the other team? (or update anyway if all 1 team)
+
+        //TODO: need major refactoring here, this is quick and dirty (but should work)
+        let eachFlagsTeams: any = [[], [], [], [], [], [], [], [], [], [], [], [], []];
+        for (let x = 0; x < results.length; x++) {
+            let thisPiece = results[x];
+            let { piecePositionId, pieceTeamId } = thisPiece;
+            let flagNum = ALL_FLAG_LOCATIONS.indexOf(piecePositionId);
+            eachFlagsTeams[flagNum].push(pieceTeamId);
+        }
+
+        for (let y = 0; y < eachFlagsTeams.length; y++) {
+            let thisFlagsTeams = eachFlagsTeams[y];
+            if (thisFlagsTeams.length === 0) continue;
+            if (thisFlagsTeams.includes(BLUE_TEAM_ID) && thisFlagsTeams.includes(RED_TEAM_ID)) continue;
+            //else update this thing
+            (this as any)["flag" + y] = thisFlagsTeams[0]; //TODO: need a way of doing this...
+            //sql update
+            queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
+            inserts = ["flag" + y, thisFlagsTeams[0], this.gameId];
+            await pool.query(queryString, inserts);
+            didUpdateFlags = true;
+        }
+
+        return didUpdateFlags;
+    }
+
+    async getNextNews() {
+        //Delete the old news
+        let queryString = "DELETE FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1";
+        let inserts = [this.gameId];
+        await pool.query(queryString, inserts);
+
+        //Grab the next news
+        queryString = "SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1";
+        const [resultNews, fields] = await pool.query(queryString, inserts);
+        const { newsTitle, newsInfo } =
+            resultNews[0] !== undefined
+                ? resultNews[0]
+                : { newsTitle: "No More News", newsInfo: "Obviously you've been playing this game too long..." };
+
+        return {
+            active: true,
+            newsTitle,
+            newsInfo
+        };
+    }
+
+    async addPoints() {
+        //add points based on the island ownerships inside this object (game)
+        let bluePoints = this.game0Points;
+        let redPoints = this.game1Points;
+
+        bluePoints += this.flag0 === this.flag1 && this.flag0 === BLUE_TEAM_ID ? ISLAND_POINTS[DRAGON_ISLAND_ID] : 0;
+        redPoints += this.flag0 === this.flag1 && this.flag0 === RED_TEAM_ID ? ISLAND_POINTS[DRAGON_ISLAND_ID] : 0;
+
+        bluePoints += this.flag2 === BLUE_TEAM_ID ? ISLAND_POINTS[HR_REPUBLIC_ISLAND_ID] : 0;
+        redPoints += this.flag2 === RED_TEAM_ID ? ISLAND_POINTS[HR_REPUBLIC_ISLAND_ID] : 0;
+
+        bluePoints += this.flag3 === BLUE_TEAM_ID ? ISLAND_POINTS[MONTAVILLE_ISLAND_ID] : 0;
+        redPoints += this.flag3 === RED_TEAM_ID ? ISLAND_POINTS[MONTAVILLE_ISLAND_ID] : 0;
+
+        bluePoints += this.flag4 === BLUE_TEAM_ID ? ISLAND_POINTS[LION_ISLAND_ID] : 0;
+        redPoints += this.flag4 === RED_TEAM_ID ? ISLAND_POINTS[LION_ISLAND_ID] : 0;
+
+        bluePoints += this.flag5 === BLUE_TEAM_ID ? ISLAND_POINTS[NOYARC_ISLAND_ID] : 0;
+        redPoints += this.flag5 === RED_TEAM_ID ? ISLAND_POINTS[NOYARC_ISLAND_ID] : 0;
+
+        bluePoints += this.flag6 === BLUE_TEAM_ID ? ISLAND_POINTS[FULLER_ISLAND_ID] : 0;
+        redPoints += this.flag6 === RED_TEAM_ID ? ISLAND_POINTS[FULLER_ISLAND_ID] : 0;
+
+        bluePoints += this.flag7 === BLUE_TEAM_ID ? ISLAND_POINTS[RICO_ISLAND_ID] : 0;
+        redPoints += this.flag7 === RED_TEAM_ID ? ISLAND_POINTS[RICO_ISLAND_ID] : 0;
+
+        bluePoints += this.flag8 === BLUE_TEAM_ID ? ISLAND_POINTS[TAMU_ISLAND_ID] : 0;
+        redPoints += this.flag8 === RED_TEAM_ID ? ISLAND_POINTS[TAMU_ISLAND_ID] : 0;
+
+        bluePoints += this.flag9 === BLUE_TEAM_ID ? ISLAND_POINTS[SHOR_ISLAND_ID] : 0;
+        redPoints += this.flag9 === RED_TEAM_ID ? ISLAND_POINTS[SHOR_ISLAND_ID] : 0;
+
+        bluePoints += this.flag10 === BLUE_TEAM_ID ? ISLAND_POINTS[KEONI_ISLAND_ID] : 0;
+        redPoints += this.flag10 === RED_TEAM_ID ? ISLAND_POINTS[KEONI_ISLAND_ID] : 0;
+
+        bluePoints += this.flag11 === this.flag12 && this.flag11 === BLUE_TEAM_ID ? ISLAND_POINTS[EAGLE_ISLAND_ID] : 0;
+        redPoints += this.flag11 === this.flag12 && this.flag11 === RED_TEAM_ID ? ISLAND_POINTS[EAGLE_ISLAND_ID] : 0;
+
+        await this.setPoints(BLUE_TEAM_ID, bluePoints);
+        await this.setPoints(RED_TEAM_ID, redPoints);
+    }
+
+    async initialStateAction(gameTeam: number, gameControllers: any) {
+        let serverAction: any = {
+            type: INITIAL_GAMESTATE,
+            payload: {}
+        };
+
+        serverAction.payload.invItems = await InvItem.all(this.gameId, gameTeam);
+        serverAction.payload.shopItems = await ShopItem.all(this.gameId, gameTeam);
+        serverAction.payload.gameboardPieces = await Piece.getVisiblePieces(this.gameId, gameTeam);
+
+        serverAction.payload.gameInfo = {
+            gameSection: this.gameSection,
+            gameInstructor: this.gameInstructor,
+            gameTeam,
+            gameControllers,
+            gamePhase: this.gamePhase,
+            gameRound: this.gameRound,
+            gameSlice: this.gameSlice,
+            gameStatus: (this as any)["game" + gameTeam + "Status"],
+            // gameStatus: gameTeam === BLUE_TEAM_ID ? this.game0Status : this.game1Status,
+            gamePoints: (this as any)["game" + gameTeam + "Points"],
+            // gamePoints: gameTeam === BLUE_TEAM_ID ? this.game0Points : this.game1Points,
+            flag0: this.flag0,
+            flag1: this.flag1,
+            flag2: this.flag2,
+            flag3: this.flag3,
+            flag4: this.flag4,
+            flag5: this.flag5,
+            flag6: this.flag6,
+            flag7: this.flag7,
+            flag8: this.flag8,
+            flag9: this.flag9,
+            flag10: this.flag10,
+            flag11: this.flag11,
+            flag12: this.flag12
+        };
+
+        serverAction.payload.gameboardMeta = {};
+        serverAction.payload.gameboardMeta.confirmedPlans = await Plan.getConfirmedPlans(this.gameId, gameTeam);
+        serverAction.payload.gameboardMeta.confirmedRods = await Capability.getRodsFromGod(this.gameId, gameTeam);
+        serverAction.payload.gameboardMeta.confirmedRemoteSense = await Capability.getRemoteSensing(this.gameId, gameTeam);
+        serverAction.payload.gameboardMeta.confirmedInsurgency = await Capability.getInsurgency(this.gameId, gameTeam);
+        serverAction.payload.gameboardMeta.confirmedBioWeapons = await Capability.getBiologicalWeapons(this.gameId, gameTeam);
+        serverAction.payload.gameboardMeta.confirmedRaiseMorale = await Capability.getRaiseMorale(this.gameId, gameTeam);
+        serverAction.payload.gameboardMeta.confirmedCommInterrupt = await Capability.getCommInterrupt(this.gameId, gameTeam);
+        serverAction.payload.gameboardMeta.confirmedGoldenEye = await Capability.getGoldenEye(this.gameId, gameTeam);
+
+        //Could put news into its own object, but don't really use it much...(TODO: figure out if need to refactor this...)
+        if (this.gamePhase == NEWS_PHASE_ID) {
+            let queryString = "SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1";
+            let inserts = [this.gameId];
+            const [resultNews, fields] = await pool.query(queryString, inserts);
+            const { newsTitle, newsInfo } =
+                resultNews[0] !== undefined
+                    ? resultNews[0]
+                    : { newsTitle: "No More News", newsInfo: "Obviously you've been playing this game too long..." };
+
+            serverAction.payload.gameboardMeta.news = {
+                active: true,
+                newsTitle,
+                newsInfo
+            };
+        }
+
+        //TODO: get these values from the database (potentially throw this into the event object)
+        //TODO: current event could be a refuel (or something else...need to handle all of them, and set other states as false...)
+        //TODO: don't have to check if not in the combat phase...(prevent these checks for added efficiency?)
+        const currentEvent = await Event.getNext(this.gameId, gameTeam);
+
+        if (currentEvent) {
+            const { eventTypeId } = currentEvent;
+            switch (eventTypeId) {
+                case POS_BATTLE_EVENT_TYPE:
+                case COL_BATTLE_EVENT_TYPE:
+                    let friendlyPiecesList: any = await currentEvent.getTeamItems(gameTeam == BLUE_TEAM_ID ? BLUE_TEAM_ID : RED_TEAM_ID);
+                    let enemyPiecesList: any = await currentEvent.getTeamItems(gameTeam == BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID);
+                    let friendlyPieces: any = [];
+                    let enemyPieces = [];
+
+                    //formatting for the frontend
+                    for (let x = 0; x < friendlyPiecesList.length; x++) {
+                        //need to transform pieces and stuff...
+                        let thisFriendlyPiece = {
+                            piece: {
+                                pieceId: friendlyPiecesList[x].pieceId,
+                                pieceGameId: friendlyPiecesList[x].pieceGameId,
+                                pieceTeamId: friendlyPiecesList[x].pieceTeamId,
+                                pieceTypeId: friendlyPiecesList[x].pieceTypeId,
+                                piecePositionId: friendlyPiecesList[x].piecePositionId,
+                                pieceVisible: friendlyPiecesList[x].pieceVisible,
+                                pieceMoves: friendlyPiecesList[x].pieceMoves,
+                                pieceFuel: friendlyPiecesList[x].pieceFuel
+                            },
+                            targetPiece:
+                                friendlyPiecesList[x].tpieceId == null
+                                    ? null
+                                    : {
+                                          pieceId: friendlyPiecesList[x].tpieceId,
+                                          pieceGameId: friendlyPiecesList[x].tpieceGameId,
+                                          pieceTeamId: friendlyPiecesList[x].tpieceTeamId,
+                                          pieceTypeId: friendlyPiecesList[x].tpieceTypeId,
+                                          piecePositionId: friendlyPiecesList[x].tpiecePositionId,
+                                          pieceVisible: friendlyPiecesList[x].tpieceVisible,
+                                          pieceMoves: friendlyPiecesList[x].tpieceMoves,
+                                          pieceFuel: friendlyPiecesList[x].tpieceFuel
+                                      }
+                        };
+                        friendlyPieces.push(thisFriendlyPiece);
+                    }
+                    for (let y = 0; y < enemyPiecesList.length; y++) {
+                        let thisEnemyPiece: any = {
+                            targetPiece: null,
+                            targetPieceIndex: -1
+                        };
+                        thisEnemyPiece.piece = enemyPiecesList[y];
+                        enemyPieces.push(thisEnemyPiece);
+                    }
+
+                    //now need to get the targetPieceIndex from the thing....if needed....
+                    for (let z = 0; z < friendlyPieces.length; z++) {
+                        if (friendlyPieces[z].targetPiece != null) {
+                            const { pieceId } = friendlyPieces[z].targetPiece;
+
+                            friendlyPieces[z].targetPieceIndex = enemyPieces.findIndex(enemyPieceThing => enemyPieceThing.piece.pieceId == pieceId);
+                        }
+                    }
+
+                    serverAction.payload.gameboardMeta.battle = {
+                        active: true,
+                        friendlyPieces,
+                        enemyPieces
+                    };
+                    break;
+                case REFUEL_EVENT_TYPE:
+                    //need to get tankers and aircraft and put that into the payload...
+                    let tankers = [];
+                    let aircraft = [];
+                    const allRefuelItems: any = await currentEvent.getRefuelItems();
+
+                    for (let x = 0; x < allRefuelItems.length; x++) {
+                        let thisRefuelItem = allRefuelItems[x];
+                        let { pieceTypeId } = thisRefuelItem;
+                        if (pieceTypeId === AIR_REFUELING_SQUADRON_ID) {
+                            tankers.push(thisRefuelItem);
+                        } else {
+                            aircraft.push(thisRefuelItem);
+                        }
+                    }
+
+                    serverAction.payload.gameboardMeta.refuel = {
+                        active: true,
+                        tankers,
+                        aircraft,
+                        selectedTankerPieceId: -1,
+                        selectedTankerPieceIndex: -1
+                    };
+                    break;
+                default:
+                //do nothing, unknown event type...should do something...
+            }
+        }
+
+        return serverAction;
     }
 }
 

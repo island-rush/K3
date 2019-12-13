@@ -15,7 +15,7 @@ class InvItem {
     async init() {
         const queryString = "SELECT * FROM invItems WHERE invItemId = ?";
         const inserts = [this.invItemId];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         if (results.length != 1) {
             return null;
