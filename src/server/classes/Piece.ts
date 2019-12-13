@@ -37,12 +37,14 @@ class Piece {
     pieceId: number;
     pieceGameId: number;
     pieceTeamId: number;
-    piecetypeId: number;
+    pieceTypeId: number;
     piecePositionId: number;
     pieceContainerId: number;
     pieceVisible: number;
     pieceMoves: number;
     pieceFuel: number;
+    pieceContents?: any;
+    // pieceDisabled?: any;
 
     //not in database
     pieceDisabled: boolean;

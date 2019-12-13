@@ -1,5 +1,5 @@
-const { Game, Piece } = require("../../classes");
-const sendUserFeedback = require("../sendUserFeedback");
+import { Game, Piece } from "../../classes";
+import sendUserFeedback from "../sendUserFeedback";
 import { OUTER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
 import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
@@ -62,7 +62,7 @@ const enterContainer = async (socket: Socket, payload: any) => {
         return;
     }
 
-    const piecesInside = await thisContainerPiece.getPiecesInside();
+    const piecesInside: any = await thisContainerPiece.getPiecesInside();
 
     let countOf: any = {}; //number of each item type already inside it
     piecesInside.forEach((piece: any) => {

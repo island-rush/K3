@@ -1,11 +1,11 @@
-const { Game, Event } = require("../../classes");
+import { Game, Event } from "../../classes";
 import { REFUEL_RESULTS } from "../../../react-client/src/redux/actions/actionTypes";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import { TYPE_FUEL, TYPE_AIR, COMBAT_PHASE_ID } from "../../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
-const sendUserFeedback = require("../sendUserFeedback");
-const giveNextEvent = require("../giveNextEvent");
+import sendUserFeedback from "../sendUserFeedback";
+import giveNextEvent from "../giveNextEvent";
 
 const confirmFuelSelection = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

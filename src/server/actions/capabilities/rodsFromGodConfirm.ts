@@ -1,10 +1,10 @@
-const { Game, InvItem, Capability } = require("../../classes");
+import { Game, InvItem, Capability } from "../../classes";
 import { RODS_FROM_GOD_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
 import { RODS_FROM_GOD_TYPE_ID, COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
-const sendUserFeedback = require("../sendUserFeedback");
+import sendUserFeedback from "../sendUserFeedback";
 
 //TODO: does this affect all pieces? or only ground since that makes sense....(compare to bio weapons)
 const rodsFromGodConfirm = async (socket: Socket, payload: any) => {

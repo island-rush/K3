@@ -1,5 +1,5 @@
-const { Game, InvItem, ShopItem } = require("../../classes");
-const sendUserFeedback = require("../sendUserFeedback");
+import { Game, InvItem, ShopItem } from "../../classes";
+import sendUserFeedback from "../sendUserFeedback";
 import { SHOP_TRANSFER } from "../../../react-client/src/redux/actions/actionTypes";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";

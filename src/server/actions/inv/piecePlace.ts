@@ -1,5 +1,5 @@
-const { Game, InvItem } = require("../../classes");
-const sendUserFeedback = require("../sendUserFeedback");
+import { Game, InvItem } from "../../classes";
+import sendUserFeedback from "../sendUserFeedback";
 import { PIECE_PLACE } from "../../../react-client/src/redux/actions/actionTypes";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { BAD_REQUEST_TAG, GAME_INACTIVE_TAG } from "../../pages/errorTypes";

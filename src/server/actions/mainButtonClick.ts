@@ -1,5 +1,5 @@
-const sendUserFeedback = require("./sendUserFeedback");
-const { Game, Capability, Piece } = require("../classes");
+import sendUserFeedback from "./sendUserFeedback";
+import { Game, Capability, Piece } from "../classes";
 import { MAIN_BUTTON_CLICK, PURCHASE_PHASE, COMBAT_PHASE, NEWS_PHASE, SLICE_CHANGE } from "../../react-client/src/redux/actions/actionTypes";
 import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../pages/errorTypes";
@@ -17,7 +17,7 @@ import {
     SLICE_EXECUTING_ID
 } from "../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
-const executeStep = require("./executeStep"); //big function
+import executeStep from "./executeStep"; //big function
 
 const mainButtonClick = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

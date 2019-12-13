@@ -1,10 +1,10 @@
-const { Game, InvItem, Capability } = require("../../classes");
+import { Game, InvItem, Capability } from "../../classes";
 import { BIO_WEAPON_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
-const sendUserFeedback = require("../sendUserFeedback");
+import sendUserFeedback from "../sendUserFeedback";
 
 const biologicalWeaponsConfirm = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

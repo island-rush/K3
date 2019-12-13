@@ -1,4 +1,4 @@
-const { Game, InvItem, Capability, Piece } = require("../../classes");
+import { Game, InvItem, Capability, Piece } from "../../classes";
 import { RAISE_MORALE_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
@@ -10,7 +10,7 @@ import {
     TYPE_MAIN
 } from "../../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
-const sendUserFeedback = require("../sendUserFeedback");
+import sendUserFeedback from "../sendUserFeedback";
 
 const raiseMoraleConfirm = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

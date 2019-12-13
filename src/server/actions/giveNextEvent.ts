@@ -1,10 +1,10 @@
-const { Event, Piece } = require("../classes");
+import { Event, Piece } from "../classes";
 import { EVENT_BATTLE, NO_MORE_EVENTS, EVENT_REFUEL } from "../../react-client/src/redux/actions/actionTypes";
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from "../../react-client/src/constants/gameConstants";
 import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { Socket } from "socket.io";
-const sendUserFeedback = require("./sendUserFeedback");
-const { POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } = require("./eventConstants");
+import sendUserFeedback from "./sendUserFeedback";
+import { POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "./eventConstants";
 
 const giveNextEvent = async (socket: Socket, options: any) => {
     const { thisGame, gameTeam } = options;
@@ -24,10 +24,10 @@ const giveNextEvent = async (socket: Socket, options: any) => {
         switch (gameEvent.eventTypeId) {
             case COL_BATTLE_EVENT_TYPE:
             case POS_BATTLE_EVENT_TYPE:
-                let friendlyPiecesList = await gameEvent.getTeamItems(gameTeam);
-                let enemyPiecesList = await gameEvent.getTeamItems(otherTeam);
-                let friendlyPieces = [];
-                let enemyPieces = [];
+                let friendlyPiecesList: any = await gameEvent.getTeamItems(gameTeam);
+                let enemyPiecesList: any = await gameEvent.getTeamItems(otherTeam);
+                let friendlyPieces: any = [];
+                let enemyPieces: any = [];
 
                 for (let x = 0; x < friendlyPiecesList.length; x++) {
                     let thisFriendlyPiece: any = {
@@ -59,7 +59,7 @@ const giveNextEvent = async (socket: Socket, options: any) => {
                 break;
             case REFUEL_EVENT_TYPE:
                 //get the pieces from the event, put them into payload (pre-format based on state?)
-                let allRefuelEventItems = await gameEvent.getRefuelItems();
+                let allRefuelEventItems: any = await gameEvent.getRefuelItems();
 
                 let tankers = [];
                 let aircraft = [];
