@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { WAITING_STATUS, NEWS_PHASE_ID, PURCHASE_PHASE_ID, COMBAT_PHASE_ID, SLICE_PLANNING_ID, PLACE_PHASE_ID } from "../../constants/gameConstants";
 
-const mainButtonStyle = {
+const mainButtonStyle: any = {
     backgroundColor: "grey",
     height: "80%",
     width: "20%",
@@ -10,7 +9,12 @@ const mainButtonStyle = {
     float: "left"
 };
 
-class MainButton extends Component {
+interface Props {
+    mainButtonClick: any;
+    gameInfo: any;
+}
+
+class MainButton extends Component<Props> {
     render() {
         const { mainButtonClick, gameInfo } = this.props;
         const { gameStatus, gamePhase, gameSlice } = gameInfo;
@@ -56,10 +60,5 @@ class MainButton extends Component {
         );
     }
 }
-
-MainButton.propTypes = {
-    mainButtonClick: PropTypes.func.isRequired, //from parent
-    gameInfo: PropTypes.object.isRequired //from parent
-};
 
 export default MainButton;

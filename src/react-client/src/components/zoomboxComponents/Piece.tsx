@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from "../styleConstants";
 import { TYPE_NAMES } from "../../constants/gameConstants";
 
@@ -32,7 +31,15 @@ const disabledStyle = {
 
 const zIndexLevels = [{ zIndex: 5 }, { zIndex: 10 }];
 
-class Piece extends Component {
+interface Props {
+    piece: any;
+    topLevel: any;
+    selected: any;
+    pieceClick: any;
+    pieceOpen: any;
+}
+
+class Piece extends Component<Props> {
     render() {
         const { piece, topLevel, selected, pieceClick, pieceOpen } = this.props;
 
@@ -48,15 +55,17 @@ class Piece extends Component {
 
         const disabledText = piece.pieceDisabled ? `\nDisabled` : ``;
 
-        const title = `${TYPE_NAMES[piece.pieceTypeId]}\nMoves: ${piece.pieceMoves}\nFuel: ${piece.pieceFuel !== -1 ? piece.pieceFuel : "N/A"}${disabledText}`;
+        const title = `${TYPE_NAMES[piece.pieceTypeId]}\nMoves: ${piece.pieceMoves}\nFuel: ${
+            piece.pieceFuel !== -1 ? piece.pieceFuel : "N/A"
+        }${disabledText}`;
 
-        const onClick = event => {
+        const onClick = (event: any) => {
             event.preventDefault();
             pieceClick(piece);
             event.stopPropagation();
         };
 
-        const onDoubleClick = event => {
+        const onDoubleClick = (event: any) => {
             event.preventDefault();
             pieceOpen(piece);
             event.stopPropagation();
@@ -65,14 +74,5 @@ class Piece extends Component {
         return <div style={pieceCombinedStyle} title={title} onClick={onClick} onDoubleClick={onDoubleClick}></div>;
     }
 }
-
-Piece.propTypes = {
-    piece: PropTypes.object.isRequired,
-    topLevel: PropTypes.bool.isRequired,
-    selected: PropTypes.bool.isRequired,
-    pieceClick: PropTypes.func.isRequired,
-    pieceOpen: PropTypes.func.isRequired,
-    pieceClose: PropTypes.func.isRequired
-};
 
 export default Piece;

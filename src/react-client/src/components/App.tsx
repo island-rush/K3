@@ -17,14 +17,14 @@ const isPlanningStyle = {
     backgroundColor: "yellow"
 };
 
-interface AppProps {
+interface Props {
     gameboardMeta: any;
     selectPosition(): any;
     menuSelect(): any;
     clearPieceSelection(): any;
 }
 
-class App extends Component<AppProps> {
+class App extends Component<Props> {
     render() {
         // const { gameboardMeta, selectPosition, menuSelect, clearPieceSelection } = this.props;
         const { gameboardMeta } = this.props;

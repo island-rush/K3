@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import PropTypes from "prop-types";
 import InvItem from "./InvItem";
 //prettier-ignore
 import { airPieceClick, landPieceClick, seaPieceClick, atcScamble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } from "../../redux/actions";
@@ -28,7 +27,7 @@ import {
     RAISE_MORALE_TYPE_ID
 } from "../../constants/gameConstants";
 
-const inventoryStyle = {
+const inventoryStyle: any = {
     backgroundColor: "Yellow",
     position: "absolute",
     height: "170%",
@@ -38,11 +37,11 @@ const inventoryStyle = {
     padding: "1%"
 };
 
-const invisibleStyle = {
+const invisibleStyle: any = {
     display: "none"
 };
 
-const airpieceItemsContainerStyle = {
+const airpieceItemsContainerStyle: any = {
     backgroundColor: "pink",
     position: "absolute",
     width: "18%",
@@ -51,7 +50,7 @@ const airpieceItemsContainerStyle = {
     top: "10%"
 };
 
-const landpieceItemsContainerStyle = {
+const landpieceItemsContainerStyle: any = {
     backgroundColor: "pink",
     position: "absolute",
     width: "18%",
@@ -59,7 +58,7 @@ const landpieceItemsContainerStyle = {
     right: "61%",
     top: "10%"
 };
-const seapieceItemsContainerStyle = {
+const seapieceItemsContainerStyle: any = {
     backgroundColor: "pink",
     position: "absolute",
     width: "18%",
@@ -67,7 +66,7 @@ const seapieceItemsContainerStyle = {
     right: "41%",
     top: "10%"
 };
-const specialpieceItemsContainerStyle = {
+const specialpieceItemsContainerStyle: any = {
     backgroundColor: "pink",
     position: "absolute",
     width: "18%",
@@ -76,7 +75,7 @@ const specialpieceItemsContainerStyle = {
     top: "10%"
 };
 
-const warfareItemsContainerStyle = {
+const warfareItemsContainerStyle: any = {
     backgroundColor: "pink",
     position: "absolute",
     width: "18%",
@@ -85,16 +84,40 @@ const warfareItemsContainerStyle = {
     top: "10%"
 };
 
-const itemCount = (array, value) => {
-    return array.filter(v => v === value).length;
+const itemCount = (array: any, value: any) => {
+    return array.filter((v: any) => v === value).length;
 };
-class InvMenu extends Component {
+
+interface Props {
+    confirmedRaiseMorale: any;
+    selected: any;
+    invItems: any;
+    airPieceClick: any;
+    landPieceClick: any;
+    seaPieceClick: any;
+    atcScamble: any;
+    cyberDominance: any;
+    missileLaunchDisruption: any;
+    communicationsInterruption: any;
+    remoteSensing: any;
+    rodsFromGod: any;
+    antiSatelliteMissiles: any;
+    goldenEye: any;
+    nuclearStrike: any;
+    biologicalWeapons: any;
+    seaMines: any;
+    droneSwarms: any;
+    insurgency: any;
+    raiseMorale: any;
+}
+
+class InvMenu extends Component<Props> {
     render() {
         //TODO: selected is a poorly chosen variable name, change to MenuIsVisible or something (since selected is used for other components too)
         //prettier-ignore
         const { confirmedRaiseMorale, selected, invItems, airPieceClick, landPieceClick, seaPieceClick, atcScamble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } = this.props;
 
-        let capabilityFunctions = {};
+        let capabilityFunctions: any = {};
         capabilityFunctions[ATC_SCRAMBLE_TYPE_ID] = atcScamble;
         capabilityFunctions[CYBER_DOMINANCE_TYPE_ID] = cyberDominance;
         capabilityFunctions[MISSILE_LAUNCH_DISRUPTION_TYPE_ID] = missileLaunchDisruption;
@@ -110,32 +133,38 @@ class InvMenu extends Component {
         capabilityFunctions[INSURGENCY_TYPE_ID] = insurgency;
         capabilityFunctions[RAISE_MORALE_TYPE_ID] = raiseMorale;
 
-        const airItems = invItems.filter(invItem => {
+        const airItems = invItems.filter((invItem: any) => {
             return TYPE_OWNERS[TYPE_AIR].includes(invItem.invItemTypeId);
         });
-        const landItems = invItems.filter(invItem => {
+        const landItems = invItems.filter((invItem: any) => {
             return TYPE_OWNERS[TYPE_LAND].includes(invItem.invItemTypeId);
         });
-        const seaItems = invItems.filter(invItem => {
+        const seaItems = invItems.filter((invItem: any) => {
             return TYPE_OWNERS[TYPE_SEA].includes(invItem.invItemTypeId);
         });
-        const specialItems = invItems.filter(invItem => {
+        const specialItems = invItems.filter((invItem: any) => {
             return TYPE_OWNERS[TYPE_SPECIAL].includes(invItem.invItemTypeId);
         });
-        const capabilityItems = invItems.filter(invItem => {
+        const capabilityItems = invItems.filter((invItem: any) => {
             return LIST_ALL_CAPABILITIES.includes(invItem.invItemTypeId);
         });
 
-        const airInvComponents = airItems.map((invItem, index) => <InvItem key={index} invItem={invItem} invItemClick={airPieceClick} />);
-        const landInvComponents = landItems.map((invItem, index) => <InvItem key={index} invItem={invItem} invItemClick={landPieceClick} />); //TODO: are helicopters special? (placed not on land?) -> determine other special cases if able
-        const seaInvComponents = seaItems.map((invItem, index) => <InvItem key={index} invItem={invItem} invItemClick={seaPieceClick} />);
+        const airInvComponents = airItems.map((invItem: any, index: number) => (
+            <InvItem key={index} invItem={invItem} invItemClick={airPieceClick} />
+        ));
+        const landInvComponents = landItems.map((invItem: any, index: number) => (
+            <InvItem key={index} invItem={invItem} invItemClick={landPieceClick} />
+        )); //TODO: are helicopters special? (placed not on land?) -> determine other special cases if able
+        const seaInvComponents = seaItems.map((invItem: any, index: number) => (
+            <InvItem key={index} invItem={invItem} invItemClick={seaPieceClick} />
+        ));
 
         //SOF team is the only land piece in special group, others are air pieces
-        const specialInvComponents = specialItems.map((invItem, index) => (
+        const specialInvComponents = specialItems.map((invItem: any, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={invItem.invItemTypeId === SOF_TEAM_TYPE_ID ? landPieceClick : airPieceClick} />
         ));
 
-        const capabilityItemComponents = capabilityItems.map((invItem, index) => (
+        const capabilityItemComponents = capabilityItems.map((invItem: any, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={capabilityFunctions[invItem.invItemTypeId]} />
         ));
 
@@ -177,30 +206,7 @@ class InvMenu extends Component {
     }
 }
 
-InvMenu.propTypes = {
-    selected: PropTypes.bool.isRequired, //from the parent
-    invItems: PropTypes.array.isRequired,
-    airPieceClick: PropTypes.func.isRequired,
-    landPieceClick: PropTypes.func.isRequired,
-    seaPieceClick: PropTypes.func.isRequired,
-    atcScamble: PropTypes.func.isRequired,
-    cyberDominance: PropTypes.func.isRequired,
-    missileLaunchDisruption: PropTypes.func.isRequired,
-    communicationsInterruption: PropTypes.func.isRequired,
-    remoteSensing: PropTypes.func.isRequired,
-    rodsFromGod: PropTypes.func.isRequired,
-    antiSatelliteMissiles: PropTypes.func.isRequired,
-    goldenEye: PropTypes.func.isRequired,
-    nuclearStrike: PropTypes.func.isRequired,
-    biologicalWeapons: PropTypes.func.isRequired,
-    seaMines: PropTypes.func.isRequired,
-    droneSwarms: PropTypes.func.isRequired,
-    insurgency: PropTypes.func.isRequired,
-    raiseMorale: PropTypes.func.isRequired,
-    confirmedRaiseMorale: PropTypes.array.isRequired
-};
-
-const mapStateToProps = ({ invItems, gameboardMeta }) => ({
+const mapStateToProps = ({ invItems, gameboardMeta }: { invItems: any; gameboardMeta: any }) => ({
     invItems,
     confirmedRaiseMorale: gameboardMeta.confirmedRaiseMorale
 });

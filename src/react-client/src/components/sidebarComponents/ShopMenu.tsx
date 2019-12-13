@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import PurchaseableItem from "./PurchaseableItem";
 import ShopItem from "./ShopItem";
 import { shopRefundRequest, shopPurchaseRequest, shopConfirmPurchase } from "../../redux/actions";
 import { TYPE_OWNERS, TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL, LIST_ALL_CAPABILITIES } from "../../constants/gameConstants";
 
-const shopStyle = {
+const shopStyle: any = {
     backgroundColor: "Yellow",
     position: "absolute",
     height: "170%",
@@ -19,7 +18,7 @@ const invisibleStyle = {
     display: "none"
 };
 
-const purchaseButtonStyle = {
+const purchaseButtonStyle: any = {
     position: "absolute",
     bottom: "1%",
     right: "1%",
@@ -28,7 +27,7 @@ const purchaseButtonStyle = {
     backgroundColor: "pink"
 };
 
-const purchaseableItemsContainerStyle = {
+const purchaseableItemsContainerStyle: any = {
     backgroundColor: "red",
     position: "relative",
     width: "15%",
@@ -38,17 +37,38 @@ const purchaseableItemsContainerStyle = {
     margin: ".5%"
 };
 
-class ShopMenu extends Component {
+interface Props {
+    shopItems: any;
+    selected: any;
+    purchase: any;
+    refund: any;
+    points: any;
+    confirmPurchase: any;
+}
+
+class ShopMenu extends Component<Props> {
     render() {
         const { shopItems, selected, purchase, refund, points, confirmPurchase } = this.props;
 
-        const airShopComponents = TYPE_OWNERS[TYPE_AIR].map((typeId, index) => <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />);
-        const landShopComponents = TYPE_OWNERS[TYPE_LAND].map((typeId, index) => <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />);
-        const seaShopComponents = TYPE_OWNERS[TYPE_SEA].map((typeId, index) => <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />);
-        const specialShopComponents = TYPE_OWNERS[TYPE_SPECIAL].map((typeId, index) => <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />);
-        const capabilityShopComponents = LIST_ALL_CAPABILITIES.map((typeId, index) => <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />);
+        const airShopComponents = TYPE_OWNERS[TYPE_AIR].map((typeId: any, index: number) => (
+            <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
+        ));
+        const landShopComponents = TYPE_OWNERS[TYPE_LAND].map((typeId: any, index: number) => (
+            <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
+        ));
+        const seaShopComponents = TYPE_OWNERS[TYPE_SEA].map((typeId: any, index: number) => (
+            <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
+        ));
+        const specialShopComponents = TYPE_OWNERS[TYPE_SPECIAL].map((typeId: any, index: number) => (
+            <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
+        ));
+        const capabilityShopComponents = LIST_ALL_CAPABILITIES.map((typeId, index) => (
+            <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
+        ));
 
-        const shopItemComponents = shopItems.map((shopItem, index) => <ShopItem key={index} shopItem={shopItem} refund={shopItemId => refund(shopItemId)} />);
+        const shopItemComponents = shopItems.map((shopItem: any, index: number) => (
+            <ShopItem key={index} shopItem={shopItem} refund={(shopItemId: number) => refund(shopItemId)} />
+        ));
 
         return (
             <div style={selected ? shopStyle : invisibleStyle}>
@@ -93,16 +113,7 @@ class ShopMenu extends Component {
     }
 }
 
-ShopMenu.propTypes = {
-    shopItems: PropTypes.array.isRequired,
-    selected: PropTypes.bool.isRequired, //from parent
-    purchase: PropTypes.func.isRequired,
-    refund: PropTypes.func.isRequired,
-    points: PropTypes.number.isRequired,
-    confirmPurchase: PropTypes.func.isRequired
-};
-
-const mapStateToProps = ({ shopItems, gameInfo }) => ({
+const mapStateToProps = ({ shopItems, gameInfo }: { shopItems: any; gameInfo: any }) => ({
     shopItems: shopItems,
     points: gameInfo.gamePoints
 });

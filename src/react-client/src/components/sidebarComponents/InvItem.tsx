@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import { TYPE_NAMES, TYPE_MOVES, TYPE_FUEL } from "../../constants/gameConstants";
 import { TYPE_IMAGES } from "../styleConstants";
 
@@ -14,7 +13,12 @@ const invItemStyle = {
     backgroundRepeat: "no-repeat"
 };
 
-const InvItem = ({ invItem, invItemClick }) => {
+interface Props {
+    invItem: any;
+    invItemClick: any;
+}
+
+const InvItem = ({ invItem, invItemClick }: Props) => {
     const { invItemTypeId } = invItem;
 
     const name = TYPE_NAMES[invItemTypeId];
@@ -28,18 +32,13 @@ const InvItem = ({ invItem, invItemClick }) => {
 
     const title = `${name}\nMoves: ${moves !== undefined ? moves : "N/A"}\nFuel: ${fuel !== undefined && fuel !== -1 ? fuel : "N/A"}`;
 
-    const onClick = event => {
+    const onClick = (event: any) => {
         event.preventDefault();
         invItemClick(invItem);
         event.stopPropagation();
     };
 
     return <div style={style} title={title} onClick={onClick} />;
-};
-
-InvItem.propTypes = {
-    invItem: PropTypes.object.isRequired,
-    invItemClick: PropTypes.func.isRequired
 };
 
 export default InvItem;

@@ -82,7 +82,7 @@ const REFUEL_POPUP_IMAGES = {
 };
 
 //TODO: change to be based on gameboardConstants
-const ZOOMBOX_BACKGROUNDS = {
+const ZOOMBOX_BACKGROUNDS: any = {
     land: { backgroundColor: "green" },
     water: { backgroundColor: "cyan" },
     airfield: { backgroundColor: "green" },

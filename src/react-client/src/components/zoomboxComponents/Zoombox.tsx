@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Piece from "./Piece";
 import { selectPiece, clearPieceSelection, pieceOpen, pieceClose } from "../../redux/actions";
@@ -18,7 +17,17 @@ const invisibleStyle = {
     display: "none"
 };
 
-class Zoombox extends Component {
+interface Props {
+    selectedPos: any;
+    selectedPiece: any;
+    gameboard: any;
+    selectPiece: any;
+    clearPieceSelection: any;
+    pieceOpen: any;
+    pieceClose: any;
+}
+
+class Zoombox extends Component<Props> {
     render() {
         const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, pieceClose } = this.props;
 
@@ -26,7 +35,7 @@ class Zoombox extends Component {
 
         const pieces = !isVisible
             ? null
-            : gameboard[selectedPos].pieces.map((piece, index) => (
+            : gameboard[selectedPos].pieces.map((piece: any, index: number) => (
                   <Piece
                       pieceOpen={pieceOpen}
                       pieceClose={pieceClose}
@@ -40,7 +49,7 @@ class Zoombox extends Component {
 
         const style = isVisible ? { ...zoomboxStyle, ...ZOOMBOX_BACKGROUNDS[gameboard[selectedPos].type] } : invisibleStyle;
 
-        const onClick = event => {
+        const onClick = (event: any) => {
             event.preventDefault();
             clearPieceSelection();
             event.stopPropagation();
@@ -54,17 +63,7 @@ class Zoombox extends Component {
     }
 }
 
-Zoombox.propTypes = {
-    selectedPos: PropTypes.number.isRequired,
-    selectedPiece: PropTypes.object,
-    gameboard: PropTypes.array.isRequired,
-    selectPiece: PropTypes.func.isRequired,
-    clearPieceSelection: PropTypes.func.isRequired,
-    pieceOpen: PropTypes.func.isRequired,
-    pieceClose: PropTypes.func.isRequired
-};
-
-const mapStateToProps = ({ gameboard, gameboardMeta }) => ({
+const mapStateToProps = ({ gameboard, gameboardMeta }: { gameboard: any; gameboardMeta: any }) => ({
     selectedPos: gameboardMeta.selectedPosition,
     selectedPiece: gameboardMeta.selectedPiece,
     gameboard: gameboard
