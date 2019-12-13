@@ -1,7 +1,14 @@
-const pool = require("../database");
+import pool from "../database";
 
 class Plan {
-    constructor(planPieceId, planMovementOrder) {
+    planGameId: number;
+    planTeamId: number;
+    planPieceId: number;
+    planMovementOrder: number;
+    planPositionId: number;
+    planSpecialFlag: number;
+
+    constructor(planPieceId: number, planMovementOrder: number) {
         this.planPieceId = planPieceId;
         this.planMovementOrder = planMovementOrder;
     }
@@ -9,7 +16,7 @@ class Plan {
     async init() {
         const queryString = "SELECT * FROM plans WHERE planPieceId = ? AND planMovementOrder = ?";
         const inserts = [this.planPieceId, this.planMovementOrder];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         if (results.length != 1) {
             return null;
@@ -19,13 +26,13 @@ class Plan {
         }
     }
 
-    static async insert(plansToInsert) {
+    static async insert(plansToInsert: any) {
         const queryString = "INSERT INTO plans (planGameId, planTeamId, planPieceId, planMovementOrder, planPositionId, planSpecialFlag) VALUES ?";
         const inserts = [plansToInsert];
         await pool.query(queryString, inserts);
     }
 
-    static async delete(pieceId) {
+    static async delete(pieceId: number) {
         const queryString = "DELETE FROM plans WHERE planPieceId = ?";
         const inserts = [pieceId];
         await pool.query(queryString, inserts);
@@ -38,14 +45,14 @@ class Plan {
     // 	await pool.query(queryString, inserts);
     // }
 
-    static async getCurrentMovementOrder(gameId, gameTeam) {
+    static async getCurrentMovementOrder(gameId: number, gameTeam: number) {
         const queryString = "SELECT planMovementOrder FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planMovementOrder ASC LIMIT 1";
         const inserts = [gameId, gameTeam];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
         return results.length !== 0 ? results[0]["planMovementOrder"] : null;
     }
 
-    static async getCollisions(gameId, movementOrder) {
+    static async getCollisions(gameId: number, movementOrder: number) {
         const queryString =
             "SELECT * FROM (SELECT pieceId as pieceId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0, piecePositionId as piecePositionId0, planPositionId as planPositionId0 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 0 AND pieceGameId = ? AND planMovementOrder = ?) as a JOIN (SELECT pieceId as pieceId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1, piecePositionId as piecePositionId1, planPositionId as planPositionId1 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 1 AND pieceGameId = ? AND planMovementOrder = ?) as b ON piecePositionId0 = planPositionId1 AND planPositionId0 = piecePositionId1";
         const inserts = [gameId, movementOrder, gameId, movementOrder];
@@ -53,7 +60,7 @@ class Plan {
         return results;
     }
 
-    static async getPositionCombinations(gameId) {
+    static async getPositionCombinations(gameId: number) {
         const queryString =
             "SELECT * FROM (SELECT pieceId as pieceId0, piecePositionId as piecePositionId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 0) as a JOIN (SELECT pieceId as pieceId1, piecePositionId as piecePositionId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 1) as b ON piecePositionId0 = piecePositionId1";
         const inserts = [gameId, gameId];
@@ -61,13 +68,13 @@ class Plan {
         return results;
     }
 
-    static async getConfirmedPlans(gameId, gameTeam) {
+    static async getConfirmedPlans(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planPieceId, planMovementOrder ASC";
         const inserts = [gameId, gameTeam];
-        const [resultPlans] = await pool.query(queryString, inserts);
+        const [resultPlans, fields] = await pool.query(queryString, inserts);
 
         //formatting for the client, needs it in this object kinda way
-        let confirmedPlans = {};
+        let confirmedPlans: any = {};
         for (let x = 0; x < resultPlans.length; x++) {
             let { planPieceId, planPositionId, planSpecialFlag } = resultPlans[x];
             let type = planSpecialFlag == 0 ? "move" : planSpecialFlag == 1 ? "container" : "NULL_SPECIAL";

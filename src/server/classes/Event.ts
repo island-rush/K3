@@ -1,9 +1,16 @@
-const pool = require("../database");
-import { ATTACK_MATRIX } from "../../client/src/constants/gameConstants";
+import pool from "../database";
+import { ATTACK_MATRIX } from "../../react-client/src/constants/gameConstants";
 
 class Event {
+    eventId: number;
+    eventGameId: number;
+    eventTeamId: number;
+    eventTypeId: number;
+    eventPosA: number;
+    eventPosB: number;
+
     //TODO: we have a class for event, but multiple tables for keeping track of events, event items, and that one for temp stuff (efficient)
-    constructor(eventId, options) {
+    constructor(eventId: number, options: any) {
         this.eventId = eventId;
         if (options) {
             Object.assign(this, options);
@@ -14,7 +21,7 @@ class Event {
         //TODO: this may not be ever called, check since we now instantiate from static methods?
         const queryString = "SELECT * FROM eventQueue WHERE eventId = ?";
         const inserts = [this.eventId];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         if (results.length != 1) {
             return null;
@@ -33,7 +40,7 @@ class Event {
     async getItems() {
         const queryString = "SELECT * FROM eventItems NATURAL JOIN pieces WHERE eventId = ? AND eventPieceId = pieceId";
         const inserts = [this.eventId];
-        const [eventItems] = await pool.query(queryString, inserts);
+        const [eventItems, fields] = await pool.query(queryString, inserts);
 
         if (eventItems.length == 0) {
             return null;
@@ -43,7 +50,7 @@ class Event {
     }
 
     //TODO: should change this to resond to eventType (change SELECT)...instead of also having getRefuelItems
-    async getTeamItems(gameTeam) {
+    async getTeamItems(gameTeam: number) {
         const queryString =
             "SELECT * FROM (SELECT * FROM eventItems NATUAL JOIN pieces WHERE eventPieceId = pieceId AND eventId = ? AND pieceTeamId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.eventItemTarget = b.tpieceId";
         const inserts = [this.eventId, gameTeam];
@@ -58,10 +65,10 @@ class Event {
         return eventRefuelItems;
     }
 
-    static async getNext(gameId, gameTeam) {
+    static async getNext(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM eventQueue WHERE eventGameId = ? AND (eventTeamId = ? OR eventTeamId = 2) ORDER BY eventId ASC LIMIT 1";
         const inserts = [gameId, gameTeam];
-        const [events] = await pool.query(queryString, inserts);
+        const [events, fields] = await pool.query(queryString, inserts);
 
         if (events.length != 1) {
             //was limiting 1 from query, so should be 1 or 0
@@ -73,10 +80,10 @@ class Event {
     }
 
     //TODO: this function not called anymore, unlikely to need it...
-    static async getNextAnyteam(gameId) {
+    static async getNextAnyteam(gameId: number) {
         const queryString = "SELECT * FROM eventQueue WHERE eventGameId = ? ORDER BY eventId ASC LIMIT 1";
         const inserts = [gameId];
-        const [events] = await pool.query(queryString, inserts);
+        const [events, fields] = await pool.query(queryString, inserts);
 
         if (events.length != 1) {
             return null;
@@ -86,13 +93,13 @@ class Event {
         }
     }
 
-    static async bulkInsertEvents(allInserts) {
+    static async bulkInsertEvents(allInserts: any) {
         const queryString = "INSERT INTO eventQueue (eventGameId, eventTeamId, eventTypeId, eventPosA, eventPosB) VALUES ?";
         const inserts = [allInserts];
         await pool.query(queryString, inserts);
     }
 
-    static async bulkInsertItems(gameId, allInserts) {
+    static async bulkInsertItems(gameId: number, allInserts: any) {
         const conn = await pool.getConnection();
 
         let queryString = "INSERT INTO eventItemsTemp (eventPieceId, eventItemGameId, eventPosA, eventPosB) VALUES ?";
@@ -110,7 +117,7 @@ class Event {
         conn.release();
     }
 
-    async bulkUpdateTargets(piecesWithTargets) {
+    async bulkUpdateTargets(piecesWithTargets: any) {
         //TODO: make sure that these piece->targets make sense (prevent bad targetting? (if possible...))
         if (piecesWithTargets.length > 0) {
             let allInserts = [];
@@ -129,12 +136,12 @@ class Event {
             await pool.query(queryString);
 
             queryString = "DELETE FROM eventItemsTargetsTemp WHERE eventItemGameId = ?";
-            inserts = [this.eventGameId];
-            await pool.query(queryString, inserts);
+            let inserts2 = [this.eventGameId];
+            await pool.query(queryString, inserts2);
         }
     }
 
-    async bulkUpdatePieceFuels(fuelUpdates, gameTeam) {
+    async bulkUpdatePieceFuels(fuelUpdates: any, gameTeam: number) {
         if (fuelUpdates.length == 0) {
             return; //no db interactions for 0 updates...
         }
@@ -156,8 +163,8 @@ class Event {
         await pool.query(queryString);
 
         queryString = "DELETE FROM pieceRefuelTemp WHERE gameId = ? AND teamId = ?";
-        inserts = [this.eventGameId, gameTeam];
-        await pool.query(queryString, inserts);
+        let inserts2 = [this.eventGameId, gameTeam];
+        await pool.query(queryString, inserts2);
     }
 
     //prettier-ignore
@@ -168,7 +175,7 @@ class Event {
 		let queryString =
 			"SELECT * FROM (SELECT * FROM eventItems NATUAL JOIN pieces WHERE eventPieceId = pieceId AND eventId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.eventItemTarget = b.tpieceId";
 		let inserts = [this.eventId];
-		const [eventItemsWithTargets] = await pool.query(queryString, inserts);
+		const [eventItemsWithTargets, fields] = await pool.query(queryString, inserts);
 
 		//need to know if any battles, and if 0 battles, end the event
 		let atLeastOneBattle = false;
@@ -180,7 +187,7 @@ class Event {
 			}
 		}
 
-		let fightResults = {
+		let fightResults: any = {
 			atLeastOneBattle
 		};
 
@@ -240,8 +247,8 @@ class Event {
 			//delete pieces if they are in the array (BULK DELETE QUERY)
 			//TODO: move this functionality to the piece class?
 			queryString = "DELETE FROM pieces WHERE pieceId IN (?)";
-			inserts = [piecesToDelete];
-			await pool.query(queryString, inserts);
+			let inserts2 = [piecesToDelete];
+			await pool.query(queryString, inserts2);
 
 			//prevents seeing previous attack from refresh*
 			queryString = "UPDATE eventItems SET eventItemTarget = -1 WHERE eventId = ?";

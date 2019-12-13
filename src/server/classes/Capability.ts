@@ -1,5 +1,5 @@
-const pool = require("../database");
-import { distanceMatrix } from "../../client/src/constants/distanceMatrix";
+import pool from "../database";
+import { distanceMatrix } from "../../react-client/src/constants/distanceMatrix";
 import {
     TYPE_OWNERS,
     TYPE_SPECIAL,
@@ -19,15 +19,15 @@ import {
     TYPE_AIR_PIECES,
     GOLDEN_EYE_RANGE,
     TYPE_GROUND_PIECES
-} from "../../client/src/constants/gameConstants";
+} from "../../react-client/src/constants/gameConstants";
 
 class Capability {
-    static async rodsFromGodInsert(gameId, gameTeam, selectedPositionId) {
+    static async rodsFromGodInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
         //TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
         //keeping it simple for now to ensure it works
         let queryString = "SELECT * FROM rodsFromGod WHERE gameId = ? AND teamId = ? AND positionId = ?";
         const inserts = [gameId, gameTeam, selectedPositionId];
-        let [results] = await pool.query(queryString, inserts);
+        let [results, fields] = await pool.query(queryString, inserts);
 
         //prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -39,10 +39,10 @@ class Capability {
         return true;
     }
 
-    static async getRodsFromGod(gameId, gameTeam) {
+    static async getRodsFromGod(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM rodsFromGod WHERE gameId = ? AND teamId = ?";
         const inserts = [gameId, gameTeam];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         let listOfPositions = [];
         for (let x = 0; x < results.length; x++) {
@@ -52,10 +52,10 @@ class Capability {
         return listOfPositions;
     }
 
-    static async useRodsFromGod(gameId) {
+    static async useRodsFromGod(gameId: number) {
         let queryString = "SELECT * FROM rodsFromGod WHERE gameId = ?";
         let inserts = [gameId];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         if (results.length === 0) {
             return [];
@@ -69,8 +69,8 @@ class Capability {
 
         //now delete pieces with this position
         queryString = "DELETE FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?)";
-        inserts = [gameId, fullListOfPositions];
-        await pool.query(queryString, inserts);
+        let inserts2 = [gameId, fullListOfPositions];
+        await pool.query(queryString, inserts2);
 
         //delete the rodsFromGod in the db
         queryString = "DELETE FROM rodsFromGod WHERE gameId = ?";
@@ -81,12 +81,12 @@ class Capability {
     }
 
     //TODO: better naming convention for these methods
-    static async insurgencyInsert(gameId, gameTeam, selectedPositionId) {
+    static async insurgencyInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
         //TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
         //keeping it simple for now to ensure it works
         let queryString = "SELECT * FROM insurgency WHERE gameId = ? AND teamId = ? AND positionId = ?";
         const inserts = [gameId, gameTeam, selectedPositionId];
-        let [results] = await pool.query(queryString, inserts);
+        let [results, fields] = await pool.query(queryString, inserts);
 
         //prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -98,10 +98,10 @@ class Capability {
         return true;
     }
 
-    static async getInsurgency(gameId, gameTeam) {
+    static async getInsurgency(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM insurgency WHERE gameId = ? AND teamId = ?";
         const inserts = [gameId, gameTeam];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         let listOfPositions = [];
         for (let x = 0; x < results.length; x++) {
@@ -111,16 +111,16 @@ class Capability {
         return listOfPositions;
     }
 
-    static async useInsurgency(gameId) {
+    static async useInsurgency(gameId: number) {
         let queryString = "SELECT * FROM insurgency WHERE gameId = ?";
         let inserts = [gameId];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         //TODO: make this more efficient using bulk selects/updates/deletes
 
-        let listOfPiecesToKill = [];
-        let listOfPieceIdsToKill = [];
-        let listOfEffectedPositions = [];
+        let listOfPiecesToKill: any = [];
+        let listOfPieceIdsToKill: any = [];
+        let listOfEffectedPositions: any = [];
 
         if (results.length === 0) {
             return { listOfPiecesToKill, listOfEffectedPositions };
@@ -134,7 +134,7 @@ class Capability {
 
             queryString = "SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ?";
             inserts = [gameId, otherTeam, positionId];
-            let [pieceResults] = await pool.query(queryString, inserts);
+            let [pieceResults, fields] = await pool.query(queryString, inserts);
 
             //for each piece
             for (let y = 0; y < pieceResults.length; y++) {
@@ -163,10 +163,10 @@ class Capability {
         return { listOfPiecesToKill, listOfEffectedPositions };
     }
 
-    static async remoteSensingInsert(gameId, gameTeam, selectedPositionId) {
+    static async remoteSensingInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
         let queryString = "SELECT * FROM remoteSensing WHERE gameId = ? AND teamId = ? AND positionId = ?";
         let inserts = [gameId, gameTeam, selectedPositionId];
-        let [results] = await pool.query(queryString, inserts);
+        let [results, fields] = await pool.query(queryString, inserts);
 
         //prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -179,10 +179,10 @@ class Capability {
         return true;
     }
 
-    static async getRemoteSensing(gameId, gameTeam) {
+    static async getRemoteSensing(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM remoteSensing WHERE gameId = ? AND teamId = ?";
         const inserts = [gameId, gameTeam];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         let listOfPositions = [];
         for (let x = 0; x < results.length; x++) {
@@ -192,7 +192,7 @@ class Capability {
         return listOfPositions;
     }
 
-    static async decreaseRemoteSensing(gameId) {
+    static async decreaseRemoteSensing(gameId: number) {
         //TODO: probably a more efficient way of doing this (single request...)
         let queryString = "UPDATE remoteSensing SET roundsLeft = roundsLeft - 1 WHERE gameId = ?;";
         const inserts = [gameId];
@@ -202,11 +202,11 @@ class Capability {
         await pool.query(queryString);
     }
 
-    static async insertBiologicalWeapons(gameId, gameTeam, selectedPositionId) {
+    static async insertBiologicalWeapons(gameId: number, gameTeam: number, selectedPositionId: number) {
         //TODO: Humanitarian assistance is restricted for the duration of this effect.
         let queryString = "SELECT * FROM biologicalWeapons WHERE gameId = ? AND teamId = ? AND positionId = ?";
         let inserts = [gameId, gameTeam, selectedPositionId];
-        let [results] = await pool.query(queryString, inserts);
+        let [results, fields] = await pool.query(queryString, inserts);
 
         //prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -219,7 +219,7 @@ class Capability {
         return true;
     }
 
-    static async getBiologicalWeapons(gameId, gameTeam) {
+    static async getBiologicalWeapons(gameId: number, gameTeam: number) {
         //get this team's bio weapons, and all team's activated bio weapons
         //what positions are currently toxic (planned to be toxic?)
         //happens in the same timeframe as rods from god, but sticks around...could be complicated with separating from plannedBio and activeBio
@@ -227,7 +227,7 @@ class Capability {
 
         const queryString = "SELECT * FROM biologicalWeapons WHERE gameId = ? AND (activated = ? OR teamId = ?)";
         const inserts = [gameId, ACTIVATED, gameTeam];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         let listOfPositions = [];
         for (let x = 0; x < results.length; x++) {
@@ -237,7 +237,7 @@ class Capability {
         return listOfPositions;
     }
 
-    static async useBiologicalWeapons(gameId) {
+    static async useBiologicalWeapons(gameId: number) {
         //take inactivated biological weapons and activate them?, let clients know which positions are toxic
         let queryString = "UPDATE biologicalWeapons SET activated = ? WHERE gameId = ?";
         let inserts = [ACTIVATED, gameId];
@@ -245,14 +245,14 @@ class Capability {
 
         queryString = "SELECT * FROM biologicalWeapons WHERE gameId = ?"; //all should be activated, no need to specify
         inserts = [gameId];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         if (results.length === 0) {
             return [];
         }
 
         //need the positions anyway to give back to the clients for updating
-        let fullListOfPositions = [];
+        let fullListOfPositions: any = [];
         for (let x = 0; x < results.length; x++) {
             fullListOfPositions.push(results[x].positionId);
         }
@@ -268,7 +268,7 @@ class Capability {
         return fullListOfPositions;
     }
 
-    static async decreaseBiologicalWeapons(gameId) {
+    static async decreaseBiologicalWeapons(gameId: number) {
         //roundsLeft--
         let queryString = "UPDATE biologicalWeapons SET roundsLeft = roundsLeft - 1 WHERE gameId = ? AND activated = ?";
         const inserts = [gameId, ACTIVATED];
@@ -278,10 +278,10 @@ class Capability {
         await pool.query(queryString);
     }
 
-    static async insertRaiseMorale(gameId, gameTeam, selectedCommanderType) {
+    static async insertRaiseMorale(gameId: number, gameTeam: number, selectedCommanderType: number) {
         let queryString = "SELECT * FROM raiseMorale WHERE gameId = ? AND teamId = ? AND commanderType = ?";
         let inserts = [gameId, gameTeam, selectedCommanderType];
-        let [results] = await pool.query(queryString, inserts);
+        let [results, fields] = await pool.query(queryString, inserts);
 
         //prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -299,7 +299,7 @@ class Capability {
         return true;
     }
 
-    static async decreaseRaiseMorale(gameId) {
+    static async decreaseRaiseMorale(gameId: number) {
         const conn = await pool.getConnection();
 
         let queryString = "DELETE FROM raiseMorale WHERE roundsLeft = 0";
@@ -310,10 +310,10 @@ class Capability {
         await conn.query(queryString, inserts);
 
         queryString = "SELECT * from raiseMorale WHERE gameId = ?";
-        const [results] = await conn.query(queryString, inserts);
+        const [results, fields] = await conn.query(queryString, inserts);
 
         //TODO: probably cleaner way of putting this (more explicit with constants...)
-        let updateArrays = [
+        let updateArrays: any = [
             { 1: 0, 2: 0, 3: 0, 4: 0 },
             { 1: 0, 2: 0, 3: 0, 4: 0 }
         ];
@@ -354,11 +354,11 @@ class Capability {
         await conn.release();
     }
 
-    static async getRaiseMorale(gameId, gameTeam) {
+    static async getRaiseMorale(gameId: number, gameTeam: number) {
         //TODO: handle more than 1 raise morale for double boosting (how would this look like when letting client know (object? / array?))
         const queryString = "SELECT * FROM raiseMorale WHERE gameId = ?";
         const inserts = [gameId, gameTeam];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         let listOfCommandersBoosted = [];
         for (let x = 0; x < results.length; x++) {
@@ -368,10 +368,10 @@ class Capability {
         return listOfCommandersBoosted;
     }
 
-    static async insertCommInterrupt(gameId, gameTeam, selectedPositionId) {
+    static async insertCommInterrupt(gameId: number, gameTeam: number, selectedPositionId: number) {
         let queryString = "SELECT * FROM commInterrupt WHERE gameId = ? AND teamId = ? AND positionId = ?";
         let inserts = [gameId, gameTeam, selectedPositionId];
-        let [results] = await pool.query(queryString, inserts);
+        let [results, fields] = await pool.query(queryString, inserts);
 
         //prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -384,10 +384,10 @@ class Capability {
         return true;
     }
 
-    static async getCommInterrupt(gameId, gameTeam) {
+    static async getCommInterrupt(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM commInterrupt WHERE gameId = ? AND (activated = ? OR teamId = ?)";
         const inserts = [gameId, ACTIVATED, gameTeam];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         let listOfCommInterrupt = [];
         for (let x = 0; x < results.length; x++) {
@@ -397,7 +397,7 @@ class Capability {
         return listOfCommInterrupt;
     }
 
-    static async useCommInterrupt(gameId) {
+    static async useCommInterrupt(gameId: number) {
         //take inactivated comm interrupt and activate them, let clients know which positions are disrupted
         let queryString = "UPDATE commInterrupt SET activated = ? WHERE gameId = ?";
         let inserts = [ACTIVATED, gameId];
@@ -405,7 +405,7 @@ class Capability {
 
         queryString = "SELECT * FROM commInterrupt WHERE gameId = ?"; //all should be activated, no need to specify
         inserts = [gameId];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         if (results.length === 0) {
             return [];
@@ -426,7 +426,7 @@ class Capability {
             masterListOfAllPositions.push(positionId);
         }
 
-        let positionsInTheseRanges0 = [];
+        let positionsInTheseRanges0: any = [];
         for (let y = 0; y < fullListOfPositions0.length; y++) {
             let currentCenterPosition = fullListOfPositions0[y];
             for (let z = 0; z < distanceMatrix[currentCenterPosition].length; z++) {
@@ -435,7 +435,7 @@ class Capability {
                 }
             }
         }
-        let positionsInTheseRanges1 = [];
+        let positionsInTheseRanges1: any = [];
         for (let y = 0; y < fullListOfPositions1.length; y++) {
             let currentCenterPosition = fullListOfPositions1[y];
             for (let z = 0; z < distanceMatrix[currentCenterPosition].length; z++) {
@@ -459,7 +459,7 @@ class Capability {
         return masterListOfAllPositions;
     }
 
-    static async decreaseCommInterrupt(gameId) {
+    static async decreaseCommInterrupt(gameId: any) {
         //roundsLeft--
         let queryString = "UPDATE commInterrupt SET roundsLeft = roundsLeft - 1 WHERE gameId = ? AND activated = ?";
         const inserts = [gameId, ACTIVATED];
@@ -469,11 +469,11 @@ class Capability {
         await pool.query(queryString);
     }
 
-    static async getGoldenEye(gameId, gameTeam) {
+    static async getGoldenEye(gameId: any, gameTeam: any) {
         //select from golden eye table
         const queryString = "SELECT * FROM goldenEye WHERE gameId = ? AND (activated = ? OR teamId = ?)";
         const inserts = [gameId, ACTIVATED, gameTeam];
-        const [results] = await pool.query(queryString, inserts);
+        const [results, fields] = await pool.query(queryString, inserts);
 
         let listOfGoldenEye = [];
         for (let x = 0; x < results.length; x++) {
@@ -483,11 +483,11 @@ class Capability {
         return listOfGoldenEye;
     }
 
-    static async insertGoldenEye(gameId, gameTeam, selectedPositionId) {
+    static async insertGoldenEye(gameId: number, gameTeam: number, selectedPositionId: number) {
         //insert golden eye into the table
         let queryString = "SELECT * FROM goldenEye WHERE gameId = ? AND teamId = ? AND positionId = ?";
         let inserts = [gameId, gameTeam, selectedPositionId];
-        let [results] = await pool.query(queryString, inserts);
+        let [results, fields] = await pool.query(queryString, inserts);
 
         //prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -501,7 +501,7 @@ class Capability {
     }
 
     //TODO: could use more bulk sql statements for better efficiency (future task, efficient enough for now)
-    static async useGoldenEye(gameId) {
+    static async useGoldenEye(gameId: number) {
         //activate golden eye
         let queryString = "UPDATE goldenEye SET activated = ? WHERE gameId = ?";
         let inserts = [ACTIVATED, gameId];
@@ -510,7 +510,7 @@ class Capability {
         //get goldenEye to delete pieces
         queryString = "SELECT * FROM goldenEye WHERE gameId = ?";
         inserts = [gameId];
-        const [allGoldenEye] = await pool.query(queryString, inserts);
+        const [allGoldenEye, fields] = await pool.query(queryString, inserts);
 
         if (allGoldenEye.length === 0) {
             return [];
@@ -537,8 +537,8 @@ class Capability {
 
                 //delete air pieces
                 queryString = "DELETE FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND pieceTypeId in (?) AND piecePositionId in (?)";
-                inserts = [gameId, otherTeam, TYPE_AIR_PIECES, allEffectedPositions];
-                await pool.query(queryString, inserts);
+                let inserts2 = [gameId, otherTeam, TYPE_AIR_PIECES, allEffectedPositions];
+                await pool.query(queryString, inserts2);
 
                 //insert ground pieces into goldenEyePieces
                 queryString =
@@ -557,7 +557,7 @@ class Capability {
         return listOfEffectedPositions;
     }
 
-    static async decreaseGoldenEye(gameId) {
+    static async decreaseGoldenEye(gameId: number) {
         //roundsLeft--
         let queryString = "UPDATE goldenEye SET roundsLeft = roundsLeft - 1 WHERE gameId = ? AND activated = ?";
         const inserts = [gameId, ACTIVATED];
