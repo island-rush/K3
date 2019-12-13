@@ -16,8 +16,8 @@ import {
     ISLAND_POINTS,
     ALL_FLAG_LOCATIONS
 } from "../../react-client/src/constants/gameboardConstants";
-import { POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "../actions/eventConstants";
 import { INITIAL_GAMESTATE } from "../../react-client/src/redux/actions/actiontypes";
+import { POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "../actions/eventConstants";
 import { InvItem, Plan, Capability, Event, ShopItem, Piece } from "../classes";
 
 type GameOptions = {
