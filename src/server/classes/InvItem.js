@@ -45,7 +45,8 @@ class InvItem {
     }
 
     static async insertFromShop(gameId, gameTeam) {
-        const queryString = "INSERT INTO invItems (invItemId, invItemGameId, invItemTeamId, invItemTypeId) SELECT * FROM shopItems WHERE shopItemGameId = ? AND shopItemTeamId = ?";
+        const queryString =
+            "INSERT INTO invItems (invItemId, invItemGameId, invItemTeamId, invItemTypeId) SELECT * FROM shopItems WHERE shopItemGameId = ? AND shopItemTeamId = ?";
         const inserts = [gameId, gameTeam];
         await pool.query(queryString, inserts);
     }
@@ -58,4 +59,4 @@ class InvItem {
     }
 }
 
-module.exports = InvItem;
+export default InvItem;

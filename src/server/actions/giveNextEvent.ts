@@ -1,11 +1,12 @@
 const { Event, Piece } = require("../classes");
-import { EVENT_BATTLE, NO_MORE_EVENTS, EVENT_REFUEL } from "../../client/src/redux/actions/actionTypes";
-import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from "../../client/src/constants/gameConstants";
-import { SOCKET_SERVER_SENDING_ACTION } from "../../client/src/constants/otherConstants";
+import { EVENT_BATTLE, NO_MORE_EVENTS, EVENT_REFUEL } from "../../react-client/src/redux/actions/actionTypes";
+import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from "../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
+import { Socket } from "socket.io";
 const sendUserFeedback = require("./sendUserFeedback");
 const { POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } = require("./eventConstants");
 
-const giveNextEvent = async (socket, options) => {
+const giveNextEvent = async (socket: Socket, options: any) => {
     const { thisGame, gameTeam } = options;
     const { gameId } = thisGame;
 
@@ -29,7 +30,7 @@ const giveNextEvent = async (socket, options) => {
                 let enemyPieces = [];
 
                 for (let x = 0; x < friendlyPiecesList.length; x++) {
-                    let thisFriendlyPiece = {
+                    let thisFriendlyPiece: any = {
                         targetPiece: null,
                         targetPieceIndex: -1
                     };
@@ -38,7 +39,7 @@ const giveNextEvent = async (socket, options) => {
                 }
 
                 for (let y = 0; y < enemyPiecesList.length; y++) {
-                    let thisEnemyPiece = {
+                    let thisEnemyPiece: any = {
                         targetPiece: null,
                         targetPieceIndex: -1
                     };
@@ -105,4 +106,4 @@ const giveNextEvent = async (socket, options) => {
     }
 };
 
-module.exports = giveNextEvent;
+export default giveNextEvent;

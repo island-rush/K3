@@ -445,7 +445,8 @@ class Capability {
             }
         }
 
-        queryString = "DELETE FROM plans WHERE planPieceId IN (SELECT pieceId FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId in (?))";
+        queryString =
+            "DELETE FROM plans WHERE planPieceId IN (SELECT pieceId FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId in (?))";
         if (positionsInTheseRanges0.length > 0) {
             inserts = [gameId, 0, positionsInTheseRanges0];
             await pool.query(queryString, inserts);
@@ -567,4 +568,4 @@ class Capability {
     }
 }
 
-module.exports = Capability;
+export default Capability;

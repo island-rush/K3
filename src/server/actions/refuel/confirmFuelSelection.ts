@@ -1,12 +1,13 @@
 const { Game, Event } = require("../../classes");
-import { REFUEL_RESULTS } from "../../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../client/src/constants/otherConstants";
+import { REFUEL_RESULTS } from "../../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { TYPE_FUEL, TYPE_AIR, COMBAT_PHASE_ID } from "../../../client/src/constants/gameConstants";
+import { TYPE_FUEL, TYPE_AIR, COMBAT_PHASE_ID } from "../../../react-client/src/constants/gameConstants";
+import { Socket } from "socket.io";
 const sendUserFeedback = require("../sendUserFeedback");
 const giveNextEvent = require("../giveNextEvent");
 
-const confirmFuelSelection = async (socket, payload) => {
+const confirmFuelSelection = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
 
     const thisGame = await new Game({ gameId }).init();
@@ -108,4 +109,4 @@ const confirmFuelSelection = async (socket, payload) => {
     await giveNextEvent(socket, { thisGame, gameTeam }); //not putting executingStep in options to let it know not to send pieceMove
 };
 
-module.exports = confirmFuelSelection;
+export default confirmFuelSelection;

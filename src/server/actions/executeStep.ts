@@ -1,11 +1,12 @@
 const { Plan, Piece, Event, Capability } = require("../classes");
-import { PLACE_PHASE, NEW_ROUND, PIECES_MOVE, UPDATE_FLAGS } from "../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../client/src/constants/otherConstants";
-import { BLUE_TEAM_ID, RED_TEAM_ID, PLACE_PHASE_ID, WAITING_STATUS } from "../../client/src/constants/gameConstants";
+import { PLACE_PHASE, NEW_ROUND, PIECES_MOVE, UPDATE_FLAGS } from "../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../react-client/src/constants/otherConstants";
+import { BLUE_TEAM_ID, RED_TEAM_ID, PLACE_PHASE_ID, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
+import { Socket } from "socket.io";
 const giveNextEvent = require("./giveNextEvent");
 const { BOTH_TEAMS_INDICATOR, POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } = require("./eventConstants");
 
-const executeStep = async (socket, thisGame) => {
+const executeStep = async (socket: Socket, thisGame: any) => {
     //inserting events here and moving pieces, or changing to new round or something...
     const { gameId, gameRound } = thisGame;
 
@@ -129,7 +130,7 @@ const executeStep = async (socket, thisGame) => {
     //Collision Battle Events
     const allCollisions = await Plan.getCollisions(gameId, currentMovementOrder); //each item in collisionBattles has {pieceId0, pieceTypeId0, pieceContainerId0, piecePositionId0, planPositionId0, pieceId1, pieceTypeId1, pieceContainerId1, piecePositionId1, planPositionId1 }
     if (allCollisions.length > 0) {
-        let allCollideEvents = {}; //'position0-position1' => [piecesInvolved]
+        let allCollideEvents: any = {}; //'position0-position1' => [piecesInvolved]
 
         for (let x = 0; x < allCollisions.length; x++) {
             let { pieceId0, piecePositionId0, planPositionId0, pieceId1 } = allCollisions[x];
@@ -187,7 +188,7 @@ const executeStep = async (socket, thisGame) => {
     //Position Battle Events
     const allPositionCombinations = await Plan.getPositionCombinations(gameId);
     if (allPositionCombinations.length > 0) {
-        let allPosEvents = {};
+        let allPosEvents: any = {};
         for (let x = 0; x < allPositionCombinations.length; x++) {
             let { pieceId0, piecePositionId0, pieceId1 } = allPositionCombinations[x];
 
@@ -225,7 +226,7 @@ const executeStep = async (socket, thisGame) => {
             //need to grab all refuel events from database, looking at pieces in the same positions
             let allPositionRefuels = await Piece.getPositionRefuels(gameId, thisTeamNum);
             if (allPositionRefuels.length > 0) {
-                let allPosEvents = {};
+                let allPosEvents: any = {};
                 for (let x = 0; x < allPositionRefuels.length; x++) {
                     // tnkrPieceId, tnkrPieceTypeId, tnkrPiecePositionId, tnkrPieceMoves, tnkrPieceFuel, arcftPieceId, arcftPieceTypeId, arcftPiecePositionId, arcftPieceMoves, arcftPieceFuel
                     //prettier-ignore
@@ -262,4 +263,4 @@ const executeStep = async (socket, thisGame) => {
     await giveNextEvent(socket, { thisGame, executingStep: true, gameTeam: RED_TEAM_ID });
 };
 
-module.exports = executeStep;
+export default executeStep;

@@ -4,15 +4,16 @@
 
 const { Game, Piece } = require("../../classes");
 const sendUserFeedback = require("../sendUserFeedback");
-import { INNER_PIECE_CLICK_ACTION } from "../../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../client/src/constants/otherConstants";
+import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { TYPE_MAIN, COMBAT_PHASE_ID, SLICE_PLANNING_ID, CONTAINER_TYPES } from "../../../client/src/constants/gameConstants";
-import { initialGameboardEmpty } from "../../../client/src/redux/reducers/initialGameboardEmpty";
-import { ALL_GROUND_TYPES } from "../../../client/src/constants/gameboardConstants";
-import { distanceMatrix } from "../../../client/src/constants/distanceMatrix";
+import { TYPE_MAIN, COMBAT_PHASE_ID, SLICE_PLANNING_ID, CONTAINER_TYPES } from "../../../react-client/src/constants/gameConstants";
+import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
+import { ALL_GROUND_TYPES } from "../../../react-client/src/constants/gameboardConstants";
+import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
+import { Socket } from "socket.io";
 
-const exitTransportContainer = async (socket, payload) => {
+const exitTransportContainer = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
     const { selectedPiece, containerPiece, selectedPositionId } = payload;
 
@@ -83,4 +84,4 @@ const exitTransportContainer = async (socket, payload) => {
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
 
-module.exports = exitTransportContainer;
+export default exitTransportContainer;

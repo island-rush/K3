@@ -106,4 +106,4 @@ const confirmBattleSelection = async (socket: Socket, payload: any) => {
     await giveNextEvent(socket, { thisGame, gameTeam: 1 }); //not putting executingStep in options to let it know not to send pieceMove
 };
 
-module.exports = confirmBattleSelection;
+export default confirmBattleSelection;

@@ -1,11 +1,18 @@
 const { Game, InvItem, Capability, Piece } = require("../../classes");
-import { RAISE_MORALE_SELECTED } from "../../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../client/src/constants/otherConstants";
+import { RAISE_MORALE_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
-import { RAISE_MORALE_TYPE_ID, ALL_COMMANDER_TYPES, COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../client/src/constants/gameConstants";
+import {
+    RAISE_MORALE_TYPE_ID,
+    ALL_COMMANDER_TYPES,
+    COMBAT_PHASE_ID,
+    SLICE_PLANNING_ID,
+    TYPE_MAIN
+} from "../../../react-client/src/constants/gameConstants";
+import { Socket } from "socket.io";
 const sendUserFeedback = require("../sendUserFeedback");
 
-const raiseMoraleConfirm = async (socket, payload) => {
+const raiseMoraleConfirm = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
 
     if (payload == null || payload.selectedCommanderType == null) {
@@ -92,4 +99,4 @@ const raiseMoraleConfirm = async (socket, payload) => {
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
 
-module.exports = raiseMoraleConfirm;
+export default raiseMoraleConfirm;

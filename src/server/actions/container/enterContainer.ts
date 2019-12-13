@@ -1,7 +1,7 @@
 const { Game, Piece } = require("../../classes");
 const sendUserFeedback = require("../sendUserFeedback");
-import { OUTER_PIECE_CLICK_ACTION } from "../../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../client/src/constants/otherConstants";
+import { OUTER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import {
     TYPE_MAIN,
@@ -21,12 +21,13 @@ import {
     SAM_SITE_TYPE_ID,
     ATTACK_HELICOPTER_TYPE_ID,
     STEALTH_FIGHTER_TYPE_ID
-} from "../../../client/src/constants/gameConstants";
-import { initialGameboardEmpty } from "../../../client/src/redux/reducers/initialGameboardEmpty";
-import { AIRFIELD_TYPE, ALL_GROUND_TYPES } from "../../../client/src/constants/gameboardConstants";
-import { distanceMatrix } from "../../../client/src/constants/distanceMatrix";
+} from "../../../react-client/src/constants/gameConstants";
+import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
+import { AIRFIELD_TYPE, ALL_GROUND_TYPES } from "../../../react-client/src/constants/gameboardConstants";
+import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
+import { Socket } from "socket.io";
 
-const enterContainer = async (socket, payload) => {
+const enterContainer = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
     const { selectedPiece, containerPiece } = payload;
 
@@ -63,8 +64,8 @@ const enterContainer = async (socket, payload) => {
 
     const piecesInside = await thisContainerPiece.getPiecesInside();
 
-    let countOf = {}; //number of each item type already inside it
-    piecesInside.forEach(piece => {
+    let countOf: any = {}; //number of each item type already inside it
+    piecesInside.forEach((piece: any) => {
         countOf[piece.pieceTypeId] = (countOf[piece.pieceTypeId] || 0) + 1;
     });
 
@@ -212,4 +213,4 @@ const enterContainer = async (socket, payload) => {
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
 
-module.exports = enterContainer;
+export default enterContainer;

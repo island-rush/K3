@@ -1,13 +1,21 @@
 const { Game, InvItem } = require("../../classes");
 const sendUserFeedback = require("../sendUserFeedback");
-import { PIECE_PLACE } from "../../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../client/src/constants/otherConstants";
+import { PIECE_PLACE } from "../../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { BAD_REQUEST_TAG, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { PLACE_PHASE_ID, TYPE_OWNERS, TYPE_TERRAIN, RADAR_TYPE_ID, MISSILE_TYPE_ID, TYPE_AIR_PIECES } from "../../../client/src/constants/gameConstants";
-import { initialGameboardEmpty } from "../../../client/src/redux/reducers/initialGameboardEmpty";
-import { TEAM_MAIN_ISLAND_STARTING_POSITIONS, ALL_AIRFIELD_LOCATIONS } from "../../../client/src/constants/gameboardConstants";
+import {
+    PLACE_PHASE_ID,
+    TYPE_OWNERS,
+    TYPE_TERRAIN,
+    RADAR_TYPE_ID,
+    MISSILE_TYPE_ID,
+    TYPE_AIR_PIECES
+} from "../../../react-client/src/constants/gameConstants";
+import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
+import { TEAM_MAIN_ISLAND_STARTING_POSITIONS, ALL_AIRFIELD_LOCATIONS } from "../../../react-client/src/constants/gameboardConstants";
+import { Socket } from "socket.io";
 
-const piecePlace = async (socket, payload) => {
+const piecePlace = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
     const { invItemId, selectedPosition } = payload;
 
@@ -106,4 +114,4 @@ const piecePlace = async (socket, payload) => {
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
 
-module.exports = piecePlace;
+export default piecePlace;

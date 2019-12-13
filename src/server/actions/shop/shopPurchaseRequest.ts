@@ -1,11 +1,12 @@
 const { Game, ShopItem } = require("../../classes");
-import { SHOP_PURCHASE } from "../../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../client/src/constants/otherConstants";
+import { SHOP_PURCHASE } from "../../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { TYPE_COSTS, PURCHASE_PHASE_ID, TYPE_MAIN, BLUE_TEAM_ID } from "../../../client/src/constants/gameConstants";
+import { TYPE_COSTS, PURCHASE_PHASE_ID, TYPE_MAIN, BLUE_TEAM_ID } from "../../../react-client/src/constants/gameConstants";
+import { Socket } from "socket.io";
 const sendUserFeedback = require("../sendUserFeedback");
 
-const shopPurchaseRequest = async (socket, payload) => {
+const shopPurchaseRequest = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
 
     if (payload == null || payload.shopItemTypeId == null) {

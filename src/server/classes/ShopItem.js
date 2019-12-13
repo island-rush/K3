@@ -53,4 +53,4 @@ class ShopItem {
     }
 }
 
-module.exports = ShopItem;
+export default ShopItem;

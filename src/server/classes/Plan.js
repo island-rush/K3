@@ -86,4 +86,4 @@ class Plan {
     }
 }
 
-module.exports = Plan;
+export default Plan;

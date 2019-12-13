@@ -1,7 +1,7 @@
 const sendUserFeedback = require("./sendUserFeedback");
 const { Game, Capability, Piece } = require("../classes");
-import { MAIN_BUTTON_CLICK, PURCHASE_PHASE, COMBAT_PHASE, NEWS_PHASE, SLICE_CHANGE } from "../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../client/src/constants/otherConstants";
+import { MAIN_BUTTON_CLICK, PURCHASE_PHASE, COMBAT_PHASE, NEWS_PHASE, SLICE_CHANGE } from "../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../pages/errorTypes";
 import {
     BLUE_TEAM_ID,
@@ -15,10 +15,11 @@ import {
     PLACE_PHASE_ID,
     SLICE_PLANNING_ID,
     SLICE_EXECUTING_ID
-} from "../../client/src/constants/gameConstants";
+} from "../../react-client/src/constants/gameConstants";
+import { Socket } from "socket.io";
 const executeStep = require("./executeStep"); //big function
 
-const mainButtonClick = async (socket, payload) => {
+const mainButtonClick = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
 
     const thisGame = await new Game({ gameId }).init();
@@ -169,4 +170,4 @@ const mainButtonClick = async (socket, payload) => {
     socket.emit(SOCKET_SERVER_SENDING_ACTION, parseInt(gameTeam) === BLUE_TEAM_ID ? serverAction0 : serverAction1);
 };
 
-module.exports = mainButtonClick;
+export default mainButtonClick;

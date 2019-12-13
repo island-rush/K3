@@ -4,13 +4,14 @@
 
 const { Game, Piece } = require("../../classes");
 const sendUserFeedback = require("../sendUserFeedback");
-import { INNER_PIECE_CLICK_ACTION } from "../../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../client/src/constants/otherConstants";
+import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { TYPE_MAIN, COMBAT_PHASE_ID, SLICE_PLANNING_ID, CONTAINER_TYPES, TYPE_TERRAIN } from "../../../client/src/constants/gameConstants";
-import { initialGameboardEmpty } from "../../../client/src/redux/reducers/initialGameboardEmpty";
+import { TYPE_MAIN, COMBAT_PHASE_ID, SLICE_PLANNING_ID, CONTAINER_TYPES, TYPE_TERRAIN } from "../../../react-client/src/constants/gameConstants";
+import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
+import { Socket } from "socket.io";
 
-const exitContainer = async (socket, payload) => {
+const exitContainer = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
     const { selectedPiece, containerPiece } = payload;
 
@@ -71,4 +72,4 @@ const exitContainer = async (socket, payload) => {
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
 
-module.exports = exitContainer;
+export default exitContainer;

@@ -1,13 +1,14 @@
 const { Game, Piece, Plan } = require("../../classes");
 const sendUserFeedback = require("../sendUserFeedback");
-import { PLAN_WAS_CONFIRMED } from "../../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../client/src/constants/otherConstants";
+import { PLAN_WAS_CONFIRMED } from "../../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { CONTAINER_TYPES, COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_TERRAIN, TYPE_OWNERS } from "../../../client/src/constants/gameConstants";
-import { distanceMatrix } from "../../../client/src/constants/distanceMatrix";
-import { initialGameboardEmpty } from "../../../client/src/redux/reducers/initialGameboardEmpty";
+import { CONTAINER_TYPES, COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_TERRAIN, TYPE_OWNERS } from "../../../react-client/src/constants/gameConstants";
+import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
+import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
+import { Socket } from "socket.io";
 
-const confirmPlan = async (socket, payload) => {
+const confirmPlan = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
     const { pieceId, plan } = payload;
     const thisGame = await new Game({ gameId }).init();
@@ -135,4 +136,4 @@ const confirmPlan = async (socket, payload) => {
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
 
-module.exports = confirmPlan;
+export default confirmPlan;

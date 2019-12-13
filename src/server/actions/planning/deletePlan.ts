@@ -1,11 +1,12 @@
 const { Game, Piece } = require("../../classes");
 const sendUserFeedback = require("../sendUserFeedback");
-import { DELETE_PLAN } from "../../../client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../client/src/constants/otherConstants";
+import { DELETE_PLAN } from "../../../react-client/src/redux/actions/actionTypes";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../client/src/constants/gameConstants";
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../react-client/src/constants/gameConstants";
+import { Socket } from "socket.io";
 
-const deletePlan = async (socket, payload) => {
+const deletePlan = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
     const { pieceId } = payload;
     const thisGame = await new Game({ gameId }).init();
@@ -49,4 +50,4 @@ const deletePlan = async (socket, payload) => {
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
 
-module.exports = deletePlan;
+export default deletePlan;
