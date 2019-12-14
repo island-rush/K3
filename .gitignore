@@ -1,5 +1,9 @@
+# Code we didn't write
 node_modules
 dist
+
+# Environment
+.env
 
 # sessions
 session-store.db

@@ -3,6 +3,10 @@
  * Sessions, Routing, and Web Sockets
  */
 
+//Use Environment Variables from .env
+import dotenv from "dotenv";
+dotenv.config();
+
 //Create the server
 import express, { Application } from "express";
 import http, { Server } from "http";

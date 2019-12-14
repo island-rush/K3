@@ -19,15 +19,14 @@ const isPlanningStyle = {
 
 interface Props {
     gameboardMeta: any;
-    selectPosition(): any;
-    menuSelect(): any;
+    selectPosition(someNum: number): any;
+    menuSelect(menuId: number): any;
     clearPieceSelection(): any;
 }
 
 class App extends Component<Props> {
     render() {
-        // const { gameboardMeta, selectPosition, menuSelect, clearPieceSelection } = this.props;
-        const { gameboardMeta } = this.props;
+        const { gameboardMeta, selectPosition, menuSelect, clearPieceSelection } = this.props;
 
         return (
             <div

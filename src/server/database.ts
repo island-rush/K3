@@ -4,21 +4,21 @@
  * Exports the pool for use in other files (Classes)
  */
 
-import mysql from "mysql2/promise";
+import mysql, { PoolOptions } from "mysql2/promise";
+import { Pool } from "mysql2/promise";
 
-// Normal Defaults
-const host = process.env.DB_HOSTNAME || "localhost";
-const user = process.env.DB_USERNAME || "root";
-const password = process.env.DB_PASSWORD || "";
-const database = process.env.DB_NAME || "X0MOPhjMXL";
+const host: string = process.env.DB_HOSTNAME;
+const user: string = process.env.DB_USERNAME;
+const password: string = process.env.DB_PASSWORD;
+const database: string = process.env.DB_NAME;
 
 // Personal Dev Database
-// const host = "remotemysql.com";
-// const user = "X0MOPhjMXL";
-// const password = "1bhg03PyGl";
-// const database = "X0MOPhjMXL";
+// const host: string = "remotemysql.com";
+// const user: string = "X0MOPhjMXL";
+// const password: string = "1bhg03PyGl";
+// const database: string = "X0MOPhjMXL";
 
-const databaseConfig = {
+const databaseConfig: PoolOptions = {
     connectionLimit: 25,
     host,
     user,
@@ -27,6 +27,6 @@ const databaseConfig = {
     multipleStatements: true //it allows for SQL injection attacks if values are not properly escaped
 };
 
-let pool = mysql.createPool(databaseConfig);
+let pool: Pool = mysql.createPool(databaseConfig);
 
 export default pool;

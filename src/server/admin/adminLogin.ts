@@ -4,9 +4,9 @@ import { Game } from "../classes";
 import md5 from "md5";
 
 const adminLogin = async (req: Request, res: Response) => {
-    const CourseDirectorSection = "CourseDirector";
-    const CourseDirectorLastName = process.env.CD_LASTNAME || "Smith";
-    const CourseDirectorPasswordHash = process.env.CD_PASSWORD || "912ec803b2ce49e4a541068d495ab570"; //"asdf"
+    const CourseDirectorSection = process.env.CD_SECTION;
+    const CourseDirectorLastName = process.env.CD_LASTNAME;
+    const CourseDirectorPasswordHash = process.env.CD_PASSWORD;
 
     const { adminSection, adminInstructor, adminPassword } = req.body;
     if (!adminSection || !adminInstructor || !adminPassword) {
