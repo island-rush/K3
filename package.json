@@ -8,7 +8,7 @@
         "devBackend": "nodemon ./src/server.ts",
         "devFrontend": "cd ./src/react-client && npm start",
         "dev": "concurrently \"npm:devBackend\" \"npm:devFrontend\"",
-        "compileBackend": "tsc -p .",
+        "compileBackend": "tsc -p . && copyfiles -u 3 ./src/server/pages/**/*.html ./dist/server/pages",
         "typecheckFrontend": "cd ./src/react-client && tsc",
         "buildClient": "cd ./src/react-client && npm run build && cd ../..",
         "moveFrontend": "copyfiles -u 1 ./src/react-client/build/**/*.* ./dist",
