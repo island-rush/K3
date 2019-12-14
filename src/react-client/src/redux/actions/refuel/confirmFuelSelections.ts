@@ -1,4 +1,3 @@
-// import setUserfeedbackAction from "../setUserfeedbackAction";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_CONFIRM_FUEL_SELECTION } from "../actionTypes";
 

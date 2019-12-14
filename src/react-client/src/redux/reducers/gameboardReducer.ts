@@ -1,21 +1,5 @@
-import {
-    INITIAL_GAMESTATE,
-    PIECES_MOVE,
-    PIECE_PLACE,
-    CLEAR_BATTLE,
-    EVENT_BATTLE,
-    REFUEL_RESULTS,
-    NO_MORE_EVENTS,
-    EVENT_REFUEL,
-    NEW_ROUND,
-    PLACE_PHASE,
-    SLICE_CHANGE,
-    REMOTE_SENSING_SELECTED,
-    RAISE_MORALE_SELECTED,
-    COMBAT_PHASE,
-    OUTER_PIECE_CLICK_ACTION,
-    INNER_PIECE_CLICK_ACTION
-} from "../actions/actionTypes";
+//prettier-ignore
+import {INITIAL_GAMESTATE,PIECES_MOVE,PIECE_PLACE,CLEAR_BATTLE,EVENT_BATTLE,REFUEL_RESULTS,NO_MORE_EVENTS,EVENT_REFUEL,NEW_ROUND,PLACE_PHASE,SLICE_CHANGE,REMOTE_SENSING_SELECTED,RAISE_MORALE_SELECTED,COMBAT_PHASE,OUTER_PIECE_CLICK_ACTION,INNER_PIECE_CLICK_ACTION} from "../actions/actionTypes";
 import { initialGameboardEmpty } from "./initialGameboardEmpty";
 
 //TODO: should do the return at the bottom, not inside each case...(see metaReducer...)
@@ -164,14 +148,3 @@ function gameboardReducer(state = initialGameboardEmpty, { type, payload }: { ty
 }
 
 export default gameboardReducer;
-
-// let gameboard = [
-// 	0: {
-// 		type: "land",
-// 		pieces: []
-// 	},
-// 	1: {
-// 		type: "water",
-// 		pieces: []
-// 	}
-// ]

@@ -2,14 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import BattlePiece from "./BattlePiece";
 import { BATTLE_POPUP_IMAGES } from "../../styleConstants";
-import {
-    battlePopupMinimizeToggle,
-    battlePieceClick,
-    targetPieceClick,
-    enemyBattlePieceClick,
-    confirmBattleSelections,
-    clearOldBattle
-} from "../../../redux/actions";
+//prettier-ignore
+import {battlePopupMinimizeToggle,battlePieceClick,targetPieceClick,enemyBattlePieceClick,confirmBattleSelections,clearOldBattle} from "../../../redux/actions";
 
 const battlePopupStyle: any = {
     position: "absolute",

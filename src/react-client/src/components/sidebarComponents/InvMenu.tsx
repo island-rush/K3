@@ -3,29 +3,8 @@ import { connect } from "react-redux";
 import InvItem from "./InvItem";
 //prettier-ignore
 import { airPieceClick, landPieceClick, seaPieceClick, atcScamble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } from "../../redux/actions";
-import {
-    TYPE_AIR,
-    TYPE_SEA,
-    TYPE_SPECIAL,
-    TYPE_LAND,
-    SOF_TEAM_TYPE_ID,
-    TYPE_OWNERS,
-    LIST_ALL_CAPABILITIES,
-    ATC_SCRAMBLE_TYPE_ID,
-    CYBER_DOMINANCE_TYPE_ID,
-    MISSILE_LAUNCH_DISRUPTION_TYPE_ID,
-    COMMUNICATIONS_INTERRUPTION_TYPE_ID,
-    REMOTE_SENSING_TYPE_ID,
-    RODS_FROM_GOD_TYPE_ID,
-    ANTI_SATELLITE_MISSILES_TYPE_ID,
-    GOLDEN_EYE_TYPE_ID,
-    NUCLEAR_STRIKE_TYPE_ID,
-    BIOLOGICAL_WEAPONS_TYPE_ID,
-    SEA_MINES_TYPE_ID,
-    DRONE_SWARMS_TYPE_ID,
-    INSURGENCY_TYPE_ID,
-    RAISE_MORALE_TYPE_ID
-} from "../../constants/gameConstants";
+//prettier-ignore
+import {TYPE_AIR,TYPE_SEA,TYPE_SPECIAL,TYPE_LAND,SOF_TEAM_TYPE_ID,TYPE_OWNERS,LIST_ALL_CAPABILITIES,ATC_SCRAMBLE_TYPE_ID,CYBER_DOMINANCE_TYPE_ID,MISSILE_LAUNCH_DISRUPTION_TYPE_ID,COMMUNICATIONS_INTERRUPTION_TYPE_ID,REMOTE_SENSING_TYPE_ID,RODS_FROM_GOD_TYPE_ID,ANTI_SATELLITE_MISSILES_TYPE_ID,GOLDEN_EYE_TYPE_ID,NUCLEAR_STRIKE_TYPE_ID,BIOLOGICAL_WEAPONS_TYPE_ID,SEA_MINES_TYPE_ID,DRONE_SWARMS_TYPE_ID,INSURGENCY_TYPE_ID,RAISE_MORALE_TYPE_ID} from "../../constants/gameConstants";
 
 const inventoryStyle: any = {
     backgroundColor: "Yellow",
@@ -58,6 +37,7 @@ const landpieceItemsContainerStyle: any = {
     right: "61%",
     top: "10%"
 };
+
 const seapieceItemsContainerStyle: any = {
     backgroundColor: "pink",
     position: "absolute",
@@ -66,6 +46,7 @@ const seapieceItemsContainerStyle: any = {
     right: "41%",
     top: "10%"
 };
+
 const specialpieceItemsContainerStyle: any = {
     backgroundColor: "pink",
     position: "absolute",

@@ -1,4 +1,3 @@
-// import setUserfeedbackAction from "../setUserfeedbackAction";
 import { UNDO_FUEL_SELECTION } from "../actionTypes";
 
 const undoFuelSelection = (aircraftPiece: any, aircraftPieceIndex: any) => {

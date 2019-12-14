@@ -6,35 +6,13 @@ import ContainerPopup from "./container/ContainerPopup";
 import RefuelPopup from "./refuel/RefuelPopup";
 import SelectCommanderTypePopup from "./capabilities/SelectCommanderTypePopup";
 import Patterns from "./Patterns";
-import {
-    innerTransportPieceClick,
-    outerPieceClick,
-    innerPieceClick,
-    selectPosition,
-    newsPopupMinimizeToggle,
-    raiseMoraleSelectCommanderType,
-    pieceClose
-} from "../../redux/actions";
-import {
-    TYPE_HIGH_LOW,
-    REMOTE_SENSING_RANGE,
-    COMM_INTERRUPT_RANGE,
-    GOLDEN_EYE_RANGE,
-    RED_TEAM_ID,
-    BLUE_TEAM_ID
-} from "../../constants/gameConstants";
+//prettier-ignore
+import {innerTransportPieceClick,outerPieceClick,innerPieceClick,selectPosition,newsPopupMinimizeToggle,raiseMoraleSelectCommanderType,pieceClose} from "../../redux/actions";
+//prettier-ignore
+import {TYPE_HIGH_LOW,REMOTE_SENSING_RANGE,COMM_INTERRUPT_RANGE,GOLDEN_EYE_RANGE,RED_TEAM_ID,BLUE_TEAM_ID} from "../../constants/gameConstants";
 import { distanceMatrix } from "../../constants/distanceMatrix";
-import {
-    IGNORE_TITLE_TYPES,
-    ALL_ISLAND_NAMES,
-    AIRFIELD_TYPE,
-    AIRFIELD_TITLE,
-    MISSILE_SILO_TYPE,
-    MISSILE_SILO_TITLE,
-    ISLAND_POINTS,
-    ALL_FLAG_LOCATIONS,
-    FLAG_ISLAND_OWNERSHIP
-} from "../../constants/gameboardConstants";
+//prettier-ignore
+import {IGNORE_TITLE_TYPES,ALL_ISLAND_NAMES,AIRFIELD_TYPE,AIRFIELD_TITLE,MISSILE_SILO_TYPE,MISSILE_SILO_TITLE,ISLAND_POINTS,ALL_FLAG_LOCATIONS,FLAG_ISLAND_OWNERSHIP} from "../../constants/gameboardConstants";
 const { HexGrid, Layout, Hexagon } = require("react-hexgrid"); //TODO: create type declaration for react-hexgrid
 
 const gameboardStyle: any = {

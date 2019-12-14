@@ -1,4 +1,3 @@
-// import setUserfeedbackAction from "../setUserfeedbackAction";
 import { TANKER_CLICK } from "../actionTypes";
 
 const tankerClick = (tankerPiece: any, tankerPieceIndex: any) => {
