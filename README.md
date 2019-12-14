@@ -44,13 +44,6 @@ npm install
 cd ../..
 ```
 
-(THIS COMMAND MAY NO LONGER BE NECESSARY: If you get an 'out of memory' error, you'll need to run it.)
-Give node extra memory with NODE_OPTIONS env variable. (This command may change based on OS / Terminal) (Works with 'Git Bash')
-
-```
-export NODE_OPTIONS=--max_old_space_size=4096
-```
-
 All dependencies should now be installed and you should be able to run the server for local development and testing.
 
 ### Database
@@ -75,7 +68,7 @@ Running the backend allows access to these non-game pages, and admin controls.
 -   /credits.html
 -   /troubleshoot.html
 
-Note there are several env variables used by the backend.
+Note there are several env variables used by the backend. These can be easily configured for local development within the .env file. The values within that file will be ignored when NODE_ENV is set to 'production'. The default values listed below are set within this file.
 
 -   CD_LASTNAME = Course Director Last Name -> default is "Smith"
 -   CD_PASSWORD = Course Director MD5 Password Hash -> default is MD5('asdf')
