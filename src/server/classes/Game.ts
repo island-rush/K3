@@ -19,14 +19,26 @@ import {
 import { INITIAL_GAMESTATE } from "../../react-client/src/redux/actions/actiontypes";
 import { POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "../actions/eventConstants";
 import { InvItem, Plan, Capability, Event, ShopItem, Piece } from "../classes";
+import { FieldPacket } from "mysql2";
 
-type GameOptions = {
-    gameId?: number;
-    gameSection?: string;
-    gameInstructor?: string;
-};
+// type GameOptions = {
+//     gameId?: number;
+//     gameSection?: string;
+//     gameInstructor?: string;
+// };
 
-class Game {
+interface GameOptionsWithId {
+    gameId: number;
+}
+
+interface GameOptionsWithoutId {
+    gameSection: string;
+    gameInstructor: string;
+}
+
+type GameOptions = GameOptionsWithId | GameOptionsWithoutId;
+
+interface Game {
     gameId: number;
     gameSection: string;
     gameInstructor: string;
@@ -72,19 +84,21 @@ class Game {
     flag10: number;
     flag11: number;
     flag12: number;
+}
 
+class Game implements Game {
     constructor(options: GameOptions) {
-        if (options.gameId) {
-            this.gameId = options.gameId;
-        } else if (options.gameSection && options.gameInstructor) {
-            this.gameSection = options.gameSection;
-            this.gameInstructor = options.gameInstructor;
+        if ((options as GameOptionsWithId).gameId) {
+            this.gameId = (options as GameOptionsWithId).gameId;
+        } else {
+            this.gameSection = (options as GameOptionsWithoutId).gameSection;
+            this.gameInstructor = (options as GameOptionsWithoutId).gameInstructor;
         }
     }
 
     async init() {
-        let queryString;
-        let inserts;
+        let queryString: string;
+        let inserts: Array<any>;
 
         if (this.gameId) {
             queryString = "SELECT * FROM games WHERE gameId = ?";
@@ -94,13 +108,41 @@ class Game {
             inserts = [this.gameSection, this.gameInstructor];
         }
 
-        const [rows, fields] = await pool.query(queryString, inserts);
+        const [rows, fields]: [Array<any>, Array<FieldPacket>] = await pool.query(queryString, inserts);
 
         if (rows.length != 1) {
             return null;
         } else {
             Object.assign(this, rows[0]);
             return this;
+        }
+    }
+
+    getLoggedIn(gameTeam: number, gameController: number) {
+        if (gameTeam == 0) {
+            if (gameController === 0) {
+                return this.game0Controller0;
+            } else if (gameController === 1) {
+                return this.game0Controller1;
+            } else if (gameController === 2) {
+                return this.game0Controller2;
+            } else if (gameController === 3) {
+                return this.game0Controller3;
+            } else {
+                return this.game0Controller4;
+            }
+        } else {
+            if (gameController === 0) {
+                return this.game1Controller0;
+            } else if (gameController === 1) {
+                return this.game1Controller1;
+            } else if (gameController === 2) {
+                return this.game1Controller2;
+            } else if (gameController === 3) {
+                return this.game1Controller3;
+            } else {
+                return this.game1Controller4;
+            }
         }
     }
 
@@ -162,7 +204,34 @@ class Game {
         const queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
         const inserts = ["game" + gameTeam + "Controller" + gameController, value, this.gameId];
         await pool.query(queryString, inserts);
-        (this as any)["game" + gameTeam + "Controller" + gameController] = value;
+        switch (gameTeam) {
+            case BLUE_TEAM_ID:
+                switch (gameController) {
+                    case 0:
+                        this.game0Controller0 = value;
+                    case 1:
+                        this.game0Controller1 = value;
+                    case 2:
+                        this.game0Controller2 = value;
+                    case 3:
+                        this.game0Controller3 = value;
+                    case 4:
+                        this.game0Controller4 = value;
+                }
+            case RED_TEAM_ID:
+                switch (gameController) {
+                    case 0:
+                        this.game1Controller0 = value;
+                    case 1:
+                        this.game1Controller1 = value;
+                    case 2:
+                        this.game1Controller2 = value;
+                    case 3:
+                        this.game1Controller3 = value;
+                    case 4:
+                        this.game1Controller4 = value;
+                }
+        }
     }
 
     async reset() {

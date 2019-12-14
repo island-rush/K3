@@ -6,6 +6,7 @@
 
 import { Router, Request, Response } from "express";
 import path from "path";
+import { LOGIN_TAG, DATABASE_TAG } from "./pages/errorTypes";
 import {
     dbStatus,
     adminLogin,
@@ -21,7 +22,6 @@ import {
     toggleGameActive,
     gameReset
 } from "./admin";
-import { LOGIN_TAG, DATABASE_TAG } from "./pages/errorTypes";
 
 const router: Router = Router();
 
@@ -74,7 +74,6 @@ router.get("/game.html", (req: Request, res: Response) => {
         res.sendFile(path.join(__dirname, "/../react-client/build/index.html"));
     } else {
         res.redirect("http://localhost:3000"); // Use this redirect while working on react frontend
-        // res.sendFile(path.join(__dirname, "/../react-client/build/index.html"));
     }
 });
 

@@ -1,53 +1,15 @@
 import { Socket } from "socket.io";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, SOCKET_CLIENT_SENDING_ACTION } from "../react-client/src/constants/otherConstants";
-import { BAD_SESSION, GAME_DOES_NOT_EXIST, NOT_LOGGED_IN_TAG } from "./pages/errorTypes";
-import {
-    SERVER_BIOLOGICAL_WEAPONS_CONFIRM,
-    SERVER_INSURGENCY_CONFIRM,
-    SERVER_REMOTE_SENSING_CONFIRM,
-    SERVER_RODS_FROM_GOD_CONFIRM,
-    SERVER_CONFIRM_FUEL_SELECTION,
-    SERVER_CONFIRM_BATTLE_SELECTION,
-    SERVER_MAIN_BUTTON_CLICK,
-    SERVER_PIECE_PLACE,
-    SERVER_DELETE_PLAN,
-    SERVER_CONFIRM_PLAN,
-    SERVER_SHOP_CONFIRM_PURCHASE,
-    SERVER_SHOP_REFUND_REQUEST,
-    SERVER_SHOP_PURCHASE_REQUEST,
-    SERVER_RAISE_MORALE_CONFIRM,
-    SERVER_COMM_INTERRUPT_CONFIRM,
-    SERVER_GOLDEN_EYE_CONFIRM,
-    SERVER_OUTER_PIECE_CLICK,
-    SERVER_INNER_PIECE_CLICK,
-    SERVER_INNER_TRANSPORT_PIECE_CLICK
-} from "../react-client/src/redux/actions/actionTypes";
 import { Game } from "./classes";
-import {
-    sendUserFeedback,
-    shopPurchaseRequest,
-    shopRefundRequest,
-    shopConfirmPurchase,
-    confirmPlan,
-    deletePlan,
-    piecePlace,
-    mainButtonClick,
-    confirmBattleSelection,
-    confirmFuelSelection,
-    rodsFromGodConfirm,
-    remoteSensingConfirm,
-    insurgencyConfirm,
-    biologicalWeaponsConfirm,
-    raiseMoraleConfirm,
-    commInterruptConfirm,
-    goldenEyeConfirm,
-    enterContainer,
-    exitContainer,
-    exitTransportContainer
-} from "./actions";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, SOCKET_CLIENT_SENDING_ACTION } from "../react-client/src/constants/otherConstants";
+import { LOGGED_IN_VALUE, NOT_LOGGED_IN_VALUE } from "../react-client/src/constants/gameConstants";
+import { BAD_SESSION, GAME_DOES_NOT_EXIST, NOT_LOGGED_IN_TAG } from "./pages/errorTypes";
+//prettier-ignore
+import {SERVER_BIOLOGICAL_WEAPONS_CONFIRM,SERVER_INSURGENCY_CONFIRM,SERVER_REMOTE_SENSING_CONFIRM,SERVER_RODS_FROM_GOD_CONFIRM,SERVER_CONFIRM_FUEL_SELECTION,SERVER_CONFIRM_BATTLE_SELECTION,SERVER_MAIN_BUTTON_CLICK,SERVER_PIECE_PLACE,SERVER_DELETE_PLAN,SERVER_CONFIRM_PLAN,SERVER_SHOP_CONFIRM_PURCHASE,SERVER_SHOP_REFUND_REQUEST,SERVER_SHOP_PURCHASE_REQUEST,SERVER_RAISE_MORALE_CONFIRM,SERVER_COMM_INTERRUPT_CONFIRM,SERVER_GOLDEN_EYE_CONFIRM,SERVER_OUTER_PIECE_CLICK,SERVER_INNER_PIECE_CLICK,SERVER_INNER_TRANSPORT_PIECE_CLICK } from "../react-client/src/redux/actions/actionTypes";
+//prettier-ignore
+import {sendUserFeedback,shopPurchaseRequest,shopRefundRequest,shopConfirmPurchase,confirmPlan,deletePlan,piecePlace,mainButtonClick,confirmBattleSelection,confirmFuelSelection,rodsFromGodConfirm,remoteSensingConfirm,insurgencyConfirm,biologicalWeaponsConfirm,raiseMoraleConfirm,commInterruptConfirm,goldenEyeConfirm,enterContainer,exitContainer,exitTransportContainer} from "./actions";
 
 const socketSetup = async (socket: Socket) => {
-    //Verify that this user is authenticated / known
+    //Verify that this user has correct session variables
     if (
         !socket.handshake.session.ir3 ||
         !socket.handshake.session.ir3.gameId ||
@@ -57,39 +19,40 @@ const socketSetup = async (socket: Socket) => {
         socket.emit(SOCKET_SERVER_REDIRECT, BAD_SESSION);
         return;
     }
-    const ir3Session = socket.handshake.session.ir3;
-    const { gameId, gameTeam, gameControllers } = ir3Session; //get the user's information
-    const thisGame = await new Game({ gameId }).init(); //get the Game
+
+    //Extract information from session
+    const ir3Session: { gameId: number; gameTeam: number; gameControllers: Array<number> } = socket.handshake.session.ir3;
+    const { gameId, gameTeam, gameControllers } = ir3Session;
+
+    //Get information about the game
+    const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        //unlikely, since we just came from gameLogin successfully
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
         return;
     }
-    let gameController: any;
-    for (gameController of gameControllers) {
-        let loggedIn = (thisGame as any)["game" + gameTeam + "Controller" + gameController];
-        //Session doesn't match DB, another player could login again as this controller (since login only checks db values)
-        if (!loggedIn) {
+
+    //Verify they are logged in
+    for (let gameController of gameControllers) {
+        if (!thisGame.getLoggedIn(gameTeam, gameController)) {
             socket.emit(SOCKET_SERVER_REDIRECT, NOT_LOGGED_IN_TAG);
             return;
         } else {
             //probably refreshed, keep them logged in (disconnect logs them out)
             setTimeout(() => {
-                thisGame.setLoggedIn(gameTeam, gameController, 1);
+                thisGame.setLoggedIn(gameTeam, gameController, LOGGED_IN_VALUE);
                 socket.handshake.session.ir3 = ir3Session;
             }, 5000);
         }
     }
-    //Socket Room for the Game
+
+    //Socket Room for the whole Game and for individual team
     socket.join("game" + gameId);
-    //Socket Room for the Team
     socket.join("game" + gameId + "team" + gameTeam);
-    //Socket Room for the Indiviual Controller
-    //TODO: multiple rooms for a single socket if logged in as multiple controllers (is this needed in the game?)
-    // socket.join("game" + gameId + "team" + gameTeam + "controller" + gameController);
+
     //Send the client intial game state data
     const serverAction = await thisGame.initialStateAction(gameTeam, gameControllers);
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction); //sends the data
+    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+
     //Setup the socket functions to respond to client requests
     socket.on(SOCKET_CLIENT_SENDING_ACTION, ({ type, payload }) => {
         try {
@@ -159,12 +122,13 @@ const socketSetup = async (socket: Socket) => {
             sendUserFeedback(socket, `INTERNAL SERVER ERROR: CHECK DATABASE -> error: ${error}`);
         }
     });
-    //Automatically Logout this person (from database) when their socket disconnects from the server
+
+    //Automatically Logout this person when their socket disconnects from the server (after 5 seconds to allow for refreshing)
     socket.on("disconnect", async () => {
         try {
             setTimeout(() => {
-                for (gameController of gameControllers) {
-                    thisGame.setLoggedIn(gameTeam, gameController, 0);
+                for (let gameController of gameControllers) {
+                    thisGame.setLoggedIn(gameTeam, gameController, NOT_LOGGED_IN_VALUE);
                 }
                 delete socket.handshake.session.ir3;
             }, 5000);
