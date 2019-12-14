@@ -86,6 +86,7 @@ const piecePlace = async (socket: Socket, payload: any) => {
     if (TYPE_AIR_PIECES.includes(invItemTypeId)) {
         if (!ALL_AIRFIELD_LOCATIONS.includes(selectedPosition)) {
             sendUserFeedback(socket, "Must place air unit on airfield.");
+            return;
         }
     }
 
