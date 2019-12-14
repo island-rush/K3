@@ -22,7 +22,7 @@ const insurgencyConfirm = async (socket: Socket, payload: any) => {
         return;
     }
 
-    const { gameActive, gamePhase, gameSlice, game0Points, game1Points } = thisGame;
+    const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);

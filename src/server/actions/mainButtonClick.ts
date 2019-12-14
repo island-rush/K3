@@ -3,21 +3,10 @@ import { Game, Capability, Piece } from "../classes";
 import { MAIN_BUTTON_CLICK, PURCHASE_PHASE, COMBAT_PHASE, NEWS_PHASE, SLICE_CHANGE } from "../../react-client/src/redux/actions/actionTypes";
 import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../react-client/src/constants/otherConstants";
 import { GAME_INACTIVE_TAG } from "../pages/errorTypes";
-import {
-    BLUE_TEAM_ID,
-    RED_TEAM_ID,
-    TYPE_MAIN,
-    WAITING_STATUS,
-    NOT_WAITING_STATUS,
-    NEWS_PHASE_ID,
-    PURCHASE_PHASE_ID,
-    COMBAT_PHASE_ID,
-    PLACE_PHASE_ID,
-    SLICE_PLANNING_ID,
-    SLICE_EXECUTING_ID
-} from "../../react-client/src/constants/gameConstants";
+//prettier-ignore
+import {BLUE_TEAM_ID,RED_TEAM_ID,TYPE_MAIN,WAITING_STATUS,NOT_WAITING_STATUS,NEWS_PHASE_ID,PURCHASE_PHASE_ID,COMBAT_PHASE_ID,PLACE_PHASE_ID,SLICE_PLANNING_ID,SLICE_EXECUTING_ID} from "../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
-import executeStep from "./executeStep"; //big function
+import executeStep from "./executeStep";
 
 const mainButtonClick = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

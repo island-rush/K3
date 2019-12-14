@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import fs from "fs";
 import pool from "../database";
-
 import { BAD_SESSION } from "../pages/errorTypes";
 
 const insertDatabaseTables = async (req: Request, res: Response) => {
@@ -9,8 +8,11 @@ const insertDatabaseTables = async (req: Request, res: Response) => {
         res.redirect(`/index.html?error=${BAD_SESSION}`);
         return;
     }
+
     const queryString = fs.readFileSync("./server/sql/tableInsert.sql").toString();
+
     await pool.query(queryString);
+
     res.redirect("/courseDirector.html?initializeDatabase=success");
 };
 

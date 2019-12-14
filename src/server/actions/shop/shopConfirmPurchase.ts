@@ -22,7 +22,6 @@ const shopConfirmPurchase = async (socket: Socket, payload: any) => {
         return;
     }
 
-    //gamePhase 1 is only phase for confirming purchase
     if (gamePhase != PURCHASE_PHASE_ID) {
         sendUserFeedback(socket, "Not the right phase...");
         return;
@@ -35,7 +34,9 @@ const shopConfirmPurchase = async (socket: Socket, payload: any) => {
     }
 
     await InvItem.insertFromShop(gameId, gameTeam);
+
     await ShopItem.deleteAll(gameId, gameTeam);
+
     const invItems = await InvItem.all(gameId, gameTeam);
 
     const serverAction = {

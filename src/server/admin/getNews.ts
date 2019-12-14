@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Game } from "../classes";
-
 import { ACCESS_TAG } from "../pages/errorTypes";
 
 const getNews = async (req: Request, res: Response) => {
@@ -8,7 +7,9 @@ const getNews = async (req: Request, res: Response) => {
         res.redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
     }
+
     const { gameId } = req.session.ir3;
+
     try {
         const results = await Game.getAllNews(gameId);
         res.send(results);

@@ -36,7 +36,7 @@ const adminLogin = async (req: Request, res: Response) => {
     req.session.ir3 = {
         gameId,
         teacher: true,
-        adminSection, //same name = don't need : inside the object...
+        adminSection,
         adminInstructor
     };
 

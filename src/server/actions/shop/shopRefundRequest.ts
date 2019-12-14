@@ -17,7 +17,6 @@ const shopRefundRequest = async (socket: Socket, payload: any) => {
         return;
     }
 
-    //gamePhase 1 is only phase for refunds
     if (gamePhase != PURCHASE_PHASE_ID) {
         sendUserFeedback(socket, "Not the right phase...");
         return;
@@ -51,6 +50,7 @@ const shopRefundRequest = async (socket: Socket, payload: any) => {
     //Refund the shopItem
     const newPoints = teamPoints + itemCost;
     await thisGame.setPoints(gameTeam, newPoints);
+
     await thisShopItem.delete();
 
     const serverAction = {

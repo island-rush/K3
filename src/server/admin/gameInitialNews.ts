@@ -1,3 +1,8 @@
+/**
+ * This file inserts news alerts into the game. These are the news alerts that should exist at the start of a game.
+ * There is a helper function to make the news inserts easier to write.
+ */
+
 import pool from "../database";
 
 type NewsOptions = {

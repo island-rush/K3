@@ -24,7 +24,6 @@ const shopPurchaseRequest = async (socket: Socket, payload: any) => {
         return;
     }
 
-    //gamePhase 1 is only phase for purchasing
     if (gamePhase != PURCHASE_PHASE_ID) {
         sendUserFeedback(socket, "Not the right phase...");
         return;

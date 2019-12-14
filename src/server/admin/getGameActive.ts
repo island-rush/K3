@@ -6,9 +6,13 @@ const getGameActive = async (req: Request, res: Response) => {
         res.sendStatus(403);
         return;
     }
+
     const { gameId } = req.session.ir3;
+
     const thisGame = await new Game({ gameId }).init();
+
     const { gameActive } = thisGame;
+
     res.send(JSON.stringify(gameActive));
 };
 

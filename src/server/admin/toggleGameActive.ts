@@ -6,11 +6,17 @@ const toggleGameActive = async (req: Request, res: Response) => {
         res.sendStatus(403); //TODO: redirect here?
         return;
     }
+
     const { gameId } = req.session.ir3;
+
     const thisGame = await new Game({ gameId }).init();
+
     const { gameActive } = thisGame;
+
     const newValue = (gameActive + 1) % 2;
+
     await thisGame.setGameActive(newValue);
+
     res.sendStatus(200);
 };
 

@@ -20,7 +20,7 @@ const confirmPlan = async (socket: Socket, payload: any) => {
         return;
     }
 
-    //Must be in combat phase (2), slice 0 to make plans
+    //Must be in combat phase (2), planning slice (0) to make plans
     if (gamePhase != COMBAT_PHASE_ID || gameSlice != SLICE_PLANNING_ID) {
         sendUserFeedback(socket, "Not the right phase/slice...looking for phase 2 slice 0");
         return;
