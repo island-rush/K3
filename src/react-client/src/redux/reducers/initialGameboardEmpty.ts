@@ -1,4 +1,4 @@
-export const initialGameboardEmpty: Array<{ type: string; pieces: any }> = [
+export const initialGameboardEmpty: { type: string; pieces: any }[] = [
     { type: "land", pieces: [] },
     { type: "land", pieces: [] },
     { type: "land", pieces: [] },

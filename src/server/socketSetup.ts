@@ -21,7 +21,7 @@ const socketSetup = async (socket: Socket) => {
     }
 
     //Extract information from session
-    const ir3Session: { gameId: number; gameTeam: number; gameControllers: Array<number> } = socket.handshake.session.ir3;
+    const ir3Session: { gameId: number; gameTeam: number; gameControllers: number[] } = socket.handshake.session.ir3;
     const { gameId, gameTeam, gameControllers } = ir3Session;
 
     //Get information about the game

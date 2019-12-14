@@ -1,11 +1,14 @@
 import pool from "../database";
+import { FieldPacket } from "mysql2";
 
-class ShopItem {
+interface ShopItem {
     shopItemId: number;
     shopItemGameId: number;
     shopItemTeamId: number;
     shopItemTypeId: number;
+}
 
+class ShopItem {
     constructor(shopItemId: number) {
         this.shopItemId = shopItemId;
     }
@@ -13,7 +16,7 @@ class ShopItem {
     async init() {
         const queryString = "SELECT * FROM shopItems WHERE shopItemId = ?";
         const inserts = [this.shopItemId];
-        const [results, fields] = await pool.query(queryString, inserts);
+        const [results, fields]: [any[], FieldPacket[]] = await pool.query(queryString, inserts);
 
         if (results.length != 1) {
             return null;

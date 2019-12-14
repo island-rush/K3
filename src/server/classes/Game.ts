@@ -21,22 +21,16 @@ import { POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from 
 import { InvItem, Plan, Capability, Event, ShopItem, Piece } from "../classes";
 import { FieldPacket } from "mysql2";
 
-// type GameOptions = {
-//     gameId?: number;
-//     gameSection?: string;
-//     gameInstructor?: string;
-// };
-
-interface GameOptionsWithId {
+interface GameConstructorOptionsWithId {
     gameId: number;
 }
 
-interface GameOptionsWithoutId {
+interface GameConstructorOptionsWithoutId {
     gameSection: string;
     gameInstructor: string;
 }
 
-type GameOptions = GameOptionsWithId | GameOptionsWithoutId;
+type GameOptions = GameConstructorOptionsWithId | GameConstructorOptionsWithoutId;
 
 interface Game {
     gameId: number;
@@ -86,19 +80,19 @@ interface Game {
     flag12: number;
 }
 
-class Game implements Game {
+class Game {
     constructor(options: GameOptions) {
-        if ((options as GameOptionsWithId).gameId) {
-            this.gameId = (options as GameOptionsWithId).gameId;
+        if ((options as GameConstructorOptionsWithId).gameId) {
+            this.gameId = (options as GameConstructorOptionsWithId).gameId;
         } else {
-            this.gameSection = (options as GameOptionsWithoutId).gameSection;
-            this.gameInstructor = (options as GameOptionsWithoutId).gameInstructor;
+            this.gameSection = (options as GameConstructorOptionsWithoutId).gameSection;
+            this.gameInstructor = (options as GameConstructorOptionsWithoutId).gameInstructor;
         }
     }
 
     async init() {
         let queryString: string;
-        let inserts: Array<any>;
+        let inserts: any[];
 
         if (this.gameId) {
             queryString = "SELECT * FROM games WHERE gameId = ?";
@@ -108,7 +102,7 @@ class Game implements Game {
             inserts = [this.gameSection, this.gameInstructor];
         }
 
-        const [rows, fields]: [Array<any>, Array<FieldPacket>] = await pool.query(queryString, inserts);
+        const [rows, fields]: [any[], FieldPacket[]] = await pool.query(queryString, inserts);
 
         if (rows.length != 1) {
             return null;

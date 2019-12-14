@@ -31,7 +31,7 @@ type PieceOptions = {
 };
 
 // prettier-ignore
-const piece = (pieceGameId: number, pieceTeamId: number, pieceTypeId: number, piecePositionId: number, pieceOptions: PieceOptions = {}): Array<number> => {
+const piece = (pieceGameId: number, pieceTeamId: number, pieceTypeId: number, piecePositionId: number, pieceOptions: PieceOptions = {}): number[] => {
 	//TODO: could have constants to indicated pieceVisible and pieceContainer (not in container == -1)
 	const pieceContainerId = pieceOptions.pieceContainerId == undefined ? -1 : pieceOptions.pieceContainerId;
 	const pieceVisible = pieceOptions.pieceVisible == undefined ? 0 : pieceOptions.pieceVisible;
@@ -51,11 +51,9 @@ const piece = (pieceGameId: number, pieceTeamId: number, pieceTypeId: number, pi
 	];
 };
 
-type PieceInsert = Array<number>;
-
 //prettier-ignore
 const gameInitialPieces = async (gameId: number) => {
-	const firstPieces: PieceInsert[] = [
+	const firstPieces: number[][] = [
 		//typical battle setup
 		piece(gameId, BLUE_TEAM_ID, TANK_COMPANY_TYPE_ID, 0),
 		piece(gameId, RED_TEAM_ID, TANK_COMPANY_TYPE_ID, 1),

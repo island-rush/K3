@@ -1,3 +1,7 @@
+/**
+ * Exporting all Classes from a single file.
+ */
+
 import Game from "./Game";
 import Piece from "./Piece";
 import Capability from "./Capability";
