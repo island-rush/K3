@@ -1,4 +1,4 @@
-import { createStore, applyMiddleware, compose, Store, Middleware } from "redux";
+import { createStore, applyMiddleware, compose, Store } from "redux";
 import thunk, { ThunkMiddleware } from "redux-thunk";
 import rootReducer from "./reducers";
 import { init, emit } from "./websocket";

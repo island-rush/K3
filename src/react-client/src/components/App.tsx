@@ -64,4 +64,4 @@ const mapActionsToProps = {
     clearPieceSelection
 };
 
-export default connect(mapStateToProps, mapActionsToProps)(App as any);
+export default connect(mapStateToProps, mapActionsToProps)(App);

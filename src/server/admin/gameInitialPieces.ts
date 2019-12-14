@@ -1,27 +1,11 @@
+/**
+ * This file inserts pieces into a game according to whatever pieces are listed. These are the pieces that should exist at the start of a new game.
+ * There is a helper function to make the piece inserts easy to write.
+ */
+
 import pool from "../database";
-import {
-    TYPE_MOVES,
-    TYPE_FUEL,
-    TANK_COMPANY_TYPE_ID,
-    BLUE_TEAM_ID,
-    RED_TEAM_ID,
-    AIRBORN_ISR_TYPE_ID,
-    STEALTH_FIGHTER_TYPE_ID,
-    AIR_REFUELING_SQUADRON_ID,
-    SUBMARINE_TYPE_ID,
-    ARMY_INFANTRY_COMPANY_TYPE_ID,
-    ARTILLERY_BATTERY_TYPE_ID,
-    STEALTH_BOMBER_TYPE_ID,
-    BOMBER_TYPE_ID,
-    ATTACK_HELICOPTER_TYPE_ID,
-    A_C_CARRIER_TYPE_ID,
-    TRANSPORT_TYPE_ID,
-    SAM_SITE_TYPE_ID,
-    MARINE_INFANTRY_COMPANY_TYPE_ID,
-    TACTICAL_AIRLIFT_SQUADRON_TYPE_ID,
-    SOF_TEAM_TYPE_ID,
-    C_130_TYPE_ID
-} from "../../react-client/src/constants/gameConstants";
+//prettier-ignore
+import {TYPE_MOVES,TYPE_FUEL,TANK_COMPANY_TYPE_ID,BLUE_TEAM_ID,RED_TEAM_ID,AIRBORN_ISR_TYPE_ID,STEALTH_FIGHTER_TYPE_ID,AIR_REFUELING_SQUADRON_ID,SUBMARINE_TYPE_ID,ARMY_INFANTRY_COMPANY_TYPE_ID,ARTILLERY_BATTERY_TYPE_ID,STEALTH_BOMBER_TYPE_ID,BOMBER_TYPE_ID,ATTACK_HELICOPTER_TYPE_ID,A_C_CARRIER_TYPE_ID,TRANSPORT_TYPE_ID,SAM_SITE_TYPE_ID,MARINE_INFANTRY_COMPANY_TYPE_ID,TACTICAL_AIRLIFT_SQUADRON_TYPE_ID,SOF_TEAM_TYPE_ID,C_130_TYPE_ID} from "../../react-client/src/constants/gameConstants";
 
 type PieceOptions = {
     pieceContainerId?: number;

@@ -233,7 +233,6 @@ class Game {
         await Game.add(this.gameSection, this.gameInstructor, this.gameAdminPassword, { gameId: this.gameId });
     }
 
-    //TODO: prevent same section/instructor
     static async add(gameSection: string, gameInstructor: string, gameAdminPasswordHash: string, options: { gameId?: number } = {}) {
         let queryString;
         let inserts;
@@ -252,9 +251,8 @@ class Game {
 
         if (result.affectedRows == 0) return;
 
-        const thisGame = await new Game({ gameSection, gameInstructor }).init(); //could not init, but since we don't know who is using this function, return the full game
+        const thisGame = await new Game({ gameSection, gameInstructor }).init();
 
-        //reset the game when its created, now only need to activate, reset is more in tune with the name (instead of initialize?)
         await gameInitialPieces(thisGame.gameId);
         await gameInitialNews(thisGame.gameId);
 
@@ -265,14 +263,22 @@ class Game {
         const queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
         const inserts = ["game" + gameTeam + "Points", newPoints, this.gameId];
         await pool.query(queryString, inserts);
-        (this as any)["game" + gameTeam + "Points"] = newPoints;
+        if (gameTeam == 0) {
+            this.game0Points = newPoints;
+        } else {
+            this.game1Points = newPoints;
+        }
     }
 
     async setStatus(gameTeam: number, newStatus: number) {
         const queryString = "UPDATE games set ?? = ? WHERE gameId = ?";
         const inserts = ["game" + gameTeam + "Status", newStatus, this.gameId];
         await pool.query(queryString, inserts);
-        (this as any)["game" + gameTeam + "Status"] = newStatus;
+        if (gameTeam == 0) {
+            this.game0Status = newStatus;
+        } else {
+            this.game1Status = newStatus;
+        }
     }
 
     async setPhase(newGamePhase: number) {
@@ -325,7 +331,7 @@ class Game {
             if (thisFlagsTeams.length === 0) continue;
             if (thisFlagsTeams.includes(BLUE_TEAM_ID) && thisFlagsTeams.includes(RED_TEAM_ID)) continue;
             //else update this thing
-            (this as any)["flag" + y] = thisFlagsTeams[0]; //TODO: need a way of doing this...
+            this.setFlag(y, thisFlagsTeams[0]);
             //sql update
             queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
             inserts = ["flag" + y, thisFlagsTeams[0], this.gameId];
@@ -334,6 +340,51 @@ class Game {
         }
 
         return didUpdateFlags;
+    }
+
+    setFlag(flagNumber: number, flagValue: number) {
+        switch (flagNumber) {
+            case 0:
+                this.flag0 = flagValue;
+                break;
+            case 1:
+                this.flag1 = flagValue;
+                break;
+            case 2:
+                this.flag2 = flagValue;
+                break;
+            case 3:
+                this.flag3 = flagValue;
+                break;
+            case 4:
+                this.flag4 = flagValue;
+                break;
+            case 5:
+                this.flag5 = flagValue;
+                break;
+            case 6:
+                this.flag6 = flagValue;
+                break;
+            case 7:
+                this.flag7 = flagValue;
+                break;
+            case 8:
+                this.flag8 = flagValue;
+                break;
+            case 9:
+                this.flag9 = flagValue;
+                break;
+            case 10:
+                this.flag10 = flagValue;
+                break;
+            case 11:
+                this.flag11 = flagValue;
+                break;
+            case 12:
+                this.flag12 = flagValue;
+                break;
+            default:
+        }
     }
 
     async getNextNews() {
@@ -399,6 +450,30 @@ class Game {
         await this.setPoints(RED_TEAM_ID, redPoints);
     }
 
+    getStatus(gameTeam: number) {
+        if (gameTeam == 0) {
+            return this.game0Status;
+        } else {
+            return this.game1Status;
+        }
+    }
+
+    getPoints(gameTeam: number) {
+        if (gameTeam == 0) {
+            return this.game0Points;
+        } else {
+            return this.game1Points;
+        }
+    }
+
+    getPasswordHash(gameTeam: number) {
+        if (gameTeam == 0) {
+            return this.game0Password;
+        } else {
+            return this.game1Password;
+        }
+    }
+
     async initialStateAction(gameTeam: number, gameControllers: any) {
         let serverAction: any = {
             type: INITIAL_GAMESTATE,
@@ -417,10 +492,8 @@ class Game {
             gamePhase: this.gamePhase,
             gameRound: this.gameRound,
             gameSlice: this.gameSlice,
-            gameStatus: (this as any)["game" + gameTeam + "Status"],
-            // gameStatus: gameTeam === BLUE_TEAM_ID ? this.game0Status : this.game1Status,
-            gamePoints: (this as any)["game" + gameTeam + "Points"],
-            // gamePoints: gameTeam === BLUE_TEAM_ID ? this.game0Points : this.game1Points,
+            gameStatus: this.getStatus(gameTeam),
+            gamePoints: this.getPoints(gameTeam),
             flag0: this.flag0,
             flag1: this.flag1,
             flag2: this.flag2,

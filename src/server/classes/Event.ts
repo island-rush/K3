@@ -1,14 +1,16 @@
 import pool from "../database";
 import { ATTACK_MATRIX } from "../../react-client/src/constants/gameConstants";
 
-class Event {
+interface Event {
     eventId: number;
     eventGameId: number;
     eventTeamId: number;
     eventTypeId: number;
     eventPosA: number;
     eventPosB: number;
+}
 
+class Event {
     //TODO: we have a class for event, but multiple tables for keeping track of events, event items, and that one for temp stuff (efficient)
     constructor(eventId: number, options: any) {
         this.eventId = eventId;
@@ -143,7 +145,7 @@ class Event {
 
     async bulkUpdatePieceFuels(fuelUpdates: any, gameTeam: number) {
         if (fuelUpdates.length == 0) {
-            return; //no db interactions for 0 updates...
+            return;
         }
 
         let allInserts = [];
@@ -151,7 +153,6 @@ class Event {
             let { pieceId, newFuel } = fuelUpdates[x]; //assuming this is what is inside of it, should probably check
             let newInsert = [pieceId, this.eventGameId, gameTeam, newFuel];
             allInserts.push(newInsert);
-            // console.log(newInsert);
         }
 
         let queryString = "INSERT INTO pieceRefuelTemp (pieceId, gameId, teamId, newFuel) VALUES ?";
@@ -169,9 +170,6 @@ class Event {
 
     //prettier-ignore
     async fight() {
-		//send specific friendly/enemy stuff to each client (io.sockets.in...)
-
-		//restricted selection, could restrict more from inner tables...
 		let queryString =
 			"SELECT * FROM (SELECT * FROM eventItems NATUAL JOIN pieces WHERE eventPieceId = pieceId AND eventId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.eventItemTarget = b.tpieceId";
 		let inserts = [this.eventId];
@@ -214,8 +212,6 @@ class Event {
 					var diceRolledResult1 = Math.floor(Math.random() * 6) + 1;
 					var diceRolledResult2 = Math.floor(Math.random() * 6) + 1;
 					let diceRollValue = diceRolledResult1+diceRolledResult2;
-
-					// console.log(`just had ${diceRollValue} and needed ${neededValue}`);
 	
 					//> or >=?
 					if (diceRollValue >= neededValue) {

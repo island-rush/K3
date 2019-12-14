@@ -1,30 +1,11 @@
 import pool from "../database";
 import { distanceMatrix } from "../../react-client/src/constants/distanceMatrix";
-import {
-    TYPE_OWNERS,
-    TYPE_SPECIAL,
-    TYPE_AIR,
-    TYPE_LAND,
-    TYPE_SEA,
-    COMM_INTERRUPT_ROUNDS,
-    DEACTIVATED,
-    BIO_WEAPONS_ROUNDS,
-    RAISE_MORALE_ROUNDS,
-    REMOTE_SENSING_ROUNDS,
-    ACTIVATED,
-    COMM_INTERRUPT_RANGE,
-    BLUE_TEAM_ID,
-    RED_TEAM_ID,
-    GOLDEN_EYE_ROUNDS,
-    TYPE_AIR_PIECES,
-    GOLDEN_EYE_RANGE,
-    TYPE_GROUND_PIECES
-} from "../../react-client/src/constants/gameConstants";
+//prettier-ignore
+import {TYPE_OWNERS,TYPE_SPECIAL,TYPE_AIR,TYPE_LAND,TYPE_SEA,COMM_INTERRUPT_ROUNDS,DEACTIVATED,BIO_WEAPONS_ROUNDS,RAISE_MORALE_ROUNDS,REMOTE_SENSING_ROUNDS,ACTIVATED,COMM_INTERRUPT_RANGE,BLUE_TEAM_ID,RED_TEAM_ID,GOLDEN_EYE_ROUNDS,TYPE_AIR_PIECES,GOLDEN_EYE_RANGE,TYPE_GROUND_PIECES} from "../../react-client/src/constants/gameConstants";
 
 class Capability {
     static async rodsFromGodInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
         //TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
-        //keeping it simple for now to ensure it works
         let queryString = "SELECT * FROM rodsFromGod WHERE gameId = ? AND teamId = ? AND positionId = ?";
         const inserts = [gameId, gameTeam, selectedPositionId];
         let [results, fields] = await pool.query(queryString, inserts);
@@ -83,7 +64,6 @@ class Capability {
     //TODO: better naming convention for these methods
     static async insurgencyInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
         //TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
-        //keeping it simple for now to ensure it works
         let queryString = "SELECT * FROM insurgency WHERE gameId = ? AND teamId = ? AND positionId = ?";
         const inserts = [gameId, gameTeam, selectedPositionId];
         let [results, fields] = await pool.query(queryString, inserts);
@@ -238,7 +218,6 @@ class Capability {
     }
 
     static async useBiologicalWeapons(gameId: number) {
-        //take inactivated biological weapons and activate them?, let clients know which positions are toxic
         let queryString = "UPDATE biologicalWeapons SET activated = ? WHERE gameId = ?";
         let inserts = [ACTIVATED, gameId];
         await pool.query(queryString, inserts);
@@ -269,7 +248,6 @@ class Capability {
     }
 
     static async decreaseBiologicalWeapons(gameId: number) {
-        //roundsLeft--
         let queryString = "UPDATE biologicalWeapons SET roundsLeft = roundsLeft - 1 WHERE gameId = ? AND activated = ?";
         const inserts = [gameId, ACTIVATED];
         await pool.query(queryString, inserts);
@@ -351,7 +329,7 @@ class Capability {
         inserts = [updateArrays[RED_TEAM_ID][TYPE_SPECIAL], gameId, RED_TEAM_ID, TYPE_OWNERS[TYPE_SPECIAL]];
         await conn.query(queryString, inserts);
 
-        await conn.release();
+        conn.release();
     }
 
     static async getRaiseMorale(gameId: number, gameTeam: number) {
@@ -460,7 +438,6 @@ class Capability {
     }
 
     static async decreaseCommInterrupt(gameId: any) {
-        //roundsLeft--
         let queryString = "UPDATE commInterrupt SET roundsLeft = roundsLeft - 1 WHERE gameId = ? AND activated = ?";
         const inserts = [gameId, ACTIVATED];
         await pool.query(queryString, inserts);
@@ -470,7 +447,6 @@ class Capability {
     }
 
     static async getGoldenEye(gameId: any, gameTeam: any) {
-        //select from golden eye table
         const queryString = "SELECT * FROM goldenEye WHERE gameId = ? AND (activated = ? OR teamId = ?)";
         const inserts = [gameId, ACTIVATED, gameTeam];
         const [results, fields] = await pool.query(queryString, inserts);
@@ -484,7 +460,6 @@ class Capability {
     }
 
     static async insertGoldenEye(gameId: number, gameTeam: number, selectedPositionId: number) {
-        //insert golden eye into the table
         let queryString = "SELECT * FROM goldenEye WHERE gameId = ? AND teamId = ? AND positionId = ?";
         let inserts = [gameId, gameTeam, selectedPositionId];
         let [results, fields] = await pool.query(queryString, inserts);
@@ -502,12 +477,10 @@ class Capability {
 
     //TODO: could use more bulk sql statements for better efficiency (future task, efficient enough for now)
     static async useGoldenEye(gameId: number) {
-        //activate golden eye
         let queryString = "UPDATE goldenEye SET activated = ? WHERE gameId = ?";
         let inserts = [ACTIVATED, gameId];
         await pool.query(queryString, inserts);
 
-        //get goldenEye to delete pieces
         queryString = "SELECT * FROM goldenEye WHERE gameId = ?";
         inserts = [gameId];
         const [allGoldenEye, fields] = await pool.query(queryString, inserts);
@@ -558,7 +531,6 @@ class Capability {
     }
 
     static async decreaseGoldenEye(gameId: number) {
-        //roundsLeft--
         let queryString = "UPDATE goldenEye SET roundsLeft = roundsLeft - 1 WHERE gameId = ? AND activated = ?";
         const inserts = [gameId, ACTIVATED];
         await pool.query(queryString, inserts);

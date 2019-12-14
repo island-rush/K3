@@ -57,7 +57,7 @@ import { distanceMatrix } from "../../constants/distanceMatrix";
 import { initialGameboardEmpty } from "./initialGameboardEmpty";
 
 import { TYPE_FUEL, TRANSPORT_TYPE_ID } from "../../constants/gameConstants";
-import { LAND_TYPE, ALL_GROUND_TYPES } from "../../constants/gameboardConstants";
+import { ALL_GROUND_TYPES } from "../../constants/gameboardConstants";
 
 const initialGameboardMeta = {
     //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)

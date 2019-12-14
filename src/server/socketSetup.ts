@@ -1,3 +1,7 @@
+/**
+ * This function configures a Socket to respond to client requests.
+ */
+
 import { Socket } from "socket.io";
 import { Game } from "./classes";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, SOCKET_CLIENT_SENDING_ACTION } from "../react-client/src/constants/otherConstants";
