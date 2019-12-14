@@ -5,7 +5,9 @@
 
 //Use Environment Variables from .env
 import dotenv from "dotenv";
-dotenv.config();
+if (process.env.NODE_ENV != "production") {
+    dotenv.config();
+}
 
 //Create the server
 import express, { Application } from "express";
