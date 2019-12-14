@@ -2,12 +2,14 @@ import pool from "../database";
 import { TYPE_MOVES, TYPE_FUEL } from "../../react-client/src/constants/gameConstants";
 import Piece from "./Piece";
 
-class InvItem {
+interface InvItem {
     invItemId: number;
     invItemGameId: number;
     invItemTeamId: number;
     invItemTypeId: number;
+}
 
+class InvItem {
     constructor(invItemId: number) {
         this.invItemId = invItemId;
     }

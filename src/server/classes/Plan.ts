@@ -1,13 +1,15 @@
 import pool from "../database";
 
-class Plan {
+interface Plan {
     planGameId: number;
     planTeamId: number;
     planPieceId: number;
     planMovementOrder: number;
     planPositionId: number;
     planSpecialFlag: number;
+}
 
+class Plan {
     constructor(planPieceId: number, planMovementOrder: number) {
         this.planPieceId = planPieceId;
         this.planMovementOrder = planMovementOrder;
@@ -37,13 +39,6 @@ class Plan {
         const inserts = [pieceId];
         await pool.query(queryString, inserts);
     }
-
-    // this may be not used since this already taken care of by Pieces.move or something...
-    // async delete() {
-    // 	const queryString = "DELETE FROM plans WHERE planPieceId = ?";
-    // 	const inserts = [this.planPieceId];
-    // 	await pool.query(queryString, inserts);
-    // }
 
     static async getCurrentMovementOrder(gameId: number, gameTeam: number) {
         const queryString = "SELECT planMovementOrder FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planMovementOrder ASC LIMIT 1";

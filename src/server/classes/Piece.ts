@@ -1,39 +1,9 @@
 import pool from "../database";
-import {
-    VISIBILITY_MATRIX,
-    TYPE_MOVES,
-    REMOTE_SENSING_RANGE,
-    SOF_TEAM_TYPE_ID,
-    SUBMARINE_TYPE_ID,
-    LIST_ALL_PIECES,
-    BLUE_TEAM_ID,
-    RED_TEAM_ID,
-    BOMBER_TYPE_ID,
-    STEALTH_BOMBER_TYPE_ID,
-    STEALTH_FIGHTER_TYPE_ID,
-    AIR_REFUELING_SQUADRON_ID,
-    TACTICAL_AIRLIFT_SQUADRON_TYPE_ID,
-    AIRBORN_ISR_TYPE_ID,
-    ARMY_INFANTRY_COMPANY_TYPE_ID,
-    ARTILLERY_BATTERY_TYPE_ID,
-    TANK_COMPANY_TYPE_ID,
-    MARINE_INFANTRY_COMPANY_TYPE_ID,
-    ATTACK_HELICOPTER_TYPE_ID,
-    LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID,
-    SAM_SITE_TYPE_ID,
-    DESTROYER_TYPE_ID,
-    A_C_CARRIER_TYPE_ID,
-    TRANSPORT_TYPE_ID,
-    MC_12_TYPE_ID,
-    C_130_TYPE_ID,
-    RADAR_TYPE_ID,
-    MISSILE_TYPE_ID,
-    TYPE_AIR_PIECES,
-    TYPE_FUEL
-} from "../../react-client/src/constants/gameConstants";
+//prettier-ignore
+import {VISIBILITY_MATRIX,TYPE_MOVES,REMOTE_SENSING_RANGE,SOF_TEAM_TYPE_ID,SUBMARINE_TYPE_ID,LIST_ALL_PIECES,BLUE_TEAM_ID,RED_TEAM_ID,BOMBER_TYPE_ID,STEALTH_BOMBER_TYPE_ID,STEALTH_FIGHTER_TYPE_ID,AIR_REFUELING_SQUADRON_ID,TACTICAL_AIRLIFT_SQUADRON_TYPE_ID,AIRBORN_ISR_TYPE_ID,ARMY_INFANTRY_COMPANY_TYPE_ID,ARTILLERY_BATTERY_TYPE_ID,TANK_COMPANY_TYPE_ID,MARINE_INFANTRY_COMPANY_TYPE_ID,ATTACK_HELICOPTER_TYPE_ID,LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID,SAM_SITE_TYPE_ID,DESTROYER_TYPE_ID,A_C_CARRIER_TYPE_ID,TRANSPORT_TYPE_ID,MC_12_TYPE_ID,C_130_TYPE_ID,RADAR_TYPE_ID,MISSILE_TYPE_ID,TYPE_AIR_PIECES,TYPE_FUEL} from "../../react-client/src/constants/gameConstants";
 import { distanceMatrix } from "../../react-client/src/constants/distanceMatrix";
 
-class Piece {
+interface Piece {
     pieceId: number;
     pieceGameId: number;
     pieceTeamId: number;
@@ -44,11 +14,11 @@ class Piece {
     pieceMoves: number;
     pieceFuel: number;
     pieceContents?: any;
-    // pieceDisabled?: any;
 
-    //not in database
     pieceDisabled: boolean;
+}
 
+class Piece {
     constructor(pieceId: number) {
         this.pieceId = pieceId;
     }
@@ -67,12 +37,7 @@ class Piece {
         queryString = "SELECT * FROM goldenEyePieces WHERE pieceId = ?";
         inserts = [this.pieceId];
         [rows, fields] = await pool.query(queryString, inserts);
-
-        if (rows.length === 0) {
-            Object.assign(this, { pieceDisabled: false });
-        } else {
-            Object.assign(this, { pieceDisabled: true });
-        }
+        this.pieceDisabled = rows.length !== 0;
 
         return this;
     }
@@ -259,8 +224,6 @@ class Piece {
                     //need to find grandparent, and find parent within pieceContents
                     //loop through all grandparent children to find actual parent?
                     //TODO: probably cleaner way of doing this logic, should also break from outer loop to be more efficient, since we are done
-                    let parentId = currentPiece.pieceContainerId;
-                    let grandParentId;
                     for (let x = 0; x < allPieces[currentPiece.piecePositionId].length; x++) {
                         let potentialGrandparent = allPieces[currentPiece.piecePositionId][x];
                         for (let y = 0; y < potentialGrandparent.pieceContents.pieces.length; y++) {
@@ -314,6 +277,7 @@ class Piece {
         await pool.query(queryString, inserts);
     }
 
+    //TODO: change this into a pieceConstructor Object, bad practice to have so many parameters
     static async insert(
         pieceGameId: number,
         pieceTeamId: number,

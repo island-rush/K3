@@ -27,7 +27,6 @@ class ShopItem {
     }
 
     async delete() {
-        // await ShopItem.delete(this.shopItemId);
         const queryString = "DELETE FROM shopItems WHERE shopItemId = ?";
         const inserts = [this.shopItemId];
         await pool.query(queryString, inserts);
@@ -37,7 +36,6 @@ class ShopItem {
         const queryString = "INSERT INTO shopItems (shopItemGameId, shopItemTeamId, shopItemTypeId) values (?, ?, ?)";
         const inserts = [shopItemGameId, shopItemTeamId, shopItemTypeId];
         const [results, fields] = await pool.query(queryString, inserts);
-        // console.log(results);
         const thisShopItem = new ShopItem(results.insertId); //TODO: this could fail, need to handle that error (rare tho)
         Object.assign(thisShopItem, {
             shopItemGameId,
