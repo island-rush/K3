@@ -75,7 +75,7 @@ Running the backend allows access to these non-game pages, and admin controls.
 -   /credits.html
 -   /troubleshoot.html
 
-Note there are several env variables used by the backend. These can be easily configured for local development within the .env file. The values within that file will be ignored when NODE_ENV is set to 'production', or they already exist in the environment. Some of the default values listed below are set within this file.
+Note there are several env variables used by the backend. These can be easily configured for local development within the .env file. The values within that file should be ignored if they are already in the system's environment. Some of the default values listed below are set within this file.
 
 -   CD_SECTION = Course Director Section -> default is "CourseDirector"
 -   CD_LASTNAME = Course Director Last Name -> default is "Smith"
@@ -138,8 +138,6 @@ When the ./dist folder has been populated with the static files and building is 
 ```
 npm start
 ```
-
-Note: Without changing NODE_ENV to "production", this will still redirect the game to localhost:3000. Please update the .env file for easy changes.
 
 ## Deployment
 
