@@ -12,12 +12,6 @@ const user: string = process.env.DB_USERNAME;
 const password: string = process.env.DB_PASSWORD;
 const database: string = process.env.DB_NAME;
 
-// Personal Dev Database
-// const host: string = "remotemysql.com";
-// const user: string = "X0MOPhjMXL";
-// const password: string = "1bhg03PyGl";
-// const database: string = "X0MOPhjMXL";
-
 const databaseConfig: PoolOptions = {
     connectionLimit: 25,
     host,
