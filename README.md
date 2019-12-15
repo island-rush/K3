@@ -24,17 +24,20 @@ mysql
 These commands will get you a working copy of this repository, and set up all development dependencies.
 
 Clone the reposority.
+
 ```
 git clone https://github.com/island-rush/K3.3.git
 cd K3.3
 ```
 
 Install node modules for the server.
+
 ```
 npm install
 ```
 
 Install node modules for the client.
+
 ```
 cd ./src/react-client
 npm install
@@ -45,7 +48,27 @@ All dependencies should now be installed and you should be able to run the serve
 
 ### Database
 
-There are many methods of running / hosting a MySQL server. Once the database exists, please create a user/password for the game to use. Set these values in the env variables on your system or use the .env file. Some defaults already exist here, simply overwrite them or add your own according to the examples.
+There are many methods of running / hosting a MySQL server. Once the database exists, please create a user/password for the game to use. Set these values in the env variables on your system or use the .env file.
+
+### Configuration
+
+Please create a .env file within the root directory and copy and paste these values into the file.
+
+```
+NODE_ENV=development
+NODE_OPTIONS=--max_old_space_size=4096
+GENERATE_SOURCEMAP=false
+DB_HOSTNAME="localhost"
+DB_USERNAME="root"
+DB_PASSWORD=""
+DB_NAME="islandrushdb"
+CD_SECTION="CourseDirector"
+CD_LASTNAME="Smith"
+CD_PASSWORDHASH="912ec803b2ce49e4a541068d495ab570"
+```
+
+Change the DB\_ credentials to whatever mysql database you want to access.
+The CD_PASSWORDHASH is an md5 hash of "asdf"
 
 ### Development
 
@@ -53,6 +76,7 @@ The following are a list of commands used to control the frontend and backend. P
 
 This command runs both the backend and frontend servers together.
 THIS COMMAND IS TYPICALLY USED FOR ALL DEVELOPMENT.
+
 ```
 npm run dev
 ```
@@ -80,12 +104,12 @@ Note there are several env variables used by the backend. These can be easily co
 -   PORT = server port (typically pre-set in production environments) -> default is 80
 -   GENERATE_SOURCEMAP = value used by react, this should always be false. Without this value, build times take up to an hour.
 
-Inserting the database tables and creating/deleting games can be accomplished from the /courseDirector page. Login from the homepage 
+Inserting the database tables and creating/deleting games can be accomplished from the /courseDirector page. Login from the homepage
 Teacher Login form with the credentials used in the env variables. These are the only credentials used to get to this page.
 
 -   Section: "CourseDirector" -> Env value
 -   Instructor: "Smith" -> Env value
--   Password: "asdf" -> Env value
+-   Password: "asdf" -> Env value (stores the md5 hash)
 
 Here you can click a button to insert the database tables ("INITIALIZE DATABASE"). This action must be done before all others.
 
@@ -99,16 +123,18 @@ Similar to Course Director, teachers login from the homepage with:
 -   Instructor: "adolph" -> Whatever value was set from CourseDirector.
 -   Password: "asdf" -> Whatever value was set from CourseDirector.
 
-Once you have logged in as a teacher, you can click the switch at the top of the page to enable a game. 
+Once you have logged in as a teacher, you can click the switch at the top of the page to enable a game.
 
 Running the frontend allows access to the main /game.html page (localhost:3000). You can log into it from the homepage using the Player Login form. This is running a react development server. If the backend server is running, it will redirect the frontend to the homepage to enforce an authenticated session. Without the backend running, the frontend won't redirect (great for developing react components) but won't receive any game info, and will appear as if it is loading.
 
 This command will run only the backend server (homepage(s) and backend functionality).
+
 ```
 npm run devBackend
 ```
 
 This command will run the frontend react server (main game page on localhost:3000).
+
 ```
 npm run devFrontend
 ```
@@ -116,14 +142,17 @@ npm run devFrontend
 Please note that production environments will build the client and server, creating static files in ./dist for the server to use. If the NODE_ENV is set to 'production', the backend will server the static files instead of localhost:3000. This can also be altered manually in the ./src/server/router.ts file.
 
 When you are ready for deployment, or wish to test with the static files (they run faster), use this command.
+
 ```
 npm run build
 ```
 
 When the ./dist folder has been populated with the static files and building is complete, you can run the server with this command.
+
 ```
 npm start
 ```
+
 Note: Without changing NODE_ENV to "production", this will still redirect the game to localhost:3000. Please update the .env file for easy changes.
 
 ## Deployment

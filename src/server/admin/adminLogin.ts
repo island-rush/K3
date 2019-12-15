@@ -6,7 +6,7 @@ import md5 from "md5";
 const adminLogin = async (req: Request, res: Response) => {
     const CourseDirectorSection = process.env.CD_SECTION;
     const CourseDirectorLastName = process.env.CD_LASTNAME;
-    const CourseDirectorPasswordHash = process.env.CD_PASSWORD;
+    const CourseDirectorPasswordHash = process.env.CD_PASSWORDHASH;
 
     const { adminSection, adminInstructor, adminPassword } = req.body;
     if (!adminSection || !adminInstructor || !adminPassword) {
