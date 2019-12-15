@@ -52,21 +52,7 @@ There are many methods of running / hosting a MySQL server. Once the database ex
 
 ### Configuration
 
-Please create a .env file within the root directory and copy and paste these values into the file.
-
-```
-NODE_ENV=development
-NODE_OPTIONS=--max_old_space_size=4096
-GENERATE_SOURCEMAP=false
-DB_HOSTNAME="localhost"
-DB_USERNAME="root"
-DB_PASSWORD=""
-DB_NAME="islandrushdb"
-CD_SECTION="CourseDirector"
-CD_LASTNAME="Smith"
-CD_PASSWORDHASH="912ec803b2ce49e4a541068d495ab570"
-```
-
+Create a .env file and paste in the values from the .env.example file. You will use the .env file to configure most values.
 Change the DB\_ credentials to whatever mysql database you want to access.
 The CD_PASSWORDHASH is an md5 hash of "asdf"
 
