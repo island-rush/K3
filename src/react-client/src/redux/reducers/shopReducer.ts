@@ -1,4 +1,4 @@
-import { SHOP_PURCHASE, SHOP_REFUND, SHOP_CLEAR, SHOP_TRANSFER, INITIAL_GAMESTATE } from "../actions/actionTypes";
+import { INITIAL_GAMESTATE, SHOP_CLEAR, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from "../actions/actionTypes";
 
 const initialShopState: any = [];
 

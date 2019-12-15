@@ -1,5 +1,5 @@
-import pool from "../database";
 import { FieldPacket } from "mysql2";
+import pool from "../database";
 
 interface ShopItem {
     shopItemId: number;

@@ -1,5 +1,5 @@
 import React from "react";
-import { TYPE_AIR, TYPE_SEA, TYPE_LAND, TYPE_SPECIAL } from "../../../constants/gameConstants";
+import { TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL } from "../../../constants/gameConstants";
 
 const popupStyle: any = {
     backgroundColor: "white",

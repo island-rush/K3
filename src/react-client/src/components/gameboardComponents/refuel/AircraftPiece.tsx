@@ -1,6 +1,6 @@
 import React, { Component } from "react";
+import { AIR_REFUELING_SQUADRON_ID, TYPE_FUEL } from "../../../constants/gameConstants";
 import { TYPE_IMAGES } from "../../styleConstants";
-import { TYPE_FUEL, AIR_REFUELING_SQUADRON_ID } from "../../../constants/gameConstants";
 
 const aircraftPieceStyle: any = {
     backgroundColor: "white",

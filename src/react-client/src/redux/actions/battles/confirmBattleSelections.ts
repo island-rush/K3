@@ -1,7 +1,7 @@
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { WAITING_STATUS } from "../../../constants/gameConstants";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_CONFIRM_BATTLE_SELECTION } from "../actionTypes";
-import { WAITING_STATUS } from "../../../constants/gameConstants";
+import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const confirmBattleSelections = () => {
     return (dispatch: any, getState: any, emit: any) => {

@@ -1,6 +1,6 @@
-import setUserfeedbackAction from "../setUserfeedbackAction";
-import { ENEMY_PIECE_SELECT } from "../actionTypes";
 import { WAITING_STATUS } from "../../../constants/gameConstants";
+import { ENEMY_PIECE_SELECT } from "../actionTypes";
+import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: any) => {
     return (dispatch: any, getState: any, emit: any) => {

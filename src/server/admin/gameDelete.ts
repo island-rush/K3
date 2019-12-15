@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Game } from "../classes";
-
 import { ACCESS_TAG } from "../pages/errorTypes";
 
 const gameDelete = async (req: Request, res: Response) => {

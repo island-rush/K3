@@ -1,7 +1,6 @@
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from "../../../constants/gameConstants";
 import { START_PLAN } from "../actionTypes";
-import { TYPE_OWNERS, COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
-import setUserFeedbackAction from "../setUserfeedbackAction";
+import setUserfeedbackAction from "../setUserfeedbackAction";
 
 //TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)
 const startPlan = () => {
@@ -16,12 +15,12 @@ const startPlan = () => {
         const { gamePhase, gameControllers, gameTeam, gameSlice } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
-            dispatch(setUserFeedbackAction("Not the right phase for planning..."));
+            dispatch(setUserfeedbackAction("Not the right phase for planning..."));
             return;
         }
 
         if (gameSlice !== SLICE_PLANNING_ID) {
-            dispatch(setUserFeedbackAction("Already Executing, wait for next planning slice."));
+            dispatch(setUserfeedbackAction("Already Executing, wait for next planning slice."));
             return;
         }
 
@@ -40,7 +39,7 @@ const startPlan = () => {
         }
 
         if (selectedPiece.pieceDisabled) {
-            dispatch(setUserFeedbackAction("Piece is disabled from something (probably goldeneye)"));
+            dispatch(setUserfeedbackAction("Piece is disabled from something (probably goldeneye)"));
             return;
         }
 

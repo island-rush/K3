@@ -1,7 +1,7 @@
-import pool from "../database";
 import { distanceMatrix } from "../../react-client/src/constants/distanceMatrix";
 //prettier-ignore
-import {TYPE_OWNERS,TYPE_SPECIAL,TYPE_AIR,TYPE_LAND,TYPE_SEA,COMM_INTERRUPT_ROUNDS,DEACTIVATED,BIO_WEAPONS_ROUNDS,RAISE_MORALE_ROUNDS,REMOTE_SENSING_ROUNDS,ACTIVATED,COMM_INTERRUPT_RANGE,BLUE_TEAM_ID,RED_TEAM_ID,GOLDEN_EYE_ROUNDS,TYPE_AIR_PIECES,GOLDEN_EYE_RANGE,TYPE_GROUND_PIECES} from "../../react-client/src/constants/gameConstants";
+import { ACTIVATED, BIO_WEAPONS_ROUNDS, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, RAISE_MORALE_ROUNDS, RED_TEAM_ID, REMOTE_SENSING_ROUNDS, TYPE_AIR, TYPE_AIR_PIECES, TYPE_GROUND_PIECES, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from "../../react-client/src/constants/gameConstants";
+import pool from "../database";
 
 class Capability {
     static async rodsFromGodInsert(gameId: number, gameTeam: number, selectedPositionId: number) {

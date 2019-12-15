@@ -1,6 +1,6 @@
+import { Store } from "redux";
 import io from "socket.io-client";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../constants/otherConstants";
-import { Store } from "redux";
 
 const socket = io(window.location.hostname);
 

@@ -1,12 +1,12 @@
-import sendUserFeedback from "./sendUserFeedback";
-import { Game, Capability, Piece } from "../classes";
-import { MAIN_BUTTON_CLICK, PURCHASE_PHASE, COMBAT_PHASE, NEWS_PHASE, SLICE_CHANGE } from "../../react-client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../react-client/src/constants/otherConstants";
-import { GAME_INACTIVE_TAG } from "../pages/errorTypes";
-//prettier-ignore
-import {BLUE_TEAM_ID,RED_TEAM_ID,TYPE_MAIN,WAITING_STATUS,NOT_WAITING_STATUS,NEWS_PHASE_ID,PURCHASE_PHASE_ID,COMBAT_PHASE_ID,PLACE_PHASE_ID,SLICE_PLANNING_ID,SLICE_EXECUTING_ID} from "../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
+//prettier-ignore
+import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PLACE_PHASE_ID, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, TYPE_MAIN, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
+import { COMBAT_PHASE, MAIN_BUTTON_CLICK, NEWS_PHASE, PURCHASE_PHASE, SLICE_CHANGE } from "../../react-client/src/redux/actions/actionTypes";
+import { Capability, Game, Piece } from "../classes";
+import { GAME_INACTIVE_TAG } from "../pages/errorTypes";
 import executeStep from "./executeStep";
+import sendUserFeedback from "./sendUserFeedback";
 
 const mainButtonClick = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

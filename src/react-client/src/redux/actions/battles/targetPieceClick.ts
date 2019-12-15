@@ -1,5 +1,5 @@
-import { TARGET_PIECE_SELECT } from "../actionTypes";
 import { WAITING_STATUS } from "../../../constants/gameConstants";
+import { TARGET_PIECE_SELECT } from "../actionTypes";
 
 const targetPieceClick = (battlePiece: any, battlePieceIndex: any) => {
     return (dispatch: any, getState: any, emit: any) => {

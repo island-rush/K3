@@ -4,8 +4,7 @@
  * Exports the pool for use in other files (Classes)
  */
 
-import mysql, { PoolOptions } from "mysql2/promise";
-import { Pool } from "mysql2/promise";
+import mysql, { Pool, PoolOptions } from "mysql2/promise";
 
 const host: string = process.env.DB_HOSTNAME;
 const user: string = process.env.DB_USERNAME;

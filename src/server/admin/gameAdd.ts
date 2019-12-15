@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Game } from "../classes";
 import md5 from "md5";
+import { Game } from "../classes";
 import { ACCESS_TAG, BAD_REQUEST_TAG } from "../pages/errorTypes";
 
 const gameAdd = async (req: Request, res: Response) => {

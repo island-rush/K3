@@ -1,5 +1,5 @@
-import pool from "../database";
 import { ATTACK_MATRIX } from "../../react-client/src/constants/gameConstants";
+import pool from "../database";
 
 interface Event {
     eventId: number;

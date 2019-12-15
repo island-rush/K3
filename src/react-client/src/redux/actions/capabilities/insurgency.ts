@@ -1,6 +1,6 @@
-import setUserfeedbackAction from "../setUserfeedbackAction";
-import { INSURGENCY_SELECTING } from "../actionTypes";
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
+import { INSURGENCY_SELECTING } from "../actionTypes";
+import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const insurgency = (invItem: any) => {
     return (dispatch: any, getState: any, emit: any) => {

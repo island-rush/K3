@@ -1,12 +1,12 @@
-import { Game, Event } from "../../classes";
-import { BATTLE_FIGHT_RESULTS, UPDATE_FLAGS } from "../../../react-client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-//prettier-ignore
-import {BLUE_TEAM_ID,RED_TEAM_ID,WAITING_STATUS,NOT_WAITING_STATUS,TYPE_MAIN,COMBAT_PHASE_ID} from "../../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
-import sendUserFeedback from "../sendUserFeedback";
+//prettier-ignore
+import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, WAITING_STATUS } from "../../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
+import { BATTLE_FIGHT_RESULTS, UPDATE_FLAGS } from "../../../react-client/src/redux/actions/actionTypes";
+import { Event, Game } from "../../classes";
+import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import giveNextEvent from "../giveNextEvent";
+import sendUserFeedback from "../sendUserFeedback";
 
 const confirmBattleSelection = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

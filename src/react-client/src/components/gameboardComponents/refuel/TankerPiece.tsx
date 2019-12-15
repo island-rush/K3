@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { TYPE_IMAGES, SELECTED_BORDERS } from "../../styleConstants";
+import { SELECTED_BORDERS, TYPE_IMAGES } from "../../styleConstants";
 
 const tankerPieceStyle = {
     backgroundColor: "white",

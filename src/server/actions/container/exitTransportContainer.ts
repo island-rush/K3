@@ -2,16 +2,16 @@
  * This function for after selecting position for piece to go to for exiting transport container.
  */
 
-import { Game, Piece } from "../../classes";
-import sendUserFeedback from "../sendUserFeedback";
-import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../react-client/src/constants/otherConstants";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { TYPE_MAIN, COMBAT_PHASE_ID, SLICE_PLANNING_ID, CONTAINER_TYPES } from "../../../react-client/src/constants/gameConstants";
-import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
-import { ALL_GROUND_TYPES } from "../../../react-client/src/constants/gameboardConstants";
-import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
 import { Socket } from "socket.io";
+import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
+import { ALL_GROUND_TYPES } from "../../../react-client/src/constants/gameboardConstants";
+import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
+import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
+import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
+import { Game, Piece } from "../../classes";
+import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import sendUserFeedback from "../sendUserFeedback";
 
 const exitTransportContainer = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

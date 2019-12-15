@@ -1,7 +1,7 @@
-import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from "../pages/errorTypes";
 import { Request, Response } from "express";
-import { Game } from "../classes";
 import md5 from "md5";
+import { Game } from "../classes";
+import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from "../pages/errorTypes";
 
 const adminLogin = async (req: Request, res: Response) => {
     const CourseDirectorSection = process.env.CD_SECTION;

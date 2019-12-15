@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import BattlePiece from "./BattlePiece";
-import { BATTLE_POPUP_IMAGES } from "../../styleConstants";
 //prettier-ignore
-import {battlePopupMinimizeToggle,battlePieceClick,targetPieceClick,enemyBattlePieceClick,confirmBattleSelections,clearOldBattle} from "../../../redux/actions";
+import { battlePieceClick, battlePopupMinimizeToggle, clearOldBattle, confirmBattleSelections, enemyBattlePieceClick, targetPieceClick } from "../../../redux/actions";
+import { BATTLE_POPUP_IMAGES } from "../../styleConstants";
+import BattlePiece from "./BattlePiece";
 
 const battlePopupStyle: any = {
     position: "absolute",

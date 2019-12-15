@@ -1,10 +1,10 @@
-import { Event, Piece } from "../classes";
-import { EVENT_BATTLE, NO_MORE_EVENTS, EVENT_REFUEL } from "../../react-client/src/redux/actions/actionTypes";
+import { Socket } from "socket.io";
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from "../../react-client/src/constants/gameConstants";
 import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
-import { Socket } from "socket.io";
+import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from "../../react-client/src/redux/actions/actionTypes";
+import { Event, Piece } from "../classes";
+import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "./eventConstants";
 import sendUserFeedback from "./sendUserFeedback";
-import { POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "./eventConstants";
 
 const giveNextEvent = async (socket: Socket, options: any) => {
     const { thisGame, gameTeam } = options;

@@ -1,6 +1,6 @@
-import { PIECE_OPEN_ACTION } from "../actionTypes";
 import { CONTAINER_TYPES } from "../../../constants/gameConstants";
-import setUserFeedbackAction from "../setUserfeedbackAction";
+import { PIECE_OPEN_ACTION } from "../actionTypes";
+import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const pieceOpen = (selectedPiece: any) => {
     return (dispatch: any, getState: any, emit: any) => {
@@ -14,7 +14,7 @@ const pieceOpen = (selectedPiece: any) => {
 
         //don't want to open pieces that aren't container types
         if (!CONTAINER_TYPES.includes(pieceTypeId)) {
-            dispatch(setUserFeedbackAction("Not a piece that can hold other pieces..."));
+            dispatch(setUserfeedbackAction("Not a piece that can hold other pieces..."));
             return;
         }
 

@@ -1,6 +1,6 @@
-import setUserfeedbackAction from "../setUserfeedbackAction";
-import { BIO_WEAPON_SELECTING } from "../actionTypes";
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
+import { BIO_WEAPON_SELECTING } from "../actionTypes";
+import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const biologicalWeapons = (invItem: any) => {
     return (dispatch: any, getState: any, emit: any) => {

@@ -1,5 +1,5 @@
-import setUserfeedbackAction from "../setUserfeedbackAction";
 import { AIRCRAFT_CLICK } from "../actionTypes";
+import setUserfeedbackAction from "../setUserfeedbackAction";
 
 //TODO: could have more checks for current game event / phase / slice / other easy stuff that should be obvious
 const aircraftClick = (aircraftPiece: any, aircraftPieceIndex: any) => {

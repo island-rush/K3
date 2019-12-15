@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from "../styleConstants";
 import { TYPE_NAMES } from "../../constants/gameConstants";
+import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from "../styleConstants";
 
 const pieceStyle = {
     backgroundColor: "grey",

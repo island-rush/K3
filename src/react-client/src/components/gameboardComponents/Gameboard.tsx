@@ -1,18 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import BattlePopup from "./battle/BattlePopup";
-import NewsPopup from "./NewsPopup";
-import ContainerPopup from "./container/ContainerPopup";
-import RefuelPopup from "./refuel/RefuelPopup";
-import SelectCommanderTypePopup from "./capabilities/SelectCommanderTypePopup";
-import Patterns from "./Patterns";
-//prettier-ignore
-import {innerTransportPieceClick,outerPieceClick,innerPieceClick,selectPosition,newsPopupMinimizeToggle,raiseMoraleSelectCommanderType,pieceClose} from "../../redux/actions";
-//prettier-ignore
-import {TYPE_HIGH_LOW,REMOTE_SENSING_RANGE,COMM_INTERRUPT_RANGE,GOLDEN_EYE_RANGE,RED_TEAM_ID,BLUE_TEAM_ID} from "../../constants/gameConstants";
 import { distanceMatrix } from "../../constants/distanceMatrix";
 //prettier-ignore
-import {IGNORE_TITLE_TYPES,ALL_ISLAND_NAMES,AIRFIELD_TYPE,AIRFIELD_TITLE,MISSILE_SILO_TYPE,MISSILE_SILO_TITLE,ISLAND_POINTS,ALL_FLAG_LOCATIONS,FLAG_ISLAND_OWNERSHIP} from "../../constants/gameboardConstants";
+import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, FLAG_ISLAND_OWNERSHIP, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE } from "../../constants/gameboardConstants";
+//prettier-ignore
+import { BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from "../../constants/gameConstants";
+//prettier-ignore
+import { innerPieceClick, innerTransportPieceClick, newsPopupMinimizeToggle, outerPieceClick, pieceClose, raiseMoraleSelectCommanderType, selectPosition } from "../../redux/actions";
+import BattlePopup from "./battle/BattlePopup";
+import SelectCommanderTypePopup from "./capabilities/SelectCommanderTypePopup";
+import ContainerPopup from "./container/ContainerPopup";
+import NewsPopup from "./NewsPopup";
+import Patterns from "./Patterns";
+import RefuelPopup from "./refuel/RefuelPopup";
 const { HexGrid, Layout, Hexagon } = require("react-hexgrid"); //TODO: create type declaration for react-hexgrid
 
 const gameboardStyle: any = {

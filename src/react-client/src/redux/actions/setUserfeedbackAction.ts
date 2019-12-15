@@ -2,7 +2,7 @@
 
 import { SET_USERFEEDBACK } from "./actionTypes";
 
-const setUserFeedbackAction = (userFeedback: string) => {
+const setUserfeedbackAction = (userFeedback: string) => {
     return {
         type: SET_USERFEEDBACK,
         payload: {
@@ -11,4 +11,4 @@ const setUserFeedbackAction = (userFeedback: string) => {
     };
 };
 
-export default setUserFeedbackAction;
+export default setUserfeedbackAction;

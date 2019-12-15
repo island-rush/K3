@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { menuSelect, selectPosition, clearPieceSelection } from "../redux/actions";
+import { clearPieceSelection, menuSelect, selectPosition } from "../redux/actions";
 import Bottombar from "./bottombarComponents/Bottombar";
-import Sidebar from "./sidebarComponents/Sidebar";
 import Gameboard from "./gameboardComponents/Gameboard";
+import Sidebar from "./sidebarComponents/Sidebar";
 import Zoombox from "./zoomboxComponents/Zoombox";
 
 const appStyle: any = {

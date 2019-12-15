@@ -1,12 +1,12 @@
-import { Game, Piece, Plan } from "../../classes";
-import sendUserFeedback from "../sendUserFeedback";
-import { PLAN_WAS_CONFIRMED } from "../../../react-client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { CONTAINER_TYPES, COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_TERRAIN, TYPE_OWNERS } from "../../../react-client/src/constants/gameConstants";
-import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
-import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
 import { Socket } from "socket.io";
+import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
+import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from "../../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
+import { PLAN_WAS_CONFIRMED } from "../../../react-client/src/redux/actions/actionTypes";
+import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
+import { Game, Piece, Plan } from "../../classes";
+import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import sendUserFeedback from "../sendUserFeedback";
 
 const confirmPlan = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

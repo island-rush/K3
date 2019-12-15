@@ -1,10 +1,10 @@
-import { Game, ShopItem } from "../../classes";
-import sendUserFeedback from "../sendUserFeedback";
-import { SHOP_REFUND } from "../../../react-client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../react-client/src/constants/otherConstants";
-import { GAME_INACTIVE_TAG, BAD_REQUEST_TAG } from "../../pages/errorTypes";
-import { TYPE_COSTS, PURCHASE_PHASE_ID, TYPE_MAIN, BLUE_TEAM_ID } from "../../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
+import { BLUE_TEAM_ID, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
+import { SHOP_REFUND } from "../../../react-client/src/redux/actions/actionTypes";
+import { Game, ShopItem } from "../../classes";
+import { BAD_REQUEST_TAG, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import sendUserFeedback from "../sendUserFeedback";
 
 const shopRefundRequest = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

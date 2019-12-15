@@ -4,24 +4,11 @@
  * For accessing pages and handling AJAX requests
  */
 
-import { Router, Request, Response } from "express";
+import { Request, Response, Router } from "express";
 import path from "path";
-import { LOGIN_TAG, DATABASE_TAG } from "./pages/errorTypes";
-import {
-    dbStatus,
-    adminLogin,
-    gameLogin,
-    getGames,
-    insertDatabaseTables,
-    setTeamPasswords,
-    setAdminPassword,
-    gameDelete,
-    gameAdd,
-    getNews,
-    getGameActive,
-    toggleGameActive,
-    gameReset
-} from "./admin";
+//prettier-ignore
+import { adminLogin, dbStatus, gameAdd, gameDelete, gameLogin, gameReset, getGameActive, getGames, getNews, insertDatabaseTables, setAdminPassword, setTeamPasswords, toggleGameActive } from "./admin";
+import { DATABASE_TAG, LOGIN_TAG } from "./pages/errorTypes";
 
 const router: Router = Router();
 

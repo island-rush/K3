@@ -5,18 +5,23 @@
 
 //Use Environment Variables from .env when in development
 import dotenv from "dotenv";
+import express, { Application, Request, Response } from "express";
+import session from "express-session";
+import http, { Server } from "http";
+import { Socket } from "socket.io";
+import router from "./server/router";
+import socketSetup from "./server/socketSetup";
+import sharedsession = require("express-socket.io-session");
+
 if (process.env.NODE_ENV != "production") {
     dotenv.config();
 }
 
 //Create the server
-import express, { Application, Response, Request } from "express";
-import http, { Server } from "http";
 const app: Application = express();
 const server: Server = http.createServer(app);
 
 //Session Setup
-import session from "express-session";
 const LokiStore = require("connect-loki")(session);
 const lokiOptions = {};
 const secret = process.env.SESSION_SECRET || "@d$f4%ggGG4_*7FGkdkjlk";
@@ -31,7 +36,6 @@ app.use(express.urlencoded({ extended: true })); //parses data and puts into req
 
 //Server Routing
 //TODO: Use middleware or reverse proxy to serve static files -> aka, anything with res.sendFile()
-import router from "./server/router";
 app.use("/", router);
 app.use(express.static(__dirname + "/react-client/build"));
 app.use((req: Request, res: Response) => {
@@ -39,9 +43,6 @@ app.use((req: Request, res: Response) => {
 });
 
 //Socket Setup
-import { Socket } from "socket.io";
-import sharedsession = require("express-socket.io-session");
-import socketSetup from "./server/socketSetup";
 const io = require("socket.io")(server);
 io.use(sharedsession(fullSession)); //Socket has access to sessions
 io.sockets.on("connection", (socket: Socket) => {

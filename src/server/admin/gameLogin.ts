@@ -1,7 +1,7 @@
-import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, ALREADY_IN_TAG, LOGIN_TAG, GAME_INACTIVE_TAG } from "../pages/errorTypes";
 import { Request, Response } from "express";
-import { Game } from "../classes";
 import md5 from "md5";
+import { Game } from "../classes";
+import { ALREADY_IN_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGIN_TAG } from "../pages/errorTypes";
 
 const gameLogin = async (req: Request, res: Response) => {
     // TODO: probably check these before grabbing them for safety

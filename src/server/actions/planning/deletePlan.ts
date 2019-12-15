@@ -1,10 +1,10 @@
-import { Game, Piece } from "../../classes";
-import sendUserFeedback from "../sendUserFeedback";
-import { DELETE_PLAN } from "../../../react-client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
+import { DELETE_PLAN } from "../../../react-client/src/redux/actions/actionTypes";
+import { Game, Piece } from "../../classes";
+import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import sendUserFeedback from "../sendUserFeedback";
 
 const deletePlan = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

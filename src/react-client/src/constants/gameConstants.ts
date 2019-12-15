@@ -1,4 +1,4 @@
-import { LAND_TYPE, WATER_TYPE, AIRFIELD_TYPE, MISSILE_SILO_TYPE, FLAG_TYPE } from "./gameboardConstants";
+import { AIRFIELD_TYPE, FLAG_TYPE, LAND_TYPE, MISSILE_SILO_TYPE, WATER_TYPE } from "./gameboardConstants";
 
 export const BOMBER_TYPE_ID = 0;
 export const STEALTH_BOMBER_TYPE_ID = 1;

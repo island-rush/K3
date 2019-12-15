@@ -1,11 +1,11 @@
-import { Game, Event } from "../../classes";
-import { REFUEL_RESULTS } from "../../../react-client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { TYPE_FUEL, TYPE_AIR, COMBAT_PHASE_ID } from "../../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
-import sendUserFeedback from "../sendUserFeedback";
+import { COMBAT_PHASE_ID, TYPE_AIR, TYPE_FUEL } from "../../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
+import { REFUEL_RESULTS } from "../../../react-client/src/redux/actions/actionTypes";
+import { Event, Game } from "../../classes";
+import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import giveNextEvent from "../giveNextEvent";
+import sendUserFeedback from "../sendUserFeedback";
 
 const confirmFuelSelection = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

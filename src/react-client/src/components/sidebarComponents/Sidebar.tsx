@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import ShopMenu from "./ShopMenu";
-import InvMenu from "./InvMenu";
-import Gameinfo from "./Gameinfo";
-import SpaceArea from "./SpaceArea";
 import { menuSelect } from "../../redux/actions";
+import Gameinfo from "./Gameinfo";
+import InvMenu from "./InvMenu";
+import ShopMenu from "./ShopMenu";
+import SpaceArea from "./SpaceArea";
 
 const sidebarStyle: any = {
     backgroundColor: "Red",

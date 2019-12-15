@@ -1,6 +1,6 @@
-import setUserfeedbackAction from "../setUserfeedbackAction";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_CONFIRM_PLAN } from "../actionTypes";
+import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const confirmPlan = () => {
     return (dispatch: any, getState: any, emit: any) => {

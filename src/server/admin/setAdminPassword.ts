@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { Game } from "../classes";
 import md5 from "md5";
+import { Game } from "../classes";
 import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from "../pages/errorTypes";
 
 const setAdminPassword = async (req: Request, res: Response) => {

@@ -1,14 +1,14 @@
-import { Game, Piece } from "../../classes";
-import sendUserFeedback from "../sendUserFeedback";
-import { OUTER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../react-client/src/constants/otherConstants";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-//prettier-ignore
-import {TYPE_MAIN,COMBAT_PHASE_ID,SLICE_PLANNING_ID,TACTICAL_AIRLIFT_SQUADRON_TYPE_ID,TRANSPORT_TYPE_ID,C_130_TYPE_ID,A_C_CARRIER_TYPE_ID,SOF_TEAM_TYPE_ID,MARINE_INFANTRY_COMPANY_TYPE_ID,ARMY_INFANTRY_COMPANY_TYPE_ID,TANK_COMPANY_TYPE_ID,LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID,ARTILLERY_BATTERY_TYPE_ID,SAM_SITE_TYPE_ID,ATTACK_HELICOPTER_TYPE_ID,STEALTH_FIGHTER_TYPE_ID} from "../../../react-client/src/constants/gameConstants";
-import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
-import { AIRFIELD_TYPE } from "../../../react-client/src/constants/gameboardConstants";
-import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
 import { Socket } from "socket.io";
+import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
+import { AIRFIELD_TYPE } from "../../../react-client/src/constants/gameboardConstants";
+//prettier-ignore
+import { ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
+import { OUTER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
+import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
+import { Game, Piece } from "../../classes";
+import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import sendUserFeedback from "../sendUserFeedback";
 
 const enterContainer = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

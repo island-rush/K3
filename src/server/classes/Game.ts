@@ -1,25 +1,12 @@
-import pool from "../database";
-import { gameInitialPieces, gameInitialNews } from "../admin";
-import { BLUE_TEAM_ID, RED_TEAM_ID, CAPTURE_TYPES, NEWS_PHASE_ID, AIR_REFUELING_SQUADRON_ID } from "../../react-client/src/constants/gameConstants";
-import {
-    MONTAVILLE_ISLAND_ID,
-    LION_ISLAND_ID,
-    EAGLE_ISLAND_ID,
-    KEONI_ISLAND_ID,
-    SHOR_ISLAND_ID,
-    TAMU_ISLAND_ID,
-    RICO_ISLAND_ID,
-    FULLER_ISLAND_ID,
-    NOYARC_ISLAND_ID,
-    HR_REPUBLIC_ISLAND_ID,
-    DRAGON_ISLAND_ID,
-    ISLAND_POINTS,
-    ALL_FLAG_LOCATIONS
-} from "../../react-client/src/constants/gameboardConstants";
-import { INITIAL_GAMESTATE } from "../../react-client/src/redux/actions/actiontypes";
-import { POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "../actions/eventConstants";
-import { InvItem, Plan, Capability, Event, ShopItem, Piece } from "../classes";
 import { FieldPacket } from "mysql2";
+//prettier-ignore
+import { ALL_FLAG_LOCATIONS, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from "../../react-client/src/constants/gameboardConstants";
+import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, CAPTURE_TYPES, NEWS_PHASE_ID, RED_TEAM_ID } from "../../react-client/src/constants/gameConstants";
+import { INITIAL_GAMESTATE } from "../../react-client/src/redux/actions/actiontypes";
+import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "../actions/eventConstants";
+import { gameInitialNews, gameInitialPieces } from "../admin";
+import { Capability, Event, InvItem, Piece, Plan, ShopItem } from "../classes";
+import pool from "../database";
 
 interface GameConstructorOptionsWithId {
     gameId: number;

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import ContainerPiece from "./ContainerPiece";
 import { TRANSPORT_TYPE_ID } from "../../../constants/gameConstants";
+import ContainerPiece from "./ContainerPiece";
 
 const containerPopupStyle: any = {
     position: "absolute",

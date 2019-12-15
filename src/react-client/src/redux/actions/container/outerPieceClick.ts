@@ -1,5 +1,5 @@
-import { SERVER_OUTER_PIECE_CLICK } from "../actionTypes";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
+import { SERVER_OUTER_PIECE_CLICK } from "../actionTypes";
 
 const outerPieceClick = (selectedPiece: any, containerPiece: any) => {
     return (dispatch: any, getState: any, emit: any) => {

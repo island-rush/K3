@@ -2,14 +2,14 @@
  * This function for letting pieces leave containers within the same position
  */
 
-import { Game, Piece } from "../../classes";
-import sendUserFeedback from "../sendUserFeedback";
-import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../../react-client/src/constants/otherConstants";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import { TYPE_MAIN, COMBAT_PHASE_ID, SLICE_PLANNING_ID, CONTAINER_TYPES, TYPE_TERRAIN } from "../../../react-client/src/constants/gameConstants";
-import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
 import { Socket } from "socket.io";
+import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_MAIN, TYPE_TERRAIN } from "../../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
+import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
+import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
+import { Game, Piece } from "../../classes";
+import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import sendUserFeedback from "../sendUserFeedback";
 
 const exitContainer = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;

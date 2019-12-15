@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { confirmPlan, startPlan, cancelPlan, undoMove, containerMove } from "../../redux/actions";
+import { cancelPlan, confirmPlan, containerMove, startPlan, undoMove } from "../../redux/actions";
 import { LEFT_CONTROLS_IMAGES } from "../styleConstants";
 
 const leftcontrolsStyle: any = {

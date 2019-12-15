@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Piece from "./Piece";
-import { selectPiece, clearPieceSelection, pieceOpen, pieceClose } from "../../redux/actions";
+import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from "../../redux/actions";
 import { ZOOMBOX_BACKGROUNDS } from "../styleConstants";
+import Piece from "./Piece";
 
 const zoomboxStyle = {
     position: "absolute",

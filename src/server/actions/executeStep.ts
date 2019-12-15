@@ -1,10 +1,10 @@
-import { Plan, Piece, Event, Capability } from "../classes";
-import { PLACE_PHASE, NEW_ROUND, PIECES_MOVE, UPDATE_FLAGS } from "../../react-client/src/redux/actions/actionTypes";
-import { SOCKET_SERVER_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from "../../react-client/src/constants/otherConstants";
-import { BLUE_TEAM_ID, RED_TEAM_ID, PLACE_PHASE_ID, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
 import { Socket } from "socket.io";
+import { BLUE_TEAM_ID, PLACE_PHASE_ID, RED_TEAM_ID, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
+import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
+import { NEW_ROUND, PLACE_PHASE, UPDATE_FLAGS } from "../../react-client/src/redux/actions/actionTypes";
+import { Capability, Event, Piece, Plan } from "../classes";
+import { BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "./eventConstants";
 import giveNextEvent from "./giveNextEvent";
-import { BOTH_TEAMS_INDICATOR, POS_BATTLE_EVENT_TYPE, COL_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "./eventConstants";
 
 const executeStep = async (socket: Socket, thisGame: any) => {
     //inserting events here and moving pieces, or changing to new round or something...

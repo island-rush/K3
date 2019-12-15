@@ -1,6 +1,6 @@
-import setUserfeedbackAction from "../setUserfeedbackAction";
-import { REMOTE_SENSING_SELECTING } from "../actionTypes";
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
+import { REMOTE_SENSING_SELECTING } from "../actionTypes";
+import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const remoteSensing = (invItem: any) => {
     return (dispatch: any, getState: any, emit: any) => {

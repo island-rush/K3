@@ -1,7 +1,7 @@
-import setUserfeedbackAction from "../setUserfeedbackAction";
-import { SERVER_RAISE_MORALE_CONFIRM } from "../actionTypes";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { ALL_COMMANDER_TYPES } from "../../../constants/gameConstants";
+import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
+import { SERVER_RAISE_MORALE_CONFIRM } from "../actionTypes";
+import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const raiseMoraleSelectCommanderType = (selectedCommanderType: any) => {
     return (dispatch: any, getState: any, emit: any) => {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { TYPE_IMAGES, DICE_IMAGES, ARROW_IMAGE } from "../../styleConstants";
 import { TYPE_NAMES } from "../../../constants/gameConstants";
+import { ARROW_IMAGE, DICE_IMAGES, TYPE_IMAGES } from "../../styleConstants";
 
 const battlePieceStyle: any = {
     backgroundColor: "white",

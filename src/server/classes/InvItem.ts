@@ -1,5 +1,5 @@
+import { TYPE_FUEL, TYPE_MOVES } from "../../react-client/src/constants/gameConstants";
 import pool from "../database";
-import { TYPE_MOVES, TYPE_FUEL } from "../../react-client/src/constants/gameConstants";
 import Piece from "./Piece";
 
 interface InvItem {
