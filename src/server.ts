@@ -14,7 +14,11 @@ import socketSetup from "./server/socketSetup";
 import sharedsession = require("express-socket.io-session");
 
 if (process.env.NODE_ENV != "production") {
-    dotenv.config();
+    try {
+        dotenv.config();
+    } catch (error) {
+        console.error("WAS NOT ABLE TO CONFIGURE FROM A .ENV FILE");
+    }
 }
 
 //Create the server
