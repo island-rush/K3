@@ -3,8 +3,6 @@
  * Sessions, Routing, and Web Sockets
  */
 
-//Use Environment Variables from .env when in development
-import dotenv from "dotenv";
 import express, { Application, Request, Response } from "express";
 import session from "express-session";
 import http, { Server } from "http";
@@ -12,14 +10,6 @@ import { Socket } from "socket.io";
 import router from "./server/router";
 import socketSetup from "./server/socketSetup";
 import sharedsession = require("express-socket.io-session");
-
-if (process.env.NODE_ENV != "production") {
-    try {
-        dotenv.config();
-    } catch (error) {
-        console.error("WAS NOT ABLE TO CONFIGURE FROM A .ENV FILE");
-    }
-}
 
 //Create the server
 const app: Application = express();
