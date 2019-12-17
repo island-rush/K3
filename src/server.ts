@@ -11,33 +11,37 @@ import router from "./server/router";
 import socketSetup from "./server/socketSetup";
 import sharedsession = require("express-socket.io-session");
 import { AzureTableStoreOptions, AzureTableStoreFactory } from "connect-azuretables";
+import { SessionOptions } from "http2";
 
 //Create the server
 const app: Application = express();
 const server: Server = http.createServer(app);
 
-//Session Setup
-const LokiStore = require("connect-loki")(session);
-const lokiOptions = {};
-const secret = process.env.SESSION_SECRET || "@d$f4%ggGG4_*7FGkdkjlk";
-const fullSession = session({
-    store: new LokiStore(lokiOptions),
-    secret,
-    resave: false,
-    saveUninitialized: false
-});
-
-// Session Setup (ALTERNATE AZURE SESSIONS) (use AZURE_STORAGE_CONNECTION_STRING in env to configure)
-// const AzureTablesStoreFactory: AzureTableStoreFactory = require("connect-azuretables")(session);
-// const azureOptions: AzureTableStoreOptions = {
-//     sessionTimeOut: 120
-// };
-// const fullSession = session({
-//     store: AzureTablesStoreFactory.create(azureOptions),
-//     secret: "sdlfkj",
-//     resave: false,
-//     saveUninitialized: false
-// });
+//Session Setup (2 possible types)
+let fullSession;
+if (process.env.SESSION_TYPE === "azure") {
+    //Azure Sessions uses Azure Storage Account (tables) -> Probably best for auto-scaling with multiple instances
+    const AzureTablesStoreFactory: AzureTableStoreFactory = require("connect-azuretables")(session);
+    const AzureOptions: AzureTableStoreOptions = {
+        sessionTimeOut: 120
+    };
+    fullSession = session({
+        store: AzureTablesStoreFactory.create(AzureOptions),
+        secret: process.env.SESSION_SECRET || "@d$f4%ggGG4_*7FGkdkjlk",
+        resave: false,
+        saveUninitialized: false
+    });
+} else {
+    //LokiStore session uses session-store.db file in root directory -> Probably best for single-instance or offline development
+    const LokiStore = require("connect-loki")(session);
+    const lokiOptions: SessionOptions = {};
+    fullSession = session({
+        store: new LokiStore(lokiOptions),
+        secret: process.env.SESSION_SECRET || "@d$f4%ggGG4_*7FGkdkjlk",
+        resave: false,
+        saveUninitialized: false
+    });
+}
 
 app.use(fullSession); //App has access to sessions
 
