@@ -3,7 +3,7 @@ import { Game } from "../classes";
 import { ACCESS_TAG } from "../pages/errorTypes";
 
 const getNews = async (req: Request, res: Response) => {
-    if (!req.session.ir3 || !req.session.ir3.teacher || !req.session.ir3.gameId) {
+    if (!req.session.ir3teacher) {
         res.redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
     }

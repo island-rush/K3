@@ -3,7 +3,8 @@ import { Game } from "../classes";
 import { ACCESS_TAG } from "../pages/errorTypes";
 
 const gameDelete = async (req: Request, res: Response) => {
-    if (!req.session.ir3 || !req.session.ir3.courseDirector) {
+    //Verify Session Exists
+    if (!req.session.ir3coursedirector) {
         res.status(403).redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
     }

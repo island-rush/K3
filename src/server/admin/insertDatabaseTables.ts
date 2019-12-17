@@ -4,7 +4,7 @@ import pool from "../database";
 import { BAD_SESSION } from "../pages/errorTypes";
 
 const insertDatabaseTables = async (req: Request, res: Response) => {
-    if (!req.session.ir3 || !req.session.ir3.courseDirector) {
+    if (!req.session.ir3coursedirector) {
         res.redirect(`/index.html?error=${BAD_SESSION}`);
         return;
     }

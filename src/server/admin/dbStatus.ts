@@ -1,8 +1,15 @@
 import { Request, Response } from "express";
 import pool from "../database";
+import { PoolConnection } from "mysql2/promise";
 
+/**
+ * Simple function connects to database.
+ * Responds with 'Connected'.
+ * @param req Express Request Object.
+ * @param res Express Response Object.
+ */
 const dbStatus = async (req: Request, res: Response) => {
-    const conn = await pool.getConnection();
+    const conn: PoolConnection = await pool.getConnection();
     res.send("Connected");
     conn.release();
 };

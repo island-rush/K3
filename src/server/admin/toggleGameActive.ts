@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Game } from "../classes";
 
 const toggleGameActive = async (req: Request, res: Response) => {
-    if (!req.session.ir3 || !req.session.ir3.teacher || !req.session.ir3.gameId) {
+    if (!req.session.ir3teacher) {
         res.sendStatus(403); //TODO: redirect here?
         return;
     }

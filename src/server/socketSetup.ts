@@ -1,7 +1,3 @@
-/**
- * This function configures a Socket to respond to client requests.
- */
-
 import { Socket } from "socket.io";
 import { LOGGED_IN_VALUE, NOT_LOGGED_IN_VALUE } from "../react-client/src/constants/gameConstants";
 import { SOCKET_CLIENT_SENDING_ACTION, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../react-client/src/constants/otherConstants";
@@ -10,25 +6,24 @@ import { SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVE
 //prettier-ignore
 import { biologicalWeaponsConfirm, commInterruptConfirm, confirmBattleSelection, confirmFuelSelection, confirmPlan, deletePlan, enterContainer, exitContainer, exitTransportContainer, goldenEyeConfirm, insurgencyConfirm, mainButtonClick, piecePlace, raiseMoraleConfirm, remoteSensingConfirm, rodsFromGodConfirm, sendUserFeedback, shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from "./actions";
 import { Game } from "./classes";
+import { GameSession } from "./interfaces";
 import { BAD_SESSION, GAME_DOES_NOT_EXIST, NOT_LOGGED_IN_TAG } from "./pages/errorTypes";
 
+/**
+ * Configures a socket to handle game requests between client and server.
+ * @param socket Socket.io socket
+ */
 const socketSetup = async (socket: Socket) => {
-    //Verify that this user has correct session variables
-    if (
-        !socket.handshake.session.ir3 ||
-        !socket.handshake.session.ir3.gameId ||
-        !socket.handshake.session.ir3.gameTeam ||
-        !socket.handshake.session.ir3.gameControllers
-    ) {
+    //Verify Session Exists
+    if (!socket.handshake.session.ir3) {
         socket.emit(SOCKET_SERVER_REDIRECT, BAD_SESSION);
         return;
     }
 
     //Extract information from session
-    const ir3Session: { gameId: number; gameTeam: number; gameControllers: number[] } = socket.handshake.session.ir3;
-    const { gameId, gameTeam, gameControllers } = ir3Session;
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
-    //Get information about the game
+    //Get the game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
@@ -41,15 +36,15 @@ const socketSetup = async (socket: Socket) => {
             socket.emit(SOCKET_SERVER_REDIRECT, NOT_LOGGED_IN_TAG);
             return;
         } else {
-            //probably refreshed, keep them logged in (disconnect logs them out)
+            //probably refreshed, keep them logged in (disconnect logs them out) (make sure the session is re-saved to old value)
             setTimeout(() => {
                 thisGame.setLoggedIn(gameTeam, gameController, LOGGED_IN_VALUE);
-                socket.handshake.session.ir3 = ir3Session;
+                socket.handshake.session.ir3 = socket.handshake.session.ir3;
             }, 5000);
         }
     }
 
-    //Socket Room for the whole Game and for individual team
+    //Socket Room for the whole game and for individual team (so we can send updates later)
     socket.join("game" + gameId);
     socket.join("game" + gameId + "team" + gameTeam);
 

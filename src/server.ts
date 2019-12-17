@@ -3,7 +3,7 @@
  * Sessions, Routing, and Web Sockets
  */
 
-import express, { Application, Request, Response } from "express";
+import express, { Application, Request, Response, RequestHandler } from "express";
 import session from "express-session";
 import http, { Server } from "http";
 import { Socket } from "socket.io";
@@ -18,7 +18,7 @@ const app: Application = express();
 const server: Server = http.createServer(app);
 
 //Session Setup (2 possible types)
-let fullSession;
+let fullSession: RequestHandler;
 if (process.env.SESSION_TYPE === "azure") {
     //Azure Sessions uses Azure Storage Account (tables) -> Probably best for auto-scaling with multiple instances
     const AzureTablesStoreFactory: AzureTableStoreFactory = require("connect-azuretables")(session);

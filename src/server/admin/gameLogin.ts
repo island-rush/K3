@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import md5 from "md5";
 import { Game } from "../classes";
+import { GameSession } from "../interfaces";
 import { ALREADY_IN_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGIN_TAG } from "../pages/errorTypes";
 
 const gameLogin = async (req: Request, res: Response) => {
@@ -43,11 +44,8 @@ const gameLogin = async (req: Request, res: Response) => {
         gameControllersInt.push(parseInt(gameControllers[x]));
     }
 
-    req.session.ir3 = {
-        gameId,
-        gameTeam,
-        gameControllers: gameControllersInt
-    };
+    const session: GameSession = { gameId, gameTeam, gameControllers: gameControllersInt };
+    req.session.ir3 = session;
 
     res.redirect("/game.html");
 };

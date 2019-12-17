@@ -1,15 +1,12 @@
-/**
- * Express Router for handling all paths (routes) to server from client.
- * Checks session for authorization to each path
- * For accessing pages and handling AJAX requests
- */
-
 import { Request, Response, Router } from "express";
 import path from "path";
 //prettier-ignore
 import { adminLogin, dbStatus, gameAdd, gameDelete, gameLogin, gameReset, getGameActive, getGames, getNews, insertDatabaseTables, setAdminPassword, setTeamPasswords, toggleGameActive } from "./admin";
 import { DATABASE_TAG, LOGIN_TAG } from "./pages/errorTypes";
 
+/**
+ * Express Router to handle different routes on the server.
+ */
 const router: Router = Router();
 
 // --------------------------------------
@@ -37,7 +34,7 @@ router.get("/credits.html", (req: Request, res: Response) => {
 });
 
 router.get("/teacher.html", (req: Request, res: Response) => {
-    if (!req.session.ir3 || !req.session.ir3.teacher || !req.session.ir3.gameId) {
+    if (!req.session.ir3teacher) {
         res.redirect(`/index.html?error=${LOGIN_TAG}`);
         return;
     }
@@ -45,7 +42,7 @@ router.get("/teacher.html", (req: Request, res: Response) => {
 });
 
 router.get("/courseDirector.html", (req: Request, res: Response) => {
-    if (!req.session.ir3 || !req.session.ir3.courseDirector) {
+    if (!req.session.ir3coursedirector) {
         res.redirect(`/index.html?error=${LOGIN_TAG}`);
         return;
     }
@@ -53,7 +50,7 @@ router.get("/courseDirector.html", (req: Request, res: Response) => {
 });
 
 router.get("/game.html", (req: Request, res: Response) => {
-    if (!req.session.ir3 || !req.session.ir3.gameId || !req.session.ir3.gameTeam || !req.session.ir3.gameControllers) {
+    if (!req.session.ir3) {
         res.redirect(`/index.html?error=${LOGIN_TAG}`);
         return;
     }

@@ -4,7 +4,7 @@ import { Game } from "../classes";
 import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from "../pages/errorTypes";
 
 const setAdminPassword = async (req: Request, res: Response) => {
-    if (!req.session.ir3 || !req.session.ir3.courseDirector) {
+    if (!req.session.ir3coursedirector) {
         res.status(403).redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
     }
