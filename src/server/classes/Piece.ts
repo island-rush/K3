@@ -18,11 +18,22 @@ interface Piece {
     pieceDisabled: boolean;
 }
 
+/**
+ * Represents a row in the pieces database table.
+ *
+ * @class Piece
+ */
 class Piece {
     constructor(pieceId: number) {
         this.pieceId = pieceId;
     }
 
+    /**
+     * Gets information from database about this piece.
+     *
+     * @returns Piece
+     * @memberof Piece
+     */
     async init() {
         let queryString = "SELECT * FROM pieces WHERE pieceId = ?";
         let inserts = [this.pieceId];
@@ -42,19 +53,36 @@ class Piece {
         return this;
     }
 
+    /**
+     * Delete this piece.
+     *
+     * @memberof Piece
+     */
     async delete() {
         const queryString = "DELETE FROM pieces WHERE pieceId = ?";
         const inserts = [this.pieceId];
         await pool.query(queryString, inserts);
     }
 
-    //TODO: referencing another table, could potentially move this function (maybe)
+    /**
+     * Delete the plans for this piece.
+     *
+     * @memberof Piece
+     */
     async deletePlans() {
+        //TODO: referencing another table, could potentially move this function (maybe)
         const queryString = "DELETE FROM plans WHERE planPieceId = ?";
         const inserts = [this.pieceId];
         await pool.query(queryString, inserts);
     }
 
+    /**
+     * Get the pieces that are within this piece.
+     * Pieces become within another by setting pieceContainerId to id of the parent.
+     *
+     * @returns array of sql rows.
+     * @memberof Piece
+     */
     async getPiecesInside() {
         const queryString = "SELECT * FROM pieces WHERE pieceContainerId = ?";
         const inserts = [this.pieceId];
@@ -63,6 +91,13 @@ class Piece {
     }
 
     // prettier-ignore
+    /**
+     * Globally update each piece's visibility based on it's surroundings for this game.
+     *
+     * @static
+     * @param {number} gameId
+     * @memberof Piece
+     */
     static async updateVisibilities(gameId: number) {
 		const conn = await pool.getConnection();
 
@@ -136,6 +171,14 @@ class Piece {
 		conn.release();
 	}
 
+    /**
+     * Globally move all pieces according to their plans for this game.
+     *
+     * @static
+     * @param {number} gameId
+     * @param {number} movementOrder
+     * @memberof Piece
+     */
     static async move(gameId: number, movementOrder: number) {
         //movement based on plans (for this order/step)
         const conn = await pool.getConnection();
@@ -185,6 +228,15 @@ class Piece {
         conn.release();
     }
 
+    /**
+     * Get dictionary of positions and the pieces those positions contain.
+     *
+     * @static
+     * @param {number} gameId
+     * @param {number} gameTeam
+     * @returns dictionary of positions with pieces inside.
+     * @memberof Piece
+     */
     static async getVisiblePieces(gameId: number, gameTeam: number) {
         let queryString =
             "SELECT * FROM pieces WHERE pieceGameId = ? AND (pieceTeamId = ? OR pieceVisible = 1) ORDER BY pieceContainerId, pieceTeamId ASC";
@@ -243,6 +295,16 @@ class Piece {
         return allPieces;
     }
 
+    /**
+     * Get sql results querying positions that should cause refuel event.
+     * These positions are tankers + any same team aircraft.
+     *
+     * @static
+     * @param {number} gameId
+     * @param {number} gameTeam
+     * @returns
+     * @memberof Piece
+     */
     static async getPositionRefuels(gameId: number, gameTeam: number) {
         //TODO: constant for 'outside container' instead of -1?
         const queryString =
@@ -254,6 +316,14 @@ class Piece {
         return results;
     }
 
+    /**
+     * Put 1 piece inside another container piece.
+     *
+     * @static
+     * @param {*} selectedPiece
+     * @param {*} containerPiece
+     * @memberof Piece
+     */
     static async putInsideContainer(selectedPiece: any, containerPiece: any) {
         //TODO: could combine into 1 query, or could have a selection for variable query, 1 request instead of 2 would be better
 
@@ -270,6 +340,14 @@ class Piece {
     }
 
     //TODO: could make this a non-static method? (since we already have the pieceId....)
+    /**
+     * Put 1 piece outside of it's parent piece.
+     *
+     * @static
+     * @param {number} selectedPieceId
+     * @param {number} newPositionId
+     * @memberof Piece
+     */
     static async putOutsideContainer(selectedPieceId: number, newPositionId: number) {
         //TODO: deal with inner transport pieces (need to also set the piecePositionId)
         let queryString = "UPDATE pieces SET pieceContainerId = -1, piecePositionId = ? WHERE pieceId = ?";
@@ -278,6 +356,21 @@ class Piece {
     }
 
     //TODO: change this into a pieceConstructor Object, bad practice to have so many parameters
+    /**
+     * Insert a single piece into the database for this game's team.
+     *
+     * @static
+     * @param {number} pieceGameId
+     * @param {number} pieceTeamId
+     * @param {number} pieceTypeId
+     * @param {number} piecePositionId
+     * @param {number} pieceContainerId
+     * @param {number} pieceVisible
+     * @param {number} pieceMoves
+     * @param {number} pieceFuel
+     * @returns Piece that was inserted.
+     * @memberof Piece
+     */
     static async insert(
         pieceGameId: number,
         pieceTeamId: number,
@@ -306,6 +399,13 @@ class Piece {
         return thisPiece;
     }
 
+    /**
+     * Globally reset moves for all pieces in this game.
+     *
+     * @static
+     * @param {number} gameId
+     * @memberof Piece
+     */
     static async resetMoves(gameId: number) {
         const testquery =
             "UPDATE pieces SET pieceMoves = CASE WHEN pieceTypeId = 0 THEN ? WHEN pieceTypeId = 1 THEN ? WHEN pieceTypeId = 2 THEN ? WHEN pieceTypeId = 3 THEN ? WHEN pieceTypeId = 4 THEN ? WHEN pieceTypeId = 5 THEN ? WHEN pieceTypeId = 6 THEN ? WHEN pieceTypeId = 7 THEN ? WHEN pieceTypeId = 8 THEN ? WHEN pieceTypeId = 9 THEN ? WHEN pieceTypeId = 10 THEN ? WHEN pieceTypeId = 11 THEN ? WHEN pieceTypeId = 12 THEN ? WHEN pieceTypeId = 13 THEN ? WHEN pieceTypeId = 14 THEN ? WHEN pieceTypeId = 15 THEN ? WHEN pieceTypeId = 16 THEN ? WHEN pieceTypeId = 17 THEN ? WHEN pieceTypeId = 18 THEN ? WHEN pieceTypeId = 19 THEN ? END WHERE pieceGameId = ?";

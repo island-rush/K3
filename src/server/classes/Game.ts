@@ -67,7 +67,13 @@ interface Game {
     flag12: number;
 }
 
+/**
+ * Represents a row in the games table in the database.
+ *
+ * @class Game
+ */
 class Game {
+    //TODO: refactor with 1 constructor with id, and another static factory method with section/instructor
     constructor(options: GameOptions) {
         if ((options as GameConstructorOptionsWithId).gameId) {
             this.gameId = (options as GameConstructorOptionsWithId).gameId;
@@ -77,6 +83,12 @@ class Game {
         }
     }
 
+    /**
+     * Get information about the game from the database.
+     *
+     * @returns Game
+     * @memberof Game
+     */
     async init() {
         let queryString: string;
         let inserts: any[];
@@ -99,7 +111,15 @@ class Game {
         }
     }
 
-    getLoggedIn(gameTeam: number, gameController: number) {
+    /**
+     * Method to dynamically grab loggedIn values from this game.
+     *
+     * @param {number} gameTeam
+     * @param {number} gameController
+     * @returns {number} logged in value.
+     * @memberof Game
+     */
+    getLoggedIn(gameTeam: number, gameController: number): number {
         if (gameTeam == 0) {
             if (gameController === 0) {
                 return this.game0Controller0;
@@ -127,18 +147,37 @@ class Game {
         }
     }
 
+    /**
+     * Delete this game.
+     *
+     * @memberof Game
+     */
     async delete() {
         const queryString = "DELETE FROM games WHERE gameId = ?";
         const inserts = [this.gameId];
         await pool.query(queryString, inserts);
     }
 
+    /**
+     * Get a sql array of all games.
+     * Only includes gameId, gameSection, gameInstructor, gameActive
+     *
+     * @static
+     * @returns
+     * @memberof Game
+     */
     static async getGames() {
         const queryString = "SELECT gameId, gameSection, gameInstructor, gameActive FROM games";
         const [rows, fields] = await pool.query(queryString);
         return rows;
     }
 
+    /**
+     * Set the admin password for a specific game.
+     *
+     * @param {string} gameAdminPasswordHash
+     * @memberof Game
+     */
     async setAdminPassword(gameAdminPasswordHash: string) {
         const queryString = "UPDATE games SET gameAdminPassword = ? WHERE gameId = ?";
         const inserts = [gameAdminPasswordHash, this.gameId];
@@ -146,6 +185,13 @@ class Game {
         Object.assign(this, { gameAdminPassword: gameAdminPasswordHash });
     }
 
+    /**
+     * Set team passwords for a specific game.
+     *
+     * @param {string} game0PasswordHash
+     * @param {string} game1PasswordHash
+     * @memberof Game
+     */
     async setTeamPasswords(game0PasswordHash: string, game1PasswordHash: string) {
         const queryString = "UPDATE games SET game0Password = ?, game1Password = ? WHERE gameId = ?";
         const inserts = [game0PasswordHash, game1PasswordHash, this.gameId];
@@ -153,6 +199,14 @@ class Game {
         Object.assign(this, { game0Password: game0PasswordHash, game1Password: game1PasswordHash });
     }
 
+    /**
+     * Get a sql array of news alerts for this game.
+     *
+     * @static
+     * @param {number} gameId
+     * @returns
+     * @memberof Game
+     */
     static async getAllNews(gameId: number) {
         const queryString = "SELECT * FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC";
         const inserts = [gameId];
@@ -160,6 +214,12 @@ class Game {
         return rows;
     }
 
+    /**
+     * Set a new value for gameActive in this game.
+     *
+     * @param {number} newValue
+     * @memberof Game
+     */
     async setGameActive(newValue: number) {
         const queryString =
             "UPDATE games SET gameActive = ?, game0Controller0 = 0, game0Controller1 = 0, game0Controller2 = 0, game0Controller3 = 0, game0Controller4 = 0, game1Controller0 = 0, game1Controller1 = 0, game1Controller2 = 0, game1Controller3 = 0, game1Controller4 = 0 WHERE gameId = ?";
@@ -181,6 +241,14 @@ class Game {
         Object.assign(this, updatedInfo);
     }
 
+    /**
+     * Set loggedIn value for a specific team/controller in this game.
+     *
+     * @param {number} gameTeam
+     * @param {number} gameController
+     * @param {number} value
+     * @memberof Game
+     */
     async setLoggedIn(gameTeam: number, gameController: number, value: number) {
         const queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
         const inserts = ["game" + gameTeam + "Controller" + gameController, value, this.gameId];
@@ -215,11 +283,27 @@ class Game {
         }
     }
 
+    /**
+     * Reset a game back to the initial, pre-defined state.
+     *
+     * @memberof Game
+     */
     async reset() {
         await this.delete();
         await Game.add(this.gameSection, this.gameInstructor, this.gameAdminPassword, { gameId: this.gameId });
     }
 
+    /**
+     * Add a new game to the database.
+     *
+     * @static
+     * @param {string} gameSection
+     * @param {string} gameInstructor
+     * @param {string} gameAdminPasswordHash
+     * @param {{ gameId?: number }} [options={}]
+     * @returns
+     * @memberof Game
+     */
     static async add(gameSection: string, gameInstructor: string, gameAdminPasswordHash: string, options: { gameId?: number } = {}) {
         let queryString;
         let inserts;
@@ -246,6 +330,13 @@ class Game {
         return thisGame;
     }
 
+    /**
+     * Set the points for a specific team in this game.
+     *
+     * @param {number} gameTeam
+     * @param {number} newPoints
+     * @memberof Game
+     */
     async setPoints(gameTeam: number, newPoints: number) {
         const queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
         const inserts = ["game" + gameTeam + "Points", newPoints, this.gameId];
@@ -257,6 +348,13 @@ class Game {
         }
     }
 
+    /**
+     * Set the status for a specific team in this game.
+     *
+     * @param {number} gameTeam
+     * @param {number} newStatus
+     * @memberof Game
+     */
     async setStatus(gameTeam: number, newStatus: number) {
         const queryString = "UPDATE games set ?? = ? WHERE gameId = ?";
         const inserts = ["game" + gameTeam + "Status", newStatus, this.gameId];
@@ -268,6 +366,12 @@ class Game {
         }
     }
 
+    /**
+     * Set the gamePhase value in this game.
+     *
+     * @param {number} newGamePhase
+     * @memberof Game
+     */
     async setPhase(newGamePhase: number) {
         const queryString = "UPDATE games set gamePhase = ? WHERE gameId = ?";
         const inserts = [newGamePhase, this.gameId];
@@ -275,6 +379,13 @@ class Game {
         this.gamePhase = newGamePhase;
     }
 
+    /**
+     * Set the gameSlice value in this game.
+     * gameSlice => planning or executing
+     *
+     * @param {number} newGameSlice
+     * @memberof Game
+     */
     async setSlice(newGameSlice: number) {
         const queryString = "UPDATE games SET gameSlice = ? WHERE gameId = ?";
         const inserts = [newGameSlice, this.gameId];
@@ -282,6 +393,13 @@ class Game {
         this.gameSlice = newGameSlice;
     }
 
+    /**
+     * Set the gameRound value in this game.
+     * Usually 1, 2, or 3
+     *
+     * @param {number} newGameRound
+     * @memberof Game
+     */
     async setRound(newGameRound: number) {
         const queryString = "UPDATE games SET gameRound = ? WHERE gameId = ?";
         const inserts = [newGameRound, this.gameId];
@@ -289,6 +407,12 @@ class Game {
         this.gameRound = newGameRound;
     }
 
+    /**
+     * Globally (in this game), calculate who own's which flag based on pieces that exist on those positions.
+     *
+     * @returns
+     * @memberof Game
+     */
     async updateFlags() {
         let didUpdateFlags = false;
         //only certain pieces can capture
@@ -329,6 +453,13 @@ class Game {
         return didUpdateFlags;
     }
 
+    /**
+     * Change flag ownership for a certain team.
+     *
+     * @param {number} flagNumber
+     * @param {number} flagValue
+     * @memberof Game
+     */
     setFlag(flagNumber: number, flagValue: number) {
         switch (flagNumber) {
             case 0:
@@ -374,6 +505,12 @@ class Game {
         }
     }
 
+    /**
+     * Delete old news, and get next news alert from database.
+     *
+     * @returns
+     * @memberof Game
+     */
     async getNextNews() {
         //Delete the old news
         let queryString = "DELETE FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1";
@@ -395,6 +532,11 @@ class Game {
         };
     }
 
+    /**
+     * Globally (for this game), give points to teams based on flags that they own.
+     *
+     * @memberof Game
+     */
     async addPoints() {
         //add points based on the island ownerships inside this object (game)
         let bluePoints = this.game0Points;
@@ -437,6 +579,13 @@ class Game {
         await this.setPoints(RED_TEAM_ID, redPoints);
     }
 
+    /**
+     * Dynamically get status for specific team.
+     *
+     * @param {number} gameTeam
+     * @returns
+     * @memberof Game
+     */
     getStatus(gameTeam: number) {
         if (gameTeam == 0) {
             return this.game0Status;
@@ -445,6 +594,13 @@ class Game {
         }
     }
 
+    /**
+     * Dynamically get points for specific team.
+     *
+     * @param {number} gameTeam
+     * @returns
+     * @memberof Game
+     */
     getPoints(gameTeam: number) {
         if (gameTeam == 0) {
             return this.game0Points;
@@ -453,6 +609,13 @@ class Game {
         }
     }
 
+    /**
+     * Dynamically get passwordhash for specific team.
+     *
+     * @param {number} gameTeam
+     * @returns
+     * @memberof Game
+     */
     getPasswordHash(gameTeam: number) {
         if (gameTeam == 0) {
             return this.game0Password;
@@ -461,6 +624,14 @@ class Game {
         }
     }
 
+    /**
+     * Generates a Redux Action, contains all current game information / state.
+     *
+     * @param {number} gameTeam
+     * @param {*} gameControllers
+     * @returns
+     * @memberof Game
+     */
     async initialStateAction(gameTeam: number, gameControllers: any) {
         let serverAction: any = {
             type: INITIAL_GAMESTATE,

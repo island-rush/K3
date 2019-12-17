@@ -10,6 +10,12 @@ interface Event {
     eventPosB: number;
 }
 
+/**
+ * Represents event row in eventqueue table in the database.
+ * Also contains other helping functions that deal with events and event items.
+ *
+ * @class Event
+ */
 class Event {
     //TODO: we have a class for event, but multiple tables for keeping track of events, event items, and that one for temp stuff (efficient)
     constructor(eventId: number, options: any) {
@@ -19,6 +25,12 @@ class Event {
         }
     }
 
+    /**
+     * Get information about this event from the database.
+     *
+     * @returns
+     * @memberof Event
+     */
     async init() {
         //TODO: this may not be ever called, check since we now instantiate from static methods?
         const queryString = "SELECT * FROM eventQueue WHERE eventId = ?";
@@ -33,12 +45,23 @@ class Event {
         }
     }
 
+    /**
+     * Delete this event from the database.
+     *
+     * @memberof Event
+     */
     async delete() {
         const queryString = "DELETE FROM eventQueue WHERE eventId = ?";
         const inserts = [this.eventId];
         await pool.query(queryString, inserts);
     }
 
+    /**
+     * Get sql array of eventItems/pieces that are tied to this event.
+     *
+     * @returns
+     * @memberof Event
+     */
     async getItems() {
         const queryString = "SELECT * FROM eventItems NATURAL JOIN pieces WHERE eventId = ? AND eventPieceId = pieceId";
         const inserts = [this.eventId];
@@ -52,6 +75,13 @@ class Event {
     }
 
     //TODO: should change this to resond to eventType (change SELECT)...instead of also having getRefuelItems
+    /**
+     * getItems() but for a specific team.
+     *
+     * @param {number} gameTeam
+     * @returns
+     * @memberof Event
+     */
     async getTeamItems(gameTeam: number) {
         const queryString =
             "SELECT * FROM (SELECT * FROM eventItems NATUAL JOIN pieces WHERE eventPieceId = pieceId AND eventId = ? AND pieceTeamId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.eventItemTarget = b.tpieceId";
@@ -60,6 +90,12 @@ class Event {
         return eventTeamItems; //TODO: do we need to return null explicitly? (this is an empty array ^^^ see getItems for difference (not sure why needed))
     }
 
+    /**
+     * Get pieces for a refuel event. (same as getItems)
+     *
+     * @returns
+     * @memberof Event
+     */
     async getRefuelItems() {
         const queryString = "SELECT * FROM eventItems NATURAL JOIN pieces WHERE eventId = ? AND pieceId = eventPieceId";
         const inserts = [this.eventId];
@@ -67,6 +103,15 @@ class Event {
         return eventRefuelItems;
     }
 
+    /**
+     * Get the next event from the eventQueue.
+     *
+     * @static
+     * @param {number} gameId
+     * @param {number} gameTeam
+     * @returns
+     * @memberof Event
+     */
     static async getNext(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM eventQueue WHERE eventGameId = ? AND (eventTeamId = ? OR eventTeamId = 2) ORDER BY eventId ASC LIMIT 1";
         const inserts = [gameId, gameTeam];
@@ -82,6 +127,14 @@ class Event {
     }
 
     //TODO: this function not called anymore, unlikely to need it...
+    /**
+     * Get the next event in the queue regardless of team.
+     *
+     * @static
+     * @param {number} gameId
+     * @returns
+     * @memberof Event
+     */
     static async getNextAnyteam(gameId: number) {
         const queryString = "SELECT * FROM eventQueue WHERE eventGameId = ? ORDER BY eventId ASC LIMIT 1";
         const inserts = [gameId];
@@ -95,12 +148,27 @@ class Event {
         }
     }
 
+    /**
+     * Insert events as a bulk insert sql query.
+     *
+     * @static
+     * @param {*} allInserts
+     * @memberof Event
+     */
     static async bulkInsertEvents(allInserts: any) {
         const queryString = "INSERT INTO eventQueue (eventGameId, eventTeamId, eventTypeId, eventPosA, eventPosB) VALUES ?";
         const inserts = [allInserts];
         await pool.query(queryString, inserts);
     }
 
+    /**
+     * Insert eventItems as a bulk insert sql query.
+     *
+     * @static
+     * @param {number} gameId
+     * @param {*} allInserts
+     * @memberof Event
+     */
     static async bulkInsertItems(gameId: number, allInserts: any) {
         const conn = await pool.getConnection();
 
@@ -119,6 +187,12 @@ class Event {
         conn.release();
     }
 
+    /**
+     * Update eventItem's targets with a bulk insert and update using a temp table.
+     *
+     * @param {*} piecesWithTargets
+     * @memberof Event
+     */
     async bulkUpdateTargets(piecesWithTargets: any) {
         //TODO: make sure that these piece->targets make sense (prevent bad targetting? (if possible...))
         if (piecesWithTargets.length > 0) {
@@ -143,6 +217,14 @@ class Event {
         }
     }
 
+    /**
+     * Update piece fuels from fuelUpdates list. (bulk query with temp table)
+     *
+     * @param {*} fuelUpdates
+     * @param {number} gameTeam
+     * @returns
+     * @memberof Event
+     */
     async bulkUpdatePieceFuels(fuelUpdates: any, gameTeam: number) {
         if (fuelUpdates.length == 0) {
             return;
@@ -169,6 +251,12 @@ class Event {
     }
 
     //prettier-ignore
+    /**
+     * Using eventItem targets, perform dice rolls between pieces and determine success or failure.
+     *
+     * @returns
+     * @memberof Event
+     */
     async fight() {
 		let queryString =
 			"SELECT * FROM (SELECT * FROM eventItems NATUAL JOIN pieces WHERE eventPieceId = pieceId AND eventId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.eventItemTarget = b.tpieceId";
