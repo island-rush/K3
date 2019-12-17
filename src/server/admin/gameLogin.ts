@@ -1,17 +1,42 @@
 import { Request, Response } from "express";
 import md5 from "md5";
+import { LOGGED_IN_VALUE } from "../../react-client/src/constants/gameConstants";
 import { Game } from "../classes";
 import { GameSession } from "../interfaces";
 import { ALREADY_IN_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGIN_TAG } from "../pages/errorTypes";
 
+/**
+ * All the values that should be a part of a game login attempt.
+ */
+interface GameLoginRequest {
+    gameSection: string;
+    gameInstructor: string;
+    gameTeam: number;
+    gameTeamPassword: string;
+    gameControllers: number[];
+}
+
+/**
+ * Verify credentials and redirect to /game
+ * @param req Express Request Object
+ * @param res Express Response Object
+ */
 const gameLogin = async (req: Request, res: Response) => {
-    // TODO: probably check these before grabbing them for safety
-    const { gameSection, gameInstructor, gameTeam, gameTeamPassword, gameControllers } = req.body;
-    if (!gameSection || !gameInstructor || !gameTeam || !gameTeamPassword || !gameControllers) {
+    //Verify Request Exists //TODO: double check variables are within db constraints
+    if (!req.body.gameSection || !req.body.gameInstructor || !req.body.gameTeam || !req.body.gameTeamPassword || !req.body.gameControllers) {
         res.redirect(`/index.html?error=${BAD_REQUEST_TAG}`);
         return;
     }
 
+    //Force html strings into ints
+    req.body.gameTeam = parseInt(req.body.gameTeam);
+    req.body.gameControllers = req.body.gameControllers.map((value: string, index: number) => {
+        return parseInt(value);
+    });
+
+    let { gameSection, gameInstructor, gameTeam, gameTeamPassword, gameControllers }: GameLoginRequest = req.body;
+
+    //Get game info
     const thisGame = await new Game({ gameSection, gameInstructor }).init();
     if (!thisGame) {
         res.redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
@@ -24,27 +49,28 @@ const gameLogin = async (req: Request, res: Response) => {
         return;
     }
 
+    //Do credentials match this game?
     const inputPasswordHash = md5(gameTeamPassword);
     if (inputPasswordHash != thisGame.getPasswordHash(gameTeam)) {
         res.redirect(`/index.html?error=${LOGIN_TAG}`);
         return;
     }
 
-    for (let x = 0; x < gameControllers.length; x++) {
-        let gameController = parseInt(gameControllers[x]);
+    //Are any of the controllers already logged in?
+    for (const gameController of gameControllers) {
         if (thisGame.getLoggedIn(gameTeam, gameController) != 0) {
             res.redirect(`/index.html?error=${ALREADY_IN_TAG}`);
             return;
         }
     }
 
-    let gameControllersInt = [];
-    for (let x = 0; x < gameControllers.length; x++) {
-        await thisGame.setLoggedIn(gameTeam, gameControllers[x], 1);
-        gameControllersInt.push(parseInt(gameControllers[x]));
+    //Mark each controller type as logged in
+    for (const gameController of gameControllers) {
+        await thisGame.setLoggedIn(gameTeam, gameController, LOGGED_IN_VALUE);
     }
 
-    const session: GameSession = { gameId, gameTeam, gameControllers: gameControllersInt };
+    //Create Session
+    const session: GameSession = { gameId, gameTeam, gameControllers };
     req.session.ir3 = session;
 
     res.redirect("/game.html");

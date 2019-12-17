@@ -5,6 +5,15 @@ import { TeacherSession } from "../interfaces";
 import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from "../pages/errorTypes";
 
 /**
+ * All the values that should be part of an admin login attempt.
+ */
+interface AdminLoginRequest {
+    adminSection: string;
+    adminInstructor: string;
+    adminPassword: string;
+}
+
+/**
  * Verify credentials and redirect to /teacher or /courseDirector.
  * @param req Express Request Object
  * @param res Express Response Object
@@ -16,7 +25,7 @@ const adminLogin = async (req: Request, res: Response) => {
         return;
     }
 
-    const { adminSection, adminInstructor, adminPassword }: { adminSection: string; adminInstructor: string; adminPassword: string } = req.body;
+    const { adminSection, adminInstructor, adminPassword }: AdminLoginRequest = req.body;
 
     const inputPasswordHash = md5(adminPassword);
 

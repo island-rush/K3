@@ -4,6 +4,15 @@ import { Game } from "../classes";
 import { ACCESS_TAG, BAD_REQUEST_TAG } from "../pages/errorTypes";
 
 /**
+ * All the values that should be part of gameAdd request.
+ */
+interface GameAddRequest {
+    adminSection: string;
+    adminInstructor: string;
+    adminPassword: string;
+}
+
+/**
  * Add a game from an express route /gameAdd
  * @param req Express Request Object
  * @param res Express Response Object
@@ -22,7 +31,7 @@ const gameAdd = async (req: Request, res: Response) => {
         return;
     }
 
-    const { adminSection, adminInstructor, adminPassword }: { adminSection: string; adminInstructor: string; adminPassword: string } = req.body;
+    const { adminSection, adminInstructor, adminPassword }: GameAddRequest = req.body;
 
     const adminPasswordHashed = md5(adminPassword);
 

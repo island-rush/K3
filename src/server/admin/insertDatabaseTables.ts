@@ -3,7 +3,14 @@ import fs from "fs";
 import pool from "../database";
 import { BAD_SESSION } from "../pages/errorTypes";
 
+/**
+ * Inserts tables into the database that are needed for all game/admin functionality.
+ * This is meant as a one-time function to help developers.
+ * @param req Express Request object
+ * @param res Express Response object
+ */
 const insertDatabaseTables = async (req: Request, res: Response) => {
+    //Verify Session
     if (!req.session.ir3coursedirector) {
         res.redirect(`/index.html?error=${BAD_SESSION}`);
         return;

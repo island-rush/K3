@@ -2,7 +2,13 @@ import { Request, Response } from "express";
 import { Game } from "../classes";
 import { ACCESS_TAG } from "../pages/errorTypes";
 
+/**
+ * Get an array of game data for all of island rush.
+ * @param req Express Request object
+ * @param res Express Response object
+ */
 const getGames = async (req: Request, res: Response) => {
+    //Verify Session
     if (!req.session.ir3coursedirector) {
         res.redirect(`/index.html?error=${ACCESS_TAG}`);
         return;

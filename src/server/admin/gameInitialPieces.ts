@@ -1,20 +1,24 @@
-/**
- * This file inserts pieces into a game according to whatever pieces are listed. These are the pieces that should exist at the start of a new game.
- * There is a helper function to make the piece inserts easy to write.
- */
-
 //prettier-ignore
 import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, RED_TEAM_ID, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_FUEL, TYPE_MOVES } from "../../react-client/src/constants/gameConstants";
 import pool from "../database";
 
+/**
+ * List of optional parameters for creating a piece.
+ */
 type PieceOptions = {
     pieceContainerId?: number;
     pieceVisible?: number;
-    pieceMoves?: number;
-    pieceFuel?: number;
 };
 
 // prettier-ignore
+/**
+ * Helper function to generate arrays of piece inserts.
+ * @param pieceGameId
+ * @param pieceTeamId
+ * @param pieceTypeId
+ * @param piecePositionId
+ * @param pieceOptions
+ */
 const piece = (pieceGameId: number, pieceTeamId: number, pieceTypeId: number, piecePositionId: number, pieceOptions: PieceOptions = {}): number[] => {
 	//TODO: could have constants to indicated pieceVisible and pieceContainer (not in container == -1)
 	const pieceContainerId = pieceOptions.pieceContainerId == undefined ? -1 : pieceOptions.pieceContainerId;
@@ -36,6 +40,10 @@ const piece = (pieceGameId: number, pieceTeamId: number, pieceTypeId: number, pi
 };
 
 //prettier-ignore
+/**
+ * Inserts a list of pre-defined pieces into a game.
+ * @param gameId
+ */
 const gameInitialPieces = async (gameId: number) => {
 	const firstPieces: number[][] = [
 		//typical battle setup

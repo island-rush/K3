@@ -3,7 +3,13 @@ import { Game } from "../classes";
 import { TeacherSession } from "../interfaces";
 import { ACCESS_TAG } from "../pages/errorTypes";
 
+/**
+ * Get array of news data for a particular game.
+ * @param req
+ * @param res
+ */
 const getNews = async (req: Request, res: Response) => {
+    //Verify Session
     if (!req.session.ir3teacher) {
         res.redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
@@ -16,7 +22,7 @@ const getNews = async (req: Request, res: Response) => {
         res.send(results);
     } catch (error) {
         console.error(error);
-        //TODO: this wouldn't happen, need database to get to teacher page anyways
+        //Manually send response if fails (unlikely)
         res.status(500).send([
             {
                 newsId: 69,

@@ -85,6 +85,8 @@ Note there are several env variables used by the backend. These can be easily co
 -   DB_USERNAME = database user -> default is 'root'
 -   DB_PASSWORD = database password -> default is ''
 -   SESSION_SECRET = optional secret used by session cookies for security
+-   SESSION_TYPE = Either 'azure' or 'loki', default is 'loki'.
+-   AZURE_STORAGE_CONNECTION_STRING = Azure Storage Table connection string (if using 'azure' sessions)
 -   NODE_ENV = 'production' or 'development'...this determines how the backend serves out the frontend
 -   NODE_OPTIONS = options for running node. (--max_old_space_size=4096)
 -   PORT = server port (typically pre-set in production environments) -> default is 80

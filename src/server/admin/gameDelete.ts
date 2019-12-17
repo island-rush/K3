@@ -3,6 +3,13 @@ import { Game } from "../classes";
 import { ACCESS_TAG } from "../pages/errorTypes";
 
 /**
+ * All the values needed for a gameDelete request.
+ */
+interface GameDeleteRequest {
+    gameId: number;
+}
+
+/**
  * Delete a game from an express route /gameDelete
  * @param req Express Request Object
  * @param res Express Response Object
@@ -21,7 +28,7 @@ const gameDelete = async (req: Request, res: Response) => {
         return;
     }
 
-    const { gameId }: { gameId: number } = req.body;
+    const { gameId }: GameDeleteRequest = req.body;
 
     //Does the game exist?
     const thisGame = await new Game({ gameId }).init();
