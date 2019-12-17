@@ -10,6 +10,7 @@ import { Socket } from "socket.io";
 import router from "./server/router";
 import socketSetup from "./server/socketSetup";
 import sharedsession = require("express-socket.io-session");
+import { AzureTableStoreOptions, AzureTableStoreFactory } from "connect-azuretables";
 
 //Create the server
 const app: Application = express();
@@ -25,8 +26,23 @@ const fullSession = session({
     resave: false,
     saveUninitialized: false
 });
+
+// Session Setup (ALTERNATE AZURE SESSIONS) (use AZURE_STORAGE_CONNECTION_STRING in env to configure)
+// const AzureTablesStoreFactory: AzureTableStoreFactory = require("connect-azuretables")(session);
+// const azureOptions: AzureTableStoreOptions = {
+//     sessionTimeOut: 120
+// };
+// const fullSession = session({
+//     store: AzureTablesStoreFactory.create(azureOptions),
+//     secret: "sdlfkj",
+//     resave: false,
+//     saveUninitialized: false
+// });
+
 app.use(fullSession); //App has access to sessions
-app.use(express.urlencoded({ extended: true })); //parses data and puts into req.body
+
+//parses data and puts into req.body
+app.use(express.urlencoded({ extended: true }));
 
 //Server Routing
 //TODO: Use middleware or reverse proxy to serve static files -> aka, anything with res.sendFile()
