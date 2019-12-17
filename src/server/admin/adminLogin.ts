@@ -11,11 +11,12 @@ import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from "../pages/errorT
  */
 const adminLogin = async (req: Request, res: Response) => {
     //Verify Request Information
-    const { adminSection, adminInstructor, adminPassword } = req.body;
-    if (!adminSection || !adminInstructor || !adminPassword) {
+    if (!req.body.adminSection || !req.body.adminInstructor || !req.body.adminPassword) {
         res.redirect(`/index.html?error=${BAD_REQUEST_TAG}`);
         return;
     }
+
+    const { adminSection, adminInstructor, adminPassword }: { adminSection: string; adminInstructor: string; adminPassword: string } = req.body;
 
     const inputPasswordHash = md5(adminPassword);
 

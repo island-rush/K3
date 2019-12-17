@@ -20,6 +20,9 @@ const databaseConfig: PoolOptions = {
     multipleStatements: true //it allows for SQL injection attacks if values are not properly escaped
 };
 
+/**
+ * Pool of database connections.
+ */
 let pool: Pool = mysql.createPool(databaseConfig);
 
 export default pool;

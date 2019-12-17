@@ -1,32 +1,30 @@
-/**
- * This file inserts news alerts into the game. These are the news alerts that should exist at the start of a game.
- * There is a helper function to make the news inserts easier to write.
- */
-
 import pool from "../database";
 
+/**
+ * Options for news alerts.
+ */
 type NewsOptions = {
     newsTitle?: string;
     newsInfo?: string;
 };
 
-// prettier-ignore
-//TODO: better news table = cleaner functions here
+/**
+ * Helper function, generates array of inserts for gameInitialNews.
+ * @param gameId
+ * @param newsOrder -> Order in which the alert comes.
+ * @param newsOptions -> List of options to customize
+ */
 const news = (gameId: number, newsOrder: number, newsOptions: NewsOptions) => {
-	// const newsTeam = newsOptions.newsTeam == undefined ? -1 : newsOptions.newsTeam;
-	// const newsPieces = newsOptions.newsPieces == undefined ? -1 : newsOptions.newsPieces;
-	// const newsEffect = newsOptions.newsEffect == undefined ? -1 : newsOptions.newsEffect;
-	// const newsRoll = newsOptions.newsRoll == undefined ? -1 : newsOptions.newsRoll;
-	// const newsLength = newsOptions.newsLength == undefined ? -1 : newsOptions.newsLength;
-	// const newsZone = newsOptions.newsZone == undefined ? -1 : newsOptions.newsZone;
-	const newsTitle = newsOptions.newsTitle == undefined ? "Default Title" : newsOptions.newsTitle;
-	const newsInfo = newsOptions.newsInfo == undefined ? "Default Info" : newsOptions.newsInfo;
-	// const newsActivated = newsOptions.newsActivated == undefined ? 0 : newsOptions.newsActivated;
+    const newsTitle = newsOptions.newsTitle == undefined ? "Default Title" : newsOptions.newsTitle;
+    const newsInfo = newsOptions.newsInfo == undefined ? "Default Info" : newsOptions.newsInfo;
 
-	// return [gameId, newsTeam, newsOrder, newsPieces, newsEffect, newsRoll, newsLength, newsZone, newsTitle, newsInfo, newsActivated];
-	return [gameId, newsOrder, newsTitle, newsInfo];
+    return [gameId, newsOrder, newsTitle, newsInfo];
 };
 
+/**
+ * Inserts a list of pre-defined news alerts into a game.
+ * @param gameId
+ */
 const gameInitialNews = async (gameId: number) => {
     let newsOrder = 0;
 

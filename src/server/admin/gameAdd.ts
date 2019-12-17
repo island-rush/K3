@@ -4,7 +4,7 @@ import { Game } from "../classes";
 import { ACCESS_TAG, BAD_REQUEST_TAG } from "../pages/errorTypes";
 
 /**
- * Add a game 'endpoint'.
+ * Add a game from an express route /gameAdd
  * @param req Express Request Object
  * @param res Express Response Object
  */
@@ -21,10 +21,12 @@ const gameAdd = async (req: Request, res: Response) => {
         res.redirect(`/index.html?error=${BAD_REQUEST_TAG}`);
         return;
     }
-    const { adminSection, adminInstructor, adminPassword } = req.body;
+
+    const { adminSection, adminInstructor, adminPassword }: { adminSection: string; adminInstructor: string; adminPassword: string } = req.body;
 
     const adminPasswordHashed = md5(adminPassword);
 
+    //Add the game
     const thisGame = await Game.add(adminSection, adminInstructor, adminPasswordHashed);
     if (!thisGame) {
         res.redirect("/courseDirector.html?gameAdd=failed"); //TODO: add status for failure?

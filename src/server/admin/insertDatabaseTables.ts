@@ -9,7 +9,7 @@ const insertDatabaseTables = async (req: Request, res: Response) => {
         return;
     }
 
-    const queryString = fs.readFileSync("./server/sql/tableInsert.sql").toString();
+    const queryString = fs.readFileSync("./src/server/sql/tableInsert.sql").toString();
 
     await pool.query(queryString);
 

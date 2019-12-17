@@ -9,7 +9,7 @@ const gameReset = async (req: Request, res: Response) => {
         return;
     }
 
-    const { gameId } = req.session.ir3teacher as TeacherSession;
+    const { gameId }: TeacherSession = req.session.ir3teacher;
 
     const thisGame = await new Game({ gameId }).init(); //If fails, will get caught by router
 

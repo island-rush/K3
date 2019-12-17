@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Game } from "../classes";
+import { TeacherSession } from "../interfaces";
 
 const toggleGameActive = async (req: Request, res: Response) => {
     if (!req.session.ir3teacher) {
@@ -7,7 +8,7 @@ const toggleGameActive = async (req: Request, res: Response) => {
         return;
     }
 
-    const { gameId } = req.session.ir3;
+    const { gameId }: TeacherSession = req.session.ir3teacher;
 
     const thisGame = await new Game({ gameId }).init();
 

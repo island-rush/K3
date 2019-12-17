@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import md5 from "md5";
 import { Game } from "../classes";
+import { TeacherSession } from "../interfaces";
 import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from "../pages/errorTypes";
 
 const setTeamPasswords = async (req: Request, res: Response) => {
@@ -14,7 +15,7 @@ const setTeamPasswords = async (req: Request, res: Response) => {
         return;
     }
 
-    const { gameId } = req.session.ir3;
+    const { gameId }: TeacherSession = req.session.ir3teacher;
 
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {

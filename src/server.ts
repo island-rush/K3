@@ -1,8 +1,3 @@
-/**
- * Handles setting up and starting the server.
- * Sessions, Routing, and Web Sockets
- */
-
 import express, { Application, Request, Response, RequestHandler } from "express";
 import session from "express-session";
 import http, { Server } from "http";
@@ -43,21 +38,20 @@ if (process.env.SESSION_TYPE === "azure") {
     });
 }
 
-app.use(fullSession); //App has access to sessions
+//App has access to sessions
+app.use(fullSession);
 
 //parses data and puts into req.body
 app.use(express.urlencoded({ extended: true }));
 
 //Server Routing
-//TODO: Use middleware or reverse proxy to serve static files -> aka, anything with res.sendFile()
 app.use("/", router);
-app.use(express.static(__dirname + "/react-client/build"));
-app.use((req: Request, res: Response) => {
-    res.status(404).sendFile(__dirname + "/server/pages/404.html");
-});
+
+//Statically serve all frontend files
+app.use(express.static(__dirname + "/react-client/build")); //TODO: Use middleware or reverse proxy to serve static files -> aka, anything with res.sendFile()
 
 //Socket Setup
-const io = require("socket.io")(server);
+const io: SocketIO.Server = require("socket.io")(server);
 io.use(sharedsession(fullSession)); //Socket has access to sessions
 io.sockets.on("connection", (socket: Socket) => {
     socketSetup(socket);

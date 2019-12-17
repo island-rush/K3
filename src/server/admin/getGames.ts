@@ -12,11 +12,12 @@ const getGames = async (req: Request, res: Response) => {
         const results = await Game.getGames();
         res.send(results);
     } catch (error) {
-        console.error(error);
+        // console.error(error);
+        console.error("Wasn't able to get games from database. Probably missing tables.");
         //Manually send 1 game that makes it obvious what the error is...TODO: change this into a redirect or custom 500 page (but need CourseDirector page to enter tables....)
         res.status(500).send([
             {
-                gameId: 69,
+                gameId: 69420,
                 gameSection: "DATABASE",
                 gameInstructor: "FAILED",
                 gameActive: 0

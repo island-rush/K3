@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Game } from "../classes";
+import { TeacherSession } from "../interfaces";
 import { ACCESS_TAG } from "../pages/errorTypes";
 
 const getNews = async (req: Request, res: Response) => {
@@ -8,7 +9,7 @@ const getNews = async (req: Request, res: Response) => {
         return;
     }
 
-    const { gameId } = req.session.ir3;
+    const { gameId }: TeacherSession = req.session.ir3teacher;
 
     try {
         const results = await Game.getAllNews(gameId);
