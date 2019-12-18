@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { TRANSPORT_TYPE_ID } from "../../../constants/gameConstants";
 import ContainerPiece from "./ContainerPiece";
+import { PieceType } from "../../../constants/interfaces";
 
 const containerPopupStyle: any = {
     position: "absolute",
@@ -65,14 +66,14 @@ class ContainerPopup extends Component<Props> {
         const { container, pieceClose, outerPieceClick, innerPieceClick, innerTransportPieceClick } = this.props;
 
         //Don't need to check for null (probably should) since empty array is still valid
-        const outsidePieces = container.outerPieces.map((piece: any, index: number) => (
+        const outsidePieces = container.outerPieces.map((piece: PieceType, index: number) => (
             <ContainerPiece key={index} piece={piece} container={container} clickFunction={outerPieceClick} />
         ));
 
         const innerPieces =
             container.containerPiece === null
                 ? null
-                : container.containerPiece.pieceContents.pieces.map((piece: any, index: number) => (
+                : container.containerPiece.pieceContents.pieces.map((piece: PieceType, index: number) => (
                       <ContainerPiece
                           key={index}
                           piece={piece}

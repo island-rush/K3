@@ -5,6 +5,7 @@ import { TRANSPORT_TYPE_ID, TYPE_FUEL } from "../../constants/gameConstants";
 //prettier-ignore
 import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, CLEAR_BATTLE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, CONTAINER_MOVE, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE } from "../actions/actionTypes";
 import { initialGameboardEmpty } from "./initialGameboardEmpty";
+import { PieceType } from "../../constants/interfaces";
 
 const initialGameboardMeta = {
     //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
@@ -121,7 +122,7 @@ function gameboardMetaReducer(state = initialGameboardMeta, { type, payload }: {
             } else {
                 //other container types only look in their own position (probably...//TODO: write down the rules for this later )
 
-                stateDeepCopy.container.outerPieces = payload.gameboard[selectedPiecePosition].pieces.filter((piece: any, index: number) => {
+                stateDeepCopy.container.outerPieces = payload.gameboard[selectedPiecePosition].pieces.filter((piece: PieceType, index: number) => {
                     return piece.pieceId !== payload.selectedPiece.pieceId;
                 });
             }
@@ -141,7 +142,7 @@ function gameboardMetaReducer(state = initialGameboardMeta, { type, payload }: {
             //need the piece to go inside the container
             //remove from outerpieces
             //add to innerpieces
-            stateDeepCopy.container.outerPieces = stateDeepCopy.container.outerPieces.filter((piece: any, index: number) => {
+            stateDeepCopy.container.outerPieces = stateDeepCopy.container.outerPieces.filter((piece: PieceType, index: number) => {
                 return piece.pieceId !== payload.selectedPiece.pieceId;
             });
             stateDeepCopy.container.containerPiece.pieceContents.pieces.push(payload.selectedPiece);
@@ -153,7 +154,7 @@ function gameboardMetaReducer(state = initialGameboardMeta, { type, payload }: {
             stateDeepCopy.container.isSelectingHex = false;
             stateDeepCopy.container.innerPieceToDrop = null;
             stateDeepCopy.container.containerPiece.pieceContents.pieces = stateDeepCopy.container.containerPiece.pieceContents.pieces.filter(
-                (piece: any, index: number) => {
+                (piece: PieceType, index: number) => {
                     return piece.pieceId !== payload.selectedPiece.pieceId;
                 }
             );

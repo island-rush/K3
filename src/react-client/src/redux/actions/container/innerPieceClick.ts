@@ -1,7 +1,8 @@
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_INNER_PIECE_CLICK } from "../actionTypes";
+import { PieceType } from "../../../constants/interfaces";
 
-const innerPieceClick = (selectedPiece: any, containerPiece: any) => {
+const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
     return (dispatch: any, getState: any, emit: any) => {
         //TODO: figure out if inner piece click is allowed
 

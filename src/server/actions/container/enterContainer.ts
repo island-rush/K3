@@ -9,10 +9,11 @@ import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/
 import { Game, Piece } from "../../classes";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
+import { PieceType } from "../../../react-client/src/constants/interfaces";
 
 const enterContainer = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
-    const { selectedPiece, containerPiece } = payload;
+    const { selectedPiece, containerPiece }: { selectedPiece: PieceType; containerPiece: PieceType } = payload;
 
     const thisGame = await new Game({ gameId }).init();
     const { gameActive, gamePhase, gameSlice } = thisGame;
@@ -48,7 +49,7 @@ const enterContainer = async (socket: Socket, payload: any) => {
     const piecesInside: any = await thisContainerPiece.getPiecesInside();
 
     let countOf: any = {}; //number of each item type already inside it
-    piecesInside.forEach((piece: any) => {
+    piecesInside.forEach((piece: PieceType) => {
         countOf[piece.pieceTypeId] = (countOf[piece.pieceTypeId] || 0) + 1;
     });
 

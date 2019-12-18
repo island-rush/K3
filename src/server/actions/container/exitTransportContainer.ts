@@ -12,10 +12,15 @@ import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/
 import { Game, Piece } from "../../classes";
 import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
+import { PieceType } from "../../../react-client/src/constants/interfaces";
 
 const exitTransportContainer = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
-    const { selectedPiece, containerPiece, selectedPositionId } = payload;
+    const {
+        selectedPiece,
+        containerPiece,
+        selectedPositionId
+    }: { selectedPiece: PieceType; containerPiece: PieceType; selectedPositionId: number } = payload;
 
     const thisGame = await new Game({ gameId }).init();
     const { gameActive, gamePhase, gameSlice } = thisGame;

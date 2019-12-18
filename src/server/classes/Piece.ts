@@ -268,7 +268,7 @@ class Piece implements PieceType {
             if (currentPiece.pieceContainerId == -1) {
                 allPieces[currentPiece.piecePositionId].push(currentPiece);
             } else {
-                let indexOfParent = allPieces[currentPiece.piecePositionId].findIndex((piece: any) => {
+                let indexOfParent = allPieces[currentPiece.piecePositionId].findIndex((piece: PieceType) => {
                     return piece.pieceId == currentPiece.pieceContainerId;
                 });
                 if (indexOfParent == -1) {

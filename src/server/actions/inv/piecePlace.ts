@@ -11,7 +11,7 @@ import sendUserFeedback from "../sendUserFeedback";
 
 const piecePlace = async (socket: Socket, payload: any) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
-    const { invItemId, selectedPosition } = payload;
+    const { invItemId, selectedPosition }: { invItemId: number; selectedPosition: number } = payload;
 
     const thisGame = await new Game({ gameId }).init();
     const { gameActive, gamePhase } = thisGame;
