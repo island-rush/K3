@@ -4,8 +4,6 @@ import { Game } from "../classes";
 
 /**
  * Get the gameActive status of a game.
- * @param req Express Request object
- * @param res Express Response object
  */
 const getGameActive = async (req: Request, res: Response) => {
     //Verify Session

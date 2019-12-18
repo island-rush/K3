@@ -1,11 +1,48 @@
+/**
+ * Section for Instructor's Game
+ *
+ * Ex: 'm1a1'
+ */
+export type Section = string;
+
+/**
+ * All the controller types that this user can act as are stored in this array.
+ */
+export type GameControllers = number[];
+
+/**
+ * Lastname of Instructor
+ */
+export type Instructor = string;
+
+/**
+ * Password (plaintext)
+ */
+export type Password = string;
+
+/**
+ * This object stored within session.ir3 to tie users to game, team, and controller(s)
+ */
 export interface GameSession {
     gameId: number;
+
+    /**
+     * Indicates Blue or Red Team (0 / 1)
+     */
     gameTeam: number;
+
     gameControllers: number[];
 }
 
+/**
+ * This object stored within session.ir3teacher to tie user to game as teacher.
+ */
 export interface TeacherSession {
     gameId: number;
+
+    /**
+     *
+     */
     gameSection: string;
     gameInstructor: string;
 }

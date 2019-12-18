@@ -1,22 +1,13 @@
 import { Request, Response } from "express";
 import md5 from "md5";
-import { TeacherSession } from "../../react-client/src/constants/interfaces";
+import { Password, TeacherSession } from "../../react-client/src/constants/interfaces";
 import { Game } from "../classes";
 import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from "../pages/errorTypes";
 
 /**
- * All the values needed for request to set team passwords.
- */
-interface SetTeamPassRequest {
-    game0Password: string;
-    game1Password: string;
-}
-
-/**
  * Set each team's password.
+ *
  * These passwords are used to log into the game.
- * @param req Express Request object
- * @param res Express Response object
  */
 const setTeamPasswords = async (req: Request, res: Response) => {
     //Verify Session
@@ -47,6 +38,14 @@ const setTeamPasswords = async (req: Request, res: Response) => {
     await thisGame.setTeamPasswords(game0PasswordHashed, game1PasswordHashed);
 
     res.redirect("/teacher.html?setTeamPasswords=success");
+};
+
+/**
+ * All the values needed for request to set team passwords.
+ */
+type SetTeamPassRequest = {
+    game0Password: Password;
+    game1Password: Password;
 };
 
 export default setTeamPasswords;

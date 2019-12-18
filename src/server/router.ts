@@ -14,26 +14,37 @@ const router: Router = Router();
 // --------------------------------------
 
 router.get("/", (req: Request, res: Response) => {
-    delete req.session.ir3;
+    //Being on the homepage(s) ensures a user is logged out / no session
+    delete req.session.ir3; //Game Session
+    delete req.session.ir3teacher; //Teacher Session
+    delete req.session.ir3coursedirector; //Course Director Session
     res.sendFile(__dirname + "/pages/index.html");
 });
 
 router.get("/index.html", (req: Request, res: Response) => {
     delete req.session.ir3;
+    delete req.session.ir3teacher;
+    delete req.session.ir3coursedirector;
     res.sendFile(__dirname + "/pages/index.html");
 });
 
 router.get("/troubleshoot.html", (req: Request, res: Response) => {
     delete req.session.ir3;
+    delete req.session.ir3teacher;
+    delete req.session.ir3coursedirector;
     res.sendFile(__dirname + "/pages/troubleshoot.html");
 });
 
 router.get("/credits.html", (req: Request, res: Response) => {
     delete req.session.ir3;
+    delete req.session.ir3teacher;
+    delete req.session.ir3coursedirector;
     res.sendFile(__dirname + "/pages/credits.html");
 });
 
 router.get("/teacher.html", (req: Request, res: Response) => {
+    delete req.session.ir3;
+    delete req.session.ir3coursedirector;
     if (!req.session.ir3teacher) {
         res.redirect(`/index.html?error=${LOGIN_TAG}`);
         return;
@@ -42,6 +53,8 @@ router.get("/teacher.html", (req: Request, res: Response) => {
 });
 
 router.get("/courseDirector.html", (req: Request, res: Response) => {
+    delete req.session.ir3;
+    delete req.session.ir3teacher;
     if (!req.session.ir3coursedirector) {
         res.redirect(`/index.html?error=${LOGIN_TAG}`);
         return;
@@ -50,6 +63,8 @@ router.get("/courseDirector.html", (req: Request, res: Response) => {
 });
 
 router.get("/game.html", (req: Request, res: Response) => {
+    delete req.session.ir3teacher;
+    delete req.session.ir3coursedirector;
     if (!req.session.ir3) {
         res.redirect(`/index.html?error=${LOGIN_TAG}`);
         return;

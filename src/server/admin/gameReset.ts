@@ -5,8 +5,6 @@ import { ACCESS_TAG } from "../pages/errorTypes";
 
 /**
  * Reset a game from an express route /gameReset
- * @param req Express Request object
- * @param res Express Response object
  */
 const gameReset = async (req: Request, res: Response) => {
     //Verify Session

@@ -1,22 +1,11 @@
 import { Request, Response } from "express";
 import md5 from "md5";
-import { TeacherSession } from "../../react-client/src/constants/interfaces";
+import { Section, Instructor, Password, TeacherSession } from "../../react-client/src/constants/interfaces";
 import { Game } from "../classes";
 import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from "../pages/errorTypes";
 
 /**
- * All the values that should be part of an admin login attempt.
- */
-interface AdminLoginRequest {
-    adminSection: string;
-    adminInstructor: string;
-    adminPassword: string;
-}
-
-/**
  * Verify credentials and redirect to /teacher or /courseDirector.
- * @param req Express Request Object
- * @param res Express Response Object
  */
 const adminLogin = async (req: Request, res: Response) => {
     //Verify Request Information
@@ -58,6 +47,15 @@ const adminLogin = async (req: Request, res: Response) => {
     req.session.ir3teacher = session;
 
     res.redirect(`/teacher.html`);
+};
+
+/**
+ * All the values that should be part of an admin login attempt.
+ */
+type AdminLoginRequest = {
+    adminSection: Section;
+    adminInstructor: Instructor;
+    adminPassword: Password;
 };
 
 export default adminLogin;

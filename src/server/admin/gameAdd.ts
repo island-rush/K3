@@ -1,21 +1,11 @@
 import { Request, Response } from "express";
 import md5 from "md5";
+import { Section, Instructor, Password } from "../../react-client/src/constants/interfaces";
 import { Game } from "../classes";
 import { ACCESS_TAG, BAD_REQUEST_TAG } from "../pages/errorTypes";
 
 /**
- * All the values that should be part of gameAdd request.
- */
-interface GameAddRequest {
-    adminSection: string;
-    adminInstructor: string;
-    adminPassword: string;
-}
-
-/**
  * Add a game from an express route /gameAdd
- * @param req Express Request Object
- * @param res Express Response Object
  */
 const gameAdd = async (req: Request, res: Response) => {
     //Verify Session Exists
@@ -42,6 +32,15 @@ const gameAdd = async (req: Request, res: Response) => {
     } else {
         res.redirect("/courseDirector.html?gameAdd=success");
     }
+};
+
+/**
+ * All the values that should be part of gameAdd request.
+ */
+type GameAddRequest = {
+    adminSection: Section;
+    adminInstructor: Instructor;
+    adminPassword: Password;
 };
 
 export default gameAdd;

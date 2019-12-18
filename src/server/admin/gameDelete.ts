@@ -3,16 +3,7 @@ import { Game } from "../classes";
 import { ACCESS_TAG } from "../pages/errorTypes";
 
 /**
- * All the values needed for a gameDelete request.
- */
-interface GameDeleteRequest {
-    gameId: number;
-}
-
-/**
  * Delete a game from an express route /gameDelete
- * @param req Express Request Object
- * @param res Express Response Object
  */
 const gameDelete = async (req: Request, res: Response) => {
     //Verify Session Exists
@@ -21,8 +12,7 @@ const gameDelete = async (req: Request, res: Response) => {
         return;
     }
 
-    //TODO: delete all sockets assosiated with the game that was deleted?
-    //send socket redirect? (if they were still on the game...prevent bad sessions from existing (extra protection from forgetting validation checks))
+    //Verify Request
     if (!req.body.gameId) {
         res.status(400).redirect("/courseDirector.html?gameDelete=failed");
         return;
@@ -30,7 +20,7 @@ const gameDelete = async (req: Request, res: Response) => {
 
     const { gameId }: GameDeleteRequest = req.body;
 
-    //Does the game exist?
+    //Get the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
         res.status(400).redirect("/courseDirector.html?gameDelete=failed");
@@ -40,6 +30,13 @@ const gameDelete = async (req: Request, res: Response) => {
     await thisGame.delete();
 
     res.redirect("/courseDirector.html?gameDelete=success");
+};
+
+/**
+ * All the values needed for a gameDelete request.
+ */
+type GameDeleteRequest = {
+    gameId: number;
 };
 
 export default gameDelete;

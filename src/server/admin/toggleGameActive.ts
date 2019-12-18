@@ -4,8 +4,6 @@ import { Game } from "../classes";
 
 /**
  * Toggle a game from active->inactive, or vice versa.
- * @param req Express Request object
- * @param res Express Response object
  */
 const toggleGameActive = async (req: Request, res: Response) => {
     //Verify Session

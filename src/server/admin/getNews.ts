@@ -5,8 +5,6 @@ import { ACCESS_TAG } from "../pages/errorTypes";
 
 /**
  * Get array of news data for a particular game.
- * @param req
- * @param res
  */
 const getNews = async (req: Request, res: Response) => {
     //Verify Session
@@ -22,7 +20,7 @@ const getNews = async (req: Request, res: Response) => {
         res.send(results);
     } catch (error) {
         console.error(error);
-        //Manually send response if fails (unlikely)
+        //Manually send response if fails
         res.status(500).send([
             {
                 newsId: 69,

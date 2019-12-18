@@ -4,8 +4,6 @@ import { ACCESS_TAG } from "../pages/errorTypes";
 
 /**
  * Get an array of game data for all of island rush.
- * @param req Express Request object
- * @param res Express Response object
  */
 const getGames = async (req: Request, res: Response) => {
     //Verify Session
@@ -24,8 +22,8 @@ const getGames = async (req: Request, res: Response) => {
         res.status(500).send([
             {
                 gameId: 69420,
-                gameSection: "DATABASE",
-                gameInstructor: "FAILED",
+                gameSection: "CLICK",
+                gameInstructor: "INITIALIZE",
                 gameActive: 0
             }
         ]);

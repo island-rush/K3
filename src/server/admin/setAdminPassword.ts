@@ -1,20 +1,11 @@
 import { Request, Response } from "express";
 import md5 from "md5";
+import { Password } from "../../react-client/src/constants/interfaces";
 import { Game } from "../classes";
 import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from "../pages/errorTypes";
 
 /**
- * All the values that should be part of a setAdminPassword attempt.
- */
-interface SetAdminPassRequest {
-    gameId: number;
-    adminPassword: string;
-}
-
-/**
  * Change the admin password for a particular game.
- * @param req Express Request object
- * @param res Express Response object
  */
 const setAdminPassword = async (req: Request, res: Response) => {
     //Verify Session
@@ -42,6 +33,14 @@ const setAdminPassword = async (req: Request, res: Response) => {
     await thisGame.setAdminPassword(adminPasswordHashed);
 
     res.redirect("/courseDirector.html?setAdminPassword=success");
+};
+
+/**
+ * All the values that should be part of a setAdminPassword attempt.
+ */
+type SetAdminPassRequest = {
+    gameId: number;
+    adminPassword: Password;
 };
 
 export default setAdminPassword;

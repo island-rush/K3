@@ -1,29 +1,7 @@
 import pool from "../database";
 
 /**
- * Options for news alerts.
- */
-type NewsOptions = {
-    newsTitle?: string;
-    newsInfo?: string;
-};
-
-/**
- * Helper function, generates array of inserts for gameInitialNews.
- * @param gameId
- * @param newsOrder -> Order in which the alert comes.
- * @param newsOptions -> List of options to customize
- */
-const news = (gameId: number, newsOrder: number, newsOptions: NewsOptions) => {
-    const newsTitle = newsOptions.newsTitle == undefined ? "Default Title" : newsOptions.newsTitle;
-    const newsInfo = newsOptions.newsInfo == undefined ? "Default Info" : newsOptions.newsInfo;
-
-    return [gameId, newsOrder, newsTitle, newsInfo];
-};
-
-/**
  * Inserts a list of pre-defined news alerts into a game.
- * @param gameId
  */
 const gameInitialNews = async (gameId: number) => {
     let newsOrder = 0;
@@ -115,6 +93,24 @@ const gameInitialNews = async (gameId: number) => {
     const queryString = "INSERT INTO news (newsGameId, newsOrder, newsTitle, newsInfo) VALUES ?";
     const inserts = [allInserts];
     await pool.query(queryString, inserts);
+};
+
+/**
+ * Options for news alerts.
+ */
+type NewsOptions = {
+    newsTitle?: string;
+    newsInfo?: string;
+};
+
+/**
+ * Helper function, generates array of inserts for gameInitialNews.
+ */
+const news = (gameId: number, newsOrder: number, newsOptions: NewsOptions) => {
+    const newsTitle = newsOptions.newsTitle == undefined ? "Default Title" : newsOptions.newsTitle;
+    const newsInfo = newsOptions.newsInfo == undefined ? "Default Info" : newsOptions.newsInfo;
+
+    return [gameId, newsOrder, newsTitle, newsInfo];
 };
 
 export default gameInitialNews;
