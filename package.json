@@ -12,7 +12,9 @@
         "typecheckFrontend": "cd ./src/react-client && tsc",
         "buildClient": "cd ./src/react-client && npm run build && cd ../..",
         "moveFrontend": "copyfiles -u 1 ./src/react-client/build/**/*.* ./dist",
-        "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend"
+        "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend",
+        "devBackend:debug": "nodemon -r dotenv/config --inspect ./src/server.ts",
+        "dev:debug": "concurrently \"npm:devBackend:debug\" \"npm:devFrontend\""
     },
     "repository": {
         "type": "git",
@@ -60,6 +62,9 @@
     "nodemonConfig": {
         "ignore": [
             "src/react-client/*"
-        ]
+        ],
+        "execMap": {
+            "ts": "node --require ts-node/register"
+        }
     }
 }
