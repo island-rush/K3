@@ -1,20 +1,19 @@
+import { PlanType } from "../../react-client/src/constants/interfaces";
 import pool from "../database";
-
-interface Plan {
-    planGameId: number;
-    planTeamId: number;
-    planPieceId: number;
-    planMovementOrder: number;
-    planPositionId: number;
-    planSpecialFlag: number;
-}
 
 /**
  * Represents rows for plans in the database.
  *
  * @class Plan
  */
-class Plan {
+class Plan implements PlanType {
+    planGameId: number;
+    planTeamId: number;
+    planPieceId: number;
+    planMovementOrder: number;
+    planPositionId: number;
+    planSpecialFlag: number;
+
     constructor(planPieceId: number, planMovementOrder: number) {
         this.planPieceId = planPieceId;
         this.planMovementOrder = planMovementOrder;

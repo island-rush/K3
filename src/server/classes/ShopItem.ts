@@ -1,19 +1,18 @@
 import { FieldPacket } from "mysql2";
+import { ShopItemType } from "../../react-client/src/constants/interfaces";
 import pool from "../database";
-
-interface ShopItem {
-    shopItemId: number;
-    shopItemGameId: number;
-    shopItemTeamId: number;
-    shopItemTypeId: number;
-}
 
 /**
  * Represents rows for shopItems table in database.
  *
  * @class ShopItem
  */
-class ShopItem {
+class ShopItem implements ShopItemType {
+    shopItemId: number;
+    shopItemGameId: number;
+    shopItemTeamId: number;
+    shopItemTypeId: number;
+
     constructor(shopItemId: number) {
         this.shopItemId = shopItemId;
     }

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+import { TeacherSession } from "../../react-client/src/constants/interfaces";
 import { Game } from "../classes";
-import { TeacherSession } from "../interfaces";
 
 /**
  * Toggle a game from active->inactive, or vice versa.

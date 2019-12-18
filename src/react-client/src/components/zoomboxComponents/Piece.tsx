@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { TYPE_NAMES } from "../../constants/gameConstants";
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from "../styleConstants";
+import { PieceType } from "../../constants/interfaces";
 
 const pieceStyle = {
     backgroundColor: "grey",
@@ -32,7 +33,7 @@ const disabledStyle = {
 const zIndexLevels = [{ zIndex: 5 }, { zIndex: 10 }];
 
 interface Props {
-    piece: any;
+    piece: PieceType;
     topLevel: any;
     selected: any;
     pieceClick: any;

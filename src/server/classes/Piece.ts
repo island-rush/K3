@@ -1,9 +1,15 @@
 import { distanceMatrix } from "../../react-client/src/constants/distanceMatrix";
 //prettier-ignore
 import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_MOVES, VISIBILITY_MATRIX } from "../../react-client/src/constants/gameConstants";
+import { PieceType } from "../../react-client/src/constants/interfaces";
 import pool from "../database";
 
-interface Piece {
+/**
+ * Represents a row in the pieces database table.
+ *
+ * @class Piece
+ */
+class Piece implements PieceType {
     pieceId: number;
     pieceGameId: number;
     pieceTeamId: number;
@@ -16,14 +22,7 @@ interface Piece {
     pieceContents?: any;
 
     pieceDisabled: boolean;
-}
 
-/**
- * Represents a row in the pieces database table.
- *
- * @class Piece
- */
-class Piece {
     constructor(pieceId: number) {
         this.pieceId = pieceId;
     }

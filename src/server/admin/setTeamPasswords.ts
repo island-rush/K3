@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import md5 from "md5";
+import { TeacherSession } from "../../react-client/src/constants/interfaces";
 import { Game } from "../classes";
-import { TeacherSession } from "../interfaces";
 import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from "../pages/errorTypes";
 
 /**

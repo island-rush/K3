@@ -7,6 +7,7 @@ import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from 
 import { gameInitialNews, gameInitialPieces } from "../admin";
 import { Capability, Event, InvItem, Piece, Plan, ShopItem } from "../classes";
 import pool from "../database";
+import { GameType } from "../../react-client/src/constants/interfaces";
 
 interface GameConstructorOptionsWithId {
     gameId: number;
@@ -19,7 +20,12 @@ interface GameConstructorOptionsWithoutId {
 
 type GameOptions = GameConstructorOptionsWithId | GameConstructorOptionsWithoutId;
 
-interface Game {
+/**
+ * Represents a row in the games table in the database.
+ *
+ * @class Game
+ */
+class Game implements GameType {
     gameId: number;
     gameSection: string;
     gameInstructor: string;
@@ -65,14 +71,7 @@ interface Game {
     flag10: number;
     flag11: number;
     flag12: number;
-}
 
-/**
- * Represents a row in the games table in the database.
- *
- * @class Game
- */
-class Game {
     //TODO: refactor with 1 constructor with id, and another static factory method with section/instructor
     constructor(options: GameOptions) {
         if ((options as GameConstructorOptionsWithId).gameId) {

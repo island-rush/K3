@@ -172,9 +172,4 @@ router.post("/gameReset", (req: Request, res: Response) => {
     }
 });
 
-//Handle 404 if no other route matched
-router.all("*", (req: Request, res: Response) => {
-    res.status(404).sendFile(__dirname + "/pages/404.html");
-});
-
 export default router;

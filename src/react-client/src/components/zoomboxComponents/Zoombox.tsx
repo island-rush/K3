@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from "../../redux/actions";
 import { ZOOMBOX_BACKGROUNDS } from "../styleConstants";
 import Piece from "./Piece";
+import { PieceType } from "../../constants/interfaces";
 
 const zoomboxStyle = {
     position: "absolute",
@@ -34,7 +35,7 @@ class Zoombox extends Component<Props> {
 
         const pieces = !isVisible
             ? null
-            : gameboard[selectedPos].pieces.map((piece: any, index: number) => (
+            : gameboard[selectedPos].pieces.map((piece: PieceType, index: number) => (
                   <Piece
                       pieceOpen={pieceOpen}
                       pieceClick={selectPiece}

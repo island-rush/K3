@@ -1,20 +1,19 @@
 import { TYPE_FUEL, TYPE_MOVES } from "../../react-client/src/constants/gameConstants";
+import { InvItemType } from "../../react-client/src/constants/interfaces";
 import pool from "../database";
 import Piece from "./Piece";
-
-interface InvItem {
-    invItemId: number;
-    invItemGameId: number;
-    invItemTeamId: number;
-    invItemTypeId: number;
-}
 
 /**
  * Represents row in invItems table in the database.
  *
  * @class InvItem
  */
-class InvItem {
+class InvItem implements InvItemType {
+    invItemId: number;
+    invItemGameId: number;
+    invItemTeamId: number;
+    invItemTypeId: number;
+
     constructor(invItemId: number) {
         this.invItemId = invItemId;
     }

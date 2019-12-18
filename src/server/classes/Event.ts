@@ -1,14 +1,6 @@
 import { ATTACK_MATRIX } from "../../react-client/src/constants/gameConstants";
 import pool from "../database";
-
-interface Event {
-    eventId: number;
-    eventGameId: number;
-    eventTeamId: number;
-    eventTypeId: number;
-    eventPosA: number;
-    eventPosB: number;
-}
+import { EventType } from "../../react-client/src/constants/interfaces";
 
 /**
  * Represents event row in eventqueue table in the database.
@@ -16,7 +8,14 @@ interface Event {
  *
  * @class Event
  */
-class Event {
+class Event implements EventType {
+    eventId: number;
+    eventGameId: number;
+    eventTeamId: number;
+    eventTypeId: number;
+    eventPosA: number;
+    eventPosB: number;
+
     //TODO: we have a class for event, but multiple tables for keeping track of events, event items, and that one for temp stuff (efficient)
     constructor(eventId: number, options: any) {
         this.eventId = eventId;
