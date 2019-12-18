@@ -1,20 +1,20 @@
 {
-    "name": "island-rush-v3-ts",
+    "name": "island-rush-v3.3",
     "version": "3.3.0",
     "description": "Island Rush V3 is a Military Strategy Teaching Tool/Game.",
-    "main": "server.js",
+    "main": "./dist/server.js",
     "scripts": {
+        "dev": "concurrently \"npm:devBackend\" \"npm:devFrontend\"",
         "start": "cross-env NODE_ENV=production node -r dotenv/config ./dist/server.js",
+        "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend",
+        "dev:debug": "concurrently \"npm:devBackend:debug\" \"npm:devFrontend\"",
         "devBackend": "nodemon -r dotenv/config ./src/server.ts",
         "devFrontend": "cd ./src/react-client && npm start",
-        "dev": "concurrently \"npm:devBackend\" \"npm:devFrontend\"",
-        "compileBackend": "tsc -p . && copyfiles -u 3 ./src/server/pages/**/*.html ./dist/server/pages",
-        "typecheckFrontend": "cd ./src/react-client && tsc",
         "buildClient": "cd ./src/react-client && npm run build && cd ../..",
         "moveFrontend": "copyfiles -u 1 ./src/react-client/build/**/*.* ./dist",
-        "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend",
+        "compileBackend": "tsc -p . && copyfiles -u 3 ./src/server/pages/**/*.html ./dist/server/pages",
         "devBackend:debug": "nodemon -r dotenv/config --inspect ./src/server.ts",
-        "dev:debug": "concurrently \"npm:devBackend:debug\" \"npm:devFrontend\""
+        "typecheckFrontend": "cd ./src/react-client && tsc"
     },
     "repository": {
         "type": "git",
