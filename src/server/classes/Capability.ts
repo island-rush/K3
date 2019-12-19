@@ -5,8 +5,6 @@ import pool from "../database";
 
 /**
  * List of static functions for handling capabilities.
- *
- * @class Capability
  */
 class Capability {
     static async rodsFromGodInsert(gameId: number, gameTeam: number, selectedPositionId: number) {

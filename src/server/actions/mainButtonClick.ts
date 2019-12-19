@@ -1,18 +1,26 @@
 import { Socket } from "socket.io";
 //prettier-ignore
 import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PLACE_PHASE_ID, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, TYPE_MAIN, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
+import { ReduxAction } from "../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { COMBAT_PHASE, MAIN_BUTTON_CLICK, NEWS_PHASE, PURCHASE_PHASE, SLICE_CHANGE } from "../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, Piece } from "../classes";
-import { GAME_INACTIVE_TAG } from "../pages/errorTypes";
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../pages/errorTypes";
 import executeStep from "./executeStep";
 import sendUserFeedback from "./sendUserFeedback";
 
-const mainButtonClick = async (socket: Socket, payload: any) => {
+const mainButtonClick = async (socket: Socket, payload: {}) => {
+    //Verify Session
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
 
+    //Get Game
     const thisGame = await new Game({ gameId }).init();
-    const { gameActive, gamePhase, gameRound, gameSlice, game0Status, game1Status } = thisGame;
+    if (!thisGame) {
+        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        return;
+    }
+
+    const { gameActive, gamePhase, gameSlice, game0Status, game1Status } = thisGame;
 
     if (!gameActive) {
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
@@ -38,7 +46,7 @@ const mainButtonClick = async (socket: Socket, payload: any) => {
     //Now Waiting
     if (otherTeamStatus == NOT_WAITING_STATUS) {
         await thisGame.setStatus(gameTeam, WAITING_STATUS);
-        let serverAction = {
+        const serverAction: ReduxAction = {
             type: MAIN_BUTTON_CLICK,
             payload: {}
         };
@@ -46,20 +54,17 @@ const mainButtonClick = async (socket: Socket, payload: any) => {
         return;
     }
 
+    //Everyone is ready to move on
     await thisGame.setStatus(otherTeam, NOT_WAITING_STATUS);
     await thisGame.setStatus(gameTeam, NOT_WAITING_STATUS);
 
-    let serverAction0;
-    let serverAction1;
+    let serverAction0: ReduxAction;
+    let serverAction1: ReduxAction;
 
     switch (gamePhase) {
         case NEWS_PHASE_ID:
             await thisGame.setPhase(PURCHASE_PHASE_ID);
-            serverAction0 = {
-                type: PURCHASE_PHASE,
-                payload: {}
-            };
-            serverAction1 = {
+            serverAction0 = serverAction1 = {
                 type: PURCHASE_PHASE,
                 payload: {}
             };

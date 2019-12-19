@@ -4,8 +4,6 @@ import pool from "../database";
 
 /**
  * Represents rows for shopItems table in database.
- *
- * @class ShopItem
  */
 class ShopItem implements ShopItemType {
     shopItemId: number;
@@ -19,9 +17,6 @@ class ShopItem implements ShopItemType {
 
     /**
      * Get's information from database about this object.
-     *
-     * @returns ShopItem
-     * @memberof ShopItem
      */
     async init() {
         const queryString = "SELECT * FROM shopItems WHERE shopItemId = ?";
@@ -38,8 +33,6 @@ class ShopItem implements ShopItemType {
 
     /**
      * Delete this ShopItem from the database.
-     *
-     * @memberof ShopItem
      */
     async delete() {
         const queryString = "DELETE FROM shopItems WHERE shopItemId = ?";
@@ -49,13 +42,6 @@ class ShopItem implements ShopItemType {
 
     /**
      * Insert a ShopItem into the database.
-     *
-     * @static
-     * @param {number} shopItemGameId
-     * @param {number} shopItemTeamId
-     * @param {number} shopItemTypeId
-     * @returns ShopItem
-     * @memberof ShopItem
      */
     static async insert(shopItemGameId: number, shopItemTeamId: number, shopItemTypeId: number) {
         const queryString = "INSERT INTO shopItems (shopItemGameId, shopItemTeamId, shopItemTypeId) values (?, ?, ?)";
@@ -67,11 +53,6 @@ class ShopItem implements ShopItemType {
 
     /**
      * Delete all ShopItems in the database for this game's team.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} gameTeam
-     * @memberof ShopItem
      */
     static async deleteAll(gameId: number, gameTeam: number) {
         const queryString = "DELETE FROM shopItems WHERE shopItemGameId = ? AND shopItemTeamId = ?";
@@ -81,12 +62,6 @@ class ShopItem implements ShopItemType {
 
     /**
      * Get all ShopItems in the database for this game's team.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} gameTeam
-     * @returns
-     * @memberof ShopItem
      */
     static async all(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM shopItems WHERE shopItemGameId = ? AND shopItemTeamId = ?";

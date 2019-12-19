@@ -2,41 +2,24 @@ import { FieldPacket } from "mysql2";
 //prettier-ignore
 import { ALL_FLAG_LOCATIONS, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from "../../react-client/src/constants/gameboardConstants";
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, CAPTURE_TYPES, NEWS_PHASE_ID, RED_TEAM_ID } from "../../react-client/src/constants/gameConstants";
+import { GameType, Instructor, Section } from "../../react-client/src/constants/interfaces";
 import { INITIAL_GAMESTATE } from "../../react-client/src/redux/actions/actiontypes";
 import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "../actions/eventConstants";
 import { gameInitialNews, gameInitialPieces } from "../admin";
 import { Capability, Event, InvItem, Piece, Plan, ShopItem } from "../classes";
 import pool from "../database";
-import { GameType } from "../../react-client/src/constants/interfaces";
-
-interface GameConstructorOptionsWithId {
-    gameId: number;
-}
-
-interface GameConstructorOptionsWithoutId {
-    gameSection: string;
-    gameInstructor: string;
-}
-
-type GameOptions = GameConstructorOptionsWithId | GameConstructorOptionsWithoutId;
 
 /**
  * Represents a row in the games table in the database.
- *
- * @class Game
  */
 class Game implements GameType {
     gameId: number;
     gameSection: string;
     gameInstructor: string;
-
     gameAdminPassword: string;
-
     gameActive: number;
-
     game0Password: string;
     game1Password: string;
-
     game0Controller0: number;
     game0Controller1: number;
     game0Controller2: number;
@@ -47,17 +30,13 @@ class Game implements GameType {
     game1Controller2: number;
     game1Controller3: number;
     game1Controller4: number;
-
     game0Status: number;
     game1Status: number;
-
     game0Points: number;
     game1Points: number;
-
     gamePhase: number;
     gameRound: number;
     gameSlice: number;
-
     flag0: number;
     flag1: number;
     flag2: number;
@@ -84,9 +63,6 @@ class Game implements GameType {
 
     /**
      * Get information about the game from the database.
-     *
-     * @returns Game
-     * @memberof Game
      */
     async init() {
         let queryString: string;
@@ -112,11 +88,6 @@ class Game implements GameType {
 
     /**
      * Method to dynamically grab loggedIn values from this game.
-     *
-     * @param {number} gameTeam
-     * @param {number} gameController
-     * @returns {number} logged in value.
-     * @memberof Game
      */
     getLoggedIn(gameTeam: number, gameController: number): number {
         if (gameTeam == 0) {
@@ -148,8 +119,6 @@ class Game implements GameType {
 
     /**
      * Delete this game.
-     *
-     * @memberof Game
      */
     async delete() {
         const queryString = "DELETE FROM games WHERE gameId = ?";
@@ -160,10 +129,6 @@ class Game implements GameType {
     /**
      * Get a sql array of all games.
      * Only includes gameId, gameSection, gameInstructor, gameActive
-     *
-     * @static
-     * @returns
-     * @memberof Game
      */
     static async getGames() {
         const queryString = "SELECT gameId, gameSection, gameInstructor, gameActive FROM games";
@@ -173,9 +138,6 @@ class Game implements GameType {
 
     /**
      * Set the admin password for a specific game.
-     *
-     * @param {string} gameAdminPasswordHash
-     * @memberof Game
      */
     async setAdminPassword(gameAdminPasswordHash: string) {
         const queryString = "UPDATE games SET gameAdminPassword = ? WHERE gameId = ?";
@@ -186,10 +148,6 @@ class Game implements GameType {
 
     /**
      * Set team passwords for a specific game.
-     *
-     * @param {string} game0PasswordHash
-     * @param {string} game1PasswordHash
-     * @memberof Game
      */
     async setTeamPasswords(game0PasswordHash: string, game1PasswordHash: string) {
         const queryString = "UPDATE games SET game0Password = ?, game1Password = ? WHERE gameId = ?";
@@ -200,11 +158,6 @@ class Game implements GameType {
 
     /**
      * Get a sql array of news alerts for this game.
-     *
-     * @static
-     * @param {number} gameId
-     * @returns
-     * @memberof Game
      */
     static async getAllNews(gameId: number) {
         const queryString = "SELECT * FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC";
@@ -215,9 +168,6 @@ class Game implements GameType {
 
     /**
      * Set a new value for gameActive in this game.
-     *
-     * @param {number} newValue
-     * @memberof Game
      */
     async setGameActive(newValue: number) {
         const queryString =
@@ -242,11 +192,6 @@ class Game implements GameType {
 
     /**
      * Set loggedIn value for a specific team/controller in this game.
-     *
-     * @param {number} gameTeam
-     * @param {number} gameController
-     * @param {number} value
-     * @memberof Game
      */
     async setLoggedIn(gameTeam: number, gameController: number, value: number) {
         const queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
@@ -284,8 +229,6 @@ class Game implements GameType {
 
     /**
      * Reset a game back to the initial, pre-defined state.
-     *
-     * @memberof Game
      */
     async reset() {
         await this.delete();
@@ -294,14 +237,6 @@ class Game implements GameType {
 
     /**
      * Add a new game to the database.
-     *
-     * @static
-     * @param {string} gameSection
-     * @param {string} gameInstructor
-     * @param {string} gameAdminPasswordHash
-     * @param {{ gameId?: number }} [options={}]
-     * @returns
-     * @memberof Game
      */
     static async add(gameSection: string, gameInstructor: string, gameAdminPasswordHash: string, options: { gameId?: number } = {}) {
         let queryString;
@@ -331,10 +266,6 @@ class Game implements GameType {
 
     /**
      * Set the points for a specific team in this game.
-     *
-     * @param {number} gameTeam
-     * @param {number} newPoints
-     * @memberof Game
      */
     async setPoints(gameTeam: number, newPoints: number) {
         const queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
@@ -349,10 +280,6 @@ class Game implements GameType {
 
     /**
      * Set the status for a specific team in this game.
-     *
-     * @param {number} gameTeam
-     * @param {number} newStatus
-     * @memberof Game
      */
     async setStatus(gameTeam: number, newStatus: number) {
         const queryString = "UPDATE games set ?? = ? WHERE gameId = ?";
@@ -367,9 +294,6 @@ class Game implements GameType {
 
     /**
      * Set the gamePhase value in this game.
-     *
-     * @param {number} newGamePhase
-     * @memberof Game
      */
     async setPhase(newGamePhase: number) {
         const queryString = "UPDATE games set gamePhase = ? WHERE gameId = ?";
@@ -380,10 +304,8 @@ class Game implements GameType {
 
     /**
      * Set the gameSlice value in this game.
-     * gameSlice => planning or executing
      *
-     * @param {number} newGameSlice
-     * @memberof Game
+     * gameSlice => planning or executing
      */
     async setSlice(newGameSlice: number) {
         const queryString = "UPDATE games SET gameSlice = ? WHERE gameId = ?";
@@ -394,10 +316,8 @@ class Game implements GameType {
 
     /**
      * Set the gameRound value in this game.
-     * Usually 1, 2, or 3
      *
-     * @param {number} newGameRound
-     * @memberof Game
+     * Usually 1, 2, or 3
      */
     async setRound(newGameRound: number) {
         const queryString = "UPDATE games SET gameRound = ? WHERE gameId = ?";
@@ -408,9 +328,6 @@ class Game implements GameType {
 
     /**
      * Globally (in this game), calculate who own's which flag based on pieces that exist on those positions.
-     *
-     * @returns
-     * @memberof Game
      */
     async updateFlags() {
         let didUpdateFlags = false;
@@ -454,10 +371,6 @@ class Game implements GameType {
 
     /**
      * Change flag ownership for a certain team.
-     *
-     * @param {number} flagNumber
-     * @param {number} flagValue
-     * @memberof Game
      */
     setFlag(flagNumber: number, flagValue: number) {
         switch (flagNumber) {
@@ -506,9 +419,6 @@ class Game implements GameType {
 
     /**
      * Delete old news, and get next news alert from database.
-     *
-     * @returns
-     * @memberof Game
      */
     async getNextNews() {
         //Delete the old news
@@ -533,8 +443,6 @@ class Game implements GameType {
 
     /**
      * Globally (for this game), give points to teams based on flags that they own.
-     *
-     * @memberof Game
      */
     async addPoints() {
         //add points based on the island ownerships inside this object (game)
@@ -580,10 +488,6 @@ class Game implements GameType {
 
     /**
      * Dynamically get status for specific team.
-     *
-     * @param {number} gameTeam
-     * @returns
-     * @memberof Game
      */
     getStatus(gameTeam: number) {
         if (gameTeam == 0) {
@@ -595,10 +499,6 @@ class Game implements GameType {
 
     /**
      * Dynamically get points for specific team.
-     *
-     * @param {number} gameTeam
-     * @returns
-     * @memberof Game
      */
     getPoints(gameTeam: number) {
         if (gameTeam == 0) {
@@ -610,10 +510,6 @@ class Game implements GameType {
 
     /**
      * Dynamically get passwordhash for specific team.
-     *
-     * @param {number} gameTeam
-     * @returns
-     * @memberof Game
      */
     getPasswordHash(gameTeam: number) {
         if (gameTeam == 0) {
@@ -625,11 +521,6 @@ class Game implements GameType {
 
     /**
      * Generates a Redux Action, contains all current game information / state.
-     *
-     * @param {number} gameTeam
-     * @param {*} gameControllers
-     * @returns
-     * @memberof Game
      */
     async initialStateAction(gameTeam: number, gameControllers: any) {
         let serverAction: any = {
@@ -794,5 +685,16 @@ class Game implements GameType {
         return serverAction;
     }
 }
+
+type GameConstructorOptionsWithId = {
+    gameId: number;
+};
+
+type GameConstructorOptionsWithoutId = {
+    gameSection: Section;
+    gameInstructor: Instructor;
+};
+
+type GameOptions = GameConstructorOptionsWithId | GameConstructorOptionsWithoutId;
 
 export default Game;

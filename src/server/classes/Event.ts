@@ -4,9 +4,8 @@ import { EventType } from "../../react-client/src/constants/interfaces";
 
 /**
  * Represents event row in eventqueue table in the database.
- * Also contains other helping functions that deal with events and event items.
  *
- * @class Event
+ * Also contains other helping functions that deal with events and event items.
  */
 class Event implements EventType {
     eventId: number;
@@ -26,9 +25,6 @@ class Event implements EventType {
 
     /**
      * Get information about this event from the database.
-     *
-     * @returns
-     * @memberof Event
      */
     async init() {
         //TODO: this may not be ever called, check since we now instantiate from static methods?
@@ -46,8 +42,6 @@ class Event implements EventType {
 
     /**
      * Delete this event from the database.
-     *
-     * @memberof Event
      */
     async delete() {
         const queryString = "DELETE FROM eventQueue WHERE eventId = ?";
@@ -57,9 +51,6 @@ class Event implements EventType {
 
     /**
      * Get sql array of eventItems/pieces that are tied to this event.
-     *
-     * @returns
-     * @memberof Event
      */
     async getItems() {
         const queryString = "SELECT * FROM eventItems NATURAL JOIN pieces WHERE eventId = ? AND eventPieceId = pieceId";
@@ -76,10 +67,6 @@ class Event implements EventType {
     //TODO: should change this to resond to eventType (change SELECT)...instead of also having getRefuelItems
     /**
      * getItems() but for a specific team.
-     *
-     * @param {number} gameTeam
-     * @returns
-     * @memberof Event
      */
     async getTeamItems(gameTeam: number) {
         const queryString =
@@ -91,9 +78,6 @@ class Event implements EventType {
 
     /**
      * Get pieces for a refuel event. (same as getItems)
-     *
-     * @returns
-     * @memberof Event
      */
     async getRefuelItems() {
         const queryString = "SELECT * FROM eventItems NATURAL JOIN pieces WHERE eventId = ? AND pieceId = eventPieceId";
@@ -104,12 +88,6 @@ class Event implements EventType {
 
     /**
      * Get the next event from the eventQueue.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} gameTeam
-     * @returns
-     * @memberof Event
      */
     static async getNext(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM eventQueue WHERE eventGameId = ? AND (eventTeamId = ? OR eventTeamId = 2) ORDER BY eventId ASC LIMIT 1";
@@ -128,11 +106,6 @@ class Event implements EventType {
     //TODO: this function not called anymore, unlikely to need it...
     /**
      * Get the next event in the queue regardless of team.
-     *
-     * @static
-     * @param {number} gameId
-     * @returns
-     * @memberof Event
      */
     static async getNextAnyteam(gameId: number) {
         const queryString = "SELECT * FROM eventQueue WHERE eventGameId = ? ORDER BY eventId ASC LIMIT 1";
@@ -149,10 +122,6 @@ class Event implements EventType {
 
     /**
      * Insert events as a bulk insert sql query.
-     *
-     * @static
-     * @param {*} allInserts
-     * @memberof Event
      */
     static async bulkInsertEvents(allInserts: any) {
         const queryString = "INSERT INTO eventQueue (eventGameId, eventTeamId, eventTypeId, eventPosA, eventPosB) VALUES ?";
@@ -162,11 +131,6 @@ class Event implements EventType {
 
     /**
      * Insert eventItems as a bulk insert sql query.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {*} allInserts
-     * @memberof Event
      */
     static async bulkInsertItems(gameId: number, allInserts: any) {
         const conn = await pool.getConnection();
@@ -188,9 +152,6 @@ class Event implements EventType {
 
     /**
      * Update eventItem's targets with a bulk insert and update using a temp table.
-     *
-     * @param {*} piecesWithTargets
-     * @memberof Event
      */
     async bulkUpdateTargets(piecesWithTargets: any) {
         //TODO: make sure that these piece->targets make sense (prevent bad targetting? (if possible...))
@@ -218,11 +179,6 @@ class Event implements EventType {
 
     /**
      * Update piece fuels from fuelUpdates list. (bulk query with temp table)
-     *
-     * @param {*} fuelUpdates
-     * @param {number} gameTeam
-     * @returns
-     * @memberof Event
      */
     async bulkUpdatePieceFuels(fuelUpdates: any, gameTeam: number) {
         if (fuelUpdates.length == 0) {
@@ -252,9 +208,6 @@ class Event implements EventType {
     //prettier-ignore
     /**
      * Using eventItem targets, perform dice rolls between pieces and determine success or failure.
-     *
-     * @returns
-     * @memberof Event
      */
     async fight() {
 		let queryString =

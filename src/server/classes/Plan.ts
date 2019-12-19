@@ -3,8 +3,6 @@ import pool from "../database";
 
 /**
  * Represents rows for plans in the database.
- *
- * @class Plan
  */
 class Plan implements PlanType {
     planGameId: number;
@@ -21,9 +19,6 @@ class Plan implements PlanType {
 
     /**
      * Get's information from database about this plan.
-     *
-     * @returns Plan
-     * @memberof Plan
      */
     async init() {
         const queryString = "SELECT * FROM plans WHERE planPieceId = ? AND planMovementOrder = ?";
@@ -40,10 +35,6 @@ class Plan implements PlanType {
 
     /**
      * Insert Plans into the database.
-     *
-     * @static
-     * @param {*} plansToInsert -> formatted array of plans to insert.
-     * @memberof Plan
      */
     static async insert(plansToInsert: any) {
         const queryString = "INSERT INTO plans (planGameId, planTeamId, planPieceId, planMovementOrder, planPositionId, planSpecialFlag) VALUES ?";
@@ -53,10 +44,6 @@ class Plan implements PlanType {
 
     /**
      * Delete all plans for a certain piece.
-     *
-     * @static
-     * @param {number} pieceId
-     * @memberof Plan
      */
     static async delete(pieceId: number) {
         const queryString = "DELETE FROM plans WHERE planPieceId = ?";
@@ -66,12 +53,6 @@ class Plan implements PlanType {
 
     /**
      * Get current movement order for this game's team.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} gameTeam
-     * @returns {number} movement order
-     * @memberof Plan
      */
     static async getCurrentMovementOrder(gameId: number, gameTeam: number) {
         const queryString = "SELECT planMovementOrder FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planMovementOrder ASC LIMIT 1";
@@ -82,12 +63,6 @@ class Plan implements PlanType {
 
     /**
      * Get all piece collisions from plans.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} movementOrder
-     * @returns array of sql results with collisions.
-     * @memberof Plan
      */
     static async getCollisions(gameId: number, movementOrder: number) {
         const queryString =
@@ -99,11 +74,6 @@ class Plan implements PlanType {
 
     /**
      * Get all positions/pieces where both teams exist.
-     *
-     * @static
-     * @param {number} gameId
-     * @returns array of sql results with combinations.
-     * @memberof Plan
      */
     static async getPositionCombinations(gameId: number) {
         const queryString =
@@ -115,12 +85,6 @@ class Plan implements PlanType {
 
     /**
      * Get all confirmed plans for this game's team.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} gameTeam
-     * @returns formatted dictionary of pieces with confirmed plans.
-     * @memberof Plan
      */
     static async getConfirmedPlans(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planPieceId, planMovementOrder ASC";

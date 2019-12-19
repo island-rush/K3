@@ -1,7 +1,3 @@
-/**
- * Exporting all Classes from a single file.
- */
-
 import Capability from "./Capability";
 import Event from "./Event";
 import Game from "./Game";

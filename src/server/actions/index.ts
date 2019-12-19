@@ -1,8 +1,3 @@
-/**
- * These are all the functions used by the game logic, exposed to socketSetup
- * Some functions are helpers, and used internally, and therefore not exposed (ex: ./giveNextEvent.js)
- */
-
 import confirmBattleSelection from "./battles/confirmBattleSelection";
 import biologicalWeaponsConfirm from "./capabilities/biologicalWeaponsConfirm";
 import commInterruptConfirm from "./capabilities/commInterruptionConfirm";

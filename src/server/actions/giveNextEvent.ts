@@ -1,4 +1,5 @@
 import { Socket } from "socket.io";
+import { GameType, ReduxAction } from "../..//react-client/src/constants/interfaces";
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from "../../react-client/src/constants/gameConstants";
 import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from "../../react-client/src/redux/actions/actionTypes";
@@ -6,18 +7,16 @@ import { Event, Piece } from "../classes";
 import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "./eventConstants";
 import sendUserFeedback from "./sendUserFeedback";
 
-const giveNextEvent = async (socket: Socket, options: any) => {
-    const { thisGame, gameTeam } = options;
-    const { gameId } = thisGame;
+/**
+ * Find the next event in the EventQueue and send to this team (through a socket)
+ */
+const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
+    //prettier-ignore
+    const { thisGame: { gameId }, gameTeam } = options;
 
     const otherTeam = gameTeam == BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
 
-    let gameboardPiecesList; //if came from 'executeStep', send new piece locations along with actions
-    if (options.executingStep) {
-        gameboardPiecesList = await Piece.getVisiblePieces(gameId, gameTeam);
-    }
-
-    let serverAction = {}; //store the action, send at the end
+    let serverAction: ReduxAction; //store the action, send at the end
 
     const gameEvent = await Event.getNext(gameId, gameTeam);
     if (gameEvent) {
@@ -29,6 +28,7 @@ const giveNextEvent = async (socket: Socket, options: any) => {
                 let friendlyPieces: any = [];
                 let enemyPieces: any = [];
 
+                //Format for the client
                 for (let x = 0; x < friendlyPiecesList.length; x++) {
                     let thisFriendlyPiece: any = {
                         targetPiece: null,
@@ -52,13 +52,14 @@ const giveNextEvent = async (socket: Socket, options: any) => {
                     payload: {
                         friendlyPieces,
                         enemyPieces,
-                        gameboardPieces: options.executingStep ? gameboardPiecesList : null,
+                        gameboardPieces: options.executingStep ? await Piece.getVisiblePieces(gameId, gameTeam) : null,
                         gameStatus: options.executingStep ? 0 : null
                     }
                 };
                 break;
             case REFUEL_EVENT_TYPE:
                 //get the pieces from the event, put them into payload (pre-format based on state?)
+                //Format for the client
                 let allRefuelEventItems: any = await gameEvent.getRefuelItems();
 
                 let tankers = [];
@@ -79,7 +80,7 @@ const giveNextEvent = async (socket: Socket, options: any) => {
                     payload: {
                         tankers,
                         aircraft,
-                        gameboardPieces: options.executingStep ? gameboardPiecesList : null,
+                        gameboardPieces: options.executingStep ? await Piece.getVisiblePieces(gameId, gameTeam) : null,
                         gameStatus: options.executingStep ? 0 : null
                     }
                 };
@@ -92,7 +93,7 @@ const giveNextEvent = async (socket: Socket, options: any) => {
         serverAction = {
             type: NO_MORE_EVENTS,
             payload: {
-                gameboardPieces: options.executingStep ? gameboardPiecesList : null,
+                gameboardPieces: options.executingStep ? await Piece.getVisiblePieces(gameId, gameTeam) : null,
                 gameStatus: options.executingStep ? 0 : null
             }
         };
@@ -104,6 +105,12 @@ const giveNextEvent = async (socket: Socket, options: any) => {
     if (socket.handshake.session.ir3.gameTeam == gameTeam) {
         socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     }
+};
+
+type GiveNextEventOptions = {
+    thisGame: GameType;
+    gameTeam: number;
+    executingStep?: boolean;
 };
 
 export default giveNextEvent;

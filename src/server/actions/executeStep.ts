@@ -1,12 +1,19 @@
 import { Socket } from "socket.io";
 import { BLUE_TEAM_ID, PLACE_PHASE_ID, RED_TEAM_ID, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
+import { GameSession, ReduxAction } from "../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { NEW_ROUND, PLACE_PHASE, UPDATE_FLAGS } from "../../react-client/src/redux/actions/actionTypes";
-import { Capability, Event, Piece, Plan } from "../classes";
+import { Capability, Event, Game, Piece, Plan } from "../classes";
 import { BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "./eventConstants";
 import giveNextEvent from "./giveNextEvent";
 
-const executeStep = async (socket: Socket, thisGame: any) => {
+/**
+ * Move pieces / step through plans
+ */
+const executeStep = async (socket: Socket, thisGame: Game) => {
+    //Grab Session (already verified from last function)
+    const session: GameSession = socket.handshake.session.ir3;
+
     //inserting events here and moving pieces, or changing to new round or something...
     const { gameId, gameRound } = thisGame;
 
@@ -14,7 +21,7 @@ const executeStep = async (socket: Socket, thisGame: any) => {
     const currentMovementOrder0 = await Plan.getCurrentMovementOrder(gameId, BLUE_TEAM_ID);
     const currentMovementOrder1 = await Plan.getCurrentMovementOrder(gameId, RED_TEAM_ID);
 
-    //No More Plans for either team
+    //No More Plans for either team -> end of the round
     //DOESN'T MAKE PLANS FOR PIECES STILL IN THE SAME POSITION...NEED TO HAVE AT LEAST 1 PLAN FOR ANYTHING TO HAPPEN (pieces in same postion would battle (again?) if there was 1 plan elsewhere...)
     if (currentMovementOrder0 == null && currentMovementOrder1 == null) {
         await thisGame.setSlice(0); //if no more moves, end of slice 1
@@ -28,26 +35,8 @@ const executeStep = async (socket: Socket, thisGame: any) => {
         await Capability.decreaseCommInterrupt(gameId);
         await Capability.decreaseRaiseMorale(gameId);
 
-        const gameboardPiecesList0 = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
-        const gameboardPiecesList1 = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
-
-        const remoteSense0 = await Capability.getRemoteSensing(gameId, BLUE_TEAM_ID);
-        const remoteSense1 = await Capability.getRemoteSensing(gameId, RED_TEAM_ID);
-
-        const bioWeapons0 = await Capability.getBiologicalWeapons(gameId, BLUE_TEAM_ID); //any team should work, since all activated at this point?
-        const bioWeapons1 = await Capability.getBiologicalWeapons(gameId, RED_TEAM_ID);
-
-        const raiseMorale0 = await Capability.getRaiseMorale(gameId, BLUE_TEAM_ID);
-        const raiseMorale1 = await Capability.getRaiseMorale(gameId, RED_TEAM_ID);
-
-        const commInterrupt0 = await Capability.getCommInterrupt(gameId, BLUE_TEAM_ID);
-        const commInterrupt1 = await Capability.getCommInterrupt(gameId, RED_TEAM_ID);
-
-        const goldenEye0 = await Capability.getGoldenEye(gameId, BLUE_TEAM_ID);
-        const goldenEye1 = await Capability.getGoldenEye(gameId, RED_TEAM_ID);
-
-        let serverAction0;
-        let serverAction1;
+        let serverAction0: ReduxAction;
+        let serverAction1: ReduxAction;
         //TODO: could do constant with 'ROUNDS_PER_COMBAT' although getting excessive
         if (gameRound == 2) {
             //Combat -> Place Phase
@@ -57,24 +46,23 @@ const executeStep = async (socket: Socket, thisGame: any) => {
             serverAction0 = {
                 type: PLACE_PHASE,
                 payload: {
-                    gameboardPieces: gameboardPiecesList0,
-                    confirmedRemoteSense: remoteSense0,
-                    confirmedBioWeapons: bioWeapons0,
-                    confirmedRaiseMorale: raiseMorale0,
-                    confirmedCommInterrupt: commInterrupt0,
-                    confirmedGoldenEye: goldenEye0
+                    gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID),
+                    confirmedRemoteSense: await Capability.getRemoteSensing(gameId, BLUE_TEAM_ID),
+                    confirmedBioWeapons: await Capability.getBiologicalWeapons(gameId, BLUE_TEAM_ID),
+                    confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, BLUE_TEAM_ID),
+                    confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, BLUE_TEAM_ID),
+                    confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID)
                 }
             };
-
             serverAction1 = {
                 type: PLACE_PHASE,
                 payload: {
-                    gameboardPieces: gameboardPiecesList1,
-                    confirmedRemoteSense: remoteSense1,
-                    confirmedBioWeapons: bioWeapons1,
-                    confirmedRaiseMorale: raiseMorale1,
-                    confirmedCommInterrupt: commInterrupt1,
-                    confirmedGoldenEye: goldenEye1
+                    gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID),
+                    confirmedRemoteSense: await Capability.getRemoteSensing(gameId, RED_TEAM_ID),
+                    confirmedBioWeapons: await Capability.getBiologicalWeapons(gameId, RED_TEAM_ID),
+                    confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, RED_TEAM_ID),
+                    confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, RED_TEAM_ID),
+                    confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID)
                 }
             };
         } else {
@@ -85,33 +73,33 @@ const executeStep = async (socket: Socket, thisGame: any) => {
                 type: NEW_ROUND,
                 payload: {
                     gameRound: thisGame.gameRound,
-                    gameboardPieces: gameboardPiecesList0,
-                    confirmedRemoteSense: remoteSense0,
-                    confirmedBioWeapons: bioWeapons0,
-                    confirmedRaiseMorale: raiseMorale0,
-                    confirmedCommInterrupt: commInterrupt0,
-                    confirmedGoldenEye: goldenEye0
+                    gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID),
+                    confirmedRemoteSense: await Capability.getRemoteSensing(gameId, BLUE_TEAM_ID),
+                    confirmedBioWeapons: await Capability.getBiologicalWeapons(gameId, BLUE_TEAM_ID),
+                    confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, BLUE_TEAM_ID),
+                    confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, BLUE_TEAM_ID),
+                    confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID)
                 }
             };
-
             serverAction1 = {
                 type: NEW_ROUND,
                 payload: {
                     gameRound: thisGame.gameRound,
-                    gameboardPieces: gameboardPiecesList1,
-                    confirmedRemoteSense: remoteSense1,
-                    confirmedBioWeapons: bioWeapons1,
-                    confirmedRaiseMorale: raiseMorale1,
-                    confirmedCommInterrupt: commInterrupt1,
-                    confirmedGoldenEye: goldenEye1
+                    gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID),
+                    confirmedRemoteSense: await Capability.getRemoteSensing(gameId, RED_TEAM_ID),
+                    confirmedBioWeapons: await Capability.getBiologicalWeapons(gameId, RED_TEAM_ID),
+                    confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, RED_TEAM_ID),
+                    confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, RED_TEAM_ID),
+                    confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID)
                 }
             };
         }
 
+        //Send to the teams
         socket.to("game" + gameId + "team0").emit(SOCKET_SERVER_SENDING_ACTION, serverAction0);
         socket.to("game" + gameId + "team1").emit(SOCKET_SERVER_SENDING_ACTION, serverAction1);
 
-        const thisSocketsAction = parseInt(socket.handshake.session.ir3.gameTeam) === BLUE_TEAM_ID ? serverAction0 : serverAction1;
+        const thisSocketsAction = session.gameTeam === BLUE_TEAM_ID ? serverAction0 : serverAction1;
         socket.emit(SOCKET_SERVER_SENDING_ACTION, thisSocketsAction);
 
         return;
@@ -125,7 +113,7 @@ const executeStep = async (socket: Socket, thisGame: any) => {
         await thisGame.setStatus(RED_TEAM_ID, WAITING_STATUS);
     }
 
-    let currentMovementOrder = currentMovementOrder0 != null ? currentMovementOrder0 : currentMovementOrder1;
+    let currentMovementOrder: number = currentMovementOrder0 != null ? currentMovementOrder0 : currentMovementOrder1;
 
     //Collision Battle Events
     const allCollisions: any = await Plan.getCollisions(gameId, currentMovementOrder); //each item in collisionBattles has {pieceId0, pieceTypeId0, pieceContainerId0, piecePositionId0, planPositionId0, pieceId1, pieceTypeId1, pieceContainerId1, piecePositionId1, planPositionId1 }
@@ -163,7 +151,7 @@ const executeStep = async (socket: Socket, thisGame: any) => {
 
     const didUpdateFlags = await thisGame.updateFlags();
     if (didUpdateFlags) {
-        const updateFlagAction = {
+        const updateFlagAction: ReduxAction = {
             type: UPDATE_FLAGS,
             payload: {
                 flag0: thisGame.flag0,
@@ -181,6 +169,8 @@ const executeStep = async (socket: Socket, thisGame: any) => {
                 flag12: thisGame.flag12
             }
         };
+
+        //Send all flag updates to every team
         socket.to("game" + gameId).emit(SOCKET_SERVER_SENDING_ACTION, updateFlagAction);
         socket.emit(SOCKET_SERVER_SENDING_ACTION, updateFlagAction);
     }

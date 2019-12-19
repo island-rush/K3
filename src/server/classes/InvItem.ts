@@ -5,8 +5,6 @@ import Piece from "./Piece";
 
 /**
  * Represents row in invItems table in the database.
- *
- * @class InvItem
  */
 class InvItem implements InvItemType {
     invItemId: number;
@@ -20,9 +18,6 @@ class InvItem implements InvItemType {
 
     /**
      * Get information from database about this inv item.
-     *
-     * @returns
-     * @memberof InvItem
      */
     async init() {
         const queryString = "SELECT * FROM invItems WHERE invItemId = ?";
@@ -39,8 +34,6 @@ class InvItem implements InvItemType {
 
     /**
      * Delete this inv item.
-     *
-     * @memberof InvItem
      */
     async delete() {
         const queryString = "DELETE FROM invItems WHERE invItemId = ?";
@@ -51,10 +44,6 @@ class InvItem implements InvItemType {
     //TODO: this looks weird, could convert to object parameter to explicitly say what is what (similar to game add)
     /**
      * Move inv item from the inventory and put it on the board as a piece.
-     *
-     * @param {number} selectedPosition
-     * @returns
-     * @memberof InvItem
      */
     async placeOnBoard(selectedPosition: number) {
         const newPiece = await Piece.insert(
@@ -75,11 +64,6 @@ class InvItem implements InvItemType {
 
     /**
      * Take all shopItems and create invItems from them.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} gameTeam
-     * @memberof InvItem
      */
     static async insertFromShop(gameId: number, gameTeam: number) {
         const queryString =
@@ -90,12 +74,6 @@ class InvItem implements InvItemType {
 
     /**
      * Get all invItems from the database for this game's team.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} gameTeam
-     * @returns
-     * @memberof InvItem
      */
     static async all(gameId: number, gameTeam: number) {
         const queryString = "SELECT * FROM invItems WHERE invItemGameId = ? AND invItemTeamId = ?";

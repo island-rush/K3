@@ -6,8 +6,6 @@ import pool from "../database";
 
 /**
  * Represents a row in the pieces database table.
- *
- * @class Piece
  */
 class Piece implements PieceType {
     pieceId: number;
@@ -29,9 +27,6 @@ class Piece implements PieceType {
 
     /**
      * Gets information from database about this piece.
-     *
-     * @returns Piece
-     * @memberof Piece
      */
     async init() {
         let queryString = "SELECT * FROM pieces WHERE pieceId = ?";
@@ -54,8 +49,6 @@ class Piece implements PieceType {
 
     /**
      * Delete this piece.
-     *
-     * @memberof Piece
      */
     async delete() {
         const queryString = "DELETE FROM pieces WHERE pieceId = ?";
@@ -65,8 +58,6 @@ class Piece implements PieceType {
 
     /**
      * Delete the plans for this piece.
-     *
-     * @memberof Piece
      */
     async deletePlans() {
         //TODO: referencing another table, could potentially move this function (maybe)
@@ -78,9 +69,6 @@ class Piece implements PieceType {
     /**
      * Get the pieces that are within this piece.
      * Pieces become within another by setting pieceContainerId to id of the parent.
-     *
-     * @returns array of sql rows.
-     * @memberof Piece
      */
     async getPiecesInside() {
         const queryString = "SELECT * FROM pieces WHERE pieceContainerId = ?";
@@ -92,10 +80,6 @@ class Piece implements PieceType {
     // prettier-ignore
     /**
      * Globally update each piece's visibility based on it's surroundings for this game.
-     *
-     * @static
-     * @param {number} gameId
-     * @memberof Piece
      */
     static async updateVisibilities(gameId: number) {
 		const conn = await pool.getConnection();
@@ -172,11 +156,6 @@ class Piece implements PieceType {
 
     /**
      * Globally move all pieces according to their plans for this game.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} movementOrder
-     * @memberof Piece
      */
     static async move(gameId: number, movementOrder: number) {
         //movement based on plans (for this order/step)
@@ -229,12 +208,6 @@ class Piece implements PieceType {
 
     /**
      * Get dictionary of positions and the pieces those positions contain.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} gameTeam
-     * @returns dictionary of positions with pieces inside.
-     * @memberof Piece
      */
     static async getVisiblePieces(gameId: number, gameTeam: number) {
         let queryString =
@@ -297,12 +270,6 @@ class Piece implements PieceType {
     /**
      * Get sql results querying positions that should cause refuel event.
      * These positions are tankers + any same team aircraft.
-     *
-     * @static
-     * @param {number} gameId
-     * @param {number} gameTeam
-     * @returns
-     * @memberof Piece
      */
     static async getPositionRefuels(gameId: number, gameTeam: number) {
         //TODO: constant for 'outside container' instead of -1?
@@ -317,11 +284,6 @@ class Piece implements PieceType {
 
     /**
      * Put 1 piece inside another container piece.
-     *
-     * @static
-     * @param {*} selectedPiece
-     * @param {*} containerPiece
-     * @memberof Piece
      */
     static async putInsideContainer(selectedPiece: any, containerPiece: any) {
         //TODO: could combine into 1 query, or could have a selection for variable query, 1 request instead of 2 would be better
@@ -341,11 +303,6 @@ class Piece implements PieceType {
     //TODO: could make this a non-static method? (since we already have the pieceId....)
     /**
      * Put 1 piece outside of it's parent piece.
-     *
-     * @static
-     * @param {number} selectedPieceId
-     * @param {number} newPositionId
-     * @memberof Piece
      */
     static async putOutsideContainer(selectedPieceId: number, newPositionId: number) {
         //TODO: deal with inner transport pieces (need to also set the piecePositionId)
@@ -357,18 +314,6 @@ class Piece implements PieceType {
     //TODO: change this into a pieceConstructor Object, bad practice to have so many parameters
     /**
      * Insert a single piece into the database for this game's team.
-     *
-     * @static
-     * @param {number} pieceGameId
-     * @param {number} pieceTeamId
-     * @param {number} pieceTypeId
-     * @param {number} piecePositionId
-     * @param {number} pieceContainerId
-     * @param {number} pieceVisible
-     * @param {number} pieceMoves
-     * @param {number} pieceFuel
-     * @returns Piece that was inserted.
-     * @memberof Piece
      */
     static async insert(
         pieceGameId: number,
@@ -400,10 +345,6 @@ class Piece implements PieceType {
 
     /**
      * Globally reset moves for all pieces in this game.
-     *
-     * @static
-     * @param {number} gameId
-     * @memberof Piece
      */
     static async resetMoves(gameId: number) {
         const testquery =

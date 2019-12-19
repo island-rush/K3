@@ -21,6 +21,23 @@ export type Instructor = string;
 export type Password = string;
 
 /**
+ * Template for ReduxActions with any payload
+ */
+export interface ReduxAction {
+    type: string;
+    payload: any;
+}
+
+/**
+ * Redux Action with userFeedback payload
+ */
+export interface UserfeedbackAction extends ReduxAction {
+    payload: {
+        userFeedback: string;
+    };
+}
+
+/**
  * This object stored within session.ir3 to tie users to game, team, and controller(s)
  */
 export interface GameSession {
