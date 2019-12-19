@@ -4,19 +4,30 @@
 
 import { Socket } from "socket.io";
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_MAIN, TYPE_TERRAIN } from "../../../react-client/src/constants/gameConstants";
+import { GameSession, PieceType, ReduxAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
 import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
 import { Game, Piece } from "../../classes";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
-import { PieceType } from "../../../react-client/src/constants/interfaces";
 
-const exitContainer = async (socket: Socket, payload: any) => {
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
-    const { selectedPiece, containerPiece }: { selectedPiece: PieceType; containerPiece: PieceType } = payload;
+/**
+ * User request to move piece outside of a container to the same position.
+ */
+const exitContainer = async (socket: Socket, payload: ExitContainerPayload) => {
+    //Grab the Session
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
+    const { selectedPiece, containerPiece } = payload;
+
+    //Grab the Game
     const thisGame = await new Game({ gameId }).init();
+    if (!thisGame) {
+        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        return;
+    }
+
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
@@ -34,6 +45,7 @@ const exitContainer = async (socket: Socket, payload: any) => {
         return;
     }
 
+    //Grab the Pieces
     const thisSelectedPiece = await new Piece(selectedPiece.pieceId).init();
     if (!thisSelectedPiece) {
         sendUserFeedback(socket, "Selected Piece did not exists...refresh page probably");
@@ -61,7 +73,7 @@ const exitContainer = async (socket: Socket, payload: any) => {
 
     await Piece.putOutsideContainer(thisSelectedPiece.pieceId, thisSelectedPiece.piecePositionId);
 
-    const serverAction = {
+    const serverAction: ReduxAction = {
         type: INNER_PIECE_CLICK_ACTION,
         payload: {
             gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),
@@ -69,8 +81,15 @@ const exitContainer = async (socket: Socket, payload: any) => {
             containerPiece
         }
     };
+
+    //Send the update to the client(s)
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+};
+
+type ExitContainerPayload = {
+    selectedPiece: PieceType;
+    containerPiece: PieceType;
 };
 
 export default exitContainer;

@@ -3,19 +3,30 @@ import { distanceMatrix } from "../../../react-client/src/constants/distanceMatr
 import { AIRFIELD_TYPE } from "../../../react-client/src/constants/gameboardConstants";
 //prettier-ignore
 import { ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
+import { GameSession, PieceType, ReduxAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { OUTER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
 import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
 import { Game, Piece } from "../../classes";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
-import { PieceType } from "../../../react-client/src/constants/interfaces";
 
-const enterContainer = async (socket: Socket, payload: any) => {
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
-    const { selectedPiece, containerPiece }: { selectedPiece: PieceType; containerPiece: PieceType } = payload;
+/**
+ * User request to put one piece inside of another.
+ */
+const enterContainer = async (socket: Socket, payload: EnterContainerPayload) => {
+    //Grab the Session
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
+    const { selectedPiece, containerPiece } = payload;
+
+    //Grab the Game
     const thisGame = await new Game({ gameId }).init();
+    if (!thisGame) {
+        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        return;
+    }
+
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
@@ -34,6 +45,7 @@ const enterContainer = async (socket: Socket, payload: any) => {
         return;
     }
 
+    //Grab the Pieces
     const thisSelectedPiece = await new Piece(selectedPiece.pieceId).init();
     if (!thisSelectedPiece) {
         sendUserFeedback(socket, "Selected Piece did not exists...refresh page probably");
@@ -185,7 +197,7 @@ const enterContainer = async (socket: Socket, payload: any) => {
 
     await Piece.putInsideContainer(thisSelectedPiece, thisContainerPiece);
 
-    const serverAction = {
+    const serverAction: ReduxAction = {
         type: OUTER_PIECE_CLICK_ACTION,
         payload: {
             gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),
@@ -193,8 +205,15 @@ const enterContainer = async (socket: Socket, payload: any) => {
             containerPiece: thisContainerPiece
         }
     };
+
+    //Send the update to the client(s)
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+};
+
+type EnterContainerPayload = {
+    selectedPiece: PieceType;
+    containerPiece: PieceType;
 };
 
 export default enterContainer;

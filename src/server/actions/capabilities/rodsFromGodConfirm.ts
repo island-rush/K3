@@ -5,10 +5,15 @@ import { RODS_FROM_GOD_SELECTED } from "../../../react-client/src/redux/actions/
 import { Capability, Game, InvItem } from "../../classes";
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
+import { InvItemType, GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
 
 //TODO: does this affect all pieces? or only ground since that makes sense....(compare to bio weapons)
-const rodsFromGodConfirm = async (socket: Socket, payload: any) => {
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
+/**
+ * User Request to use rods from god on a certain position.
+ */
+const rodsFromGodConfirm = async (socket: Socket, payload: RodsFromGodConfirmPayload) => {
+    //Grab the Session
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
     if (payload == null || payload.selectedPositionId == null) {
         sendUserFeedback(socket, "Server Error: Malformed Payload (missing selectedPositionId)");
@@ -17,6 +22,7 @@ const rodsFromGodConfirm = async (socket: Socket, payload: any) => {
 
     const { selectedPositionId, invItem } = payload;
 
+    //Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
@@ -79,15 +85,22 @@ const rodsFromGodConfirm = async (socket: Socket, payload: any) => {
 
     await thisInvItem.delete();
 
-    const serverAction = {
+    const serverAction: ReduxAction = {
         type: RODS_FROM_GOD_SELECTED,
         payload: {
             invItem: thisInvItem,
             selectedPositionId
         }
     };
+
+    //Send the update to the client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+};
+
+type RodsFromGodConfirmPayload = {
+    selectedPositionId: number;
+    invItem: InvItemType;
 };
 
 export default rodsFromGodConfirm;
