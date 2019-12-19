@@ -1,14 +1,18 @@
 import { distanceMatrix } from "../../constants/distanceMatrix";
 //prettier-ignore
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, TYPE_TERRAIN } from "../../constants/gameConstants";
+import { DispatchType, EmitType, ReduxAction } from "../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../constants/otherConstants";
 import { initialGameboardEmpty } from "../reducers/initialGameboardEmpty";
 //prettier-ignore
 import { HIGHLIGHT_POSITIONS, PLANNING_SELECT, POSITION_SELECT, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM } from "./actionTypes";
 import setUserfeedbackAction from "./setUserfeedbackAction";
 
+/**
+ * Change the state based on position that was clicked by the user.
+ */
 const selectPosition = (selectedPositionId: number) => {
-    return (dispatch: any, getState: any, emit: any) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 
         //selecting the hex to put piece that is inside container
@@ -17,7 +21,7 @@ const selectPosition = (selectedPositionId: number) => {
             //TODO: check that the position was vaild (on the server side)
 
             //other checks
-            const thisAction = {
+            const thisAction: ReduxAction = {
                 type: SERVER_INNER_TRANSPORT_PIECE_CLICK,
                 payload: {
                     selectedPiece: gameboardMeta.container.innerPieceToDrop,
@@ -53,7 +57,7 @@ const selectPosition = (selectedPositionId: number) => {
             //highlight if needed
             if (gameboardMeta.planning.invItem.invItemTypeId === REMOTE_SENSING_TYPE_ID) {
                 let clickedPosition = selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition;
-                let highlightedPositions = [];
+                let highlightedPositions: number[] = [];
                 for (let x = 0; x < distanceMatrix[clickedPosition].length; x++) {
                     if (distanceMatrix[clickedPosition][x] <= REMOTE_SENSING_RANGE) {
                         highlightedPositions.push(x);
@@ -70,7 +74,7 @@ const selectPosition = (selectedPositionId: number) => {
 
             if (gameboardMeta.planning.invItem.invItemTypeId === COMMUNICATIONS_INTERRUPTION_TYPE_ID) {
                 let clickedPosition = selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition;
-                let highlightedPositions = [];
+                let highlightedPositions: number[] = [];
                 for (let x = 0; x < distanceMatrix[clickedPosition].length; x++) {
                     if (distanceMatrix[clickedPosition][x] <= COMM_INTERRUPT_RANGE) highlightedPositions.push(x);
                 }
@@ -100,7 +104,7 @@ const selectPosition = (selectedPositionId: number) => {
 
             // eslint-disable-next-line no-restricted-globals
             if (confirm("Are you sure you want to use capability on this position?")) {
-                let type;
+                let type: string;
                 switch (gameboardMeta.planning.invItem.invItemTypeId) {
                     case RODS_FROM_GOD_TYPE_ID:
                         type = SERVER_RODS_FROM_GOD_CONFIRM;
@@ -133,7 +137,7 @@ const selectPosition = (selectedPositionId: number) => {
                     }
                 });
 
-                const clientAction = {
+                const clientAction: ReduxAction = {
                     type,
                     payload: {
                         selectedPositionId: selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition,
@@ -155,7 +159,7 @@ const selectPosition = (selectedPositionId: number) => {
             return;
         }
 
-        var trueMoveCount = 0;
+        let trueMoveCount = 0;
         for (var i = 0; i < gameboardMeta.planning.moves.length; i++) {
             const { type } = gameboardMeta.planning.moves[i];
             if (type === "move") {

@@ -1,7 +1,11 @@
+import { DispatchType, EmitType, PieceType } from "../../../constants/interfaces";
 import { TANKER_CLICK } from "../actionTypes";
 
-const tankerClick = (tankerPiece: any, tankerPieceIndex: any) => {
-    return (dispatch: any, getState: any, emit: any) => {
+/**
+ * Action to select tanker to give fuel to other pieces.
+ */
+const tankerClick = (tankerPiece: PieceType, tankerPieceIndex: number) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         //TODO: check for bad state (wrong phase? ...use userFeedback...)
 
         dispatch({

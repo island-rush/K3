@@ -1,7 +1,3 @@
-/**
- * Central Importing for all redux actions
- */
-
 import battlePieceClick from "./battles/battlePieceClick";
 import battlePopupMinimizeToggle from "./battles/battlePopupMinimizeToggle";
 import clearOldBattle from "./battles/clearOldBattle";

@@ -1,7 +1,11 @@
+import { DispatchType, EmitType, PieceType } from "../../constants/interfaces";
 import { PIECE_CLICK } from "./actionTypes";
 
-const selectPiece = (selectedPiece: any) => {
-    return (dispatch: any, getState: any, emit: any) => {
+/**
+ * Change the state based on the piece that the user selected.
+ */
+const selectPiece = (selectedPiece: PieceType) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 
         if (!gameboardMeta.planning.active) {

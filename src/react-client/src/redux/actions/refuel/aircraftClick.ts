@@ -1,9 +1,13 @@
+import { DispatchType, EmitType, PieceType } from "../../../constants/interfaces";
 import { AIRCRAFT_CLICK } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
 //TODO: could have more checks for current game event / phase / slice / other easy stuff that should be obvious
-const aircraftClick = (aircraftPiece: any, aircraftPieceIndex: any) => {
-    return (dispatch: any, getState: any, emit: any) => {
+/**
+ * Action to select aircraft to receive fuel from tanker.
+ */
+const aircraftClick = (aircraftPiece: PieceType, aircraftPieceIndex: number) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
         const { selectedTankerPieceId, aircraft } = gameboardMeta.refuel;
 

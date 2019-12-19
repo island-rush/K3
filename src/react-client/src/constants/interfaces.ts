@@ -28,6 +28,9 @@ export interface ReduxAction {
     payload: any;
 }
 
+export type DispatchType = (reduxAction: ReduxAction) => any;
+export type EmitType = (requestType: string, clientAction: ReduxAction) => SocketIOClient.Socket;
+
 /**
  * Redux Action with userFeedback payload
  */

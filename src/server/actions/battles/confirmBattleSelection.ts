@@ -1,18 +1,30 @@
 import { Socket } from "socket.io";
 //prettier-ignore
 import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, WAITING_STATUS } from "../../../react-client/src/constants/gameConstants";
+import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { BATTLE_FIGHT_RESULTS, UPDATE_FLAGS } from "../../../react-client/src/redux/actions/actionTypes";
 import { Event, Game } from "../../classes";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import giveNextEvent from "../giveNextEvent";
 import sendUserFeedback from "../sendUserFeedback";
 
-const confirmBattleSelection = async (socket: Socket, payload: any) => {
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
+/**
+ * User request to confirm their battle selections. (what pieces are attacking what other pieces)
+ */
+const confirmBattleSelection = async (socket: Socket, payload: ConfirmBattleSelectionPayload) => {
+    //Grab the Session
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+
     const { friendlyPieces } = payload;
 
+    //Get the Game
     const thisGame = await new Game({ gameId }).init();
+    if (!thisGame) {
+        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        return;
+    }
+
     const { gameActive, gamePhase, game0Status, game1Status } = thisGame;
 
     if (!gameActive) {
@@ -57,8 +69,9 @@ const confirmBattleSelection = async (socket: Socket, payload: any) => {
     //Do the fight!
     const fightResults = await thisTeamsCurrentEvent.fight();
 
+    //Send the results of the battle back to the client(s)
     if (fightResults.atLeastOneBattle) {
-        const serverAction = {
+        const serverAction: ReduxAction = {
             type: BATTLE_FIGHT_RESULTS,
             payload: {
                 masterRecord: fightResults.masterRecord
@@ -72,9 +85,10 @@ const confirmBattleSelection = async (socket: Socket, payload: any) => {
 
     await thisTeamsCurrentEvent.delete();
 
+    //Check for flag updates after the battle (enemy may no longer be there = capture the flag)
     const didUpdateFlags = await thisGame.updateFlags();
     if (didUpdateFlags) {
-        const updateFlagAction = {
+        const updateFlagAction: ReduxAction = {
             type: UPDATE_FLAGS,
             payload: {
                 flag0: thisGame.flag0,
@@ -98,6 +112,10 @@ const confirmBattleSelection = async (socket: Socket, payload: any) => {
 
     await giveNextEvent(socket, { thisGame, gameTeam: 0 }); //not putting executingStep in options to let it know not to send pieceMove
     await giveNextEvent(socket, { thisGame, gameTeam: 1 }); //not putting executingStep in options to let it know not to send pieceMove
+};
+
+type ConfirmBattleSelectionPayload = {
+    friendlyPieces: any;
 };
 
 export default confirmBattleSelection;
