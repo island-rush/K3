@@ -1,12 +1,15 @@
+import { DispatchType, EmitType, PieceType, ReduxAction } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_INNER_PIECE_CLICK } from "../actionTypes";
-import { PieceType } from "../../../constants/interfaces";
 
+/**
+ * Move piece from inside container to outside (same position)
+ */
 const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
-    return (dispatch: any, getState: any, emit: any) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         //TODO: figure out if inner piece click is allowed
 
-        const clientAction = {
+        const clientAction: ReduxAction = {
             type: SERVER_INNER_PIECE_CLICK,
             payload: {
                 selectedPiece,

@@ -1,9 +1,13 @@
 import { CONTAINER_TYPES } from "../../../constants/gameConstants";
+import { DispatchType, EmitType, PieceType } from "../../../constants/interfaces";
 import { PIECE_OPEN_ACTION } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
-const pieceOpen = (selectedPiece: any) => {
-    return (dispatch: any, getState: any, emit: any) => {
+/**
+ * Double Click a container piece to open it.
+ */
+const pieceOpen = (selectedPiece: PieceType) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameboard } = getState();
 
         const { pieceTypeId } = selectedPiece;

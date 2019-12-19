@@ -1,9 +1,10 @@
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
+import { DispatchType, EmitType, InvItemType } from "../../../constants/interfaces";
 import { RODS_FROM_GOD_SELECTING } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
-const rodsFromGod = (invItem: any) => {
-    return (dispatch: any, getState: any, emit: any) => {
+const rodsFromGod = (invItem: InvItemType) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 

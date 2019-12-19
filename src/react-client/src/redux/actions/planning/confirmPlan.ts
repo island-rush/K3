@@ -1,15 +1,19 @@
+import { DispatchType, EmitType, ReduxAction } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_CONFIRM_PLAN } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
+/**
+ * Action to confirm a list of moves as a plan for a piece.
+ */
 const confirmPlan = () => {
-    return (dispatch: any, getState: any, emit: any) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 
         if (gameboardMeta.planning.moves.length === 0) {
             dispatch(setUserfeedbackAction("Can't submit an empty plan..."));
         } else {
-            const clientAction = {
+            const clientAction: ReduxAction = {
                 type: SERVER_CONFIRM_PLAN,
                 payload: {
                     pieceId: gameboardMeta.selectedPiece.pieceId,

@@ -1,10 +1,14 @@
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from "../../../constants/gameConstants";
+import { DispatchType, EmitType } from "../../../constants/interfaces";
 import { START_PLAN } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
 //TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)
+/**
+ * Action to set gamestate in a planning state to click positions for a plan for a piece.
+ */
 const startPlan = () => {
-    return (dispatch: any, getState: any, emit: any) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameboardMeta, gameInfo } = getState();
 
         if (gameboardMeta.selectedPiece == null) {

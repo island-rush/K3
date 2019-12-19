@@ -1,10 +1,11 @@
 import { WAITING_STATUS } from "../../../constants/gameConstants";
+import { DispatchType, EmitType, ReduxAction } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_CONFIRM_BATTLE_SELECTION } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const confirmBattleSelections = () => {
-    return (dispatch: any, getState: any, emit: any) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         //check the local state before sending to the server
         const { gameboardMeta, gameInfo } = getState();
         const { gameStatus } = gameInfo;
@@ -19,7 +20,7 @@ const confirmBattleSelections = () => {
         const { friendlyPieces } = gameboardMeta.battle;
         //need to send to the server what selections were made, for it to handle it...
 
-        const clientAction = {
+        const clientAction: ReduxAction = {
             type: SERVER_CONFIRM_BATTLE_SELECTION,
             payload: {
                 friendlyPieces

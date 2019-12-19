@@ -1,9 +1,10 @@
 import { WAITING_STATUS } from "../../../constants/gameConstants";
+import { DispatchType, EmitType } from "../../../constants/interfaces";
 import { BATTLE_PIECE_SELECT } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
-const battlePieceClick = (battlePiece: any, battlePieceIndex: any) => {
-    return (dispatch: any, getState: any, emit: any) => {
+const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gameStatus } = gameInfo;
         if (gameStatus === WAITING_STATUS) {

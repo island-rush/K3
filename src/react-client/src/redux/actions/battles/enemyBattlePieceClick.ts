@@ -1,9 +1,10 @@
 import { WAITING_STATUS } from "../../../constants/gameConstants";
+import { DispatchType, EmitType } from "../../../constants/interfaces";
 import { ENEMY_PIECE_SELECT } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
-const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: any) => {
-    return (dispatch: any, getState: any, emit: any) => {
+const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameboardMeta, gameInfo } = getState();
         const { gameStatus } = gameInfo;
 

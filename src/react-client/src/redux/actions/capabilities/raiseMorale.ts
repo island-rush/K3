@@ -1,11 +1,12 @@
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
+import { DispatchType, EmitType, InvItemType } from "../../../constants/interfaces";
 import { RAISE_MORALE_SELECTING } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
 //TODO: need to get rid of boost = x from the component when the raise morale is expired
 
-const raiseMorale = (invItem: any) => {
-    return (dispatch: any, getState: any, emit: any) => {
+const raiseMorale = (invItem: InvItemType) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 

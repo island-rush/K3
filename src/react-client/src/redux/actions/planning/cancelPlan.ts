@@ -1,14 +1,18 @@
+import { DispatchType, EmitType } from "../../../constants/interfaces";
+import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { CANCEL_PLAN, SERVER_DELETE_PLAN } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 
 //TODO: rename cancelPlan to deletePlan to match the server side function (possibly match all client/server functions with each other...)
+/**
+ * Action to cancel a plan for a piece.
+ */
 const cancelPlan = () => {
-    return (dispatch: any, getState: any, emit: any) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 
         if (gameboardMeta.planning.active) {
-            dispatch({ type: CANCEL_PLAN });
+            dispatch({ type: CANCEL_PLAN, payload: {} });
         } else {
             //check to see if there is a piece selected and if that piece has a confirmed plan
             if (gameboardMeta.selectedPiece !== null && gameboardMeta.selectedPiece.pieceId in gameboardMeta.confirmedPlans) {

@@ -1,7 +1,8 @@
+import { DispatchType, EmitType } from "../../../constants/interfaces";
 import { CLEAR_BATTLE } from "../actionTypes";
 
 const clearOldBattle = () => {
-    return (dispatch: any, getState: any, emit: any) => {
+    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
         const { battle } = gameboardMeta;
 
