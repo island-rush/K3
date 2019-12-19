@@ -1,6 +1,6 @@
 # Island Rush V3
 
-[![Build status](https://dev.azure.com/spenceradolph/IslandRushK3/_apis/build/status/IslandRushK3-CI)](https://dev.azure.com/spenceradolph/IslandRushK3/_build/latest?definitionId=7)
+[![Build status](https://dev.azure.com/IslandRush/IslandRushProject/_apis/build/status/islandrushv3%20-%20CI)](https://dev.azure.com/IslandRush/IslandRushProject/_build/latest?definitionId=3)
 
 ![FullGameboard](https://github.com/island-rush/Images/blob/master/K3/fullGameboard.PNG)
 
