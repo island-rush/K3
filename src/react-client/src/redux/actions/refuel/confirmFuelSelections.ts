@@ -1,4 +1,5 @@
-import { DispatchType, EmitType, ReduxAction } from "../../../constants/interfaces";
+import { Dispatch } from "redux";
+import { EmitType, ReduxAction } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_CONFIRM_FUEL_SELECTION } from "../actionTypes";
 
@@ -6,7 +7,7 @@ import { SERVER_CONFIRM_FUEL_SELECTION } from "../actionTypes";
  * Action to confirm all fuel selections from specific tankers to specific aircraft.
  */
 const confirmFuelSelections = () => {
-    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         //check the local state before sending to the server
         // const { gameboardMeta } = getState();
 

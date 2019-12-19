@@ -1,11 +1,12 @@
+import { Dispatch } from "redux";
 import { WAITING_STATUS } from "../../../constants/gameConstants";
-import { DispatchType, EmitType, ReduxAction } from "../../../constants/interfaces";
+import { EmitType, ReduxAction } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_CONFIRM_BATTLE_SELECTION } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const confirmBattleSelections = () => {
-    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         //check the local state before sending to the server
         const { gameboardMeta, gameInfo } = getState();
         const { gameStatus } = gameInfo;

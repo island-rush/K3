@@ -1,7 +1,8 @@
+import { Dispatch } from "redux";
 import { distanceMatrix } from "../../constants/distanceMatrix";
 //prettier-ignore
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, TYPE_TERRAIN } from "../../constants/gameConstants";
-import { DispatchType, EmitType, ReduxAction } from "../../constants/interfaces";
+import { EmitType, ReduxAction } from "../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../constants/otherConstants";
 import { initialGameboardEmpty } from "../reducers/initialGameboardEmpty";
 //prettier-ignore
@@ -12,7 +13,7 @@ import setUserfeedbackAction from "./setUserfeedbackAction";
  * Change the state based on position that was clicked by the user.
  */
 const selectPosition = (selectedPositionId: number) => {
-    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 
         //selecting the hex to put piece that is inside container

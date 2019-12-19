@@ -1,11 +1,12 @@
+import { Dispatch } from "redux";
 import { ALL_COMMANDER_TYPES } from "../../../constants/gameConstants";
-import { DispatchType, EmitType, ReduxAction } from "../../../constants/interfaces";
+import { EmitType, ReduxAction } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_RAISE_MORALE_CONFIRM } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const raiseMoraleSelectCommanderType = (selectedCommanderType: number) => {
-    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
         const { invItem } = gameboardMeta.planning;
 

@@ -1,4 +1,5 @@
-import { DispatchType, EmitType } from "../../../constants/interfaces";
+import { Dispatch } from "redux";
+import { EmitType } from "../../../constants/interfaces";
 import { CONTAINER_MOVE } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
@@ -7,7 +8,7 @@ import setUserfeedbackAction from "../setUserfeedbackAction";
  * Action to handle a container move.
  */
 const containerMove = () => {
-    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 
         if (gameboardMeta.planning.active) {

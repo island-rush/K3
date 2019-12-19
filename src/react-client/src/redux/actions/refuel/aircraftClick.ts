@@ -1,4 +1,5 @@
-import { DispatchType, EmitType, PieceType } from "../../../constants/interfaces";
+import { Dispatch } from "redux";
+import { EmitType, PieceType } from "../../../constants/interfaces";
 import { AIRCRAFT_CLICK } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
@@ -7,7 +8,7 @@ import setUserfeedbackAction from "../setUserfeedbackAction";
  * Action to select aircraft to receive fuel from tanker.
  */
 const aircraftClick = (aircraftPiece: PieceType, aircraftPieceIndex: number) => {
-    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
         const { selectedTankerPieceId, aircraft } = gameboardMeta.refuel;
 

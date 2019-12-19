@@ -1,8 +1,9 @@
-import { DispatchType, EmitType } from "../../../constants/interfaces";
+import { Dispatch } from "redux";
+import { EmitType } from "../../../constants/interfaces";
 import { CLEAR_BATTLE } from "../actionTypes";
 
 const clearOldBattle = () => {
-    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
         const { battle } = gameboardMeta;
 

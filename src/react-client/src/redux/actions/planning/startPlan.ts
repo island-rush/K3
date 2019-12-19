@@ -1,5 +1,6 @@
+import { Dispatch } from "redux";
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from "../../../constants/gameConstants";
-import { DispatchType, EmitType } from "../../../constants/interfaces";
+import { EmitType } from "../../../constants/interfaces";
 import { START_PLAN } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
@@ -8,7 +9,7 @@ import setUserfeedbackAction from "../setUserfeedbackAction";
  * Action to set gamestate in a planning state to click positions for a plan for a piece.
  */
 const startPlan = () => {
-    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta, gameInfo } = getState();
 
         if (gameboardMeta.selectedPiece == null) {

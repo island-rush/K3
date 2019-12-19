@@ -1,10 +1,11 @@
+import { Dispatch } from "redux";
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
-import { DispatchType, EmitType, InvItemType } from "../../../constants/interfaces";
+import { EmitType, InvItemType } from "../../../constants/interfaces";
 import { REMOTE_SENSING_SELECTING } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
 const remoteSensing = (invItem: InvItemType) => {
-    return (dispatch: DispatchType, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 
