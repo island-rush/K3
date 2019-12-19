@@ -1,13 +1,18 @@
 import { Socket } from "socket.io";
 import { BLUE_TEAM_ID, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
+import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { SHOP_PURCHASE } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, ShopItem } from "../../classes";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
 
-const shopPurchaseRequest = async (socket: Socket, payload: any) => {
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
+/**
+ * Client is requesting to buy something from the shop and place it into their cart. (Insert ShopItem)
+ */
+const shopPurchaseRequest = async (socket: Socket, payload: ShopPurchaseRequestPayload) => {
+    //Grab the session
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
     if (payload == null || payload.shopItemTypeId == null) {
         sendUserFeedback(socket, "Server Error: Malformed Payload (missing shopItemTypeId)");
@@ -16,7 +21,13 @@ const shopPurchaseRequest = async (socket: Socket, payload: any) => {
 
     const { shopItemTypeId } = payload;
 
+    //Grab the Game
     const thisGame = await new Game({ gameId }).init();
+    if (!thisGame) {
+        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        return;
+    }
+
     const { gameActive, gamePhase, game0Points, game1Points } = thisGame;
 
     if (!gameActive) {
@@ -46,18 +57,24 @@ const shopPurchaseRequest = async (socket: Socket, payload: any) => {
     const newPoints = teamPoints - shopItemCost;
     await thisGame.setPoints(gameTeam, newPoints);
 
+    //TODO: possible error checking if was unable to insert the piece? (don't setPoints until inserted...)
     const shopItem = await ShopItem.insert(gameId, gameTeam, shopItemTypeId);
 
-    //TODO: standardize payloads for similar actions (points vs newpoints vs etc...)
-    const serverAction = {
+    const serverAction: ReduxAction = {
         type: SHOP_PURCHASE,
         payload: {
             shopItem,
             points: newPoints
         }
     };
+
+    //Send update to client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+};
+
+type ShopPurchaseRequestPayload = {
+    shopItemTypeId: number;
 };
 
 export default shopPurchaseRequest;

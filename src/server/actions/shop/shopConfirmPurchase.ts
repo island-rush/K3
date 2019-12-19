@@ -1,19 +1,24 @@
 import { Socket } from "socket.io";
 import { PURCHASE_PHASE_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
+import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { SHOP_TRANSFER } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, InvItem, ShopItem } from "../../classes";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
 
 /***
- * TODO: standard function descriptions (author?, arguments, returns, why/when used?)
  * Transfers ShopItems into InvItems ("confirms" them, no longer able to refund once inside inventory...)
  */
+const shopConfirmPurchase = async (socket: Socket, payload: {}) => {
+    //Grab the Session
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
-const shopConfirmPurchase = async (socket: Socket, payload: any) => {
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
     const thisGame = await new Game({ gameId }).init();
+    if (!thisGame) {
+        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        return;
+    }
 
     const { gameActive, gamePhase } = thisGame;
 
@@ -39,12 +44,14 @@ const shopConfirmPurchase = async (socket: Socket, payload: any) => {
 
     const invItems = await InvItem.all(gameId, gameTeam);
 
-    const serverAction = {
+    const serverAction: ReduxAction = {
         type: SHOP_TRANSFER,
         payload: {
             invItems
         }
     };
+
+    //Send update to client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };

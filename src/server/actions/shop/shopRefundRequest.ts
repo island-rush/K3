@@ -1,14 +1,25 @@
 import { Socket } from "socket.io";
 import { BLUE_TEAM_ID, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
+import { GameSession, ReduxAction, ShopItemType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { SHOP_REFUND } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, ShopItem } from "../../classes";
-import { BAD_REQUEST_TAG, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
 
-const shopRefundRequest = async (socket: Socket, payload: any) => {
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
+/**
+ * Client is requesting to refund a certain ShopItem in their cart
+ */
+const shopRefundRequest = async (socket: Socket, payload: ShopRefundRequestPayload) => {
+    //Grab Session
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+
+    //Get Game
     const thisGame = await new Game({ gameId }).init();
+    if (!thisGame) {
+        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        return;
+    }
 
     const { gameActive, gamePhase, game0Points, game1Points } = thisGame;
 
@@ -53,7 +64,8 @@ const shopRefundRequest = async (socket: Socket, payload: any) => {
 
     await thisShopItem.delete();
 
-    const serverAction = {
+    //Send update to the client
+    const serverAction: ReduxAction = {
         type: SHOP_REFUND,
         payload: {
             shopItemId, //is this used on the frontend?
@@ -62,6 +74,10 @@ const shopRefundRequest = async (socket: Socket, payload: any) => {
     };
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+};
+
+type ShopRefundRequestPayload = {
+    shopItem: ShopItemType;
 };
 
 export default shopRefundRequest;
