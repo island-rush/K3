@@ -19,8 +19,8 @@ const invisibleStyle = {
 };
 
 interface Props {
-    selectedPos: any;
-    selectedPiece: any;
+    selectedPos: number;
+    selectedPiece: PieceType;
     gameboard: any;
     selectPiece: any;
     clearPieceSelection: any;

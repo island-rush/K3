@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { ANTI_SATELLITE_MISSILES_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID } from "../../constants/gameConstants";
 import { antiSatelliteMissiles, remoteSensing, rodsFromGod } from "../../redux/actions";
 import InvItem from "./InvItem";
+import { InvItemType } from "../../constants/interfaces";
 
 const spaceAreaStyle: any = {
     backgroundColor: "Yellow",
@@ -64,8 +65,8 @@ const invisibleStyle = {
 };
 
 interface Props {
-    selected: any;
-    invItems: any;
+    selected: boolean;
+    invItems: InvItemType[];
     remoteSensing: any;
     rodsFromGod: any;
     antiSatelliteMissiles: any;
@@ -80,27 +81,27 @@ class SpaceArea extends Component<Props> {
         capabilityFunctions[RODS_FROM_GOD_TYPE_ID] = rodsFromGod;
         capabilityFunctions[ANTI_SATELLITE_MISSILES_TYPE_ID] = antiSatelliteMissiles;
 
-        const remoteSensingItems = invItems.filter((invItem: any) => {
+        const remoteSensingItems = invItems.filter((invItem: InvItemType) => {
             return invItem.invItemTypeId === REMOTE_SENSING_TYPE_ID;
         });
 
-        const rodsfromGodItems = invItems.filter((invItem: any) => {
+        const rodsfromGodItems = invItems.filter((invItem: InvItemType) => {
             return invItem.invItemTypeId === RODS_FROM_GOD_TYPE_ID;
         });
 
-        const antiSatelliteMissilesItems = invItems.filter((invItem: any) => {
+        const antiSatelliteMissilesItems = invItems.filter((invItem: InvItemType) => {
             return invItem.invItemTypeId === ANTI_SATELLITE_MISSILES_TYPE_ID;
         });
 
-        const remoteSensingItemItemComponents = remoteSensingItems.map((invItem: any, index: number) => (
+        const remoteSensingItemItemComponents = remoteSensingItems.map((invItem: InvItemType, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={capabilityFunctions[invItem.invItemTypeId]} />
         ));
 
-        const rodsfromGodItemItemComponents = rodsfromGodItems.map((invItem: any, index: number) => (
+        const rodsfromGodItemItemComponents = rodsfromGodItems.map((invItem: InvItemType, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={capabilityFunctions[invItem.invItemTypeId]} />
         ));
 
-        const antiSatelliteMissilesItemItemComponents = antiSatelliteMissilesItems.map((invItem: any, index: number) => (
+        const antiSatelliteMissilesItemItemComponents = antiSatelliteMissilesItems.map((invItem: InvItemType, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={capabilityFunctions[invItem.invItemTypeId]} />
         ));
 
@@ -132,7 +133,7 @@ class SpaceArea extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ invItems, gameboardMeta }: { invItems: any; gameboardMeta: any }) => ({
+const mapStateToProps = ({ invItems, gameboardMeta }: { invItems: InvItemType[]; gameboardMeta: any }) => ({
     invItems,
     confirmedRaiseMorale: gameboardMeta.confirmedRaiseMorale
 });

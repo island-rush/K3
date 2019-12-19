@@ -34,8 +34,8 @@ const zIndexLevels = [{ zIndex: 5 }, { zIndex: 10 }];
 
 interface Props {
     piece: PieceType;
-    topLevel: any;
-    selected: any;
+    topLevel: boolean;
+    selected: boolean;
     pieceClick: any;
     pieceOpen: any;
 }

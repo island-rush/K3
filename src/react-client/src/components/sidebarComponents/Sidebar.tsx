@@ -48,7 +48,7 @@ const selectedButtonStyle = {
 
 interface Props {
     gameInfo: any;
-    selectedMenu: any;
+    selectedMenu: number;
     menuSelect: any;
 }
 

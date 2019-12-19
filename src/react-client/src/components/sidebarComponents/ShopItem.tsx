@@ -1,5 +1,6 @@
 import React from "react";
 import { TYPE_IMAGES } from "../styleConstants";
+import { ShopItemType } from "../../constants/interfaces";
 
 const shopItemStyle = {
     backgroundColor: "green",
@@ -14,7 +15,7 @@ const shopItemStyle = {
 
 interface Props {
     refund: any;
-    shopItem: any;
+    shopItem: ShopItemType;
 }
 
 const ShopItem = ({ refund, shopItem }: Props) => {

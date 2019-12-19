@@ -274,8 +274,8 @@ class Capability {
         await pool.query(queryString, inserts);
 
         queryString = "UPDATE pieces SET pieceMoves = pieceMoves + 1 WHERE pieceGameId = ? AND pieceTeamId = ? AND pieceTypeId in (?)";
-        inserts = [gameId, gameTeam, TYPE_OWNERS[selectedCommanderType]];
-        await pool.query(queryString, inserts);
+        let inserts2 = [gameId, gameTeam, TYPE_OWNERS[selectedCommanderType]];
+        await pool.query(queryString, inserts2);
 
         return true;
     }

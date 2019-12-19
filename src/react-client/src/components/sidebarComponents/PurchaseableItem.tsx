@@ -14,7 +14,7 @@ const purchaseableItemStyle = {
 };
 
 interface Props {
-    typeId: any;
+    typeId: number;
     purchase: any;
 }
 

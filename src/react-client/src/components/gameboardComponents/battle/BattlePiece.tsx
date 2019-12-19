@@ -49,13 +49,13 @@ const selected: any = [
 ];
 
 interface Props {
-    isFriendly: any;
+    isFriendly: boolean;
     battlePieceClick: any;
     targetPieceClick: any;
     enemyBattlePieceClick: any;
     battlePiece: any;
     battlePieceIndex: any;
-    isSelected: any;
+    isSelected: boolean;
 }
 
 class BattlePiece extends Component<Props> {

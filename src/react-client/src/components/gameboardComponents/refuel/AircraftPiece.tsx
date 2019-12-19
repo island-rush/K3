@@ -30,7 +30,7 @@ const textDivStyle: any = {
 
 interface Props {
     aircraftPiece: any;
-    aircraftPieceIndex: any;
+    aircraftPieceIndex: number;
     aircraftClick: any;
     undoFuelSelection: any;
 }

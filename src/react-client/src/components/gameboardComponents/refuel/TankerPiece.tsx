@@ -24,8 +24,8 @@ const boxStyle = {
 
 interface Props {
     tankerPiece: any;
-    tankerPieceIndex: any;
-    isSelected: any;
+    tankerPieceIndex: number;
+    isSelected: boolean;
     tankerClick: any;
 }
 

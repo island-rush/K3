@@ -4,6 +4,7 @@ import { LIST_ALL_CAPABILITIES, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE
 import { shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from "../../redux/actions";
 import PurchaseableItem from "./PurchaseableItem";
 import ShopItem from "./ShopItem";
+import { ShopItemType } from "../../constants/interfaces";
 
 const shopStyle: any = {
     backgroundColor: "Yellow",
@@ -38,11 +39,11 @@ const purchaseableItemsContainerStyle: any = {
 };
 
 interface Props {
-    shopItems: any;
-    selected: any;
+    shopItems: ShopItemType[];
+    selected: boolean;
     purchase: any;
     refund: any;
-    points: any;
+    points: number;
     confirmPurchase: any;
 }
 
@@ -50,23 +51,23 @@ class ShopMenu extends Component<Props> {
     render() {
         const { shopItems, selected, purchase, refund, points, confirmPurchase } = this.props;
 
-        const airShopComponents = TYPE_OWNERS[TYPE_AIR].map((typeId: any, index: number) => (
+        const airShopComponents = TYPE_OWNERS[TYPE_AIR].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
         ));
-        const landShopComponents = TYPE_OWNERS[TYPE_LAND].map((typeId: any, index: number) => (
+        const landShopComponents = TYPE_OWNERS[TYPE_LAND].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
         ));
-        const seaShopComponents = TYPE_OWNERS[TYPE_SEA].map((typeId: any, index: number) => (
+        const seaShopComponents = TYPE_OWNERS[TYPE_SEA].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
         ));
-        const specialShopComponents = TYPE_OWNERS[TYPE_SPECIAL].map((typeId: any, index: number) => (
+        const specialShopComponents = TYPE_OWNERS[TYPE_SPECIAL].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
         ));
         const capabilityShopComponents = LIST_ALL_CAPABILITIES.map((typeId, index) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
         ));
 
-        const shopItemComponents = shopItems.map((shopItem: any, index: number) => (
+        const shopItemComponents = shopItems.map((shopItem: ShopItemType, index: number) => (
             <ShopItem key={index} shopItem={shopItem} refund={(shopItemId: number) => refund(shopItemId)} />
         ));
 
@@ -113,8 +114,8 @@ class ShopMenu extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ shopItems, gameInfo }: { shopItems: any; gameInfo: any }) => ({
-    shopItems: shopItems,
+const mapStateToProps = ({ shopItems, gameInfo }: { shopItems: ShopItemType[]; gameInfo: any }) => ({
+    shopItems,
     points: gameInfo.gamePoints
 });
 

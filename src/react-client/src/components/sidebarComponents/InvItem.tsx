@@ -1,6 +1,7 @@
 import React from "react";
 import { TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from "../../constants/gameConstants";
 import { TYPE_IMAGES } from "../styleConstants";
+import { InvItemType } from "../../constants/interfaces";
 
 const invItemStyle = {
     position: "relative",
@@ -14,7 +15,7 @@ const invItemStyle = {
 };
 
 interface Props {
-    invItem: any;
+    invItem: InvItemType;
     invItemClick: any;
 }
 

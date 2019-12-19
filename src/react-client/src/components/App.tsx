@@ -13,7 +13,7 @@ const appStyle: any = {
     width: "100%"
 };
 
-const isPlanningStyle = {
+const isPlanningStyle: any = {
     backgroundColor: "yellow"
 };
 

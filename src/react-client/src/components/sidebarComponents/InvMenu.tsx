@@ -5,6 +5,7 @@ import { ANTI_SATELLITE_MISSILES_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPO
 //prettier-ignore
 import { airPieceClick, antiSatelliteMissiles, atcScamble, biologicalWeapons, communicationsInterruption, cyberDominance, droneSwarms, goldenEye, insurgency, landPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines, seaPieceClick } from "../../redux/actions";
 import InvItem from "./InvItem";
+import { InvItemType } from "../../constants/interfaces";
 
 const inventoryStyle: any = {
     backgroundColor: "Yellow",
@@ -71,8 +72,8 @@ const itemCount = (array: any, value: any) => {
 
 interface Props {
     confirmedRaiseMorale: any;
-    selected: any;
-    invItems: any;
+    selected: boolean;
+    invItems: InvItemType[];
     airPieceClick: any;
     landPieceClick: any;
     seaPieceClick: any;
@@ -114,38 +115,38 @@ class InvMenu extends Component<Props> {
         capabilityFunctions[INSURGENCY_TYPE_ID] = insurgency;
         capabilityFunctions[RAISE_MORALE_TYPE_ID] = raiseMorale;
 
-        const airItems = invItems.filter((invItem: any) => {
+        const airItems = invItems.filter((invItem: InvItemType) => {
             return TYPE_OWNERS[TYPE_AIR].includes(invItem.invItemTypeId);
         });
-        const landItems = invItems.filter((invItem: any) => {
+        const landItems = invItems.filter((invItem: InvItemType) => {
             return TYPE_OWNERS[TYPE_LAND].includes(invItem.invItemTypeId);
         });
-        const seaItems = invItems.filter((invItem: any) => {
+        const seaItems = invItems.filter((invItem: InvItemType) => {
             return TYPE_OWNERS[TYPE_SEA].includes(invItem.invItemTypeId);
         });
-        const specialItems = invItems.filter((invItem: any) => {
+        const specialItems = invItems.filter((invItem: InvItemType) => {
             return TYPE_OWNERS[TYPE_SPECIAL].includes(invItem.invItemTypeId);
         });
-        const capabilityItems = invItems.filter((invItem: any) => {
+        const capabilityItems = invItems.filter((invItem: InvItemType) => {
             return LIST_ALL_CAPABILITIES.includes(invItem.invItemTypeId);
         });
 
-        const airInvComponents = airItems.map((invItem: any, index: number) => (
+        const airInvComponents = airItems.map((invItem: InvItemType, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={airPieceClick} />
         ));
-        const landInvComponents = landItems.map((invItem: any, index: number) => (
+        const landInvComponents = landItems.map((invItem: InvItemType, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={landPieceClick} />
         )); //TODO: are helicopters special? (placed not on land?) -> determine other special cases if able
-        const seaInvComponents = seaItems.map((invItem: any, index: number) => (
+        const seaInvComponents = seaItems.map((invItem: InvItemType, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={seaPieceClick} />
         ));
 
         //SOF team is the only land piece in special group, others are air pieces
-        const specialInvComponents = specialItems.map((invItem: any, index: number) => (
+        const specialInvComponents = specialItems.map((invItem: InvItemType, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={invItem.invItemTypeId === SOF_TEAM_TYPE_ID ? landPieceClick : airPieceClick} />
         ));
 
-        const capabilityItemComponents = capabilityItems.map((invItem: any, index: number) => (
+        const capabilityItemComponents = capabilityItems.map((invItem: InvItemType, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={capabilityFunctions[invItem.invItemTypeId]} />
         ));
 
@@ -187,7 +188,7 @@ class InvMenu extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ invItems, gameboardMeta }: { invItems: any; gameboardMeta: any }) => ({
+const mapStateToProps = ({ invItems, gameboardMeta }: { invItems: InvItemType[]; gameboardMeta: any }) => ({
     invItems,
     confirmedRaiseMorale: gameboardMeta.confirmedRaiseMorale
 });

@@ -15,7 +15,7 @@ const invisibleStyle = {
 };
 
 interface Props {
-    selected: any;
+    selected: boolean;
     gameInfo: any;
 }
 
