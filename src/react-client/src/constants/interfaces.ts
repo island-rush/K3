@@ -33,7 +33,7 @@ export type Instructor = string;
  */
 export type Password = string;
 
-export type EmitType = (requestType: string, clientAction: AnyAction) => SocketIOClient.Socket;
+export type EmitType = (requestType: string, clientAction: AnyAction) => any;
 
 export interface UserfeedbackAction extends Action {
     type: typeof SET_USERFEEDBACK;
