@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
+import { AnyAction } from "redux";
 import { COMBAT_PHASE_ID, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { InvItemType, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { InvItemType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { GOLDEN_EYE_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, InvItem } from "../../classes";
@@ -84,7 +85,7 @@ const goldenEyeConfirm = async (socket: Socket, payload: GoldenEyeConfirmPayload
 
     await thisInvItem.delete();
 
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: GOLDEN_EYE_SELECTED,
         payload: {
             invItem: thisInvItem,

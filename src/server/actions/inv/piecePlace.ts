@@ -1,13 +1,14 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { ALL_AIRFIELD_LOCATIONS, TEAM_MAIN_ISLAND_STARTING_POSITIONS } from "../../../react-client/src/constants/gameboardConstants";
 //prettier-ignore
 import { MISSILE_TYPE_ID, PLACE_PHASE_ID, RADAR_TYPE_ID, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { PIECE_PLACE } from "../../../react-client/src/redux/actions/actionTypes";
 import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
 import { Game, InvItem } from "../../classes";
-import { BAD_REQUEST_TAG, GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
+import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
 
 /**
@@ -108,7 +109,7 @@ const piecePlace = async (socket: Socket, payload: PiecePlacePayload) => {
     //TODO: Should probably also write down how the state is stored on the frontend eventually, so others know how it works
     newPiece.pieceContents = { pieces: [] }; //new pieces have nothing in them, and piece contents is required for the frontend...
 
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: PIECE_PLACE,
         payload: {
             invItemId,

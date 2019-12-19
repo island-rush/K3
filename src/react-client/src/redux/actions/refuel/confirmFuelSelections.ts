@@ -1,5 +1,5 @@
-import { Dispatch } from "redux";
-import { EmitType, ReduxAction } from "../../../constants/interfaces";
+import { AnyAction, Dispatch } from "redux";
+import { EmitType } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_CONFIRM_FUEL_SELECTION } from "../actionTypes";
 
@@ -20,7 +20,7 @@ const confirmFuelSelections = () => {
         const { gameboardMeta } = getState();
         const { aircraft, tankers } = gameboardMeta.refuel;
 
-        const clientAction: ReduxAction = {
+        const clientAction: AnyAction = {
             type: SERVER_CONFIRM_FUEL_SELECTION,
             payload: {
                 aircraft,

@@ -1,6 +1,6 @@
-import { Dispatch } from "redux";
+import { AnyAction, Dispatch } from "redux";
 import { WAITING_STATUS } from "../../../constants/gameConstants";
-import { EmitType, ReduxAction } from "../../../constants/interfaces";
+import { EmitType } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_CONFIRM_BATTLE_SELECTION } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
@@ -21,7 +21,7 @@ const confirmBattleSelections = () => {
         const { friendlyPieces } = gameboardMeta.battle;
         //need to send to the server what selections were made, for it to handle it...
 
-        const clientAction: ReduxAction = {
+        const clientAction: AnyAction = {
             type: SERVER_CONFIRM_BATTLE_SELECTION,
             payload: {
                 friendlyPieces

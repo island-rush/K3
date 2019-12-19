@@ -1,10 +1,11 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { BLUE_TEAM_ID, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { SHOP_PURCHASE } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, ShopItem } from "../../classes";
-import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
 
 /**
@@ -60,7 +61,7 @@ const shopPurchaseRequest = async (socket: Socket, payload: ShopPurchaseRequestP
     //TODO: possible error checking if was unable to insert the piece? (don't setPoints until inserted...)
     const shopItem = await ShopItem.insert(gameId, gameTeam, shopItemTypeId);
 
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: SHOP_PURCHASE,
         payload: {
             shopItem,

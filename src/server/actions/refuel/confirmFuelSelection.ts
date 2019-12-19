@@ -1,10 +1,11 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { COMBAT_PHASE_ID, TYPE_AIR, TYPE_FUEL } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { REFUEL_RESULTS } from "../../../react-client/src/redux/actions/actionTypes";
 import { Event, Game } from "../../classes";
-import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import giveNextEvent from "../giveNextEvent";
 import sendUserFeedback from "../sendUserFeedback";
 
@@ -102,7 +103,7 @@ const confirmFuelSelection = async (socket: Socket, payload: FuelSelectionPayloa
 
         //TODO: better payloads?
         if (fuelSelections.length > 0) {
-            const serverAction: ReduxAction = {
+            const serverAction: AnyAction = {
                 type: REFUEL_RESULTS,
                 payload: {
                     fuelUpdates: fuelSelections //TODO: this should be the server's own record, not just sending back to client

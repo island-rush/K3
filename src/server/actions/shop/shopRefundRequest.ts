@@ -1,6 +1,7 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { BLUE_TEAM_ID, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, ReduxAction, ShopItemType } from "../../../react-client/src/constants/interfaces";
+import { GameSession, ShopItemType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { SHOP_REFUND } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, ShopItem } from "../../classes";
@@ -65,7 +66,7 @@ const shopRefundRequest = async (socket: Socket, payload: ShopRefundRequestPaylo
     await thisShopItem.delete();
 
     //Send update to the client
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: SHOP_REFUND,
         payload: {
             shopItemId, //is this used on the frontend?

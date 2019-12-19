@@ -1,11 +1,12 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../react-client/src/constants/gameConstants";
+import { GameSession } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { DELETE_PLAN } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, Piece } from "../../classes";
-import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
-import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
 
 /**
  * Client request to delete a plan for a piece.
@@ -52,7 +53,7 @@ const deletePlan = async (socket: Socket, payload: DeletePlanPayload) => {
 
     await thisPiece.deletePlans();
 
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: DELETE_PLAN,
         payload: {
             pieceId

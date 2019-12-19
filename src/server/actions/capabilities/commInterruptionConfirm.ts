@@ -1,7 +1,8 @@
 import { Socket } from "socket.io";
+import { AnyAction } from "redux";
 //prettier-ignore
 import { COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, InvItemType, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { COMM_INTERRUP_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, InvItem } from "../../classes";
@@ -87,7 +88,7 @@ const commInterruptConfirm = async (socket: Socket, payload: CommInterruptConfir
     const confirmedCommInterrupt = await Capability.getCommInterrupt(gameId, gameTeam);
 
     // let the client(team) know that this plan was accepted
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: COMM_INTERRUP_SELECTED,
         payload: {
             invItem: thisInvItem,

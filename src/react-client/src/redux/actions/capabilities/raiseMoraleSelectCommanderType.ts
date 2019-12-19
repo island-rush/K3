@@ -1,6 +1,6 @@
-import { Dispatch } from "redux";
+import { AnyAction, Dispatch } from "redux";
 import { ALL_COMMANDER_TYPES } from "../../../constants/gameConstants";
-import { EmitType, ReduxAction } from "../../../constants/interfaces";
+import { EmitType } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_RAISE_MORALE_CONFIRM } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
@@ -15,7 +15,7 @@ const raiseMoraleSelectCommanderType = (selectedCommanderType: number) => {
             return;
         }
 
-        const clientAction: ReduxAction = {
+        const clientAction: AnyAction = {
             type: SERVER_RAISE_MORALE_CONFIRM,
             payload: {
                 invItem,

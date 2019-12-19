@@ -3,8 +3,9 @@
  */
 
 import { Socket } from "socket.io";
+import { AnyAction } from "redux";
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_MAIN, TYPE_TERRAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, PieceType, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession, PieceType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
 import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
@@ -73,7 +74,7 @@ const exitContainer = async (socket: Socket, payload: ExitContainerPayload) => {
 
     await Piece.putOutsideContainer(thisSelectedPiece.pieceId, thisSelectedPiece.piecePositionId);
 
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: INNER_PIECE_CLICK_ACTION,
         payload: {
             gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),

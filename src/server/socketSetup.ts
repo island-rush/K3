@@ -1,6 +1,7 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { LOGGED_IN_VALUE, NOT_LOGGED_IN_VALUE } from "../react-client/src/constants/gameConstants";
-import { GameSession, ReduxAction } from "../react-client/src/constants/interfaces";
+import { GameSession } from "../react-client/src/constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../react-client/src/constants/otherConstants";
 //prettier-ignore
 import { SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_MAIN_BUTTON_CLICK, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST } from "../react-client/src/redux/actions/actionTypes";
@@ -53,7 +54,7 @@ const socketSetup = async (socket: Socket) => {
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 
     //Setup the socket functions to respond to client requests
-    socket.on(SOCKET_CLIENT_SENDING_ACTION, ({ type, payload }: ReduxAction) => {
+    socket.on(SOCKET_CLIENT_SENDING_ACTION, ({ type, payload }: AnyAction) => {
         try {
             switch (type) {
                 case SERVER_SHOP_PURCHASE_REQUEST:

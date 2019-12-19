@@ -1,7 +1,8 @@
 import { Socket } from "socket.io";
+import { AnyAction } from "redux";
 //prettier-ignore
 import { ALL_COMMANDER_TYPES, COMBAT_PHASE_ID, RAISE_MORALE_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, InvItemType, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { RAISE_MORALE_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, InvItem, Piece } from "../../classes";
@@ -88,7 +89,7 @@ const raiseMoraleConfirm = async (socket: Socket, payload: RaiseMoraleConfirmPay
     const confirmedRaiseMorale = await Capability.getRaiseMorale(gameId, gameTeam);
 
     // let the client(team) know that this plan was accepted
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: RAISE_MORALE_SELECTED,
         payload: {
             invItem: thisInvItem,

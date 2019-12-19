@@ -1,3 +1,5 @@
+import { AnyAction } from "redux";
+
 /**
  * Section for Instructor's Game
  *
@@ -20,21 +22,12 @@ export type Instructor = string;
  */
 export type Password = string;
 
-/**
- * Template for ReduxActions with any payload
- */
-export interface ReduxAction {
-    type: string;
-    payload: any;
-}
-
-export type DispatchType = (reduxAction: ReduxAction) => any;
-export type EmitType = (requestType: string, clientAction: ReduxAction) => SocketIOClient.Socket;
+export type EmitType = (requestType: string, clientAction: AnyAction) => SocketIOClient.Socket;
 
 /**
  * Redux Action with userFeedback payload
  */
-export interface UserfeedbackAction extends ReduxAction {
+export interface UserfeedbackAction extends AnyAction {
     payload: {
         userFeedback: string;
     };

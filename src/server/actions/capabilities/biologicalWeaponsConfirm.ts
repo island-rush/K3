@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
+import { AnyAction } from "redux";
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, InvItemType, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { BIO_WEAPON_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, InvItem } from "../../classes";
@@ -84,7 +85,7 @@ const biologicalWeaponsConfirm = async (socket: Socket, payload: BioWeaponsConfi
 
     await thisInvItem.delete();
 
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: BIO_WEAPON_SELECTED,
         payload: {
             invItem: thisInvItem,

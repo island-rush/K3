@@ -1,6 +1,7 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { BLUE_TEAM_ID, PLACE_PHASE_ID, RED_TEAM_ID, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
-import { GameSession, ReduxAction } from "../../react-client/src/constants/interfaces";
+import { GameSession } from "../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { NEW_ROUND, PLACE_PHASE, UPDATE_FLAGS } from "../../react-client/src/redux/actions/actionTypes";
 import { Capability, Event, Game, Piece, Plan } from "../classes";
@@ -35,8 +36,8 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
         await Capability.decreaseCommInterrupt(gameId);
         await Capability.decreaseRaiseMorale(gameId);
 
-        let serverAction0: ReduxAction;
-        let serverAction1: ReduxAction;
+        let serverAction0: AnyAction;
+        let serverAction1: AnyAction;
         //TODO: could do constant with 'ROUNDS_PER_COMBAT' although getting excessive
         if (gameRound == 2) {
             //Combat -> Place Phase
@@ -151,7 +152,7 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
 
     const didUpdateFlags = await thisGame.updateFlags();
     if (didUpdateFlags) {
-        const updateFlagAction: ReduxAction = {
+        const updateFlagAction: AnyAction = {
             type: UPDATE_FLAGS,
             payload: {
                 flag0: thisGame.flag0,

@@ -1,7 +1,8 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 //prettier-ignore
 import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PLACE_PHASE_ID, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, TYPE_MAIN, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
-import { ReduxAction, GameSession } from "../../react-client/src/constants/interfaces";
+import { GameSession } from "../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { COMBAT_PHASE, MAIN_BUTTON_CLICK, NEWS_PHASE, PURCHASE_PHASE, SLICE_CHANGE } from "../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, Piece } from "../classes";
@@ -46,7 +47,7 @@ const mainButtonClick = async (socket: Socket, payload: {}) => {
     //Now Waiting
     if (otherTeamStatus == NOT_WAITING_STATUS) {
         await thisGame.setStatus(gameTeam, WAITING_STATUS);
-        const serverAction: ReduxAction = {
+        const serverAction: AnyAction = {
             type: MAIN_BUTTON_CLICK,
             payload: {}
         };
@@ -58,8 +59,8 @@ const mainButtonClick = async (socket: Socket, payload: {}) => {
     await thisGame.setStatus(otherTeam, NOT_WAITING_STATUS);
     await thisGame.setStatus(gameTeam, NOT_WAITING_STATUS);
 
-    let serverAction0: ReduxAction;
-    let serverAction1: ReduxAction;
+    let serverAction0: AnyAction;
+    let serverAction1: AnyAction;
 
     switch (gamePhase) {
         case NEWS_PHASE_ID:

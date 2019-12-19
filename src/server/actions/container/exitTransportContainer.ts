@@ -1,8 +1,9 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
 import { ALL_GROUND_TYPES } from "../../../react-client/src/constants/gameboardConstants";
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { PieceType, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { PieceType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
 import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
@@ -78,7 +79,7 @@ const exitTransportContainer = async (socket: Socket, payload: ExitTransportCont
 
     await Piece.putOutsideContainer(thisSelectedPiece.pieceId, selectedPositionId);
 
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: INNER_PIECE_CLICK_ACTION,
         payload: {
             gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),

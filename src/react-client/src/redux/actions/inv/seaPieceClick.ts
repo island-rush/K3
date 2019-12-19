@@ -1,6 +1,6 @@
-import { Dispatch } from "redux";
+import { AnyAction, Dispatch } from "redux";
 import { PLACE_PHASE_ID } from "../../../constants/gameConstants";
-import { EmitType, InvItemType, ReduxAction } from "../../../constants/interfaces";
+import { EmitType, InvItemType } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_PIECE_PLACE } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
@@ -31,7 +31,7 @@ const seaPieceClick = (invItem: InvItemType) => {
 
         const { invItemId } = invItem; //TODO: send the whole item anyway? (even though the server only uses the id, consistent...)
 
-        const clientAction: ReduxAction = {
+        const clientAction: AnyAction = {
             type: SERVER_PIECE_PLACE,
             payload: {
                 invItemId,

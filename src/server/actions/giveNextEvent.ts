@@ -1,5 +1,6 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
-import { GameType, ReduxAction, GameSession } from "../..//react-client/src/constants/interfaces";
+import { GameSession, GameType } from "../..//react-client/src/constants/interfaces";
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from "../../react-client/src/constants/gameConstants";
 import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from "../../react-client/src/redux/actions/actionTypes";
@@ -19,7 +20,7 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
 
     const otherTeam = gameTeam == BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
 
-    let serverAction: ReduxAction; //store the action, send at the end
+    let serverAction: AnyAction; //store the action, send at the end
 
     const gameEvent = await Event.getNext(gameId, gameTeam);
     if (gameEvent) {

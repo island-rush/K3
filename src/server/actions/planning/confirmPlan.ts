@@ -1,7 +1,8 @@
 import { Socket } from "socket.io";
+import { AnyAction } from "redux";
 import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { PLAN_WAS_CONFIRMED } from "../../../react-client/src/redux/actions/actionTypes";
 import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
@@ -137,7 +138,7 @@ const confirmPlan = async (socket: Socket, payload: ConfirmPlanPayload) => {
     //TODO: could change the phrasing on Plan vs Moves (as far as inserting..function names...database entries??)
     await Plan.insert(plansToInsert);
 
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: PLAN_WAS_CONFIRMED,
         payload: {
             pieceId,

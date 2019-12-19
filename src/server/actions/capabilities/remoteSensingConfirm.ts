@@ -1,6 +1,7 @@
 import { Socket } from "socket.io";
+import { AnyAction } from "redux";
 import { COMBAT_PHASE_ID, REMOTE_SENSING_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, InvItemType, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { REMOTE_SENSING_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, InvItem, Piece } from "../../classes";
@@ -89,7 +90,7 @@ const remoteSensingConfirm = async (socket: Socket, payload: RemoteSensingConfir
     const confirmedRemoteSense = await Capability.getRemoteSensing(gameId, gameTeam);
 
     // let the client(team) know that this plan was accepted
-    const serverAction: ReduxAction = {
+    const serverAction: AnyAction = {
         type: REMOTE_SENSING_SELECTED,
         payload: {
             invItem: thisInvItem,

@@ -1,7 +1,8 @@
+import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 //prettier-ignore
 import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, WAITING_STATUS } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { BATTLE_FIGHT_RESULTS, UPDATE_FLAGS } from "../../../react-client/src/redux/actions/actionTypes";
 import { Event, Game } from "../../classes";
@@ -71,7 +72,7 @@ const confirmBattleSelection = async (socket: Socket, payload: ConfirmBattleSele
 
     //Send the results of the battle back to the client(s)
     if (fightResults.atLeastOneBattle) {
-        const serverAction: ReduxAction = {
+        const serverAction: AnyAction = {
             type: BATTLE_FIGHT_RESULTS,
             payload: {
                 masterRecord: fightResults.masterRecord
@@ -88,7 +89,7 @@ const confirmBattleSelection = async (socket: Socket, payload: ConfirmBattleSele
     //Check for flag updates after the battle (enemy may no longer be there = capture the flag)
     const didUpdateFlags = await thisGame.updateFlags();
     if (didUpdateFlags) {
-        const updateFlagAction: ReduxAction = {
+        const updateFlagAction: AnyAction = {
             type: UPDATE_FLAGS,
             payload: {
                 flag0: thisGame.flag0,
