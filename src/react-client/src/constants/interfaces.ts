@@ -1,4 +1,15 @@
-import { AnyAction } from "redux";
+import { Action, AnyAction } from "redux";
+import {
+    SET_USERFEEDBACK,
+    SERVER_SHOP_PURCHASE_REQUEST,
+    SERVER_SHOP_REFUND_REQUEST,
+    SERVER_SHOP_CONFIRM_PURCHASE,
+    SHOP_PURCHASE,
+    SHOP_REFUND,
+    SHOP_TRANSFER,
+    SERVER_PIECE_PLACE,
+    PIECE_PLACE
+} from "../redux/actions/actionTypes";
 
 /**
  * Section for Instructor's Game
@@ -24,12 +35,64 @@ export type Password = string;
 
 export type EmitType = (requestType: string, clientAction: AnyAction) => SocketIOClient.Socket;
 
-/**
- * Redux Action with userFeedback payload
- */
-export interface UserfeedbackAction extends AnyAction {
+export interface UserfeedbackAction extends Action {
+    type: typeof SET_USERFEEDBACK;
     payload: {
         userFeedback: string;
+    };
+}
+
+export interface ShopPurchaseRequestAction extends Action {
+    type: typeof SERVER_SHOP_PURCHASE_REQUEST;
+    payload: {
+        shopItemTypeId: number;
+    };
+}
+export interface ShopPurchaseAction extends Action {
+    type: typeof SHOP_PURCHASE;
+    payload: {
+        shopItem: ShopItemType;
+        points: number;
+    };
+}
+
+export interface ShopRefundAction extends Action {
+    type: typeof SHOP_REFUND;
+    payload: {
+        shopItemId: number;
+        pointsAdded: number;
+    };
+}
+export interface ShopRefundRequestAction extends Action {
+    type: typeof SERVER_SHOP_REFUND_REQUEST;
+    payload: {
+        shopItem: ShopItemType;
+    };
+}
+
+export interface ShopConfirmPurchaseRequestAction extends Action {
+    type: typeof SERVER_SHOP_CONFIRM_PURCHASE;
+}
+export interface ShopConfirmPurchaseAction extends Action {
+    type: typeof SHOP_TRANSFER;
+    payload: {
+        invItems: InvItemType[];
+    };
+}
+
+export interface InvItemPlaceRequestAction extends Action {
+    type: typeof SERVER_PIECE_PLACE;
+    payload: {
+        invItemId: number;
+        selectedPosition: number;
+    };
+}
+export interface InvItemPlaceAction extends Action {
+    type: typeof PIECE_PLACE;
+    payload: {
+        invItemId: number;
+        positionId: number;
+        newPiece: PieceType;
     };
 }
 

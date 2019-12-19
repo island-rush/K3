@@ -58,13 +58,13 @@ const socketSetup = async (socket: Socket) => {
         try {
             switch (type) {
                 case SERVER_SHOP_PURCHASE_REQUEST:
-                    shopPurchaseRequest(socket, payload);
+                    shopPurchaseRequest(socket, { type, payload });
                     break;
                 case SERVER_SHOP_REFUND_REQUEST:
-                    shopRefundRequest(socket, payload);
+                    shopRefundRequest(socket, { type, payload });
                     break;
                 case SERVER_SHOP_CONFIRM_PURCHASE:
-                    shopConfirmPurchase(socket, payload);
+                    shopConfirmPurchase(socket, { type });
                     break;
                 case SERVER_CONFIRM_PLAN:
                     confirmPlan(socket, payload);
@@ -73,7 +73,7 @@ const socketSetup = async (socket: Socket) => {
                     deletePlan(socket, payload);
                     break;
                 case SERVER_PIECE_PLACE:
-                    piecePlace(socket, payload);
+                    piecePlace(socket, { type, payload });
                     break;
                 case SERVER_MAIN_BUTTON_CLICK:
                     mainButtonClick(socket, payload);

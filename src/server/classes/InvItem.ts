@@ -79,7 +79,7 @@ class InvItem implements InvItemType {
         const queryString = "SELECT * FROM invItems WHERE invItemGameId = ? AND invItemTeamId = ?";
         const inserts = [gameId, gameTeam];
         const [invItems] = await pool.query(queryString, inserts);
-        return invItems;
+        return invItems as InvItemType[];
     }
 }
 

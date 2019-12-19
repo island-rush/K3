@@ -1,5 +1,5 @@
-import { AnyAction, Dispatch } from "redux";
-import { EmitType } from "../../../constants/interfaces";
+import { Dispatch } from "redux";
+import { EmitType, ShopPurchaseRequestAction } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_SHOP_PURCHASE_REQUEST } from "../actionTypes";
 
@@ -8,7 +8,7 @@ import { SERVER_SHOP_PURCHASE_REQUEST } from "../actionTypes";
  */
 const shopPurchaseRequest = (shopItemTypeId: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        const clientAction: AnyAction = {
+        const clientAction: ShopPurchaseRequestAction = {
             type: SERVER_SHOP_PURCHASE_REQUEST,
             payload: {
                 shopItemTypeId

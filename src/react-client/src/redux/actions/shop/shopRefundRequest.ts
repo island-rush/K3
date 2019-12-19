@@ -1,5 +1,5 @@
-import { AnyAction, Dispatch } from "redux";
-import { EmitType, ShopItemType } from "../../../constants/interfaces";
+import { Dispatch } from "redux";
+import { EmitType, ShopItemType, ShopRefundRequestAction } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_SHOP_REFUND_REQUEST } from "../actionTypes";
 
@@ -8,7 +8,7 @@ import { SERVER_SHOP_REFUND_REQUEST } from "../actionTypes";
  */
 const shopRefundRequest = (shopItem: ShopItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        const clientAction: AnyAction = {
+        const clientAction: ShopRefundRequestAction = {
             type: SERVER_SHOP_REFUND_REQUEST,
             payload: {
                 shopItem

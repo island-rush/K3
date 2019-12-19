@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { BLUE_TEAM_ID, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, ShopItemType } from "../../../react-client/src/constants/interfaces";
+import { GameSession, ShopRefundRequestAction, ShopRefundAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { SHOP_REFUND } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, ShopItem } from "../../classes";
@@ -11,7 +11,7 @@ import sendUserFeedback from "../sendUserFeedback";
 /**
  * Client is requesting to refund a certain ShopItem in their cart
  */
-const shopRefundRequest = async (socket: Socket, payload: ShopRefundRequestPayload) => {
+const shopRefundRequest = async (socket: Socket, action: ShopRefundRequestAction) => {
     //Grab Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
@@ -41,7 +41,7 @@ const shopRefundRequest = async (socket: Socket, payload: ShopRefundRequestPaylo
     }
 
     //Does the item exist?
-    const { shopItemId } = payload.shopItem;
+    const { shopItemId } = action.payload.shopItem;
     const thisShopItem = await new ShopItem(shopItemId).init();
     if (!thisShopItem) {
         sendUserFeedback(socket, "Shop Item did not exist...");
@@ -65,20 +65,17 @@ const shopRefundRequest = async (socket: Socket, payload: ShopRefundRequestPaylo
 
     await thisShopItem.delete();
 
-    //Send update to the client
-    const serverAction: AnyAction = {
+    const serverAction: ShopRefundAction = {
         type: SHOP_REFUND,
         payload: {
             shopItemId, //is this used on the frontend?
             pointsAdded: itemCost
         }
     };
+
+    //Send update to the client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-};
-
-type ShopRefundRequestPayload = {
-    shopItem: ShopItemType;
 };
 
 export default shopRefundRequest;
