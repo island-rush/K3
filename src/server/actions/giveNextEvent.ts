@@ -1,5 +1,5 @@
 import { Socket } from "socket.io";
-import { GameType, ReduxAction } from "../..//react-client/src/constants/interfaces";
+import { GameType, ReduxAction, GameSession } from "../..//react-client/src/constants/interfaces";
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from "../../react-client/src/constants/gameConstants";
 import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from "../../react-client/src/redux/actions/actionTypes";
@@ -11,6 +11,9 @@ import sendUserFeedback from "./sendUserFeedback";
  * Find the next event in the EventQueue and send to this team (through a socket)
  */
 const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
+    //Grab Session
+    const session: GameSession = socket.handshake.session.ir3;
+
     //prettier-ignore
     const { thisGame: { gameId }, gameTeam } = options;
 
@@ -102,7 +105,7 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
     //sending the event that we got, or "no more events"? (but also sending piece moves after this
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 
-    if (socket.handshake.session.ir3.gameTeam == gameTeam) {
+    if (session.gameTeam == gameTeam) {
         socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     }
 };

@@ -1,7 +1,7 @@
 import { Socket } from "socket.io";
 //prettier-ignore
 import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PLACE_PHASE_ID, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, TYPE_MAIN, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
-import { ReduxAction } from "../../react-client/src/constants/interfaces";
+import { ReduxAction, GameSession } from "../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { COMBAT_PHASE, MAIN_BUTTON_CLICK, NEWS_PHASE, PURCHASE_PHASE, SLICE_CHANGE } from "../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, Piece } from "../classes";
@@ -11,7 +11,7 @@ import sendUserFeedback from "./sendUserFeedback";
 
 const mainButtonClick = async (socket: Socket, payload: {}) => {
     //Verify Session
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
     //Get Game
     const thisGame = await new Game({ gameId }).init();
@@ -161,7 +161,7 @@ const mainButtonClick = async (socket: Socket, payload: {}) => {
     //Send to all clients (could be different from getting points)
     socket.to("game" + gameId + "team" + BLUE_TEAM_ID).emit(SOCKET_SERVER_SENDING_ACTION, serverAction0);
     socket.to("game" + gameId + "team" + RED_TEAM_ID).emit(SOCKET_SERVER_SENDING_ACTION, serverAction1);
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, parseInt(gameTeam) === BLUE_TEAM_ID ? serverAction0 : serverAction1);
+    socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? serverAction0 : serverAction1);
 };
 
 export default mainButtonClick;
