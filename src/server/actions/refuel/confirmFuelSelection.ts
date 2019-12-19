@@ -1,16 +1,27 @@
 import { Socket } from "socket.io";
 import { COMBAT_PHASE_ID, TYPE_AIR, TYPE_FUEL } from "../../../react-client/src/constants/gameConstants";
+import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { REFUEL_RESULTS } from "../../../react-client/src/redux/actions/actionTypes";
 import { Event, Game } from "../../classes";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
 import giveNextEvent from "../giveNextEvent";
 import sendUserFeedback from "../sendUserFeedback";
 
-const confirmFuelSelection = async (socket: Socket, payload: any) => {
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
+/**
+ * Client Request to transfer fuel from tankers to other aircraft. Finishes a Refuel Event
+ */
+const confirmFuelSelection = async (socket: Socket, payload: FuelSelectionPayload) => {
+    //Grab the Session
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
+    //Grab the Game
     const thisGame = await new Game({ gameId }).init();
+    if (!thisGame) {
+        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        return;
+    }
+
     const { gameActive, gamePhase } = thisGame;
 
     if (!gameActive) {
@@ -82,6 +93,7 @@ const confirmFuelSelection = async (socket: Socket, payload: any) => {
         }
     }
 
+    //If there are updates to send
     if (fuelSelections.length != 0) {
         await thisRefuelEvent.bulkUpdatePieceFuels(fuelSelections, gameTeam);
 
@@ -90,7 +102,7 @@ const confirmFuelSelection = async (socket: Socket, payload: any) => {
 
         //TODO: better payloads?
         if (fuelSelections.length > 0) {
-            const serverAction = {
+            const serverAction: ReduxAction = {
                 type: REFUEL_RESULTS,
                 payload: {
                     fuelUpdates: fuelSelections //TODO: this should be the server's own record, not just sending back to client
@@ -107,6 +119,11 @@ const confirmFuelSelection = async (socket: Socket, payload: any) => {
 
     await thisRefuelEvent.delete();
     await giveNextEvent(socket, { thisGame, gameTeam }); //not putting executingStep in options to let it know not to send pieceMove
+};
+
+type FuelSelectionPayload = {
+    aircraft: any;
+    tankers: any;
 };
 
 export default confirmFuelSelection;

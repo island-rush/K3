@@ -1,17 +1,29 @@
 import { Socket } from "socket.io";
 import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from "../../../react-client/src/constants/gameConstants";
+import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { PLAN_WAS_CONFIRMED } from "../../../react-client/src/redux/actions/actionTypes";
 import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
 import { Game, Piece, Plan } from "../../classes";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
 
-const confirmPlan = async (socket: Socket, payload: any) => {
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
+/**
+ * User Request to confirm a plan for a piece.
+ */
+const confirmPlan = async (socket: Socket, payload: ConfirmPlanPayload) => {
+    //Grab Session
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+
     const { pieceId, plan } = payload;
+
+    //Grab the Game
     const thisGame = await new Game({ gameId }).init();
+    if (!thisGame) {
+        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        return;
+    }
 
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
@@ -125,15 +137,22 @@ const confirmPlan = async (socket: Socket, payload: any) => {
     //TODO: could change the phrasing on Plan vs Moves (as far as inserting..function names...database entries??)
     await Plan.insert(plansToInsert);
 
-    const serverAction = {
+    const serverAction: ReduxAction = {
         type: PLAN_WAS_CONFIRMED,
         payload: {
             pieceId,
             plan
         }
     };
+
+    //Send the update to the client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+};
+
+type ConfirmPlanPayload = {
+    plan: any;
+    pieceId: any;
 };
 
 export default confirmPlan;

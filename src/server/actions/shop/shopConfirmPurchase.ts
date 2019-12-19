@@ -14,6 +14,7 @@ const shopConfirmPurchase = async (socket: Socket, payload: {}) => {
     //Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
+    //Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);

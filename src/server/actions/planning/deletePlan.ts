@@ -3,13 +3,25 @@ import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../react-client/src/co
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { DELETE_PLAN } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, Piece } from "../../classes";
-import { GAME_INACTIVE_TAG } from "../../pages/errorTypes";
+import { GAME_INACTIVE_TAG, GAME_DOES_NOT_EXIST } from "../../pages/errorTypes";
 import sendUserFeedback from "../sendUserFeedback";
+import { GameSession, ReduxAction } from "../../../react-client/src/constants/interfaces";
 
-const deletePlan = async (socket: Socket, payload: any) => {
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
+/**
+ * Client request to delete a plan for a piece.
+ */
+const deletePlan = async (socket: Socket, payload: DeletePlanPayload) => {
+    //Grab the Session
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+
     const { pieceId } = payload;
+
+    //Grab the Game
     const thisGame = await new Game({ gameId }).init();
+    if (!thisGame) {
+        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        return;
+    }
 
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
@@ -40,14 +52,20 @@ const deletePlan = async (socket: Socket, payload: any) => {
 
     await thisPiece.deletePlans();
 
-    const serverAction = {
+    const serverAction: ReduxAction = {
         type: DELETE_PLAN,
         payload: {
             pieceId
         }
     };
+
+    //Send the update to the client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction); //TODO: should the other sockets for this team get the update? (in the background?)
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+};
+
+type DeletePlanPayload = {
+    pieceId: number;
 };
 
 export default deletePlan;
