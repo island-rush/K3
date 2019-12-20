@@ -1,9 +1,8 @@
-import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { distanceMatrix } from "../../../react-client/src/constants/distanceMatrix";
 import { ALL_GROUND_TYPES } from "../../../react-client/src/constants/gameboardConstants";
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { PieceType } from "../../../react-client/src/constants/interfaces";
+import { ExitContainerAction, ExitTransportContainerRequestAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
 import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
@@ -14,11 +13,11 @@ import sendUserFeedback from "../sendUserFeedback";
 /**
  * User request to move piece outside of a transport container to an adjacent land piece
  */
-const exitTransportContainer = async (socket: Socket, payload: ExitTransportContainerPayload) => {
+const exitTransportContainer = async (socket: Socket, action: ExitTransportContainerRequestAction) => {
     //Grab the Session
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
 
-    const { selectedPiece, containerPiece, selectedPositionId } = payload;
+    const { selectedPiece, containerPiece, selectedPositionId } = action.payload;
 
     //Grab the Game
     const thisGame = await new Game({ gameId }).init();
@@ -79,7 +78,7 @@ const exitTransportContainer = async (socket: Socket, payload: ExitTransportCont
 
     await Piece.putOutsideContainer(thisSelectedPiece.pieceId, selectedPositionId);
 
-    const serverAction: AnyAction = {
+    const serverAction: ExitContainerAction = {
         type: INNER_PIECE_CLICK_ACTION,
         payload: {
             gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),
@@ -91,12 +90,6 @@ const exitTransportContainer = async (socket: Socket, payload: ExitTransportCont
     //TODO: could make some sort of helper to send to teams and stuff, this is a little weird...
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-};
-
-type ExitTransportContainerPayload = {
-    selectedPiece: PieceType;
-    containerPiece: PieceType;
-    selectedPositionId: number;
 };
 
 export default exitTransportContainer;

@@ -8,7 +8,13 @@ import {
     SHOP_REFUND,
     SHOP_TRANSFER,
     SERVER_PIECE_PLACE,
-    PIECE_PLACE
+    PIECE_PLACE,
+    SERVER_OUTER_PIECE_CLICK,
+    OUTER_PIECE_CLICK_ACTION,
+    SERVER_INNER_PIECE_CLICK,
+    INNER_PIECE_CLICK_ACTION,
+    SERVER_INNER_TRANSPORT_PIECE_CLICK,
+    INNER_TRANSPORT_PIECE_CLICK_ACTION
 } from "../redux/actions/actionTypes";
 
 /**
@@ -93,6 +99,49 @@ export interface InvItemPlaceAction extends Action {
         invItemId: number;
         positionId: number;
         newPiece: PieceType;
+    };
+}
+
+export interface EnterContainerRequestAction extends Action {
+    type: typeof SERVER_OUTER_PIECE_CLICK;
+    payload: {
+        selectedPiece: PieceType;
+        containerPiece: PieceType;
+    };
+}
+
+export interface EnterContainerAction extends Action {
+    type: typeof OUTER_PIECE_CLICK_ACTION;
+    payload: {
+        gameboardPieces: any;
+        selectedPiece: PieceType;
+        containerPiece: PieceType;
+    };
+}
+
+export interface ExitContainerRequestAction extends Action {
+    type: typeof SERVER_INNER_PIECE_CLICK;
+    payload: {
+        selectedPiece: PieceType;
+        containerPiece: PieceType;
+    };
+}
+
+export interface ExitContainerAction extends Action {
+    type: typeof INNER_PIECE_CLICK_ACTION;
+    payload: {
+        gameboardPieces: any;
+        selectedPiece: PieceType;
+        containerPiece: PieceType;
+    };
+}
+
+export interface ExitTransportContainerRequestAction extends Action {
+    type: typeof SERVER_INNER_TRANSPORT_PIECE_CLICK;
+    payload: {
+        selectedPiece: PieceType;
+        containerPiece: PieceType;
+        selectedPositionId: number;
     };
 }
 

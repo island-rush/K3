@@ -106,13 +106,13 @@ const socketSetup = async (socket: Socket) => {
                     goldenEyeConfirm(socket, payload);
                     break;
                 case SERVER_OUTER_PIECE_CLICK:
-                    enterContainer(socket, payload);
+                    enterContainer(socket, { type, payload });
                     break;
                 case SERVER_INNER_PIECE_CLICK:
-                    exitContainer(socket, payload);
+                    exitContainer(socket, { type, payload });
                     break;
                 case SERVER_INNER_TRANSPORT_PIECE_CLICK:
-                    exitTransportContainer(socket, payload);
+                    exitTransportContainer(socket, { type, payload });
                     break;
                 default:
                     sendUserFeedback(socket, "Did not recognize client socket request type");

@@ -3,9 +3,8 @@
  */
 
 import { Socket } from "socket.io";
-import { AnyAction } from "redux";
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_MAIN, TYPE_TERRAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, PieceType } from "../../../react-client/src/constants/interfaces";
+import { ExitContainerAction, ExitContainerRequestAction, GameSession } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { INNER_PIECE_CLICK_ACTION } from "../../../react-client/src/redux/actions/actionTypes";
 import { initialGameboardEmpty } from "../../../react-client/src/redux/reducers/initialGameboardEmpty";
@@ -16,11 +15,11 @@ import sendUserFeedback from "../sendUserFeedback";
 /**
  * User request to move piece outside of a container to the same position.
  */
-const exitContainer = async (socket: Socket, payload: ExitContainerPayload) => {
+const exitContainer = async (socket: Socket, action: ExitContainerRequestAction) => {
     //Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
-    const { selectedPiece, containerPiece } = payload;
+    const { selectedPiece, containerPiece } = action.payload;
 
     //Grab the Game
     const thisGame = await new Game({ gameId }).init();
@@ -74,7 +73,7 @@ const exitContainer = async (socket: Socket, payload: ExitContainerPayload) => {
 
     await Piece.putOutsideContainer(thisSelectedPiece.pieceId, thisSelectedPiece.piecePositionId);
 
-    const serverAction: AnyAction = {
+    const serverAction: ExitContainerAction = {
         type: INNER_PIECE_CLICK_ACTION,
         payload: {
             gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),
@@ -86,11 +85,6 @@ const exitContainer = async (socket: Socket, payload: ExitContainerPayload) => {
     //Send the update to the client(s)
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-};
-
-type ExitContainerPayload = {
-    selectedPiece: PieceType;
-    containerPiece: PieceType;
 };
 
 export default exitContainer;
