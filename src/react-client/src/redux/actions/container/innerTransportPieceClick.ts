@@ -1,4 +1,4 @@
-import { Dispatch } from "redux";
+import { AnyAction, Dispatch } from "redux";
 import { EmitType, PieceType } from "../../../constants/interfaces";
 import { INNER_TRANSPORT_PIECE_CLICK_ACTION } from "../actionTypes";
 
@@ -10,13 +10,15 @@ const innerTransportPieceClick = (selectedPiece: PieceType, containerPiece: Piec
         //TODO: figure out if inner piece click is allowed
         //TODO: could probably see if there is even land next to where this piece is (don't allow if in the open ocean?)
 
-        dispatch({
+        const clientAction: AnyAction = {
             type: INNER_TRANSPORT_PIECE_CLICK_ACTION,
             payload: {
                 selectedPiece,
                 containerPiece
             }
-        });
+        };
+
+        dispatch(clientAction);
     };
 };
 

@@ -14,7 +14,23 @@ import {
     SERVER_INNER_PIECE_CLICK,
     INNER_PIECE_CLICK_ACTION,
     SERVER_INNER_TRANSPORT_PIECE_CLICK,
-    INNER_TRANSPORT_PIECE_CLICK_ACTION
+    INNER_TRANSPORT_PIECE_CLICK_ACTION,
+    SERVER_RODS_FROM_GOD_CONFIRM,
+    RODS_FROM_GOD_SELECTED,
+    SERVER_REMOTE_SENSING_CONFIRM,
+    REMOTE_SENSING_SELECTED,
+    SERVER_INSURGENCY_CONFIRM,
+    INSURGENCY_SELECTED,
+    SERVER_BIOLOGICAL_WEAPONS_CONFIRM,
+    BIO_WEAPON_SELECTED,
+    SERVER_RAISE_MORALE_CONFIRM,
+    RAISE_MORALE_SELECTED,
+    SERVER_COMM_INTERRUPT_CONFIRM,
+    COMM_INTERRUP_SELECTED,
+    SERVER_GOLDEN_EYE_CONFIRM,
+    GOLDEN_EYE_SELECTED,
+    DELETE_PLAN,
+    SERVER_DELETE_PLAN
 } from "../redux/actions/actionTypes";
 
 /**
@@ -142,6 +158,134 @@ export interface ExitTransportContainerRequestAction extends Action {
         selectedPiece: PieceType;
         containerPiece: PieceType;
         selectedPositionId: number;
+    };
+}
+
+export interface RodsFromGodRequestAction extends Action {
+    type: typeof SERVER_RODS_FROM_GOD_CONFIRM;
+    payload: {
+        selectedPositionId: number;
+        invItem: InvItemType;
+    };
+}
+
+export interface RodsFromGodAction extends Action {
+    type: typeof RODS_FROM_GOD_SELECTED;
+    payload: {
+        invItem: InvItemType;
+        selectedPositionId: number;
+    };
+}
+
+export interface RemoteSensingRequestAction extends Action {
+    type: typeof SERVER_REMOTE_SENSING_CONFIRM;
+    payload: {
+        selectedPositionId: number;
+        invItem: InvItemType;
+    };
+}
+
+export interface RemoteSensingAction extends Action {
+    type: typeof REMOTE_SENSING_SELECTED;
+    payload: {
+        invItem: InvItemType;
+        confirmedRemoteSense: any;
+        gameboardPieces: any;
+    };
+}
+
+export interface InsurgencyRequestAction extends Action {
+    type: typeof SERVER_INSURGENCY_CONFIRM;
+    payload: {
+        selectedPositionId: number;
+        invItem: InvItemType;
+    };
+}
+
+export interface InsurgencyAction extends Action {
+    type: typeof INSURGENCY_SELECTED;
+    payload: {
+        invItem: InvItemType;
+        selectedPositionId: number;
+    };
+}
+
+export interface BioWeaponsRequestAction extends Action {
+    type: typeof SERVER_BIOLOGICAL_WEAPONS_CONFIRM;
+    payload: {
+        selectedPositionId: number;
+        invItem: InvItemType;
+    };
+}
+
+export interface BioWeaponsAction extends Action {
+    type: typeof BIO_WEAPON_SELECTED;
+    payload: {
+        invItem: InvItemType;
+        selectedPositionId: number;
+    };
+}
+
+export interface RaiseMoraleRequestAction extends Action {
+    type: typeof SERVER_RAISE_MORALE_CONFIRM;
+    payload: {
+        selectedCommanderType: number;
+        invItem: InvItemType;
+    };
+}
+
+export interface RaiseMoraleAction extends Action {
+    type: typeof RAISE_MORALE_SELECTED;
+    payload: {
+        invItem: InvItemType;
+        confirmedRaiseMorale: any;
+        gameboardPieces: any;
+    };
+}
+
+export interface CommInterruptRequestAction extends Action {
+    type: typeof SERVER_COMM_INTERRUPT_CONFIRM;
+    payload: {
+        selectedPositionId: number;
+        invItem: InvItemType;
+    };
+}
+
+export interface CommInterruptAction extends Action {
+    type: typeof COMM_INTERRUP_SELECTED;
+    payload: {
+        invItem: InvItemType;
+        confirmedCommInterrupt: any;
+    };
+}
+
+export interface GoldenEyeRequestAction extends Action {
+    type: typeof SERVER_GOLDEN_EYE_CONFIRM;
+    payload: {
+        selectedPositionId: number;
+        invItem: InvItemType;
+    };
+}
+
+export interface GoldenEyeAction extends Action {
+    type: typeof GOLDEN_EYE_SELECTED;
+    payload: {
+        invItem: InvItemType;
+        selectedPositionId: number;
+    };
+}
+
+export interface DeletePlanRequestAction extends Action {
+    type: typeof SERVER_DELETE_PLAN;
+    payload: {
+        pieceId: number;
+    };
+}
+
+export interface DeletePlanAction extends Action {
+    type: typeof DELETE_PLAN;
+    payload: {
+        pieceId: number;
     };
 }
 

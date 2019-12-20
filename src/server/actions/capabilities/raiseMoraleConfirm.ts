@@ -1,8 +1,7 @@
 import { Socket } from "socket.io";
-import { AnyAction } from "redux";
 //prettier-ignore
 import { ALL_COMMANDER_TYPES, COMBAT_PHASE_ID, RAISE_MORALE_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
+import { GameSession, InvItemType, RaiseMoraleAction, RaiseMoraleRequestAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { RAISE_MORALE_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, InvItem, Piece } from "../../classes";
@@ -12,16 +11,16 @@ import sendUserFeedback from "../sendUserFeedback";
 /**
  * User request to use Raise Morale capability on a set of troops for a commander.
  */
-const raiseMoraleConfirm = async (socket: Socket, payload: RaiseMoraleConfirmPayload) => {
+const raiseMoraleConfirm = async (socket: Socket, action: RaiseMoraleRequestAction) => {
     //Grab Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
-    if (payload == null || payload.selectedCommanderType == null) {
+    if (action.payload == null || action.payload.selectedCommanderType == null) {
         sendUserFeedback(socket, "Server Error: Malformed Payload (missing selectedCommanderType)");
         return;
     }
 
-    const { selectedCommanderType, invItem } = payload;
+    const { selectedCommanderType, invItem } = action.payload;
 
     //Get the Game
     const thisGame = await new Game({ gameId }).init();
@@ -89,7 +88,7 @@ const raiseMoraleConfirm = async (socket: Socket, payload: RaiseMoraleConfirmPay
     const confirmedRaiseMorale = await Capability.getRaiseMorale(gameId, gameTeam);
 
     // let the client(team) know that this plan was accepted
-    const serverAction: AnyAction = {
+    const serverAction: RaiseMoraleAction = {
         type: RAISE_MORALE_SELECTED,
         payload: {
             invItem: thisInvItem,
@@ -101,11 +100,6 @@ const raiseMoraleConfirm = async (socket: Socket, payload: RaiseMoraleConfirmPay
     //Send the update to the client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-};
-
-type RaiseMoraleConfirmPayload = {
-    selectedCommanderType: number;
-    invItem: InvItemType;
 };
 
 export default raiseMoraleConfirm;

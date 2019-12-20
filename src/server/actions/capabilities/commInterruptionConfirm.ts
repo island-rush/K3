@@ -1,8 +1,7 @@
 import { Socket } from "socket.io";
-import { AnyAction } from "redux";
 //prettier-ignore
 import { COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
+import { CommInterruptAction, CommInterruptRequestAction, GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { COMM_INTERRUP_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, InvItem } from "../../classes";
@@ -12,16 +11,16 @@ import sendUserFeedback from "../sendUserFeedback";
 /**
  * User Request to use CommInterrupt capability.
  */
-const commInterruptConfirm = async (socket: Socket, payload: CommInterruptConfirmPayload) => {
+const commInterruptConfirm = async (socket: Socket, action: CommInterruptRequestAction) => {
     //Grab Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
-    if (payload == null || payload.selectedPositionId == null) {
+    if (action.payload == null || action.payload.selectedPositionId == null) {
         sendUserFeedback(socket, "Server Error: Malformed Payload (missing selectedPositionId)");
         return;
     }
 
-    const { selectedPositionId, invItem } = payload;
+    const { selectedPositionId, invItem } = action.payload;
 
     //Get the Game
     const thisGame = await new Game({ gameId }).init();
@@ -88,7 +87,7 @@ const commInterruptConfirm = async (socket: Socket, payload: CommInterruptConfir
     const confirmedCommInterrupt = await Capability.getCommInterrupt(gameId, gameTeam);
 
     // let the client(team) know that this plan was accepted
-    const serverAction: AnyAction = {
+    const serverAction: CommInterruptAction = {
         type: COMM_INTERRUP_SELECTED,
         payload: {
             invItem: thisInvItem,
@@ -99,11 +98,6 @@ const commInterruptConfirm = async (socket: Socket, payload: CommInterruptConfir
     //Send the update to the client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-};
-
-type CommInterruptConfirmPayload = {
-    selectedPositionId: number;
-    invItem: InvItemType;
 };
 
 export default commInterruptConfirm;

@@ -1,7 +1,6 @@
 import { Socket } from "socket.io";
-import { AnyAction } from "redux";
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
+import { BioWeaponsAction, BioWeaponsRequestAction, GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { BIO_WEAPON_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, InvItem } from "../../classes";
@@ -11,16 +10,16 @@ import sendUserFeedback from "../sendUserFeedback";
 /**
  * User request to use BioWeapons capability.
  */
-const biologicalWeaponsConfirm = async (socket: Socket, payload: BioWeaponsConfirmPayload) => {
+const biologicalWeaponsConfirm = async (socket: Socket, action: BioWeaponsRequestAction) => {
     //Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
-    if (payload == null || payload.selectedPositionId == null) {
+    if (action.payload == null || action.payload.selectedPositionId == null) {
         sendUserFeedback(socket, "Server Error: Malformed Payload (missing selectedPositionId)");
         return;
     }
 
-    const { selectedPositionId, invItem } = payload;
+    const { selectedPositionId, invItem } = action.payload;
 
     //Get the Game
     const thisGame = await new Game({ gameId }).init();
@@ -85,7 +84,7 @@ const biologicalWeaponsConfirm = async (socket: Socket, payload: BioWeaponsConfi
 
     await thisInvItem.delete();
 
-    const serverAction: AnyAction = {
+    const serverAction: BioWeaponsAction = {
         type: BIO_WEAPON_SELECTED,
         payload: {
             invItem: thisInvItem,
@@ -96,11 +95,6 @@ const biologicalWeaponsConfirm = async (socket: Socket, payload: BioWeaponsConfi
     //Send the update to the client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-};
-
-type BioWeaponsConfirmPayload = {
-    selectedPositionId: number;
-    invItem: InvItemType;
 };
 
 export default biologicalWeaponsConfirm;

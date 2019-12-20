@@ -1,7 +1,6 @@
 import { Socket } from "socket.io";
-import { AnyAction } from "redux";
 import { COMBAT_PHASE_ID, RODS_FROM_GOD_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
+import { GameSession, RodsFromGodAction, RodsFromGodRequestAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { RODS_FROM_GOD_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, InvItem } from "../../classes";
@@ -12,16 +11,16 @@ import sendUserFeedback from "../sendUserFeedback";
 /**
  * User Request to use rods from god on a certain position.
  */
-const rodsFromGodConfirm = async (socket: Socket, payload: RodsFromGodConfirmPayload) => {
+const rodsFromGodConfirm = async (socket: Socket, action: RodsFromGodRequestAction) => {
     //Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
-    if (payload == null || payload.selectedPositionId == null) {
+    if (action.payload == null || action.payload.selectedPositionId == null) {
         sendUserFeedback(socket, "Server Error: Malformed Payload (missing selectedPositionId)");
         return;
     }
 
-    const { selectedPositionId, invItem } = payload;
+    const { selectedPositionId, invItem } = action.payload;
 
     //Grab the Game
     const thisGame = await new Game({ gameId }).init();
@@ -86,7 +85,7 @@ const rodsFromGodConfirm = async (socket: Socket, payload: RodsFromGodConfirmPay
 
     await thisInvItem.delete();
 
-    const serverAction: AnyAction = {
+    const serverAction: RodsFromGodAction = {
         type: RODS_FROM_GOD_SELECTED,
         payload: {
             invItem: thisInvItem,
@@ -97,11 +96,6 @@ const rodsFromGodConfirm = async (socket: Socket, payload: RodsFromGodConfirmPay
     //Send the update to the client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-};
-
-type RodsFromGodConfirmPayload = {
-    selectedPositionId: number;
-    invItem: InvItemType;
 };
 
 export default rodsFromGodConfirm;

@@ -70,13 +70,13 @@ const socketSetup = async (socket: Socket) => {
                     confirmPlan(socket, payload);
                     break;
                 case SERVER_DELETE_PLAN:
-                    deletePlan(socket, payload);
+                    deletePlan(socket, { type, payload });
                     break;
                 case SERVER_PIECE_PLACE:
                     piecePlace(socket, { type, payload });
                     break;
                 case SERVER_MAIN_BUTTON_CLICK:
-                    mainButtonClick(socket, payload);
+                    mainButtonClick(socket, { type, payload });
                     break;
                 case SERVER_CONFIRM_BATTLE_SELECTION:
                     confirmBattleSelection(socket, payload);
@@ -85,25 +85,25 @@ const socketSetup = async (socket: Socket) => {
                     confirmFuelSelection(socket, payload);
                     break;
                 case SERVER_RODS_FROM_GOD_CONFIRM:
-                    rodsFromGodConfirm(socket, payload);
+                    rodsFromGodConfirm(socket, { type, payload });
                     break;
                 case SERVER_REMOTE_SENSING_CONFIRM:
-                    remoteSensingConfirm(socket, payload);
+                    remoteSensingConfirm(socket, { type, payload });
                     break;
                 case SERVER_INSURGENCY_CONFIRM:
-                    insurgencyConfirm(socket, payload);
+                    insurgencyConfirm(socket, { type, payload });
                     break;
                 case SERVER_BIOLOGICAL_WEAPONS_CONFIRM:
-                    biologicalWeaponsConfirm(socket, payload);
+                    biologicalWeaponsConfirm(socket, { type, payload });
                     break;
                 case SERVER_RAISE_MORALE_CONFIRM:
-                    raiseMoraleConfirm(socket, payload);
+                    raiseMoraleConfirm(socket, { type, payload });
                     break;
                 case SERVER_COMM_INTERRUPT_CONFIRM:
-                    commInterruptConfirm(socket, payload);
+                    commInterruptConfirm(socket, { type, payload });
                     break;
                 case SERVER_GOLDEN_EYE_CONFIRM:
-                    goldenEyeConfirm(socket, payload);
+                    goldenEyeConfirm(socket, { type, payload });
                     break;
                 case SERVER_OUTER_PIECE_CLICK:
                     enterContainer(socket, { type, payload });

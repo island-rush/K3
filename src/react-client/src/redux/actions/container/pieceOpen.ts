@@ -1,4 +1,4 @@
-import { Dispatch } from "redux";
+import { AnyAction, Dispatch } from "redux";
 import { CONTAINER_TYPES } from "../../../constants/gameConstants";
 import { EmitType, PieceType } from "../../../constants/interfaces";
 import { PIECE_OPEN_ACTION } from "../actionTypes";
@@ -23,13 +23,15 @@ const pieceOpen = (selectedPiece: PieceType) => {
             return;
         }
 
-        dispatch({
+        const clientAction: AnyAction = {
             type: PIECE_OPEN_ACTION,
             payload: {
                 selectedPiece,
                 gameboard
             }
-        });
+        };
+
+        dispatch(clientAction);
     };
 };
 

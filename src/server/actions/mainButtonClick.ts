@@ -10,7 +10,7 @@ import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../pages/errorTypes";
 import executeStep from "./executeStep";
 import sendUserFeedback from "./sendUserFeedback";
 
-const mainButtonClick = async (socket: Socket, payload: {}) => {
+const mainButtonClick = async (socket: Socket, action: AnyAction) => {
     //Verify Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

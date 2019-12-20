@@ -1,7 +1,6 @@
-import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../react-client/src/constants/gameConstants";
-import { GameSession } from "../../../react-client/src/constants/interfaces";
+import { DeletePlanAction, DeletePlanRequestAction, GameSession } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { DELETE_PLAN } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, Piece } from "../../classes";
@@ -11,11 +10,11 @@ import sendUserFeedback from "../sendUserFeedback";
 /**
  * Client request to delete a plan for a piece.
  */
-const deletePlan = async (socket: Socket, payload: DeletePlanPayload) => {
+const deletePlan = async (socket: Socket, action: DeletePlanRequestAction) => {
     //Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
-    const { pieceId } = payload;
+    const { pieceId } = action.payload;
 
     //Grab the Game
     const thisGame = await new Game({ gameId }).init();
@@ -53,7 +52,7 @@ const deletePlan = async (socket: Socket, payload: DeletePlanPayload) => {
 
     await thisPiece.deletePlans();
 
-    const serverAction: AnyAction = {
+    const serverAction: DeletePlanAction = {
         type: DELETE_PLAN,
         payload: {
             pieceId
@@ -63,10 +62,6 @@ const deletePlan = async (socket: Socket, payload: DeletePlanPayload) => {
     //Send the update to the client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction); //TODO: should the other sockets for this team get the update? (in the background?)
     socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-};
-
-type DeletePlanPayload = {
-    pieceId: number;
 };
 
 export default deletePlan;
