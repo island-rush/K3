@@ -66,38 +66,32 @@ const rIndexSolver = (index: number) => {
 };
 
 const patternSolver = (position: any, gameInfo: any, positionIndex: number) => {
-    const { type, pieces } = position; //position comes from the gameboard state
-    const { highPieces, lowPieces } = TYPE_HIGH_LOW;
-    let redHigh = 0,
-        redLow = 0,
-        blueHigh = 0,
-        blueLow = 0;
-    if (pieces) {
-        for (let x = 0; x < pieces.length; x++) {
-            let thisPiece = pieces[x];
-            if (thisPiece.pieceTeamId === RED_TEAM_ID && highPieces.includes(thisPiece.pieceTypeId)) {
-                redHigh = 1;
-            }
-            if (thisPiece.pieceTeamId === RED_TEAM_ID && lowPieces.includes(thisPiece.pieceTypeId)) {
-                redLow = 1;
-            }
-            if (thisPiece.pieceTeamId === BLUE_TEAM_ID && highPieces.includes(thisPiece.pieceTypeId)) {
-                blueHigh = 1;
-            }
-            if (thisPiece.pieceTeamId === BLUE_TEAM_ID && lowPieces.includes(thisPiece.pieceTypeId)) {
-                blueLow = 1;
-            }
-        }
-    }
+    const { type } = position; //position comes from the gameboard state
 
     if (ALL_FLAG_LOCATIONS.includes(positionIndex)) {
         const flagNum = ALL_FLAG_LOCATIONS.indexOf(positionIndex);
         const islandOwner = gameInfo["flag" + flagNum];
-        const finalType = islandOwner === BLUE_TEAM_ID ? "blue" : islandOwner === RED_TEAM_ID ? "red" : "flag";
-        return finalType + redHigh + redLow + blueHigh + blueLow;
+        const finalType = islandOwner === BLUE_TEAM_ID ? "blueflag" : islandOwner === RED_TEAM_ID ? "redflag" : "flag";
+        return finalType;
     }
 
-    return type + redHigh + redLow + blueHigh + blueLow; //This resolves what image is shown on the board (see ./images/positionImages)
+    return type; //This resolves what image is shown on the board (see ./images/positionImages)
+};
+
+const hasPieceType = (position: any, highLow: "top" | "bottom", team: "blue" | "red") => {
+    const { pieces } = position;
+    const { highPieces, lowPieces } = TYPE_HIGH_LOW;
+    const highLowToCheck = highLow === "top" ? highPieces : lowPieces;
+    const blueRedToCheck = team === "blue" ? BLUE_TEAM_ID : RED_TEAM_ID;
+    if (pieces) {
+        for (const piece of pieces) {
+            if (piece.pieceTeamId === blueRedToCheck && highLowToCheck.includes(piece.pieceTypeId)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
 };
 
 const titleSolver = (position: any, gameInfo: any, positionIndex: number) => {
@@ -273,6 +267,10 @@ class Gameboard extends Component<Props> {
                 }
                 //TODO: pass down what the highlighting means into the title
                 title={titleSolver(gameboard[positionIndex], gameInfo, parseInt(positionIndex))}
+                topBlue={hasPieceType(gameboard[positionIndex], "top", "blue")}
+                bottomBlue={hasPieceType(gameboard[positionIndex], "bottom", "blue")}
+                topRed={hasPieceType(gameboard[positionIndex], "top", "red")}
+                bottomRed={hasPieceType(gameboard[positionIndex], "bottom", "red")}
             />
         ));
 
