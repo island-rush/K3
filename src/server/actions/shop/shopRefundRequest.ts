@@ -1,7 +1,6 @@
-import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { BLUE_TEAM_ID, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, ShopRefundRequestAction, ShopRefundAction } from "../../../react-client/src/constants/interfaces";
+import { GameSession, ShopRefundAction, ShopRefundRequestAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { SHOP_REFUND } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, ShopItem } from "../../classes";

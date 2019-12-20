@@ -1,5 +1,5 @@
-import { AnyAction, Dispatch } from "redux";
-import { EmitType } from "../../../constants/interfaces";
+import { Dispatch } from "redux";
+import { ConfirmPlanRequestAction, EmitType } from "../../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
 import { SERVER_CONFIRM_PLAN } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
@@ -14,7 +14,7 @@ const confirmPlan = () => {
         if (gameboardMeta.planning.moves.length === 0) {
             dispatch(setUserfeedbackAction("Can't submit an empty plan..."));
         } else {
-            const clientAction: AnyAction = {
+            const clientAction: ConfirmPlanRequestAction = {
                 type: SERVER_CONFIRM_PLAN,
                 payload: {
                     pieceId: gameboardMeta.selectedPiece.pieceId,

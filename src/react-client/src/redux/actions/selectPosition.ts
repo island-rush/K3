@@ -2,7 +2,7 @@ import { AnyAction, Dispatch } from "redux";
 import { distanceMatrix } from "../../constants/distanceMatrix";
 //prettier-ignore
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, TYPE_TERRAIN } from "../../constants/gameConstants";
-import { EmitType } from "../../constants/interfaces";
+import { EmitType, ExitTransportContainerRequestAction } from "../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../constants/otherConstants";
 import { initialGameboardEmpty } from "../reducers/initialGameboardEmpty";
 //prettier-ignore
@@ -22,7 +22,7 @@ const selectPosition = (selectedPositionId: number) => {
             //TODO: check that the position was vaild (on the server side)
 
             //other checks
-            const thisAction: AnyAction = {
+            const thisAction: ExitTransportContainerRequestAction = {
                 type: SERVER_INNER_TRANSPORT_PIECE_CLICK,
                 payload: {
                     selectedPiece: gameboardMeta.container.innerPieceToDrop,

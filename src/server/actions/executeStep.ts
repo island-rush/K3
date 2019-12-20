@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { BLUE_TEAM_ID, PLACE_PHASE_ID, RED_TEAM_ID, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
-import { GameSession } from "../../react-client/src/constants/interfaces";
+import { GameSession, UpdateFlagAction } from "../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { NEW_ROUND, PLACE_PHASE, UPDATE_FLAGS } from "../../react-client/src/redux/actions/actionTypes";
 import { Capability, Event, Game, Piece, Plan } from "../classes";
@@ -152,7 +152,7 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
 
     const didUpdateFlags = await thisGame.updateFlags();
     if (didUpdateFlags) {
-        const updateFlagAction: AnyAction = {
+        const updateFlagAction: UpdateFlagAction = {
             type: UPDATE_FLAGS,
             payload: {
                 flag0: thisGame.flag0,

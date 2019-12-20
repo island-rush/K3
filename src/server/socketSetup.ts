@@ -76,7 +76,7 @@ const socketSetup = async (socket: Socket) => {
                     piecePlace(socket, { type, payload });
                     break;
                 case SERVER_MAIN_BUTTON_CLICK:
-                    mainButtonClick(socket, { type, payload });
+                    mainButtonClick(socket, { type });
                     break;
                 case SERVER_CONFIRM_BATTLE_SELECTION:
                     confirmBattleSelection(socket, { type, payload });

@@ -1,12 +1,6 @@
-import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { PURCHASE_PHASE_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import {
-    GameSession,
-    ShopConfirmPurchaseRequestAction,
-    ShopConfirmPurchaseAction,
-    InvItemType
-} from "../../../react-client/src/constants/interfaces";
+import { GameSession, ShopConfirmPurchaseAction, ShopConfirmPurchaseRequestAction } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { SHOP_TRANSFER } from "../../../react-client/src/redux/actions/actionTypes";
 import { Game, InvItem, ShopItem } from "../../classes";
