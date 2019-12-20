@@ -67,7 +67,7 @@ const socketSetup = async (socket: Socket) => {
                     shopConfirmPurchase(socket, { type });
                     break;
                 case SERVER_CONFIRM_PLAN:
-                    confirmPlan(socket, payload);
+                    confirmPlan(socket, { type, payload });
                     break;
                 case SERVER_DELETE_PLAN:
                     deletePlan(socket, { type, payload });
@@ -79,10 +79,10 @@ const socketSetup = async (socket: Socket) => {
                     mainButtonClick(socket, { type, payload });
                     break;
                 case SERVER_CONFIRM_BATTLE_SELECTION:
-                    confirmBattleSelection(socket, payload);
+                    confirmBattleSelection(socket, { type, payload });
                     break;
                 case SERVER_CONFIRM_FUEL_SELECTION:
-                    confirmFuelSelection(socket, payload);
+                    confirmFuelSelection(socket, { type, payload });
                     break;
                 case SERVER_RODS_FROM_GOD_CONFIRM:
                     rodsFromGodConfirm(socket, { type, payload });

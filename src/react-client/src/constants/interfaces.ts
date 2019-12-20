@@ -1,37 +1,6 @@
 import { Action, AnyAction } from "redux";
-import {
-    SET_USERFEEDBACK,
-    SERVER_SHOP_PURCHASE_REQUEST,
-    SERVER_SHOP_REFUND_REQUEST,
-    SERVER_SHOP_CONFIRM_PURCHASE,
-    SHOP_PURCHASE,
-    SHOP_REFUND,
-    SHOP_TRANSFER,
-    SERVER_PIECE_PLACE,
-    PIECE_PLACE,
-    SERVER_OUTER_PIECE_CLICK,
-    OUTER_PIECE_CLICK_ACTION,
-    SERVER_INNER_PIECE_CLICK,
-    INNER_PIECE_CLICK_ACTION,
-    SERVER_INNER_TRANSPORT_PIECE_CLICK,
-    INNER_TRANSPORT_PIECE_CLICK_ACTION,
-    SERVER_RODS_FROM_GOD_CONFIRM,
-    RODS_FROM_GOD_SELECTED,
-    SERVER_REMOTE_SENSING_CONFIRM,
-    REMOTE_SENSING_SELECTED,
-    SERVER_INSURGENCY_CONFIRM,
-    INSURGENCY_SELECTED,
-    SERVER_BIOLOGICAL_WEAPONS_CONFIRM,
-    BIO_WEAPON_SELECTED,
-    SERVER_RAISE_MORALE_CONFIRM,
-    RAISE_MORALE_SELECTED,
-    SERVER_COMM_INTERRUPT_CONFIRM,
-    COMM_INTERRUP_SELECTED,
-    SERVER_GOLDEN_EYE_CONFIRM,
-    GOLDEN_EYE_SELECTED,
-    DELETE_PLAN,
-    SERVER_DELETE_PLAN
-} from "../redux/actions/actionTypes";
+//prettier-ignore
+import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DELETE_PLAN, GOLDEN_EYE_SELECTED, INNER_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLAN_WAS_CONFIRMED, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SERVER_CONFIRM_BATTLE_SELECTION, UPDATE_FLAGS, BATTLE_FIGHT_RESULTS, SERVER_CONFIRM_FUEL_SELECTION, REFUEL_RESULTS } from "../redux/actions/actionTypes";
 
 /**
  * Section for Instructor's Game
@@ -286,6 +255,70 @@ export interface DeletePlanAction extends Action {
     type: typeof DELETE_PLAN;
     payload: {
         pieceId: number;
+    };
+}
+
+export interface ConfirmPlanRequestAction extends Action {
+    type: typeof SERVER_CONFIRM_PLAN;
+    payload: {
+        pieceId: number;
+        plan: any;
+    };
+}
+
+export interface ConfirmPlanAction extends Action {
+    type: typeof PLAN_WAS_CONFIRMED;
+    payload: {
+        pieceId: number;
+        plan: any;
+    };
+}
+
+export interface ConfirmBattleSelectionRequestAction extends Action {
+    type: typeof SERVER_CONFIRM_BATTLE_SELECTION;
+    payload: {
+        friendlyPieces: any;
+    };
+}
+
+export interface UpdateFlagAction extends Action {
+    type: typeof UPDATE_FLAGS;
+    payload: {
+        flag0: number;
+        flag1: number;
+        flag2: number;
+        flag3: number;
+        flag4: number;
+        flag5: number;
+        flag6: number;
+        flag7: number;
+        flag8: number;
+        flag9: number;
+        flag10: number;
+        flag11: number;
+        flag12: number;
+    };
+}
+
+export interface BattleResultsAction extends Action {
+    type: typeof BATTLE_FIGHT_RESULTS;
+    payload: {
+        masterRecord: any;
+    };
+}
+
+export interface ConfirmFuelSelectionRequestAction extends Action {
+    type: typeof SERVER_CONFIRM_FUEL_SELECTION;
+    payload: {
+        aircraft: any;
+        tankers: any;
+    };
+}
+
+export interface FuelResultsAction extends Action {
+    type: typeof REFUEL_RESULTS;
+    payload: {
+        fuelUpdates: any;
     };
 }
 

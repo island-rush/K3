@@ -1,7 +1,6 @@
-import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { COMBAT_PHASE_ID, TYPE_AIR, TYPE_FUEL } from "../../../react-client/src/constants/gameConstants";
-import { GameSession } from "../../../react-client/src/constants/interfaces";
+import { ConfirmFuelSelectionRequestAction, FuelResultsAction, GameSession } from "../../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
 import { REFUEL_RESULTS } from "../../../react-client/src/redux/actions/actionTypes";
 import { Event, Game } from "../../classes";
@@ -12,7 +11,7 @@ import sendUserFeedback from "../sendUserFeedback";
 /**
  * Client Request to transfer fuel from tankers to other aircraft. Finishes a Refuel Event
  */
-const confirmFuelSelection = async (socket: Socket, payload: FuelSelectionPayload) => {
+const confirmFuelSelection = async (socket: Socket, action: ConfirmFuelSelectionRequestAction) => {
     //Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
@@ -43,7 +42,7 @@ const confirmFuelSelection = async (socket: Socket, payload: FuelSelectionPayloa
     const thisRefuelEvent = await Event.getNext(gameId, gameTeam); //TODO: this could be an unecessary call (if we move the refuel functionality out of the event class)
 
     //handle the payload and stuff, send the response (with next event?) (or 2 responses...)
-    const { aircraft, tankers } = payload;
+    const { aircraft, tankers } = action.payload;
 
     //TODO: go through fuelSelections and make sure it makes sense from backend (security)
     //ex: these pieces exist, these fuel amounts aren't beyond tanker fuel (can't drain tanker, or add fuel from nothing)
@@ -103,7 +102,7 @@ const confirmFuelSelection = async (socket: Socket, payload: FuelSelectionPayloa
 
         //TODO: better payloads?
         if (fuelSelections.length > 0) {
-            const serverAction: AnyAction = {
+            const serverAction: FuelResultsAction = {
                 type: REFUEL_RESULTS,
                 payload: {
                     fuelUpdates: fuelSelections //TODO: this should be the server's own record, not just sending back to client
@@ -120,11 +119,6 @@ const confirmFuelSelection = async (socket: Socket, payload: FuelSelectionPayloa
 
     await thisRefuelEvent.delete();
     await giveNextEvent(socket, { thisGame, gameTeam }); //not putting executingStep in options to let it know not to send pieceMove
-};
-
-type FuelSelectionPayload = {
-    aircraft: any;
-    tankers: any;
 };
 
 export default confirmFuelSelection;
