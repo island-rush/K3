@@ -157,7 +157,7 @@ Note: the ./web.config is currently being used to configure the environment to r
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Please Contact Owners for information.
 
 ## Version
 
