@@ -157,7 +157,7 @@ Note: the ./web.config is currently being used to configure the environment to r
 
 ## License
 
-Please Contact Owners for information.
+Please Contact Owners for Information.
 
 ## Version
 
