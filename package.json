@@ -53,19 +53,5 @@
         "md5": "^2.2.1",
         "mysql2": "^2.0.2",
         "socket.io": "^2.3.0"
-    },
-    "prettier": {
-        "tabWidth": 4,
-        "semi": true,
-        "singleQuote": false,
-        "printWidth": 150
-    },
-    "nodemonConfig": {
-        "ignore": [
-            "src/react-client/*"
-        ],
-        "execMap": {
-            "ts": "node --require ts-node/register"
-        }
     }
 }
