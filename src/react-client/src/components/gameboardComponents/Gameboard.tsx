@@ -11,9 +11,11 @@ import BattlePopup from "./battle/BattlePopup";
 import SelectCommanderTypePopup from "./capabilities/SelectCommanderTypePopup";
 import ContainerPopup from "./container/ContainerPopup";
 import NewsPopup from "./NewsPopup";
-import Patterns from "./Patterns";
 import RefuelPopup from "./refuel/RefuelPopup";
-const { HexGrid, Layout, Hexagon } = require("react-hexgrid"); //TODO: create type declaration for react-hexgrid
+const { HexGrid, Layout, Hexagon, Pattern } = require("react-hexgrid"); //TODO: create type declaration for react-hexgrid
+
+const imageSize = { x: 3.4, y: 2.75 };
+const positionImagesPath = "./images/positionImages/";
 
 const gameboardStyle: any = {
     backgroundColor: "blue",
@@ -281,7 +283,13 @@ class Gameboard extends Component<Props> {
                         <Layout size={{ x: 3.15, y: 3.15 }} flat={true} spacing={1.03} origin={{ x: -98, y: -46 }}>
                             {positions}
                         </Layout>
-                        <Patterns />
+                        <Pattern id="land" link={positionImagesPath + "land.png"} size={imageSize} />
+                        <Pattern id="water" link={positionImagesPath + "water.png"} size={imageSize} />
+                        <Pattern id="flag" link={positionImagesPath + "flag.png"} size={imageSize} />
+                        <Pattern id="redflag" link={positionImagesPath + "redflag.png"} size={imageSize} />
+                        <Pattern id="blueflag" link={positionImagesPath + "blueflag.png"} size={imageSize} />
+                        <Pattern id="airfield" link={positionImagesPath + "airfield.png"} size={imageSize} />
+                        <Pattern id="missile" link={positionImagesPath + "missile.png"} size={imageSize} />
                     </HexGrid>
                 </div>
 
