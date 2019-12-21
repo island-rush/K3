@@ -1,7 +1,6 @@
-import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 import { BLUE_TEAM_ID, PLACE_PHASE_ID, RED_TEAM_ID, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
-import { GameSession, UpdateFlagAction } from "../../react-client/src/constants/interfaces";
+import { GameSession, NewRoundAction, PlacePhaseAction, UpdateFlagAction } from "../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { NEW_ROUND, PLACE_PHASE, UPDATE_FLAGS } from "../../react-client/src/redux/actions/actionTypes";
 import { Capability, Event, Game, Piece, Plan } from "../classes";
@@ -36,15 +35,13 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
         await Capability.decreaseCommInterrupt(gameId);
         await Capability.decreaseRaiseMorale(gameId);
 
-        let serverAction0: AnyAction;
-        let serverAction1: AnyAction;
         //TODO: could do constant with 'ROUNDS_PER_COMBAT' although getting excessive
         if (gameRound == 2) {
             //Combat -> Place Phase
             await thisGame.setRound(0);
             await thisGame.setPhase(PLACE_PHASE_ID);
 
-            serverAction0 = {
+            const placePhaseAction0: PlacePhaseAction = {
                 type: PLACE_PHASE,
                 payload: {
                     gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID),
@@ -55,7 +52,7 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
                     confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID)
                 }
             };
-            serverAction1 = {
+            const placePhaseAction1: PlacePhaseAction = {
                 type: PLACE_PHASE,
                 payload: {
                     gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID),
@@ -66,11 +63,18 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
                     confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID)
                 }
             };
+
+            socket.to("game" + gameId + "team0").emit(SOCKET_SERVER_SENDING_ACTION, placePhaseAction0);
+            socket.to("game" + gameId + "team1").emit(SOCKET_SERVER_SENDING_ACTION, placePhaseAction1);
+
+            const thisSocketsAction = session.gameTeam === BLUE_TEAM_ID ? placePhaseAction0 : placePhaseAction1;
+            socket.emit(SOCKET_SERVER_SENDING_ACTION, thisSocketsAction);
+            return;
         } else {
             //Next Round of Combat
             await thisGame.setRound(gameRound + 1);
 
-            serverAction0 = {
+            const newRoundAction0: NewRoundAction = {
                 type: NEW_ROUND,
                 payload: {
                     gameRound: thisGame.gameRound,
@@ -82,7 +86,7 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
                     confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID)
                 }
             };
-            serverAction1 = {
+            const newRoundAction1: NewRoundAction = {
                 type: NEW_ROUND,
                 payload: {
                     gameRound: thisGame.gameRound,
@@ -94,16 +98,14 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
                     confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID)
                 }
             };
+
+            socket.to("game" + gameId + "team0").emit(SOCKET_SERVER_SENDING_ACTION, newRoundAction0);
+            socket.to("game" + gameId + "team1").emit(SOCKET_SERVER_SENDING_ACTION, newRoundAction1);
+
+            const thisSocketsAction = session.gameTeam === BLUE_TEAM_ID ? newRoundAction0 : newRoundAction1;
+            socket.emit(SOCKET_SERVER_SENDING_ACTION, thisSocketsAction);
+            return;
         }
-
-        //Send to the teams
-        socket.to("game" + gameId + "team0").emit(SOCKET_SERVER_SENDING_ACTION, serverAction0);
-        socket.to("game" + gameId + "team1").emit(SOCKET_SERVER_SENDING_ACTION, serverAction1);
-
-        const thisSocketsAction = session.gameTeam === BLUE_TEAM_ID ? serverAction0 : serverAction1;
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, thisSocketsAction);
-
-        return;
     }
 
     //One of the teams may be without plans, keep them waiting

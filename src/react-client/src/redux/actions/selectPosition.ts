@@ -1,8 +1,9 @@
-import { AnyAction, Dispatch } from "redux";
+import { Dispatch } from "redux";
 import { distanceMatrix } from "../../constants/distanceMatrix";
 //prettier-ignore
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, TYPE_TERRAIN } from "../../constants/gameConstants";
-import { EmitType, ExitTransportContainerRequestAction } from "../../constants/interfaces";
+//prettier-ignore
+import { EmitType, ExitTransportContainerRequestAction, HighlightPositionsAction, PlanningSelectAction, PositionCapabilityRequestAction, PositionSelectAction } from "../../constants/interfaces";
 import { SOCKET_CLIENT_SENDING_ACTION } from "../../constants/otherConstants";
 import { initialGameboardEmpty } from "../reducers/initialGameboardEmpty";
 //prettier-ignore
@@ -38,12 +39,15 @@ const selectPosition = (selectedPositionId: number) => {
 
         if (!gameboardMeta.planning.active) {
             //select anything and highlight, looking at the position
-            dispatch({
+
+            const thisAction: PositionSelectAction = {
                 type: POSITION_SELECT,
                 payload: {
                     selectedPositionId
                 }
-            });
+            };
+
+            dispatch(thisAction);
             return;
         }
 
@@ -65,12 +69,14 @@ const selectPosition = (selectedPositionId: number) => {
                     }
                 }
 
-                dispatch({
+                const highlightAction: HighlightPositionsAction = {
                     type: HIGHLIGHT_POSITIONS,
                     payload: {
                         highlightedPositions
                     }
-                });
+                };
+
+                dispatch(highlightAction);
             }
 
             if (gameboardMeta.planning.invItem.invItemTypeId === COMMUNICATIONS_INTERRUPTION_TYPE_ID) {
@@ -80,12 +86,14 @@ const selectPosition = (selectedPositionId: number) => {
                     if (distanceMatrix[clickedPosition][x] <= COMM_INTERRUPT_RANGE) highlightedPositions.push(x);
                 }
 
-                dispatch({
+                const highlightAction: HighlightPositionsAction = {
                     type: HIGHLIGHT_POSITIONS,
                     payload: {
                         highlightedPositions
                     }
-                });
+                };
+
+                dispatch(highlightAction);
             }
 
             if (gameboardMeta.planning.invItem.invItemTypeId === GOLDEN_EYE_TYPE_ID) {
@@ -95,17 +103,26 @@ const selectPosition = (selectedPositionId: number) => {
                     if (distanceMatrix[clickedPosition][x] <= GOLDEN_EYE_RANGE) highlightedPositions.push(x);
                 }
 
-                dispatch({
+                const highlightAction: HighlightPositionsAction = {
                     type: HIGHLIGHT_POSITIONS,
                     payload: {
                         highlightedPositions
                     }
-                });
+                };
+
+                dispatch(highlightAction);
             }
 
             // eslint-disable-next-line no-restricted-globals
             if (confirm("Are you sure you want to use capability on this position?")) {
-                let type: string;
+                //TODO: figure out better way of typecasting the 'type' for this action (could be many types)
+                let type:
+                    | typeof SERVER_RODS_FROM_GOD_CONFIRM
+                    | typeof SERVER_REMOTE_SENSING_CONFIRM
+                    | typeof SERVER_INSURGENCY_CONFIRM
+                    | typeof SERVER_BIOLOGICAL_WEAPONS_CONFIRM
+                    | typeof SERVER_COMM_INTERRUPT_CONFIRM
+                    | typeof SERVER_GOLDEN_EYE_CONFIRM;
                 switch (gameboardMeta.planning.invItem.invItemTypeId) {
                     case RODS_FROM_GOD_TYPE_ID:
                         type = SERVER_RODS_FROM_GOD_CONFIRM;
@@ -131,14 +148,16 @@ const selectPosition = (selectedPositionId: number) => {
                 }
 
                 //TODO: frontend action to change into a 'waiting on server' state?
-                dispatch({
+                const highlightAction: HighlightPositionsAction = {
                     type: HIGHLIGHT_POSITIONS,
                     payload: {
                         highlightedPositions: []
                     }
-                });
+                };
 
-                const clientAction: AnyAction = {
+                dispatch(highlightAction);
+
+                const clientAction: PositionCapabilityRequestAction = {
                     type,
                     payload: {
                         selectedPositionId: selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition,
@@ -151,12 +170,14 @@ const selectPosition = (selectedPositionId: number) => {
             }
 
             //select the position anyway
-            dispatch({
+            const positionSelectAction: PositionSelectAction = {
                 type: POSITION_SELECT,
                 payload: {
                     selectedPositionId: selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition
                 }
-            });
+            };
+
+            dispatch(positionSelectAction);
             return;
         }
 
@@ -192,12 +213,14 @@ const selectPosition = (selectedPositionId: number) => {
             return;
         }
 
-        dispatch({
+        const planningSelectAction: PlanningSelectAction = {
             type: PLANNING_SELECT,
             payload: {
                 selectedPositionId
             }
-        });
+        };
+
+        dispatch(planningSelectAction);
     };
 };
 

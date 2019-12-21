@@ -1,6 +1,6 @@
-import { AnyAction, Dispatch } from "redux";
+import { Dispatch } from "redux";
 import { CONTAINER_TYPES } from "../../../constants/gameConstants";
-import { EmitType, PieceType } from "../../../constants/interfaces";
+import { EmitType, PieceOpenAction, PieceType } from "../../../constants/interfaces";
 import { PIECE_OPEN_ACTION } from "../actionTypes";
 import setUserfeedbackAction from "../setUserfeedbackAction";
 
@@ -23,7 +23,7 @@ const pieceOpen = (selectedPiece: PieceType) => {
             return;
         }
 
-        const clientAction: AnyAction = {
+        const clientAction: PieceOpenAction = {
             type: PIECE_OPEN_ACTION,
             payload: {
                 selectedPiece,

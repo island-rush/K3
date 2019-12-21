@@ -1,8 +1,8 @@
-import { AnyAction } from "redux";
 import { Socket } from "socket.io";
 //prettier-ignore
-import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PLACE_PHASE_ID, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, TYPE_MAIN, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
-import { GameSession, MainButtonClickRequestAction, MainButtonClickAction } from "../../react-client/src/constants/interfaces";
+import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, TYPE_MAIN, WAITING_STATUS } from "../../react-client/src/constants/gameConstants";
+//prettier-ignore
+import { CombatPhaseAction, GameSession, MainButtonClickAction, MainButtonClickRequestAction, NewsPhaseAction, PurchasePhaseAction, SliceChangeAction } from "../../react-client/src/constants/interfaces";
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
 import { COMBAT_PHASE, MAIN_BUTTON_CLICK, NEWS_PHASE, PURCHASE_PHASE, SLICE_CHANGE } from "../../react-client/src/redux/actions/actionTypes";
 import { Capability, Game, Piece } from "../classes";
@@ -11,7 +11,7 @@ import executeStep from "./executeStep";
 import sendUserFeedback from "./sendUserFeedback";
 
 const mainButtonClick = async (socket: Socket, action: MainButtonClickRequestAction) => {
-    //Verify Session
+    //Grab Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
     //Get Game
@@ -58,110 +58,99 @@ const mainButtonClick = async (socket: Socket, action: MainButtonClickRequestAct
     await thisGame.setStatus(otherTeam, NOT_WAITING_STATUS);
     await thisGame.setStatus(gameTeam, NOT_WAITING_STATUS);
 
-    let serverAction0: AnyAction;
-    let serverAction1: AnyAction;
+    if (gamePhase === NEWS_PHASE_ID) {
+        await thisGame.setPhase(PURCHASE_PHASE_ID);
 
-    switch (gamePhase) {
-        case NEWS_PHASE_ID:
-            await thisGame.setPhase(PURCHASE_PHASE_ID);
-            serverAction0 = serverAction1 = {
-                type: PURCHASE_PHASE,
-                payload: {}
-            };
-            break;
+        const purchasePhaseAction: PurchasePhaseAction = {
+            type: PURCHASE_PHASE
+        };
 
-        case PURCHASE_PHASE_ID:
-            await thisGame.setPhase(COMBAT_PHASE_ID);
-
-            //probably do this again anyway (pieces have been placed and could be seeing things now)
-            await Piece.updateVisibilities(gameId);
-
-            serverAction0 = {
-                type: COMBAT_PHASE,
-                payload: {
-                    gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID)
-                }
-            };
-            serverAction1 = {
-                type: COMBAT_PHASE,
-                payload: {
-                    gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID)
-                }
-            };
-            break;
-
-        //Combat Phase -> Slice, Round, Place Troops... (stepping through)
-        case COMBAT_PHASE_ID:
-            if (gameSlice == SLICE_PLANNING_ID) {
-                await thisGame.setSlice(SLICE_EXECUTING_ID);
-
-                //TODO: change payload to reflect what's being sent (confirmedRods = list of positions, confirmedInsurgency = list of pieces to delete)
-                const confirmedRods = await Capability.useRodsFromGod(gameId);
-                const confirmedBioWeapons = await Capability.useBiologicalWeapons(gameId);
-                const confirmedGoldenEye = await Capability.useGoldenEye(gameId);
-                const confirmedCommInterrupt = await Capability.useCommInterrupt(gameId);
-                const { listOfPiecesToKill, listOfEffectedPositions } = await Capability.useInsurgency(gameId);
-
-                serverAction0 = {
-                    type: SLICE_CHANGE,
-                    payload: {
-                        confirmedRods,
-                        confirmedBioWeapons,
-                        confirmedGoldenEye,
-                        confirmedCommInterrupt,
-                        confirmedInsurgencyPos: listOfEffectedPositions,
-                        confirmedInsurgencyPieces: listOfPiecesToKill,
-                        gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID)
-                    }
-                };
-                serverAction1 = {
-                    type: SLICE_CHANGE,
-                    payload: {
-                        confirmedRods,
-                        confirmedBioWeapons,
-                        confirmedGoldenEye,
-                        confirmedCommInterrupt,
-                        confirmedInsurgencyPos: listOfEffectedPositions,
-                        confirmedInsurgencyPieces: listOfPiecesToKill,
-                        gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID)
-                    }
-                };
-            } else {
-                await executeStep(socket, thisGame);
-                return; //executeStep will handle sending socket stuff, most likely separate for each client
-            }
-            break;
-
-        //Place Troops -> News
-        case PLACE_PHASE_ID:
-            await thisGame.addPoints();
-            await thisGame.setPhase(NEWS_PHASE_ID);
-            const news = await thisGame.getNextNews();
-            serverAction0 = {
-                type: NEWS_PHASE,
-                payload: {
-                    news,
-                    gamePoints: thisGame.game0Points
-                }
-            };
-            serverAction1 = {
-                type: NEWS_PHASE,
-                payload: {
-                    news,
-                    gamePoints: thisGame.game1Points
-                }
-            };
-            break;
-
-        default:
-            sendUserFeedback(socket, "Backend Failure, unkown gamePhase...");
-            return;
+        //Same update to all client(s)
+        socket.to("game" + gameId).emit(SOCKET_SERVER_SENDING_ACTION, purchasePhaseAction);
+        socket.emit(SOCKET_SERVER_SENDING_ACTION, purchasePhaseAction);
+        return;
     }
 
-    //Send to all clients (could be different from getting points)
-    socket.to("game" + gameId + "team" + BLUE_TEAM_ID).emit(SOCKET_SERVER_SENDING_ACTION, serverAction0);
-    socket.to("game" + gameId + "team" + RED_TEAM_ID).emit(SOCKET_SERVER_SENDING_ACTION, serverAction1);
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? serverAction0 : serverAction1);
+    if (gamePhase === PURCHASE_PHASE_ID) {
+        await thisGame.setPhase(COMBAT_PHASE_ID);
+
+        //probably do this again anyway (pieces have been placed and could be seeing things now)
+        await Piece.updateVisibilities(gameId);
+
+        const combatPhaseAction: CombatPhaseAction = {
+            type: COMBAT_PHASE,
+            payload: {
+                gameboardPieces: []
+            }
+        };
+
+        let combatPhaseAction0 = combatPhaseAction;
+        let combatPhaseAction1 = combatPhaseAction;
+        combatPhaseAction0.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
+        combatPhaseAction1.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
+
+        socket.to("game" + gameId + "team" + BLUE_TEAM_ID).emit(SOCKET_SERVER_SENDING_ACTION, combatPhaseAction0);
+        socket.to("game" + gameId + "team" + RED_TEAM_ID).emit(SOCKET_SERVER_SENDING_ACTION, combatPhaseAction1);
+        socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? combatPhaseAction0 : combatPhaseAction1);
+        return;
+    }
+
+    //Combat Phase === Planning -> execute || execute -> execute
+    if (gamePhase === COMBAT_PHASE_ID) {
+        if (gameSlice === SLICE_EXECUTING_ID) {
+            await executeStep(socket, thisGame);
+            return; //executeStep will handle sending socket stuff, most likely separate for each client
+        }
+
+        await thisGame.setSlice(SLICE_EXECUTING_ID);
+
+        const { listOfPiecesToKill, listOfEffectedPositions } = await Capability.useInsurgency(gameId);
+
+        const sliceChangeAction: SliceChangeAction = {
+            type: SLICE_CHANGE,
+            payload: {
+                confirmedRods: await Capability.useRodsFromGod(gameId),
+                confirmedBioWeapons: await Capability.useBiologicalWeapons(gameId),
+                confirmedGoldenEye: await Capability.useGoldenEye(gameId),
+                confirmedCommInterrupt: await Capability.useCommInterrupt(gameId),
+                confirmedInsurgencyPos: listOfEffectedPositions,
+                confirmedInsurgencyPieces: listOfPiecesToKill,
+                gameboardPieces: []
+            }
+        };
+
+        let sliceChangeAction0 = sliceChangeAction;
+        let sliceChangeAction1 = sliceChangeAction;
+        sliceChangeAction0.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
+        sliceChangeAction1.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
+
+        socket.to("game" + gameId + "team" + BLUE_TEAM_ID).emit(SOCKET_SERVER_SENDING_ACTION, sliceChangeAction0);
+        socket.to("game" + gameId + "team" + RED_TEAM_ID).emit(SOCKET_SERVER_SENDING_ACTION, sliceChangeAction1);
+        socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? sliceChangeAction0 : sliceChangeAction1);
+        return;
+    }
+
+    //If none of the other phases, must be in Place Phase
+
+    await thisGame.addPoints();
+    await thisGame.setPhase(NEWS_PHASE_ID);
+
+    const newsPhaseAction: NewsPhaseAction = {
+        type: NEWS_PHASE,
+        payload: {
+            news: await thisGame.getNextNews(),
+            gamePoints: -1
+        }
+    };
+
+    let newsPhaseAction0 = newsPhaseAction;
+    let newsPhaseAction1 = newsPhaseAction;
+    newsPhaseAction0.payload.gamePoints = thisGame.game0Points;
+    newsPhaseAction1.payload.gamePoints = thisGame.game1Points;
+
+    socket.to("game" + gameId + "team" + BLUE_TEAM_ID).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseAction0);
+    socket.to("game" + gameId + "team" + RED_TEAM_ID).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseAction1);
+    socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? newsPhaseAction0 : newsPhaseAction1);
 };
 
 export default mainButtonClick;
