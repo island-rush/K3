@@ -34,6 +34,7 @@
         "@types/md5": "^2.1.33",
         "@types/mysql2": "github:types/mysql2",
         "@types/node": "^12.12.17",
+        "@types/redux": "^3.6.0",
         "@types/socket.io": "^2.1.4",
         "concurrently": "^5.0.1",
         "copyfiles": "^2.1.1",
@@ -44,7 +45,6 @@
         "typescript": "^3.7.3"
     },
     "dependencies": {
-        "@types/redux": "^3.6.0",
         "connect-azuretables": "^1.0.20",
         "connect-loki": "^1.1.0",
         "express": "^4.17.1",
