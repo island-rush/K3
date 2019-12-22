@@ -1,28 +1,28 @@
-import { Socket } from "socket.io";
-//prettier-ignore
-import { COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { CommInterruptAction, CommInterruptRequestAction, GameSession, InvItemType } from "../../../react-client/src/constants/interfaces";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
-import { COMM_INTERRUP_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
-import { Capability, Game, InvItem } from "../../classes";
-import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import sendUserFeedback from "../sendUserFeedback";
+import { Socket } from 'socket.io';
+// prettier-ignore
+import { COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../react-client/src/constants/gameConstants';
+import { CommInterruptAction, CommInterruptRequestAction, GameSession } from '../../../react-client/src/constants/interfaces';
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
+import { COMM_INTERRUP_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
+import { Capability, Game, InvItem } from '../../classes';
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
+import sendUserFeedback from '../sendUserFeedback';
 
 /**
  * User Request to use CommInterrupt capability.
  */
 const commInterruptConfirm = async (socket: Socket, action: CommInterruptRequestAction) => {
-    //Grab Session
+    // Grab Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
     if (action.payload == null || action.payload.selectedPositionId == null) {
-        sendUserFeedback(socket, "Server Error: Malformed Payload (missing selectedPositionId)");
+        sendUserFeedback(socket, 'Server Error: Malformed Payload (missing selectedPositionId)');
         return;
     }
 
     const { selectedPositionId, invItem } = action.payload;
 
-    //Get the Game
+    // Get the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
@@ -36,49 +36,49 @@ const commInterruptConfirm = async (socket: Socket, action: CommInterruptRequest
         return;
     }
 
-    //gamePhase 2 is only phase for comm interrupt
-    if (gamePhase != COMBAT_PHASE_ID) {
-        sendUserFeedback(socket, "Not the right phase...");
+    // gamePhase 2 is only phase for comm interrupt
+    if (gamePhase !== COMBAT_PHASE_ID) {
+        sendUserFeedback(socket, 'Not the right phase...');
         return;
     }
 
-    //gameSlice 0 is only slice for comm interrupt
-    if (gameSlice != SLICE_PLANNING_ID) {
-        sendUserFeedback(socket, "Not the right slice (must be planning)...");
+    // gameSlice 0 is only slice for comm interrupt
+    if (gameSlice !== SLICE_PLANNING_ID) {
+        sendUserFeedback(socket, 'Not the right slice (must be planning)...');
         return;
     }
 
-    //Only the main controller (0) can use comm interrupt
+    // Only the main controller (0) can use comm interrupt
     if (!gameControllers.includes(TYPE_MAIN)) {
-        sendUserFeedback(socket, "Not the main controller (0)...");
+        sendUserFeedback(socket, 'Not the main controller (0)...');
         return;
     }
 
     const { invItemId } = invItem;
 
-    //Does the invItem exist for it?
+    // Does the invItem exist for it?
     const thisInvItem = await new InvItem(invItemId).init();
     if (!thisInvItem) {
-        sendUserFeedback(socket, "Did not have the invItem to complete this request.");
+        sendUserFeedback(socket, 'Did not have the invItem to complete this request.');
         return;
     }
 
-    //verify correct type of inv item
+    // verify correct type of inv item
     const { invItemTypeId } = thisInvItem;
-    if (invItemTypeId != COMMUNICATIONS_INTERRUPTION_TYPE_ID) {
-        sendUserFeedback(socket, "Inv Item was not a comm interrupt type.");
+    if (invItemTypeId !== COMMUNICATIONS_INTERRUPTION_TYPE_ID) {
+        sendUserFeedback(socket, 'Inv Item was not a comm interrupt type.');
         return;
     }
 
-    //does the position make sense?
+    // does the position make sense?
     if (selectedPositionId < 0) {
-        sendUserFeedback(socket, "got a negative position for comm interrupt.");
+        sendUserFeedback(socket, 'got a negative position for comm interrupt.');
         return;
     }
 
-    //insert the 'plan' for comm interrupt into the db for later use
+    // insert the 'plan' for comm interrupt into the db for later use
     if (!(await Capability.insertCommInterrupt(gameId, gameTeam, selectedPositionId))) {
-        sendUserFeedback(socket, "db failed to insert comm interrupt, likely already an entry for that position.");
+        sendUserFeedback(socket, 'db failed to insert comm interrupt, likely already an entry for that position.');
         return;
     }
 
@@ -95,9 +95,9 @@ const commInterruptConfirm = async (socket: Socket, action: CommInterruptRequest
         }
     };
 
-    //Send the update to the client(s)
+    // Send the update to the client(s)
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-    socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
 
 export default commInterruptConfirm;

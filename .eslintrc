@@ -15,6 +15,7 @@
         "no-plusplus": "off",
         "no-await-in-loop": "off",
         "radix": "off",
-        "no-case-declarations": "off"
+        "no-case-declarations": "off",
+        "operator-linebreak": "off"
     }
 }
