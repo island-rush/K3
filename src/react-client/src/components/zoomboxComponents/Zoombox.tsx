@@ -1,21 +1,21 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from "../../redux/actions";
-import { ZOOMBOX_BACKGROUNDS } from "../styleConstants";
-import Piece from "./Piece";
-import { PieceType } from "../../constants/interfaces";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux/actions';
+import { ZOOMBOX_BACKGROUNDS } from '../styleConstants';
+import Piece from './Piece';
+import { PieceType } from '../../constants/interfaces';
 
 const zoomboxStyle = {
-    position: "absolute",
-    left: "0%",
-    bottom: "0%",
-    height: "29%",
-    width: "24%",
-    boxShadow: "0px 0px 0px 2px rgba(0, 0, 0, 1) inset"
+    position: 'absolute',
+    left: '0%',
+    bottom: '0%',
+    height: '29%',
+    width: '24%',
+    boxShadow: '0px 0px 0px 2px rgba(0, 0, 0, 1) inset'
 };
 
 const invisibleStyle = {
-    display: "none"
+    display: 'none'
 };
 
 interface Props {

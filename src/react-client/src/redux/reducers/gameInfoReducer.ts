@@ -4,8 +4,8 @@ import { COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PLACE_PHASE_ID, PUR
 import { COMBAT_PHASE, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, PIECES_MOVE, PLACE_PHASE, PURCHASE_PHASE, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, UPDATE_FLAGS } from "../actions/actionTypes";
 
 const initialGameInfoState = {
-    gameSection: "Loading...",
-    gameInstructor: "Loading...",
+    gameSection: 'Loading...',
+    gameInstructor: 'Loading...',
     gameTeam: -1,
     gameControllers: [],
     gamePhase: -1,

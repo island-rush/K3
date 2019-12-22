@@ -1,6 +1,6 @@
-import { Dispatch } from "redux";
-import { EmitType } from "../../../constants/interfaces";
-import { REFUELPOPUP_MINIMIZE_TOGGLE } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { EmitType } from '../../../constants/interfaces';
+import { REFUELPOPUP_MINIMIZE_TOGGLE } from '../actionTypes';
 
 /**
  * Action to toggle refuel popup minimized.

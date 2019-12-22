@@ -1,6 +1,6 @@
-import { Dispatch } from "redux";
-import { EmitType, PieceType } from "../../../constants/interfaces";
-import { UNDO_FUEL_SELECTION } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { EmitType, PieceType } from '../../../constants/interfaces';
+import { UNDO_FUEL_SELECTION } from '../actionTypes';
 
 /**
  * Action to undo a fuel selection from tanker to another aircraft piece.

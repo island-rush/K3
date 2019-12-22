@@ -1,7 +1,7 @@
-import { Dispatch } from "redux";
-import { WAITING_STATUS } from "../../../constants/gameConstants";
-import { EmitType } from "../../../constants/interfaces";
-import { TARGET_PIECE_SELECT } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { WAITING_STATUS } from '../../../constants/gameConstants';
+import { EmitType } from '../../../constants/interfaces';
+import { TARGET_PIECE_SELECT } from '../actionTypes';
 
 const targetPieceClick = (battlePiece: any, battlePieceIndex: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {

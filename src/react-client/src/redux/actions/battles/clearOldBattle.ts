@@ -1,6 +1,6 @@
-import { Dispatch } from "redux";
-import { EmitType } from "../../../constants/interfaces";
-import { CLEAR_BATTLE } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { EmitType } from '../../../constants/interfaces';
+import { CLEAR_BATTLE } from '../actionTypes';
 
 const clearOldBattle = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {

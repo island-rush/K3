@@ -1,69 +1,69 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 //prettier-ignore
 import { ANTI_SATELLITE_MISSILES_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, CYBER_DOMINANCE_TYPE_ID, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, LIST_ALL_CAPABILITIES, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, RAISE_MORALE_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SOF_TEAM_TYPE_ID, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from "../../constants/gameConstants";
 //prettier-ignore
 import { airPieceClick, antiSatelliteMissiles, atcScamble, biologicalWeapons, communicationsInterruption, cyberDominance, droneSwarms, goldenEye, insurgency, landPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines, seaPieceClick } from "../../redux/actions";
-import InvItem from "./InvItem";
-import { InvItemType } from "../../constants/interfaces";
+import InvItem from './InvItem';
+import { InvItemType } from '../../constants/interfaces';
 
 const inventoryStyle: any = {
-    backgroundColor: "Yellow",
-    position: "absolute",
-    height: "170%",
-    width: "1800%",
-    marginLeft: "150%",
-    marginTop: "20%",
-    padding: "1%"
+    backgroundColor: 'Yellow',
+    position: 'absolute',
+    height: '170%',
+    width: '1800%',
+    marginLeft: '150%',
+    marginTop: '20%',
+    padding: '1%'
 };
 
 const invisibleStyle: any = {
-    display: "none"
+    display: 'none'
 };
 
 const airpieceItemsContainerStyle: any = {
-    backgroundColor: "pink",
-    position: "absolute",
-    width: "18%",
-    height: "80%",
-    right: "81%",
-    top: "10%"
+    backgroundColor: 'pink',
+    position: 'absolute',
+    width: '18%',
+    height: '80%',
+    right: '81%',
+    top: '10%'
 };
 
 const landpieceItemsContainerStyle: any = {
-    backgroundColor: "pink",
-    position: "absolute",
-    width: "18%",
-    height: "80%",
-    right: "61%",
-    top: "10%"
+    backgroundColor: 'pink',
+    position: 'absolute',
+    width: '18%',
+    height: '80%',
+    right: '61%',
+    top: '10%'
 };
 
 const seapieceItemsContainerStyle: any = {
-    backgroundColor: "pink",
-    position: "absolute",
-    width: "18%",
-    height: "80%",
-    right: "41%",
-    top: "10%"
+    backgroundColor: 'pink',
+    position: 'absolute',
+    width: '18%',
+    height: '80%',
+    right: '41%',
+    top: '10%'
 };
 
 const specialpieceItemsContainerStyle: any = {
-    backgroundColor: "pink",
-    position: "absolute",
-    width: "18%",
-    height: "80%",
-    right: "21%",
-    top: "10%"
+    backgroundColor: 'pink',
+    position: 'absolute',
+    width: '18%',
+    height: '80%',
+    right: '21%',
+    top: '10%'
 };
 
 const warfareItemsContainerStyle: any = {
-    backgroundColor: "pink",
-    position: "absolute",
-    width: "18%",
-    height: "80%",
-    left: "81%",
-    top: "10%"
+    backgroundColor: 'pink',
+    position: 'absolute',
+    width: '18%',
+    height: '80%',
+    left: '81%',
+    top: '10%'
 };
 
 const itemCount = (array: any, value: any) => {

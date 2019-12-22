@@ -1,9 +1,9 @@
-import { Dispatch } from "redux";
-import { PLACE_PHASE_ID } from "../../../constants/gameConstants";
-import { EmitType, InvItemPlaceRequestAction, InvItemType } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_PIECE_PLACE } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { PLACE_PHASE_ID } from '../../../constants/gameConstants';
+import { EmitType, InvItemPlaceRequestAction, InvItemType } from '../../../constants/interfaces';
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
+import { SERVER_PIECE_PLACE } from '../actionTypes';
+import setUserfeedbackAction from '../setUserfeedbackAction';
 
 /**
  * Action to select inv item to place on the board (land item)
@@ -15,14 +15,14 @@ const landPieceClick = (invItem: InvItemType) => {
         const { gamePhase } = gameInfo;
 
         if (gamePhase !== PLACE_PHASE_ID) {
-            dispatch(setUserfeedbackAction("wrong phase to place land inv item."));
+            dispatch(setUserfeedbackAction('wrong phase to place land inv item.'));
             return;
         }
 
         const { selectedPosition } = gameboardMeta;
 
         if (selectedPosition === -1) {
-            dispatch(setUserfeedbackAction("Must select a position before using an inv item..."));
+            dispatch(setUserfeedbackAction('Must select a position before using an inv item...'));
             return;
         }
 

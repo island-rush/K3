@@ -1,8 +1,8 @@
-import { Dispatch } from "redux";
-import { EmitType } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { CANCEL_PLAN, SERVER_DELETE_PLAN } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { EmitType } from '../../../constants/interfaces';
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
+import { CANCEL_PLAN, SERVER_DELETE_PLAN } from '../actionTypes';
+import setUserfeedbackAction from '../setUserfeedbackAction';
 
 //TODO: rename cancelPlan to deletePlan to match the server side function (possibly match all client/server functions with each other...)
 /**
@@ -26,7 +26,7 @@ const cancelPlan = () => {
                 };
                 emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
             } else {
-                dispatch(setUserfeedbackAction("Must select a piece to delete + already have a plan for it to cancel/delete"));
+                dispatch(setUserfeedbackAction('Must select a piece to delete + already have a plan for it to cancel/delete'));
             }
         }
     };

@@ -1,9 +1,9 @@
-import { Dispatch } from "redux";
-import { WAITING_STATUS } from "../../../constants/gameConstants";
-import { ConfirmBattleSelectionRequestAction, EmitType } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_CONFIRM_BATTLE_SELECTION } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { WAITING_STATUS } from '../../../constants/gameConstants';
+import { ConfirmBattleSelectionRequestAction, EmitType } from '../../../constants/interfaces';
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
+import { SERVER_CONFIRM_BATTLE_SELECTION } from '../actionTypes';
+import setUserfeedbackAction from '../setUserfeedbackAction';
 
 const confirmBattleSelections = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
@@ -14,7 +14,7 @@ const confirmBattleSelections = () => {
         //TODO: could do loads more checks on current status of gameplay to prevent accidental presses? (but same checks on backend probably)
         if (gameStatus === WAITING_STATUS) {
             //already waiting
-            dispatch(setUserfeedbackAction("already waiting, client prevented something..."));
+            dispatch(setUserfeedbackAction('already waiting, client prevented something...'));
             return;
         }
 

@@ -1,7 +1,7 @@
-import { Dispatch } from "redux";
-import { EmitType } from "../../../constants/interfaces";
-import { CONTAINER_MOVE } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { EmitType } from '../../../constants/interfaces';
+import { CONTAINER_MOVE } from '../actionTypes';
+import setUserfeedbackAction from '../setUserfeedbackAction';
 
 //TODO: delete this action.
 /**
@@ -28,7 +28,7 @@ const containerMove = () => {
                 }
             });
         } else {
-            dispatch(setUserfeedbackAction("Can only do container moves while actively planning..."));
+            dispatch(setUserfeedbackAction('Can only do container moves while actively planning...'));
         }
     };
 };

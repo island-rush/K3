@@ -1,34 +1,34 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { cancelPlan, confirmPlan, containerMove, startPlan, undoMove } from "../../redux/actions";
-import { LEFT_CONTROLS_IMAGES } from "../styleConstants";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { cancelPlan, confirmPlan, containerMove, startPlan, undoMove } from '../../redux/actions';
+import { LEFT_CONTROLS_IMAGES } from '../styleConstants';
 
 const leftcontrolsStyle: any = {
-    background: "grey",
-    height: "80%",
-    width: "25%",
-    position: "relative",
-    float: "left",
-    margin: ".5%"
+    background: 'grey',
+    height: '80%',
+    width: '25%',
+    position: 'relative',
+    float: 'left',
+    margin: '.5%'
 };
 
 const buttonStyle: any = {
-    background: "white",
-    height: "80%",
-    width: "18%",
-    float: "left",
-    margin: "1%",
-    marginTop: "2%",
-    backgroundSize: "100% 100%",
-    backgroundRepeat: "no-repeat"
+    background: 'white',
+    height: '80%',
+    width: '18%',
+    float: 'left',
+    margin: '1%',
+    marginTop: '2%',
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat'
 };
 
 const buttonTitles: any = {
-    start: "Start Planning a Move for a Piece",
-    undo: "Undo a Planned Move",
-    cancel: "Cancel a Plan",
-    confirm: "Confirm a Plan",
-    container: "Open Container Controls Or Something Idk"
+    start: 'Start Planning a Move for a Piece',
+    undo: 'Undo a Planned Move',
+    cancel: 'Cancel a Plan',
+    confirm: 'Confirm a Plan',
+    container: 'Open Container Controls Or Something Idk'
 };
 
 interface Props {

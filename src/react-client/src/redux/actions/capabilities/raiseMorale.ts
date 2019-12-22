@@ -1,8 +1,8 @@
-import { Dispatch } from "redux";
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
-import { EmitType, InvItemType } from "../../../constants/interfaces";
-import { RAISE_MORALE_SELECTING } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
+import { EmitType, InvItemType } from '../../../constants/interfaces';
+import { RAISE_MORALE_SELECTING } from '../actionTypes';
+import setUserfeedbackAction from '../setUserfeedbackAction';
 
 //TODO: need to get rid of boost = x from the component when the raise morale is expired
 
@@ -12,12 +12,12 @@ const raiseMorale = (invItem: InvItemType) => {
         const { gamePhase, gameSlice } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
-            dispatch(setUserfeedbackAction("wrong phase for raise morale dude."));
+            dispatch(setUserfeedbackAction('wrong phase for raise morale dude.'));
             return;
         }
 
         if (gameSlice !== SLICE_PLANNING_ID) {
-            dispatch(setUserfeedbackAction("must be in planning to use raise morale."));
+            dispatch(setUserfeedbackAction('must be in planning to use raise morale.'));
             return;
         }
 

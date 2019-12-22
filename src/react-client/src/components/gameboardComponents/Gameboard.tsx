@@ -1,34 +1,34 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { distanceMatrix } from "../../constants/distanceMatrix";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { distanceMatrix } from '../../constants/distanceMatrix';
 //prettier-ignore
 import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, FLAG_ISLAND_OWNERSHIP, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE } from "../../constants/gameboardConstants";
 //prettier-ignore
 import { BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from "../../constants/gameConstants";
 //prettier-ignore
 import { innerPieceClick, innerTransportPieceClick, newsPopupMinimizeToggle, outerPieceClick, pieceClose, raiseMoraleSelectCommanderType, selectPosition } from "../../redux/actions";
-import BattlePopup from "./battle/BattlePopup";
-import SelectCommanderTypePopup from "./capabilities/SelectCommanderTypePopup";
-import ContainerPopup from "./container/ContainerPopup";
-import NewsPopup from "./NewsPopup";
-import RefuelPopup from "./refuel/RefuelPopup";
-const { HexGrid, Layout, Hexagon, Pattern } = require("react-hexgrid"); //TODO: create type declaration for react-hexgrid
+import BattlePopup from './battle/BattlePopup';
+import SelectCommanderTypePopup from './capabilities/SelectCommanderTypePopup';
+import ContainerPopup from './container/ContainerPopup';
+import NewsPopup from './NewsPopup';
+import RefuelPopup from './refuel/RefuelPopup';
+const { HexGrid, Layout, Hexagon, Pattern } = require('react-hexgrid'); //TODO: create type declaration for react-hexgrid
 
 const imageSize = { x: 3.4, y: 2.75 };
-const positionImagesPath = "./images/positionImages/";
+const positionImagesPath = './images/positionImages/';
 
 const gameboardStyle: any = {
-    backgroundColor: "blue",
-    width: "94%",
-    height: "88%",
-    top: "0%",
-    right: "0%",
-    position: "absolute"
+    backgroundColor: 'blue',
+    width: '94%',
+    height: '88%',
+    top: '0%',
+    right: '0%',
+    position: 'absolute'
 };
 
 const subDivStyle = {
-    height: "100%",
-    width: "100%"
+    height: '100%',
+    width: '100%'
 };
 
 //These functions organize the hexagons into the proper rows/columns to make the shape of the board (based on the index of the position (0->726))
@@ -72,19 +72,19 @@ const patternSolver = (position: any, gameInfo: any, positionIndex: number) => {
 
     if (ALL_FLAG_LOCATIONS.includes(positionIndex)) {
         const flagNum = ALL_FLAG_LOCATIONS.indexOf(positionIndex);
-        const islandOwner = gameInfo["flag" + flagNum];
-        const finalType = islandOwner === BLUE_TEAM_ID ? "blueflag" : islandOwner === RED_TEAM_ID ? "redflag" : "flag";
+        const islandOwner = gameInfo['flag' + flagNum];
+        const finalType = islandOwner === BLUE_TEAM_ID ? 'blueflag' : islandOwner === RED_TEAM_ID ? 'redflag' : 'flag';
         return finalType;
     }
 
     return type; //This resolves what image is shown on the board (see ./images/positionImages)
 };
 
-const hasPieceType = (position: any, highLow: "top" | "bottom", team: "blue" | "red") => {
+const hasPieceType = (position: any, highLow: 'top' | 'bottom', team: 'blue' | 'red') => {
     const { pieces } = position;
     const { highPieces, lowPieces } = TYPE_HIGH_LOW;
-    const highLowToCheck = highLow === "top" ? highPieces : lowPieces;
-    const blueRedToCheck = team === "blue" ? BLUE_TEAM_ID : RED_TEAM_ID;
+    const highLowToCheck = highLow === 'top' ? highPieces : lowPieces;
+    const blueRedToCheck = team === 'blue' ? BLUE_TEAM_ID : RED_TEAM_ID;
     if (pieces) {
         for (const piece of pieces) {
             if (piece.pieceTeamId === blueRedToCheck && highLowToCheck.includes(piece.pieceTypeId)) {
@@ -101,7 +101,7 @@ const titleSolver = (position: any, gameInfo: any, positionIndex: number) => {
     //ignore titles for types 'land' and 'water'
 
     if (IGNORE_TITLE_TYPES.includes(type)) {
-        return "";
+        return '';
     }
 
     if (!ALL_FLAG_LOCATIONS.includes(positionIndex)) {
@@ -112,7 +112,7 @@ const titleSolver = (position: any, gameInfo: any, positionIndex: number) => {
             case MISSILE_SILO_TYPE:
                 return MISSILE_SILO_TITLE;
             default:
-                return "";
+                return '';
         }
     }
 
@@ -120,7 +120,7 @@ const titleSolver = (position: any, gameInfo: any, positionIndex: number) => {
     const islandNum = FLAG_ISLAND_OWNERSHIP[positionIndex];
     const islandTitle = ALL_ISLAND_NAMES[islandNum];
 
-    return "Island Flag\n" + islandTitle + "\nPoints: " + ISLAND_POINTS[islandNum];
+    return 'Island Flag\n' + islandTitle + '\nPoints: ' + ISLAND_POINTS[islandNum];
 };
 
 interface Props {
@@ -168,7 +168,7 @@ class Gameboard extends Component<Props> {
                 planningPositions.push(parseInt(positionId));
             }
 
-            if (type === "container" && !containerPositions.includes(parseInt(positionId))) {
+            if (type === 'container' && !containerPositions.includes(parseInt(positionId))) {
                 containerPositions.push(parseInt(positionId));
             }
         }
@@ -177,10 +177,10 @@ class Gameboard extends Component<Props> {
             if (selectedPiece.pieceId in confirmedPlans) {
                 for (let z = 0; z < confirmedPlans[selectedPiece.pieceId].length; z++) {
                     const { type, positionId } = confirmedPlans[selectedPiece.pieceId][z];
-                    if (type === "move") {
+                    if (type === 'move') {
                         planningPositions.push(parseInt(positionId));
                     }
-                    if (type === "container") {
+                    if (type === 'container') {
                         containerPositions.push(parseInt(positionId));
                     }
                 }
@@ -244,52 +244,52 @@ class Gameboard extends Component<Props> {
                 //TODO: highlight according to some priority list
                 className={
                     parseInt(selectedPosition) === parseInt(positionIndex)
-                        ? "selectedPos"
+                        ? 'selectedPos'
                         : containerPositions.includes(parseInt(positionIndex))
-                        ? "containerPos"
+                        ? 'containerPos'
                         : planningPositions.includes(parseInt(positionIndex))
-                        ? "plannedPos"
+                        ? 'plannedPos'
                         : highlightedPositions.includes(parseInt(positionIndex))
-                        ? "highlightedPos"
+                        ? 'highlightedPos'
                         : battlePositions.includes(parseInt(positionIndex))
-                        ? "battlePos"
+                        ? 'battlePos'
                         : confirmedRods.includes(parseInt(positionIndex))
-                        ? "battlePos"
+                        ? 'battlePos'
                         : confirmedBioWeapons.includes(parseInt(positionIndex))
-                        ? "bioWeaponPos"
+                        ? 'bioWeaponPos'
                         : confirmedInsurgency.includes(parseInt(positionIndex))
-                        ? "battlePos"
+                        ? 'battlePos'
                         : remoteSensedPositions.includes(parseInt(positionIndex))
-                        ? "remoteSensePos"
+                        ? 'remoteSensePos'
                         : commInterruptPositions.includes(parseInt(positionIndex))
-                        ? "commInterruptPos"
+                        ? 'commInterruptPos'
                         : goldenEyePositions.includes(parseInt(positionIndex))
-                        ? "goldenEyePos"
-                        : ""
+                        ? 'goldenEyePos'
+                        : ''
                 }
                 //TODO: pass down what the highlighting means into the title
                 title={titleSolver(gameboard[positionIndex], gameInfo, parseInt(positionIndex))}
-                topBlue={hasPieceType(gameboard[positionIndex], "top", "blue")}
-                bottomBlue={hasPieceType(gameboard[positionIndex], "bottom", "blue")}
-                topRed={hasPieceType(gameboard[positionIndex], "top", "red")}
-                bottomRed={hasPieceType(gameboard[positionIndex], "bottom", "red")}
+                topBlue={hasPieceType(gameboard[positionIndex], 'top', 'blue')}
+                bottomBlue={hasPieceType(gameboard[positionIndex], 'bottom', 'blue')}
+                topRed={hasPieceType(gameboard[positionIndex], 'top', 'red')}
+                bottomRed={hasPieceType(gameboard[positionIndex], 'bottom', 'red')}
             />
         ));
 
         return (
             <div style={gameboardStyle}>
                 <div style={subDivStyle}>
-                    <HexGrid width={"100%"} height={"100%"} viewBox="-50 -50 100 100">
+                    <HexGrid width={'100%'} height={'100%'} viewBox="-50 -50 100 100">
                         <Layout size={{ x: 3.15, y: 3.15 }} flat={true} spacing={1.03} origin={{ x: -98, y: -46 }}>
                             {positions}
                         </Layout>
-                        <Pattern id="land" link={positionImagesPath + "land.png"} size={imageSize} />
-                        <Pattern id="water" link={positionImagesPath + "water.png"} size={imageSize} />
-                        <Pattern id="flag" link={positionImagesPath + "flag.png"} size={imageSize} />
-                        <Pattern id="redflag" link={positionImagesPath + "redflag.png"} size={imageSize} />
-                        <Pattern id="blueflag" link={positionImagesPath + "blueflag.png"} size={imageSize} />
-                        <Pattern id="airfield" link={positionImagesPath + "airfield.png"} size={imageSize} />
-                        <Pattern id="missile" link={positionImagesPath + "missile.png"} size={imageSize} />
+                        <Pattern id="land" link={positionImagesPath + 'land.png'} size={imageSize} />
+                        <Pattern id="water" link={positionImagesPath + 'water.png'} size={imageSize} />
+                        <Pattern id="flag" link={positionImagesPath + 'flag.png'} size={imageSize} />
+                        <Pattern id="redflag" link={positionImagesPath + 'redflag.png'} size={imageSize} />
+                        <Pattern id="blueflag" link={positionImagesPath + 'blueflag.png'} size={imageSize} />
+                        <Pattern id="airfield" link={positionImagesPath + 'airfield.png'} size={imageSize} />
+                        <Pattern id="missile" link={positionImagesPath + 'missile.png'} size={imageSize} />
                     </HexGrid>
                 </div>
 

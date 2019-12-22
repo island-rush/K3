@@ -1,8 +1,8 @@
-import { Dispatch } from "redux";
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
-import { EmitType, InvItemType } from "../../../constants/interfaces";
-import { BIO_WEAPON_SELECTING } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
+import { EmitType, InvItemType } from '../../../constants/interfaces';
+import { BIO_WEAPON_SELECTING } from '../actionTypes';
+import setUserfeedbackAction from '../setUserfeedbackAction';
 
 const biologicalWeapons = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
@@ -10,12 +10,12 @@ const biologicalWeapons = (invItem: InvItemType) => {
         const { gamePhase, gameSlice } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
-            dispatch(setUserfeedbackAction("wrong phase for bio weapons dude."));
+            dispatch(setUserfeedbackAction('wrong phase for bio weapons dude.'));
             return;
         }
 
         if (gameSlice !== SLICE_PLANNING_ID) {
-            dispatch(setUserfeedbackAction("must be in planning to use bio weapons."));
+            dispatch(setUserfeedbackAction('must be in planning to use bio weapons.'));
             return;
         }
 

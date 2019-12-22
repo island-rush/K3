@@ -1,11 +1,11 @@
 //TODO: make this file less thiccc, it's getting pretty hefty (maybe use more reducers to keep it clean....)
-import { distanceMatrix } from "../../constants/distanceMatrix";
-import { ALL_GROUND_TYPES } from "../../constants/gameboardConstants";
-import { TRANSPORT_TYPE_ID, TYPE_FUEL } from "../../constants/gameConstants";
+import { distanceMatrix } from '../../constants/distanceMatrix';
+import { ALL_GROUND_TYPES } from '../../constants/gameboardConstants';
+import { TRANSPORT_TYPE_ID, TYPE_FUEL } from '../../constants/gameConstants';
 //prettier-ignore
 import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, CLEAR_BATTLE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, CONTAINER_MOVE, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE } from "../actions/actionTypes";
-import { initialGameboardEmpty } from "./initialGameboardEmpty";
-import { PieceType } from "../../constants/interfaces";
+import { initialGameboardEmpty } from './initialGameboardEmpty';
+import { PieceType } from '../../constants/interfaces';
 
 const initialGameboardMeta = {
     //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
@@ -16,8 +16,8 @@ const initialGameboardMeta = {
     news: {
         isMinimized: false,
         active: false,
-        newsTitle: "Loading Title...",
-        newsInfo: "Loading Info..."
+        newsTitle: 'Loading Title...',
+        newsInfo: 'Loading Info...'
     },
     battle: {
         isMinimized: false,
@@ -284,14 +284,14 @@ function gameboardMetaReducer(state = initialGameboardMeta, { type, payload }: {
             break;
         case CONTAINER_MOVE:
             stateDeepCopy.planning.moves.push({
-                type: "container",
+                type: 'container',
                 positionId: payload.selectedPositionId
             });
             break;
         case PLANNING_SELECT:
             //TODO: move this to userActions to have more checks there within the thunk
             stateDeepCopy.planning.moves.push({
-                type: "move",
+                type: 'move',
                 positionId: payload.selectedPositionId
             });
             break;

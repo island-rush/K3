@@ -1,6 +1,6 @@
-import { Dispatch } from "redux";
-import { EmitType } from "../../constants/interfaces";
-import { MENU_SELECT } from "./actionTypes";
+import { Dispatch } from 'redux';
+import { EmitType } from '../../constants/interfaces';
+import { MENU_SELECT } from './actionTypes';
 
 /**
  * Dispatch to Redux store that user selected menu.

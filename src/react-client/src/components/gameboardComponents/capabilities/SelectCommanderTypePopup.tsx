@@ -1,28 +1,28 @@
-import React from "react";
-import { TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL } from "../../../constants/gameConstants";
+import React from 'react';
+import { TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL } from '../../../constants/gameConstants';
 
 const popupStyle: any = {
-    backgroundColor: "white",
-    width: "50%",
-    height: "30%",
-    top: "25%",
-    right: "25%",
-    position: "absolute"
+    backgroundColor: 'white',
+    width: '50%',
+    height: '30%',
+    top: '25%',
+    right: '25%',
+    position: 'absolute'
 };
 
 const titleStyle: any = {
-    textAlign: "center"
+    textAlign: 'center'
 };
 
 const buttonStyle: any = {
-    float: "left",
-    backgroundColor: "grey",
-    margin: "5%",
-    padding: "5%"
+    float: 'left',
+    backgroundColor: 'grey',
+    margin: '5%',
+    padding: '5%'
 };
 
 const invisibleStyle: any = {
-    display: "none"
+    display: 'none'
 };
 
 interface Props {

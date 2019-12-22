@@ -1,8 +1,8 @@
-import { Dispatch } from "redux";
-import { WAITING_STATUS } from "../../../constants/gameConstants";
-import { EmitType } from "../../../constants/interfaces";
-import { ENEMY_PIECE_SELECT } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { WAITING_STATUS } from '../../../constants/gameConstants';
+import { EmitType } from '../../../constants/interfaces';
+import { ENEMY_PIECE_SELECT } from '../actionTypes';
+import setUserfeedbackAction from '../setUserfeedbackAction';
 
 const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
@@ -17,7 +17,7 @@ const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
         const { selectedBattlePiece, selectedBattlePieceIndex } = gameboardMeta.battle;
 
         if (selectedBattlePiece === -1 || selectedBattlePieceIndex === -1) {
-            dispatch(setUserfeedbackAction("Must select piece to attack with.."));
+            dispatch(setUserfeedbackAction('Must select piece to attack with..'));
         } else {
             dispatch({
                 type: ENEMY_PIECE_SELECT,

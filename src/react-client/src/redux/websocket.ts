@@ -1,7 +1,7 @@
-import { AnyAction, Store } from "redux";
-import io from "socket.io-client";
-import { EmitType } from "../constants/interfaces";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../constants/otherConstants";
+import { AnyAction, Store } from 'redux';
+import io from 'socket.io-client';
+import { EmitType } from '../constants/interfaces';
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../constants/otherConstants';
 
 const socket: SocketIOClient.Socket = io(window.location.hostname);
 

@@ -1,8 +1,8 @@
-import { Dispatch } from "redux";
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from "../../../constants/gameConstants";
-import { EmitType } from "../../../constants/interfaces";
-import { START_PLAN } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from '../../../constants/gameConstants';
+import { EmitType } from '../../../constants/interfaces';
+import { START_PLAN } from '../actionTypes';
+import setUserfeedbackAction from '../setUserfeedbackAction';
 
 //TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)
 /**
@@ -13,19 +13,19 @@ const startPlan = () => {
         const { gameboardMeta, gameInfo } = getState();
 
         if (gameboardMeta.selectedPiece == null) {
-            dispatch(setUserfeedbackAction("Must select a piece to plan a move..."));
+            dispatch(setUserfeedbackAction('Must select a piece to plan a move...'));
             return;
         }
         const { selectedPiece } = gameboardMeta;
         const { gamePhase, gameControllers, gameTeam, gameSlice } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
-            dispatch(setUserfeedbackAction("Not the right phase for planning..."));
+            dispatch(setUserfeedbackAction('Not the right phase for planning...'));
             return;
         }
 
         if (gameSlice !== SLICE_PLANNING_ID) {
-            dispatch(setUserfeedbackAction("Already Executing, wait for next planning slice."));
+            dispatch(setUserfeedbackAction('Already Executing, wait for next planning slice.'));
             return;
         }
 
@@ -44,12 +44,12 @@ const startPlan = () => {
         }
 
         if (selectedPiece.pieceDisabled) {
-            dispatch(setUserfeedbackAction("Piece is disabled from something (probably goldeneye)"));
+            dispatch(setUserfeedbackAction('Piece is disabled from something (probably goldeneye)'));
             return;
         }
 
         if (gameboardMeta.planning.active) {
-            dispatch(setUserfeedbackAction("Already planning a move..."));
+            dispatch(setUserfeedbackAction('Already planning a move...'));
             return;
         }
 

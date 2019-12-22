@@ -1,49 +1,49 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { menuSelect } from "../../redux/actions";
-import Gameinfo from "./Gameinfo";
-import InvMenu from "./InvMenu";
-import ShopMenu from "./ShopMenu";
-import SpaceArea from "./SpaceArea";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { menuSelect } from '../../redux/actions';
+import Gameinfo from './Gameinfo';
+import InvMenu from './InvMenu';
+import ShopMenu from './ShopMenu';
+import SpaceArea from './SpaceArea';
 
 const sidebarStyle: any = {
-    backgroundColor: "Red",
-    position: "absolute",
-    top: "0%",
-    left: "0%",
-    height: "40%",
-    width: "5%"
+    backgroundColor: 'Red',
+    position: 'absolute',
+    top: '0%',
+    left: '0%',
+    height: '40%',
+    width: '5%'
 };
 
 const buttonStyle: any = {
-    position: "absolute",
-    backgroundSize: "100% 100%",
-    backgroundRepeat: "no-repeat",
-    backgroundColor: "maroon",
-    left: "15%",
-    width: "70%",
-    paddingTop: "70%"
+    position: 'absolute',
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat',
+    backgroundColor: 'maroon',
+    left: '15%',
+    width: '70%',
+    paddingTop: '70%'
 };
 
 const shopButtonStyle = {
-    top: "4%"
+    top: '4%'
 };
 
 const invButtonStyle = {
-    top: "28%"
+    top: '28%'
 };
 
 const spaceButtonStyle = {
-    top: "52%"
+    top: '52%'
 };
 
 const infoButtonStyle = {
     backgroundImage: 'url("./images/graphics/infoIcon.png")',
-    top: "76%"
+    top: '76%'
 };
 
 const selectedButtonStyle = {
-    backgroundColor: "white"
+    backgroundColor: 'white'
 };
 
 interface Props {
@@ -77,7 +77,7 @@ class Sidebar extends Component<Props> {
                     style={{
                         ...buttonStyle,
                         ...shopButtonStyle,
-                        ...(selectedMenu === 1 ? selectedButtonStyle : "")
+                        ...(selectedMenu === 1 ? selectedButtonStyle : '')
                     }}
                 />
                 <div
@@ -89,7 +89,7 @@ class Sidebar extends Component<Props> {
                     style={{
                         ...buttonStyle,
                         ...invButtonStyle,
-                        ...(selectedMenu === 2 ? selectedButtonStyle : "")
+                        ...(selectedMenu === 2 ? selectedButtonStyle : '')
                     }}
                 />
 
@@ -102,7 +102,7 @@ class Sidebar extends Component<Props> {
                     style={{
                         ...buttonStyle,
                         ...spaceButtonStyle,
-                        ...(selectedMenu === 3 ? selectedButtonStyle : "")
+                        ...(selectedMenu === 3 ? selectedButtonStyle : '')
                     }}
                 />
                 <div
@@ -114,7 +114,7 @@ class Sidebar extends Component<Props> {
                     style={{
                         ...buttonStyle,
                         ...infoButtonStyle,
-                        ...(selectedMenu === 4 ? selectedButtonStyle : "")
+                        ...(selectedMenu === 4 ? selectedButtonStyle : '')
                     }}
                 />
             </div>

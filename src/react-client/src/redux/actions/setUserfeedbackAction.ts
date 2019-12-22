@@ -1,5 +1,5 @@
-import { UserfeedbackAction } from "../../constants/interfaces";
-import { SET_USERFEEDBACK } from "./actionTypes";
+import { UserfeedbackAction } from '../../constants/interfaces';
+import { SET_USERFEEDBACK } from './actionTypes';
 
 /**
  * Helper function to create Redux Action to send userfeedback to the state.

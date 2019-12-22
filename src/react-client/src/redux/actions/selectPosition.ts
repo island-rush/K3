@@ -1,14 +1,14 @@
-import { Dispatch } from "redux";
-import { distanceMatrix } from "../../constants/distanceMatrix";
+import { Dispatch } from 'redux';
+import { distanceMatrix } from '../../constants/distanceMatrix';
 //prettier-ignore
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, TYPE_TERRAIN } from "../../constants/gameConstants";
 //prettier-ignore
 import { EmitType, ExitTransportContainerRequestAction, HighlightPositionsAction, PlanningSelectAction, PositionCapabilityRequestAction, PositionSelectAction } from "../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../constants/otherConstants";
-import { initialGameboardEmpty } from "../reducers/initialGameboardEmpty";
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../constants/otherConstants';
+import { initialGameboardEmpty } from '../reducers/initialGameboardEmpty';
 //prettier-ignore
 import { HIGHLIGHT_POSITIONS, PLANNING_SELECT, POSITION_SELECT, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM } from "./actionTypes";
-import setUserfeedbackAction from "./setUserfeedbackAction";
+import setUserfeedbackAction from './setUserfeedbackAction';
 
 /**
  * Change the state based on position that was clicked by the user.
@@ -53,7 +53,7 @@ const selectPosition = (selectedPositionId: number) => {
 
         //is actively planning
         if (selectedPositionId === -1 && !gameboardMeta.planning.capability) {
-            dispatch(setUserfeedbackAction("Must select a position for the plan..."));
+            dispatch(setUserfeedbackAction('Must select a position for the plan...'));
             return;
         }
 
@@ -114,7 +114,7 @@ const selectPosition = (selectedPositionId: number) => {
             }
 
             // eslint-disable-next-line no-restricted-globals
-            if (confirm("Are you sure you want to use capability on this position?")) {
+            if (confirm('Are you sure you want to use capability on this position?')) {
                 //TODO: figure out better way of typecasting the 'type' for this action (could be many types)
                 let type:
                     | typeof SERVER_RODS_FROM_GOD_CONFIRM
@@ -143,7 +143,7 @@ const selectPosition = (selectedPositionId: number) => {
                         type = SERVER_GOLDEN_EYE_CONFIRM;
                         break;
                     default:
-                        dispatch(setUserfeedbackAction("unkown/not yet implemented invItemTypeId functionality (capability)"));
+                        dispatch(setUserfeedbackAction('unkown/not yet implemented invItemTypeId functionality (capability)'));
                         return;
                 }
 
@@ -184,13 +184,13 @@ const selectPosition = (selectedPositionId: number) => {
         let trueMoveCount = 0;
         for (var i = 0; i < gameboardMeta.planning.moves.length; i++) {
             const { type } = gameboardMeta.planning.moves[i];
-            if (type === "move") {
+            if (type === 'move') {
                 trueMoveCount++;
             }
         }
 
         if (trueMoveCount >= gameboardMeta.selectedPiece.pieceMoves) {
-            dispatch(setUserfeedbackAction("Must move piece within range..."));
+            dispatch(setUserfeedbackAction('Must move piece within range...'));
             return;
         }
 
@@ -201,7 +201,7 @@ const selectPosition = (selectedPositionId: number) => {
                 : gameboardMeta.selectedPosition;
 
         if (distanceMatrix[lastSelectedPosition][selectedPositionId] !== 1) {
-            dispatch(setUserfeedbackAction("Must select adjacent position..."));
+            dispatch(setUserfeedbackAction('Must select adjacent position...'));
             return;
         }
 
@@ -209,7 +209,7 @@ const selectPosition = (selectedPositionId: number) => {
         const { pieceTypeId } = gameboardMeta.selectedPiece;
         const { type } = initialGameboardEmpty[selectedPositionId];
         if (!TYPE_TERRAIN[pieceTypeId].includes(type)) {
-            dispatch(setUserfeedbackAction("Wrong terrain type for this piece..."));
+            dispatch(setUserfeedbackAction('Wrong terrain type for this piece...'));
             return;
         }
 

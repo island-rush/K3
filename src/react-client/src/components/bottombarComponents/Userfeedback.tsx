@@ -1,12 +1,12 @@
-import React, { FC } from "react";
+import React, { FC } from 'react';
 
 const userfeedbackStyle: any = {
-    background: "grey",
-    height: "80%",
-    width: "40%",
-    position: "relative",
-    float: "left",
-    margin: ".5%"
+    background: 'grey',
+    height: '80%',
+    width: '40%',
+    position: 'relative',
+    float: 'left',
+    margin: '.5%'
 };
 
 interface Props {

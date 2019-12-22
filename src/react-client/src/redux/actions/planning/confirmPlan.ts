@@ -1,8 +1,8 @@
-import { Dispatch } from "redux";
-import { ConfirmPlanRequestAction, EmitType } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_CONFIRM_PLAN } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { ConfirmPlanRequestAction, EmitType } from '../../../constants/interfaces';
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
+import { SERVER_CONFIRM_PLAN } from '../actionTypes';
+import setUserfeedbackAction from '../setUserfeedbackAction';
 
 /**
  * Action to confirm a list of moves as a plan for a piece.

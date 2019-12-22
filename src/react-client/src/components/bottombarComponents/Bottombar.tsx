@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { mainButtonClick } from "../../redux/actions";
-import Leftcontrols from "./Leftcontrols";
-import MainButton from "./MainButton";
-import UserFeedback from "./Userfeedback";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { mainButtonClick } from '../../redux/actions';
+import Leftcontrols from './Leftcontrols';
+import MainButton from './MainButton';
+import UserFeedback from './Userfeedback';
 
 const bottombarStyle: any = {
-    backgroundColor: "Green",
-    position: "absolute",
-    height: "10%",
-    width: "73%",
-    bottom: "0%",
-    right: "0%"
+    backgroundColor: 'Green',
+    position: 'absolute',
+    height: '10%',
+    width: '73%',
+    bottom: '0%',
+    right: '0%'
 };
 
 interface Props {

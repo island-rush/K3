@@ -1,20 +1,20 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { clearPieceSelection, menuSelect, selectPosition } from "../redux/actions";
-import Bottombar from "./bottombarComponents/Bottombar";
-import Gameboard from "./gameboardComponents/Gameboard";
-import Sidebar from "./sidebarComponents/Sidebar";
-import Zoombox from "./zoomboxComponents/Zoombox";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { clearPieceSelection, menuSelect, selectPosition } from '../redux/actions';
+import Bottombar from './bottombarComponents/Bottombar';
+import Gameboard from './gameboardComponents/Gameboard';
+import Sidebar from './sidebarComponents/Sidebar';
+import Zoombox from './zoomboxComponents/Zoombox';
 
 const appStyle: any = {
-    position: "relative",
-    backgroundColor: "blue",
-    height: "100%",
-    width: "100%"
+    position: 'relative',
+    backgroundColor: 'blue',
+    height: '100%',
+    width: '100%'
 };
 
 const isPlanningStyle: any = {
-    backgroundColor: "yellow"
+    backgroundColor: 'yellow'
 };
 
 interface Props {
@@ -32,7 +32,7 @@ class App extends Component<Props> {
             <div
                 style={{
                     ...appStyle,
-                    ...(gameboardMeta.planning.active ? isPlanningStyle : "")
+                    ...(gameboardMeta.planning.active ? isPlanningStyle : '')
                 }}
                 onClick={event => {
                     event.preventDefault();

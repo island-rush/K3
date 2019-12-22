@@ -1,8 +1,8 @@
-import { Dispatch } from "redux";
-import { CONTAINER_TYPES } from "../../../constants/gameConstants";
-import { EmitType, PieceOpenAction, PieceType } from "../../../constants/interfaces";
-import { PIECE_OPEN_ACTION } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { CONTAINER_TYPES } from '../../../constants/gameConstants';
+import { EmitType, PieceOpenAction, PieceType } from '../../../constants/interfaces';
+import { PIECE_OPEN_ACTION } from '../actionTypes';
+import setUserfeedbackAction from '../setUserfeedbackAction';
 
 /**
  * Double Click a container piece to open it.
@@ -19,7 +19,7 @@ const pieceOpen = (selectedPiece: PieceType) => {
 
         //don't want to open pieces that aren't container types
         if (!CONTAINER_TYPES.includes(pieceTypeId)) {
-            dispatch(setUserfeedbackAction("Not a piece that can hold other pieces..."));
+            dispatch(setUserfeedbackAction('Not a piece that can hold other pieces...'));
             return;
         }
 

@@ -1,70 +1,70 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 //prettier-ignore
 import { battlePieceClick, battlePopupMinimizeToggle, clearOldBattle, confirmBattleSelections, enemyBattlePieceClick, targetPieceClick } from "../../../redux/actions";
-import { BATTLE_POPUP_IMAGES } from "../../styleConstants";
-import BattlePiece from "./BattlePiece";
+import { BATTLE_POPUP_IMAGES } from '../../styleConstants';
+import BattlePiece from './BattlePiece';
 
 const battlePopupStyle: any = {
-    position: "absolute",
-    display: "block",
-    width: "80%",
-    height: "70%",
-    top: "10%",
-    right: "10%",
-    backgroundColor: "white",
-    border: "2px solid black",
+    position: 'absolute',
+    display: 'block',
+    width: '80%',
+    height: '70%',
+    top: '10%',
+    right: '10%',
+    backgroundColor: 'white',
+    border: '2px solid black',
     zIndex: 4
 };
 
 const battlePopupMinimizeStyle: any = {
-    position: "absolute",
-    display: "block",
-    width: "7%",
-    height: "12%",
-    top: "0%",
-    left: "-8%",
-    backgroundColor: "white",
-    border: "2px solid black",
+    position: 'absolute',
+    display: 'block',
+    width: '7%',
+    height: '12%',
+    top: '0%',
+    left: '-8%',
+    backgroundColor: 'white',
+    border: '2px solid black',
     zIndex: 4,
-    backgroundSize: "100% 100%",
-    backgroundRepeat: "no-repeat"
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat'
 };
 
 const isMinimizedStyle: any = {
-    border: "2px solid red",
-    top: "35%",
-    margin: "2%"
+    border: '2px solid red',
+    top: '35%',
+    margin: '2%'
 };
 
 const leftBattleStyle: any = {
-    position: "relative",
-    overflow: "scroll",
-    float: "left",
-    backgroundColor: "grey",
-    height: "96%",
-    width: "48%",
-    margin: "1%"
+    position: 'relative',
+    overflow: 'scroll',
+    float: 'left',
+    backgroundColor: 'grey',
+    height: '96%',
+    width: '48%',
+    margin: '1%'
 };
 
 const rightBattleStyle: any = {
-    position: "relative",
-    overflow: "scroll",
-    backgroundColor: "grey",
-    height: "96%",
-    width: "48%",
-    float: "right",
-    margin: "1%"
+    position: 'relative',
+    overflow: 'scroll',
+    backgroundColor: 'grey',
+    height: '96%',
+    width: '48%',
+    float: 'right',
+    margin: '1%'
 };
 
 const battleButtonStyle: any = {
-    position: "absolute",
-    bottom: "-7%",
-    right: "2%"
+    position: 'absolute',
+    bottom: '-7%',
+    right: '2%'
 };
 
 const invisibleStyle: any = {
-    display: "none"
+    display: 'none'
 };
 
 interface Props {
@@ -133,7 +133,7 @@ class BattlePopup extends Component<Props> {
                         }}
                         style={battleButtonStyle}
                     >
-                        {battle.masterRecord == null ? "Confirm Selections" : "Return to Battle"}
+                        {battle.masterRecord == null ? 'Confirm Selections' : 'Return to Battle'}
                     </button>
                     <div
                         onClick={event => {

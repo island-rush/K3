@@ -104,18 +104,18 @@ FLAG_ISLAND_OWNERSHIP[FLAG_12_LOCATION] = EAGLE_ISLAND_ID;
 //TODO: probably rethink this file, and possible the database naming convention for island (flag) positions?
 
 export let ALL_ISLAND_NAMES: { [id: number]: string } = {};
-ALL_ISLAND_NAMES[DRAGON_ISLAND_ID] = "Dragon Island";
-ALL_ISLAND_NAMES[HR_REPUBLIC_ISLAND_ID] = "H.R. Republic";
-ALL_ISLAND_NAMES[MONTAVILLE_ISLAND_ID] = "Montaville";
-ALL_ISLAND_NAMES[LION_ISLAND_ID] = "Lion Island";
-ALL_ISLAND_NAMES[NOYARC_ISLAND_ID] = "Noyarc";
-ALL_ISLAND_NAMES[FULLER_ISLAND_ID] = "Fuller Island";
-ALL_ISLAND_NAMES[RICO_ISLAND_ID] = "Rico Island";
-ALL_ISLAND_NAMES[TAMU_ISLAND_ID] = "Tamu Island";
-ALL_ISLAND_NAMES[SHOR_ISLAND_ID] = "Shor";
-ALL_ISLAND_NAMES[KEONI_ISLAND_ID] = "Keoni";
-ALL_ISLAND_NAMES[EAGLE_ISLAND_ID] = "Eagle Island";
-ALL_ISLAND_NAMES[EAGLE_ISLAND_ID] = "Eagle Island";
+ALL_ISLAND_NAMES[DRAGON_ISLAND_ID] = 'Dragon Island';
+ALL_ISLAND_NAMES[HR_REPUBLIC_ISLAND_ID] = 'H.R. Republic';
+ALL_ISLAND_NAMES[MONTAVILLE_ISLAND_ID] = 'Montaville';
+ALL_ISLAND_NAMES[LION_ISLAND_ID] = 'Lion Island';
+ALL_ISLAND_NAMES[NOYARC_ISLAND_ID] = 'Noyarc';
+ALL_ISLAND_NAMES[FULLER_ISLAND_ID] = 'Fuller Island';
+ALL_ISLAND_NAMES[RICO_ISLAND_ID] = 'Rico Island';
+ALL_ISLAND_NAMES[TAMU_ISLAND_ID] = 'Tamu Island';
+ALL_ISLAND_NAMES[SHOR_ISLAND_ID] = 'Shor';
+ALL_ISLAND_NAMES[KEONI_ISLAND_ID] = 'Keoni';
+ALL_ISLAND_NAMES[EAGLE_ISLAND_ID] = 'Eagle Island';
+ALL_ISLAND_NAMES[EAGLE_ISLAND_ID] = 'Eagle Island';
 
 export let ISLAND_POINTS: { [id: number]: number } = {};
 ISLAND_POINTS[DRAGON_ISLAND_ID] = 5;
@@ -130,14 +130,14 @@ ISLAND_POINTS[SHOR_ISLAND_ID] = 5;
 ISLAND_POINTS[KEONI_ISLAND_ID] = 5;
 ISLAND_POINTS[EAGLE_ISLAND_ID] = 5;
 
-export const LAND_TYPE = "land";
-export const WATER_TYPE = "water";
-export const AIRFIELD_TYPE = "airfield";
-export const MISSILE_SILO_TYPE = "missile";
-export const FLAG_TYPE = "flag";
+export const LAND_TYPE = 'land';
+export const WATER_TYPE = 'water';
+export const AIRFIELD_TYPE = 'airfield';
+export const MISSILE_SILO_TYPE = 'missile';
+export const FLAG_TYPE = 'flag';
 
-export const AIRFIELD_TITLE = "Airfield";
-export const MISSILE_SILO_TITLE = "Missile Silo";
+export const AIRFIELD_TITLE = 'Airfield';
+export const MISSILE_SILO_TITLE = 'Missile Silo';
 
 export const ALL_GROUND_TYPES = [LAND_TYPE, AIRFIELD_TYPE, MISSILE_SILO_TYPE, FLAG_TYPE];
 

@@ -1,67 +1,67 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { ANTI_SATELLITE_MISSILES_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID } from "../../constants/gameConstants";
-import { antiSatelliteMissiles, remoteSensing, rodsFromGod } from "../../redux/actions";
-import InvItem from "./InvItem";
-import { InvItemType } from "../../constants/interfaces";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { ANTI_SATELLITE_MISSILES_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID } from '../../constants/gameConstants';
+import { antiSatelliteMissiles, remoteSensing, rodsFromGod } from '../../redux/actions';
+import InvItem from './InvItem';
+import { InvItemType } from '../../constants/interfaces';
 
 const spaceAreaStyle: any = {
-    backgroundColor: "Yellow",
-    position: "absolute",
-    height: "170%",
-    width: "1800%",
-    marginLeft: "150%",
-    marginTop: "20%",
-    padding: "1%"
+    backgroundColor: 'Yellow',
+    position: 'absolute',
+    height: '170%',
+    width: '1800%',
+    marginLeft: '150%',
+    marginTop: '20%',
+    padding: '1%'
 };
 
 const remoteSensingContainerStyle: any = {
-    backgroundColor: "pink",
-    position: "absolute",
-    width: "18%",
-    height: "80%",
-    right: "81%",
-    top: "10%"
+    backgroundColor: 'pink',
+    position: 'absolute',
+    width: '18%',
+    height: '80%',
+    right: '81%',
+    top: '10%'
 };
 
 const rodsfromGodContainerStyle: any = {
-    backgroundColor: "pink",
-    position: "absolute",
-    width: "18%",
-    height: "80%",
-    right: "61%",
-    top: "10%"
+    backgroundColor: 'pink',
+    position: 'absolute',
+    width: '18%',
+    height: '80%',
+    right: '61%',
+    top: '10%'
 };
 
 const antiSatelliteMissilesContainerStyle: any = {
-    backgroundColor: "pink",
-    position: "absolute",
-    width: "18%",
-    height: "80%",
-    right: "41%",
-    top: "10%"
+    backgroundColor: 'pink',
+    position: 'absolute',
+    width: '18%',
+    height: '80%',
+    right: '41%',
+    top: '10%'
 };
 
 const future1ContainerStyle: any = {
-    backgroundColor: "pink",
-    position: "absolute",
-    width: "18%",
-    height: "80%",
-    right: "21%",
-    top: "10%"
+    backgroundColor: 'pink',
+    position: 'absolute',
+    width: '18%',
+    height: '80%',
+    right: '21%',
+    top: '10%'
 };
 
 const future2ContainerStyle: any = {
-    backgroundColor: "pink",
-    position: "absolute",
-    width: "18%",
-    height: "80%",
-    left: "81%",
-    top: "10%"
+    backgroundColor: 'pink',
+    position: 'absolute',
+    width: '18%',
+    height: '80%',
+    left: '81%',
+    top: '10%'
 };
 
 const invisibleStyle = {
-    display: "none"
+    display: 'none'
 };
 
 interface Props {

@@ -1,25 +1,25 @@
-import React, { Component } from "react";
-import { SELECTED_BORDERS, TYPE_IMAGES } from "../../styleConstants";
+import React, { Component } from 'react';
+import { SELECTED_BORDERS, TYPE_IMAGES } from '../../styleConstants';
 
 const tankerPieceStyle = {
-    backgroundColor: "white",
-    height: "15%",
-    width: "96%",
-    margin: "1%",
-    padding: "1%",
-    borderRadius: "2%"
+    backgroundColor: 'white',
+    height: '15%',
+    width: '96%',
+    margin: '1%',
+    padding: '1%',
+    borderRadius: '2%'
 };
 
 const boxStyle = {
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "90% 90%",
-    backgroundPosition: "center",
-    border: "2px solid black",
-    height: "92%",
-    width: "23%",
-    float: "left",
-    margin: ".5%",
-    position: "relative"
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '90% 90%',
+    backgroundPosition: 'center',
+    border: '2px solid black',
+    height: '92%',
+    width: '23%',
+    float: 'left',
+    margin: '.5%',
+    position: 'relative'
 };
 
 interface Props {

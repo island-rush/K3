@@ -1,7 +1,7 @@
-import { Dispatch } from "redux";
-import { EmitType, ExitContainerRequestAction, PieceType } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_INNER_PIECE_CLICK } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { EmitType, ExitContainerRequestAction, PieceType } from '../../../constants/interfaces';
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
+import { SERVER_INNER_PIECE_CLICK } from '../actionTypes';
 
 /**
  * Move piece from inside container to outside (same position)

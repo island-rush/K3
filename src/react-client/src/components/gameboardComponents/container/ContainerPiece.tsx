@@ -1,18 +1,18 @@
-import React from "react";
-import { TYPE_NAMES } from "../../../constants/gameConstants";
-import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from "../../styleConstants";
-import { PieceType } from "../../../constants/interfaces";
+import React from 'react';
+import { TYPE_NAMES } from '../../../constants/gameConstants';
+import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../../styleConstants';
+import { PieceType } from '../../../constants/interfaces';
 
 const containerPieceStyle: any = {
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "90% 90%",
-    backgroundPosition: "center",
-    border: "2px solid black",
-    height: "15%",
-    width: "15%",
-    float: "left",
-    margin: ".5%",
-    position: "relative"
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '90% 90%',
+    backgroundPosition: 'center',
+    border: '2px solid black',
+    height: '15%',
+    width: '15%',
+    float: 'left',
+    margin: '.5%',
+    position: 'relative'
 };
 
 interface Props {

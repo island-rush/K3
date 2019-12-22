@@ -1,7 +1,7 @@
-import { Dispatch } from "redux";
-import { ConfirmFuelSelectionRequestAction, EmitType } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_CONFIRM_FUEL_SELECTION } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { ConfirmFuelSelectionRequestAction, EmitType } from '../../../constants/interfaces';
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
+import { SERVER_CONFIRM_FUEL_SELECTION } from '../actionTypes';
 
 /**
  * Action to confirm all fuel selections from specific tankers to specific aircraft.

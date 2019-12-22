@@ -1,16 +1,16 @@
-import React from "react";
-import { TYPE_COSTS, TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from "../../constants/gameConstants";
-import { TYPE_IMAGES } from "../styleConstants";
+import React from 'react';
+import { TYPE_COSTS, TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../constants/gameConstants';
+import { TYPE_IMAGES } from '../styleConstants';
 
 const purchaseableItemStyle = {
-    backgroundColor: "grey",
-    position: "relative",
-    width: "28%",
-    paddingTop: "28%",
-    margin: "2.5%",
-    float: "left",
-    backgroundSize: "100% 100%",
-    backgroundRepeat: "no-repeat"
+    backgroundColor: 'grey',
+    position: 'relative',
+    width: '28%',
+    paddingTop: '28%',
+    margin: '2.5%',
+    float: 'left',
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat'
 };
 
 interface Props {
@@ -26,7 +26,7 @@ const PurchaseableItem = ({ typeId, purchase }: Props) => {
     const moves = TYPE_MOVES[typeId];
     const fuel = TYPE_FUEL[typeId];
 
-    const title = `${name}\nCost: ${cost}\nMoves: ${moves !== undefined ? moves : "N/A"}\nFuel: ${fuel !== undefined && fuel !== -1 ? fuel : "N/A"}`;
+    const title = `${name}\nCost: ${cost}\nMoves: ${moves !== undefined ? moves : 'N/A'}\nFuel: ${fuel !== undefined && fuel !== -1 ? fuel : 'N/A'}`;
 
     const onClick = (event: any) => {
         event.preventDefault();

@@ -1,6 +1,6 @@
-import { Dispatch } from "redux";
-import { EmitType, PieceType } from "../../../constants/interfaces";
-import { TANKER_CLICK } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { EmitType, PieceType } from '../../../constants/interfaces';
+import { TANKER_CLICK } from '../actionTypes';
 
 /**
  * Action to select tanker to give fuel to other pieces.

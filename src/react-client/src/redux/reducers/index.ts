@@ -1,10 +1,10 @@
-import { combineReducers } from "redux";
-import gameboardMetaReducer from "./gameboardMetaReducer";
-import gameboardReducer from "./gameboardReducer";
-import gameInfoReducer from "./gameInfoReducer";
-import invReducer from "./invReducer";
-import shopReducer from "./shopReducer";
-import userFeedback from "./userFeedback";
+import { combineReducers } from 'redux';
+import gameboardMetaReducer from './gameboardMetaReducer';
+import gameboardReducer from './gameboardReducer';
+import gameInfoReducer from './gameInfoReducer';
+import invReducer from './invReducer';
+import shopReducer from './shopReducer';
+import userFeedback from './userFeedback';
 
 const rootReducer = combineReducers({
     userFeedback,

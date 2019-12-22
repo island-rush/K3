@@ -1,41 +1,41 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { LIST_ALL_CAPABILITIES, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from "../../constants/gameConstants";
-import { shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from "../../redux/actions";
-import PurchaseableItem from "./PurchaseableItem";
-import ShopItem from "./ShopItem";
-import { ShopItemType } from "../../constants/interfaces";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { LIST_ALL_CAPABILITIES, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../constants/gameConstants';
+import { shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from '../../redux/actions';
+import PurchaseableItem from './PurchaseableItem';
+import ShopItem from './ShopItem';
+import { ShopItemType } from '../../constants/interfaces';
 
 const shopStyle: any = {
-    backgroundColor: "Yellow",
-    position: "absolute",
-    height: "170%",
-    width: "1800%",
-    marginLeft: "150%",
-    marginTop: "20%"
+    backgroundColor: 'Yellow',
+    position: 'absolute',
+    height: '170%',
+    width: '1800%',
+    marginLeft: '150%',
+    marginTop: '20%'
 };
 
 const invisibleStyle = {
-    display: "none"
+    display: 'none'
 };
 
 const purchaseButtonStyle: any = {
-    position: "absolute",
-    bottom: "1%",
-    right: "1%",
-    height: "5%",
-    width: "10%",
-    backgroundColor: "pink"
+    position: 'absolute',
+    bottom: '1%',
+    right: '1%',
+    height: '5%',
+    width: '10%',
+    backgroundColor: 'pink'
 };
 
 const purchaseableItemsContainerStyle: any = {
-    backgroundColor: "red",
-    position: "relative",
-    width: "15%",
-    height: "80%",
-    float: "left",
-    top: "2.5%",
-    margin: ".5%"
+    backgroundColor: 'red',
+    position: 'relative',
+    width: '15%',
+    height: '80%',
+    float: 'left',
+    top: '2.5%',
+    margin: '.5%'
 };
 
 interface Props {
