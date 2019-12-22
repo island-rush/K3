@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
-import md5 from "md5";
-import { Password, TeacherSession } from "../../react-client/src/constants/interfaces";
-import { Game } from "../classes";
-import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from "../pages/errorTypes";
+import { Request, Response } from 'express';
+import md5 from 'md5';
+import { Password, TeacherSession } from '../../react-client/src/constants/interfaces';
+import { Game } from '../classes';
+import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from '../pages/errorTypes';
 
 /**
  * Set each team's password.
@@ -10,13 +10,13 @@ import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from "../pages/error
  * These passwords are used to log into the game.
  */
 const setTeamPasswords = async (req: Request, res: Response) => {
-    //Verify Session
+    // Verify Session
     if (!req.session.ir3teacher) {
         res.status(403).redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
     }
 
-    //Verify Request
+    // Verify Request
     if (!req.body.game0Password || !req.body.game1Password) {
         res.status(403).redirect(`/teacher.html?error=${BAD_REQUEST_TAG}`);
         return;
@@ -24,7 +24,7 @@ const setTeamPasswords = async (req: Request, res: Response) => {
 
     const { gameId }: TeacherSession = req.session.ir3teacher;
 
-    //Get game info
+    // Get game info
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
         res.status(400).redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
@@ -37,7 +37,7 @@ const setTeamPasswords = async (req: Request, res: Response) => {
 
     await thisGame.setTeamPasswords(game0PasswordHashed, game1PasswordHashed);
 
-    res.redirect("/teacher.html?setTeamPasswords=success");
+    res.redirect('/teacher.html?setTeamPasswords=success');
 };
 
 /**

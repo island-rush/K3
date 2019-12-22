@@ -1,0 +1,19 @@
+{
+    "extends": ["airbnb-typescript/base"],
+    "rules": {
+        "linebreak-style": "off",
+        "object-curly-newline": "off",
+        "comma-dangle": "off",
+        "@typescript-eslint/indent": ["warn", 4],
+        "max-len": "off",
+        "global-require": "off",
+        "no-console": "off",
+        "no-restricted-syntax": "off",
+        "no-param-reassign": "off",
+        "no-self-assign": "off",
+        "import/no-cycle": "off",
+        "no-plusplus": "off",
+        "no-await-in-loop": "off",
+        "radix": "off"
+    }
+}

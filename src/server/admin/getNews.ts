@@ -1,13 +1,13 @@
-import { Request, Response } from "express";
-import { TeacherSession } from "../../react-client/src/constants/interfaces";
-import { Game } from "../classes";
-import { ACCESS_TAG } from "../pages/errorTypes";
+import { Request, Response } from 'express';
+import { TeacherSession } from '../../react-client/src/constants/interfaces';
+import { Game } from '../classes';
+import { ACCESS_TAG } from '../pages/errorTypes';
 
 /**
  * Get array of news data for a particular game.
  */
 const getNews = async (req: Request, res: Response) => {
-    //Verify Session
+    // Verify Session
     if (!req.session.ir3teacher) {
         res.redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
@@ -20,11 +20,11 @@ const getNews = async (req: Request, res: Response) => {
         res.send(results);
     } catch (error) {
         console.error(error);
-        //Manually send response if fails
+        // Manually send response if fails
         res.status(500).send([
             {
                 newsId: 69,
-                newsTitle: "DATABASE FAILED"
+                newsTitle: 'DATABASE FAILED'
             }
         ]);
     }

@@ -4,7 +4,7 @@
  * Exports the pool for use in other files (Classes)
  */
 
-import mysql, { Pool, PoolOptions } from "mysql2/promise";
+import mysql, { Pool, PoolOptions } from 'mysql2/promise';
 
 const host: string = process.env.DB_HOSTNAME;
 const user: string = process.env.DB_USERNAME;
@@ -17,12 +17,12 @@ const databaseConfig: PoolOptions = {
     user,
     password,
     database,
-    multipleStatements: true //it allows for SQL injection attacks if values are not properly escaped
+    multipleStatements: true // it allows for SQL injection attacks if values are not properly escaped
 };
 
 /**
  * Pool of database connections.
  */
-let pool: Pool = mysql.createPool(databaseConfig);
+const pool: Pool = mysql.createPool(databaseConfig);
 
 export default pool;

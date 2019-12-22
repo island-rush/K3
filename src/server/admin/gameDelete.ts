@@ -1,35 +1,35 @@
-import { Request, Response } from "express";
-import { Game } from "../classes";
-import { ACCESS_TAG } from "../pages/errorTypes";
+import { Request, Response } from 'express';
+import { Game } from '../classes';
+import { ACCESS_TAG } from '../pages/errorTypes';
 
 /**
  * Delete a game from an express route /gameDelete
  */
 const gameDelete = async (req: Request, res: Response) => {
-    //Verify Session Exists
+    // Verify Session Exists
     if (!req.session.ir3coursedirector) {
         res.status(403).redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
     }
 
-    //Verify Request
+    // Verify Request
     if (!req.body.gameId) {
-        res.status(400).redirect("/courseDirector.html?gameDelete=failed");
+        res.status(400).redirect('/courseDirector.html?gameDelete=failed');
         return;
     }
 
     const { gameId }: GameDeleteRequest = req.body;
 
-    //Get the Game
+    // Get the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        res.status(400).redirect("/courseDirector.html?gameDelete=failed");
+        res.status(400).redirect('/courseDirector.html?gameDelete=failed');
         return;
     }
 
     await thisGame.delete();
 
-    res.redirect("/courseDirector.html?gameDelete=success");
+    res.redirect('/courseDirector.html?gameDelete=success');
 };
 
 /**
