@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 // prettier-ignore
 import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, TYPE_MAIN, WAITING_STATUS } from '../../react-client/src/constants/gameConstants';
 // prettier-ignore
-import { CombatPhaseAction, GameSession, MainButtonClickAction, MainButtonClickRequestAction, NewsPhaseAction, PurchasePhaseAction, SliceChangeAction } from '../../react-client/src/constants/interfaces';
+import { CombatPhaseAction, GameSession, MainButtonClickAction, NewsPhaseAction, PurchasePhaseAction, SliceChangeAction } from '../../react-client/src/constants/interfaces';
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../react-client/src/constants/otherConstants';
 import { COMBAT_PHASE, MAIN_BUTTON_CLICK, NEWS_PHASE, PURCHASE_PHASE, SLICE_CHANGE } from '../../react-client/src/redux/actions/actionTypes';
 import { Capability, Game, Piece } from '../classes';
@@ -84,8 +84,8 @@ const mainButtonClick = async (socket: Socket) => {
             }
         };
 
-        const combatPhaseAction0 = combatPhaseAction;
-        const combatPhaseAction1 = combatPhaseAction;
+        const combatPhaseAction0 = JSON.parse(JSON.stringify(combatPhaseAction));
+        const combatPhaseAction1 = JSON.parse(JSON.stringify(combatPhaseAction));
         combatPhaseAction0.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
         combatPhaseAction1.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
 
@@ -119,8 +119,8 @@ const mainButtonClick = async (socket: Socket) => {
             }
         };
 
-        const sliceChangeAction0 = sliceChangeAction;
-        const sliceChangeAction1 = sliceChangeAction;
+        const sliceChangeAction0 = JSON.parse(JSON.stringify(sliceChangeAction));
+        const sliceChangeAction1 = JSON.parse(JSON.stringify(sliceChangeAction));
         sliceChangeAction0.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
         sliceChangeAction1.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
 
