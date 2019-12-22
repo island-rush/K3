@@ -1,23 +1,23 @@
-import { Socket } from "socket.io";
-import { EventBattleAction, EventRefuelAction, GameSession, GameType, NoMoreEventsAction } from "../..//react-client/src/constants/interfaces";
-import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from "../../react-client/src/constants/gameConstants";
-import { SOCKET_SERVER_SENDING_ACTION } from "../../react-client/src/constants/otherConstants";
-import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from "../../react-client/src/redux/actions/actionTypes";
-import { Event, Piece } from "../classes";
-import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "./eventConstants";
-import sendUserFeedback from "./sendUserFeedback";
+import { Socket } from 'socket.io';
+import { EventBattleAction, EventRefuelAction, GameSession, GameType, NoMoreEventsAction } from '../../react-client/src/constants/interfaces';
+import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from '../../react-client/src/constants/gameConstants';
+import { SOCKET_SERVER_SENDING_ACTION } from '../../react-client/src/constants/otherConstants';
+import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from '../../react-client/src/redux/actions/actionTypes';
+import { Event, Piece } from '../classes';
+import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from './eventConstants';
+import sendUserFeedback from './sendUserFeedback';
 
 /**
  * Find the next event in the EventQueue and send to this team (through a socket)
  */
 const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
-    //Grab Session
+    // Grab Session
     const session: GameSession = socket.handshake.session.ir3;
 
-    //prettier-ignore
+    // prettier-ignore
     const { thisGame: { gameId }, gameTeam } = options;
 
-    const otherTeam = gameTeam == BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
+    const otherTeam = gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
 
     const gameEvent = await Event.getNext(gameId, gameTeam);
 
@@ -30,8 +30,8 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
             }
         };
 
-        socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, noMoreEventsAction);
-        if (session.gameTeam == gameTeam) socket.emit(SOCKET_SERVER_SENDING_ACTION, noMoreEventsAction);
+        socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, noMoreEventsAction);
+        if (session.gameTeam === gameTeam) socket.emit(SOCKET_SERVER_SENDING_ACTION, noMoreEventsAction);
 
         return;
     }
@@ -39,14 +39,14 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
     switch (gameEvent.eventTypeId) {
         case COL_BATTLE_EVENT_TYPE:
         case POS_BATTLE_EVENT_TYPE:
-            let friendlyPiecesList: any = await gameEvent.getTeamItems(gameTeam);
-            let enemyPiecesList: any = await gameEvent.getTeamItems(otherTeam);
-            let friendlyPieces: any = [];
-            let enemyPieces: any = [];
+            const friendlyPiecesList: any = await gameEvent.getTeamItems(gameTeam);
+            const enemyPiecesList: any = await gameEvent.getTeamItems(otherTeam);
+            const friendlyPieces: any = [];
+            const enemyPieces: any = [];
 
-            //Format for the client
+            // Format for the client
             for (let x = 0; x < friendlyPiecesList.length; x++) {
-                let thisFriendlyPiece: any = {
+                const thisFriendlyPiece: any = {
                     targetPiece: null,
                     targetPieceIndex: -1
                 };
@@ -55,7 +55,7 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
             }
 
             for (let y = 0; y < enemyPiecesList.length; y++) {
-                let thisEnemyPiece: any = {
+                const thisEnemyPiece: any = {
                     targetPiece: null,
                     targetPieceIndex: -1
                 };
@@ -73,21 +73,21 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
                 }
             };
 
-            socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, eventBattleAction);
-            if (session.gameTeam == gameTeam) socket.emit(SOCKET_SERVER_SENDING_ACTION, eventBattleAction);
+            socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, eventBattleAction);
+            if (session.gameTeam === gameTeam) socket.emit(SOCKET_SERVER_SENDING_ACTION, eventBattleAction);
 
             return;
         case REFUEL_EVENT_TYPE:
-            //get the pieces from the event, put them into payload (pre-format based on state?)
-            //Format for the client
-            let allRefuelEventItems: any = await gameEvent.getRefuelItems();
+            // get the pieces from the event, put them into payload (pre-format based on state?)
+            // Format for the client
+            const allRefuelEventItems: any = await gameEvent.getRefuelItems();
 
-            let tankers = [];
-            let aircraft = [];
+            const tankers = [];
+            const aircraft = [];
             for (let x = 0; x < allRefuelEventItems.length; x++) {
-                //put each piece into the refuel event....
-                let thisPiece = allRefuelEventItems[x];
-                let { pieceId, pieceTypeId, pieceFuel, pieceMoves } = thisPiece;
+                // put each piece into the refuel event....
+                const thisPiece = allRefuelEventItems[x];
+                const { pieceTypeId } = thisPiece;
                 if (pieceTypeId === AIR_REFUELING_SQUADRON_ID) {
                     tankers.push(thisPiece);
                 } else {
@@ -105,13 +105,12 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
                 }
             };
 
-            socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, eventRefuelAction);
-            if (session.gameTeam == gameTeam) socket.emit(SOCKET_SERVER_SENDING_ACTION, eventRefuelAction);
+            socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, eventRefuelAction);
+            if (session.gameTeam === gameTeam) socket.emit(SOCKET_SERVER_SENDING_ACTION, eventRefuelAction);
 
             return;
         default:
-            sendUserFeedback(socket, "Server Error, unknown event type...");
-            return;
+            sendUserFeedback(socket, 'Server Error, unknown event type...');
     }
 };
 

@@ -14,6 +14,7 @@
         "import/no-cycle": "off",
         "no-plusplus": "off",
         "no-await-in-loop": "off",
-        "radix": "off"
+        "radix": "off",
+        "no-case-declarations": "off"
     }
 }
