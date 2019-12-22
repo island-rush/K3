@@ -5,6 +5,7 @@
     "main": "./dist/server.js",
     "scripts": {
         "dev": "concurrently \"npm:devBackend\" \"npm:devFrontend\"",
+        "lint": "eslint ./src/**/*.ts",
         "start": "cross-env NODE_ENV=production node -r dotenv/config ./dist/server.js",
         "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend",
         "dev:debug": "concurrently \"npm:devBackend:debug\" \"npm:devFrontend\"",

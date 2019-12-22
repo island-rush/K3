@@ -222,12 +222,12 @@ class Piece implements PieceType {
         let queryString =
             'SELECT * FROM pieces WHERE pieceGameId = ? AND (pieceTeamId = ? OR pieceVisible = 1) ORDER BY pieceContainerId, pieceTeamId ASC';
         let inserts = [gameId, gameTeam];
-        const [results, fields8] = await pool.query(queryString, inserts);
+        const [results]: any = await pool.query(queryString, inserts);
 
         queryString =
             'SELECT pieceId FROM goldenEyePieces NATURAL JOIN pieces WHERE goldenEyePieces.pieceId = pieces.pieceId AND pieces.pieceGameId = ?';
         inserts = [gameId];
-        const [pieceIdsStuck, fields5] = await pool.query(queryString, inserts);
+        const [pieceIdsStuck]: any = await pool.query(queryString, inserts);
         const allPieceIdsStuck = [];
         for (let x = 0; x < pieceIdsStuck.length; x++) {
             allPieceIdsStuck.push(pieceIdsStuck[x].pieceId);
@@ -247,13 +247,13 @@ class Piece implements PieceType {
                 allPieces[currentPiece.piecePositionId] = [];
             }
             // TODO: constant instead of -1
-            if (currentPiece.pieceContainerId == -1) {
+            if (currentPiece.pieceContainerId === -1) {
                 allPieces[currentPiece.piecePositionId].push(currentPiece);
             } else {
                 const indexOfParent = allPieces[currentPiece.piecePositionId].findIndex(
-                    (piece: PieceType) => piece.pieceId == currentPiece.pieceContainerId
+                    (piece: PieceType) => piece.pieceId === currentPiece.pieceContainerId
                 );
-                if (indexOfParent == -1) {
+                if (indexOfParent === -1) {
                     // need to find grandparent, and find parent within pieceContents
                     // loop through all grandparent children to find actual parent?
                     // TODO: probably cleaner way of doing this logic, should also break from outer loop to be more efficient, since we are done
@@ -261,7 +261,7 @@ class Piece implements PieceType {
                         const potentialGrandparent = allPieces[currentPiece.piecePositionId][x];
                         for (let y = 0; y < potentialGrandparent.pieceContents.pieces.length; y++) {
                             const potentialParent = potentialGrandparent.pieceContents.pieces[y];
-                            if (potentialParent.pieceId == currentPiece.pieceContainerId) {
+                            if (potentialParent.pieceId === currentPiece.pieceContainerId) {
                                 allPieces[currentPiece.piecePositionId][x].pieceContents.pieces[y].pieceContents.pieces.push(currentPiece);
                                 break;
                             }
@@ -337,7 +337,7 @@ class Piece implements PieceType {
         const queryString =
             'INSERT INTO pieces (pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         const inserts = [pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel];
-        const [results, fields] = await pool.query(queryString, inserts);
+        const [results]: any = await pool.query(queryString, inserts);
         const thisPiece = new Piece(results.insertId);
         Object.assign(thisPiece, {
             pieceGameId,

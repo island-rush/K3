@@ -31,7 +31,12 @@
         "eject": "react-scripts eject"
     },
     "eslintConfig": {
-        "extends": "react-app"
+        "extends": "react-app",
+        "ignorePatterns": [
+            "build",
+            "node_modules",
+            "public"
+        ]
     },
     "browserslist": {
         "production": [
