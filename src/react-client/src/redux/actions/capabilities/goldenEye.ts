@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { EmitType, InvItemType } from '../../../constants/interfaces';
+import { EmitType, GoldenEyeSelectingAction, InvItemType } from '../../../constants/interfaces';
 import { GOLDEN_EYE_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -22,12 +22,14 @@ const goldenEye = (invItem: InvItemType) => {
         //other checks that the player is allowed to select golden eye (do they have it? / game effects...)
 
         //dispatch that the player is currently selecting area to select
-        dispatch({
+        const goldenEyeSelectingAction: GoldenEyeSelectingAction = {
             type: GOLDEN_EYE_SELECTING,
             payload: {
                 invItem
             }
-        });
+        };
+
+        dispatch(goldenEyeSelectingAction);
     };
 };
 

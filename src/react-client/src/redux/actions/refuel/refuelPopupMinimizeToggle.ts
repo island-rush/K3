@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType } from '../../../constants/interfaces';
+import { EmitType, RefuelPopupToggleAction } from '../../../constants/interfaces';
 import { REFUELPOPUP_MINIMIZE_TOGGLE } from '../actionTypes';
 
 /**
@@ -7,10 +7,12 @@ import { REFUELPOPUP_MINIMIZE_TOGGLE } from '../actionTypes';
  */
 const refuelPopupMinimizeToggle = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        dispatch({
+        const refuelPopupMinimizeAction: RefuelPopupToggleAction = {
             type: REFUELPOPUP_MINIMIZE_TOGGLE,
             payload: {}
-        });
+        };
+
+        dispatch(refuelPopupMinimizeAction);
     };
 };
 

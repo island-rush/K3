@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { EmitType, InvItemType } from '../../../constants/interfaces';
+import { EmitType, InsurgencySelectingAction, InvItemType } from '../../../constants/interfaces';
 import { INSURGENCY_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -22,12 +22,14 @@ const insurgency = (invItem: InvItemType) => {
         //other checks that the player is allowed to select insurgency (do they have it? / game effects...)
 
         //dispatch that the player is currently selecting which position to select
-        dispatch({
+        const insurgencySelectingAction: InsurgencySelectingAction = {
             type: INSURGENCY_SELECTING,
             payload: {
                 invItem
             }
-        });
+        };
+
+        dispatch(insurgencySelectingAction);
     };
 };
 

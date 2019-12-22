@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { EmitType, InvItemType } from '../../../constants/interfaces';
+import { EmitType, InvItemType, RaiseMoraleSelectingAction } from '../../../constants/interfaces';
 import { RAISE_MORALE_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -24,12 +24,14 @@ const raiseMorale = (invItem: InvItemType) => {
         //other checks that the player is allowed to select raise morale (do they have it? / game effects...)
 
         //dispatch that the player is currently selecting which commander type to boost
-        dispatch({
+        const raiseMoraleSelectingAction: RaiseMoraleSelectingAction = {
             type: RAISE_MORALE_SELECTING,
             payload: {
                 invItem
             }
-        });
+        };
+
+        dispatch(raiseMoraleSelectingAction);
     };
 };
 

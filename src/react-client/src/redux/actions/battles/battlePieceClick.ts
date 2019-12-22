@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { WAITING_STATUS } from '../../../constants/gameConstants';
-import { EmitType } from '../../../constants/interfaces';
+import { BattlePieceSelectAction, EmitType } from '../../../constants/interfaces';
 import { BATTLE_PIECE_SELECT } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -13,13 +13,15 @@ const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
             return;
         }
 
-        dispatch({
+        const battlePieceSelectAction: BattlePieceSelectAction = {
             type: BATTLE_PIECE_SELECT,
             payload: {
                 battlePiece,
                 battlePieceIndex
             }
-        });
+        };
+
+        dispatch(battlePieceSelectAction);
     };
 };
 

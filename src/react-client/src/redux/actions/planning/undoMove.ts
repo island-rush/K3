@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType } from '../../../constants/interfaces';
+import { EmitType, UndoMoveAction } from '../../../constants/interfaces';
 import { UNDO_MOVE } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -11,10 +11,12 @@ const undoMove = () => {
         const { gameboardMeta } = getState();
 
         if (gameboardMeta.planning.active) {
-            dispatch({
+            const undoMoveAction: UndoMoveAction = {
                 type: UNDO_MOVE,
                 payload: {}
-            });
+            };
+
+            dispatch(undoMoveAction);
         } else {
             dispatch(setUserfeedbackAction('Can only undo while actively planning'));
         }

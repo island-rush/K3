@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, PieceType } from '../../../constants/interfaces';
+import { EmitType, PieceType, TankerClickAction } from '../../../constants/interfaces';
 import { TANKER_CLICK } from '../actionTypes';
 
 /**
@@ -9,13 +9,15 @@ const tankerClick = (tankerPiece: PieceType, tankerPieceIndex: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         //TODO: check for bad state (wrong phase? ...use userFeedback...)
 
-        dispatch({
+        const tankerClickAction: TankerClickAction = {
             type: TANKER_CLICK,
             payload: {
                 tankerPiece,
                 tankerPieceIndex
             }
-        });
+        };
+
+        dispatch(tankerClickAction);
         return;
     };
 };

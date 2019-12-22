@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { EmitType, InvItemType } from '../../../constants/interfaces';
+import { EmitType, InvItemType, RemoteSenseSelectingAction } from '../../../constants/interfaces';
 import { REMOTE_SENSING_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -22,12 +22,14 @@ const remoteSensing = (invItem: InvItemType) => {
         //other checks that the player is allowed to select remote sensing (do they have it? / game effects...)
 
         //dispatch that the player is currently selecting which position to select
-        dispatch({
+        const remoteSenseSelectingAction: RemoteSenseSelectingAction = {
             type: REMOTE_SENSING_SELECTING,
             payload: {
                 invItem
             }
-        });
+        };
+
+        dispatch(remoteSenseSelectingAction);
     };
 };
 

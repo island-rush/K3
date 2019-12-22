@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType } from '../../constants/interfaces';
+import { EmitType, MenuSelectAction } from '../../constants/interfaces';
 import { MENU_SELECT } from './actionTypes';
 
 /**
@@ -10,12 +10,14 @@ const menuSelect = (selectedMenuId: number) => {
         const { gameboardMeta } = getState();
 
         if (!gameboardMeta.planning.active) {
-            dispatch({
+            const menuSelectAction: MenuSelectAction = {
                 type: MENU_SELECT,
                 payload: {
                     selectedMenuId
                 }
-            });
+            };
+
+            dispatch(menuSelectAction);
         }
     };
 };

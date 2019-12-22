@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { EmitType, InvItemType } from '../../../constants/interfaces';
+import { CommInterruptSelectingAction, EmitType, InvItemType } from '../../../constants/interfaces';
 import { COMM_INTERRUPT_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -22,12 +22,14 @@ const communicationsInterruption = (invItem: InvItemType) => {
         //other checks that the player is allowed to select comm interrupt (do they have it? / game effects...)
 
         //dispatch that the player is currently selecting which position to select
-        dispatch({
+        const commInterruptSelectingAction: CommInterruptSelectingAction = {
             type: COMM_INTERRUPT_SELECTING,
             payload: {
                 invItem
             }
-        });
+        };
+
+        dispatch(commInterruptSelectingAction);
     };
 };
 

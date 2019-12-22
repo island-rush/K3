@@ -1,7 +1,7 @@
 //TODO: get rid of this function and use pieceClick(-1) or something that could handle it that way
 
 import { Dispatch } from 'redux';
-import { EmitType } from '../../constants/interfaces';
+import { EmitType, PieceClearAction } from '../../constants/interfaces';
 import { PIECE_CLEAR_SELECTION } from './actionTypes';
 
 /**
@@ -12,10 +12,12 @@ const clearPieceSelection = () => {
         const { gameboardMeta } = getState();
 
         if (!gameboardMeta.planning.active) {
-            dispatch({
+            const pieceClearAction: PieceClearAction = {
                 type: PIECE_CLEAR_SELECTION,
                 payload: {}
-            });
+            };
+
+            dispatch(pieceClearAction);
         }
     };
 };

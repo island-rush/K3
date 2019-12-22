@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { EmitType, InvItemType } from '../../../constants/interfaces';
+import { EmitType, InvItemType, RodsFromGodSelectingAction } from '../../../constants/interfaces';
 import { RODS_FROM_GOD_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -22,12 +22,15 @@ const rodsFromGod = (invItem: InvItemType) => {
         //other checks that the player is allowed to select rods from god (do they have it? / game effects...)
 
         //dispatch that the player is currently selecting which position to select
-        dispatch({
+
+        const rodsFromGodSelectingAction: RodsFromGodSelectingAction = {
             type: RODS_FROM_GOD_SELECTING,
             payload: {
                 invItem
             }
-        });
+        };
+
+        dispatch(rodsFromGodSelectingAction);
     };
 };
 

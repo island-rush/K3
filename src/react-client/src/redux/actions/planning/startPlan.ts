@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from '../../../constants/gameConstants';
-import { EmitType } from '../../../constants/interfaces';
+import { EmitType, StartPlanAction } from '../../../constants/interfaces';
 import { START_PLAN } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -53,7 +53,12 @@ const startPlan = () => {
             return;
         }
 
-        dispatch({ type: START_PLAN, payload: {} });
+        const startPlanAction: StartPlanAction = {
+            type: START_PLAN,
+            payload: {}
+        };
+
+        dispatch(startPlanAction);
     };
 };
 

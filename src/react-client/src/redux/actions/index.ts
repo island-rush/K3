@@ -33,7 +33,6 @@ import menuSelect from './menuSelect';
 import newsPopupMinimizeToggle from './newsPopupMinimizeToggle';
 import cancelPlan from './planning/cancelPlan';
 import confirmPlan from './planning/confirmPlan';
-import containerMove from './planning/containerMove';
 import startPlan from './planning/startPlan';
 import undoMove from './planning/undoMove';
 import aircraftClick from './refuel/aircraftClick';
@@ -48,4 +47,4 @@ import shopPurchaseRequest from './shop/shopPurchaseRequest';
 import shopRefundRequest from './shop/shopRefundRequest';
 
 //prettier-ignore
-export { shopRefundRequest, shopPurchaseRequest, shopConfirmPurchase, selectPosition, selectPiece, confirmPlan, startPlan, cancelPlan, undoMove, menuSelect, battlePopupMinimizeToggle, mainButtonClick, battlePieceClick, targetPieceClick, enemyBattlePieceClick, confirmBattleSelections, clearOldBattle, clearPieceSelection, containerMove, confirmFuelSelections, tankerClick, aircraftClick, undoFuelSelection, newsPopupMinimizeToggle, airPieceClick, landPieceClick, seaPieceClick, atcScamble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale, refuelPopupMinimizeToggle, raiseMoraleSelectCommanderType, pieceOpen, pieceClose, outerPieceClick, innerPieceClick, innerTransportPieceClick };
+export { shopRefundRequest, shopPurchaseRequest, shopConfirmPurchase, selectPosition, selectPiece, confirmPlan, startPlan, cancelPlan, undoMove, menuSelect, battlePopupMinimizeToggle, mainButtonClick, battlePieceClick, targetPieceClick, enemyBattlePieceClick, confirmBattleSelections, clearOldBattle, clearPieceSelection, confirmFuelSelections, tankerClick, aircraftClick, undoFuelSelection, newsPopupMinimizeToggle, airPieceClick, landPieceClick, seaPieceClick, atcScamble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale, refuelPopupMinimizeToggle, raiseMoraleSelectCommanderType, pieceOpen, pieceClose, outerPieceClick, innerPieceClick, innerTransportPieceClick };

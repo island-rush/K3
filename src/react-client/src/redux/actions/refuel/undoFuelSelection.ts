@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, PieceType } from '../../../constants/interfaces';
+import { EmitType, PieceType, UndoFuelSelectionAction } from '../../../constants/interfaces';
 import { UNDO_FUEL_SELECTION } from '../actionTypes';
 
 /**
@@ -12,13 +12,15 @@ const undoFuelSelection = (aircraftPiece: PieceType, aircraftPieceIndex: number)
 
         //TODO: determine if it can undo the selection...
 
-        dispatch({
+        const undoFuelSelectionAction: UndoFuelSelectionAction = {
             type: UNDO_FUEL_SELECTION,
             payload: {
                 aircraftPiece,
                 aircraftPieceIndex
             }
-        });
+        };
+
+        dispatch(undoFuelSelectionAction);
         return;
     };
 };

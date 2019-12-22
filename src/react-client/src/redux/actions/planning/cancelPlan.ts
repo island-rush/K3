@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType } from '../../../constants/interfaces';
+import { EmitType, PreventPlanAction } from '../../../constants/interfaces';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
 import { CANCEL_PLAN, SERVER_DELETE_PLAN } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
@@ -13,7 +13,12 @@ const cancelPlan = () => {
         const { gameboardMeta } = getState();
 
         if (gameboardMeta.planning.active) {
-            dispatch({ type: CANCEL_PLAN, payload: {} });
+            const preventPlanAction: PreventPlanAction = {
+                type: CANCEL_PLAN,
+                payload: {}
+            };
+
+            dispatch(preventPlanAction);
         } else {
             //check to see if there is a piece selected and if that piece has a confirmed plan
             if (gameboardMeta.selectedPiece !== null && gameboardMeta.selectedPiece.pieceId in gameboardMeta.confirmedPlans) {

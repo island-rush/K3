@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType } from '../../../constants/interfaces';
+import { ClearBattleAction, EmitType } from '../../../constants/interfaces';
 import { CLEAR_BATTLE } from '../actionTypes';
 
 const clearOldBattle = () => {
@@ -7,12 +7,14 @@ const clearOldBattle = () => {
         const { gameboardMeta } = getState();
         const { battle } = gameboardMeta;
 
-        dispatch({
+        const clearBattleAction: ClearBattleAction = {
             type: CLEAR_BATTLE,
             payload: {
                 battle
             }
-        });
+        };
+
+        dispatch(clearBattleAction);
     };
 };
 

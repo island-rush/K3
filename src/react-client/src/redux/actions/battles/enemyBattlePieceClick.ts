@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { WAITING_STATUS } from '../../../constants/gameConstants';
-import { EmitType } from '../../../constants/interfaces';
+import { EmitType, EnemyPieceSelectAction } from '../../../constants/interfaces';
 import { ENEMY_PIECE_SELECT } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -19,13 +19,15 @@ const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
         if (selectedBattlePiece === -1 || selectedBattlePieceIndex === -1) {
             dispatch(setUserfeedbackAction('Must select piece to attack with..'));
         } else {
-            dispatch({
+            const enemyPieceSelectAction: EnemyPieceSelectAction = {
                 type: ENEMY_PIECE_SELECT,
                 payload: {
                     battlePiece,
                     battlePieceIndex
                 }
-            });
+            };
+
+            dispatch(enemyPieceSelectAction);
         }
     };
 };

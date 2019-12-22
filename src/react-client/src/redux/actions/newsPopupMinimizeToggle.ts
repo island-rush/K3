@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType } from '../../constants/interfaces';
+import { EmitType, NewsPopupToggleAction } from '../../constants/interfaces';
 import { NEWSPOPUP_MINIMIZE_TOGGLE } from './actionTypes';
 
 /**
@@ -7,10 +7,12 @@ import { NEWSPOPUP_MINIMIZE_TOGGLE } from './actionTypes';
  */
 const newsPopupMinimizeToggle = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        dispatch({
+        const newsPopupMinimizeToggleAction: NewsPopupToggleAction = {
             type: NEWSPOPUP_MINIMIZE_TOGGLE,
             payload: {}
-        });
+        };
+
+        dispatch(newsPopupMinimizeToggleAction);
     };
 };
 

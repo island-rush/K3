@@ -19,13 +19,6 @@ const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) =>
         };
 
         emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
-
-        // dispatch({
-        //     type: INNER_PIECE_CLICK_ACTION,
-        //     payload: {
-        //         selectedPiece
-        //     }
-        // });
     };
 };
 

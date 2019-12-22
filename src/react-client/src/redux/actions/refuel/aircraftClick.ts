@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, PieceType } from '../../../constants/interfaces';
+import { AircraftClickAction, EmitType, PieceType } from '../../../constants/interfaces';
 import { AIRCRAFT_CLICK } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
@@ -24,13 +24,15 @@ const aircraftClick = (aircraftPiece: PieceType, aircraftPieceIndex: number) => 
 
         //TODO: determine if it has enough fuel to give for this piece...
 
-        dispatch({
+        const aircraftClickAction: AircraftClickAction = {
             type: AIRCRAFT_CLICK,
             payload: {
                 aircraftPiece,
                 aircraftPieceIndex
             }
-        });
+        };
+
+        dispatch(aircraftClickAction);
         return;
     };
 };

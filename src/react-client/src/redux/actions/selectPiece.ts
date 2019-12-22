@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, PieceType } from '../../constants/interfaces';
+import { EmitType, PieceClickAction, PieceType } from '../../constants/interfaces';
 import { PIECE_CLICK } from './actionTypes';
 
 /**
@@ -10,12 +10,14 @@ const selectPiece = (selectedPiece: PieceType) => {
         const { gameboardMeta } = getState();
 
         if (!gameboardMeta.planning.active) {
-            dispatch({
+            const clientAction: PieceClickAction = {
                 type: PIECE_CLICK,
                 payload: {
                     selectedPiece
                 }
-            });
+            };
+
+            dispatch(clientAction);
         }
     };
 };

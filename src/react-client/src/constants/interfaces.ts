@@ -1,6 +1,6 @@
 import { Action, AnyAction } from 'redux';
 //prettier-ignore
-import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DELETE_PLAN, GOLDEN_EYE_SELECTED, INNER_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLAN_WAS_CONFIRMED, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SERVER_CONFIRM_BATTLE_SELECTION, UPDATE_FLAGS, BATTLE_FIGHT_RESULTS, SERVER_CONFIRM_FUEL_SELECTION, REFUEL_RESULTS, SERVER_MAIN_BUTTON_CLICK, MAIN_BUTTON_CLICK, INNER_TRANSPORT_PIECE_CLICK_ACTION, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PURCHASE_PHASE, COMBAT_PHASE, SLICE_CHANGE, NEWS_PHASE, EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS, PLACE_PHASE, NEW_ROUND, POSITION_SELECT, HIGHLIGHT_POSITIONS, PLANNING_SELECT, INITIAL_GAMESTATE } from "../redux/actions/actionTypes";
+import { AIRCRAFT_CLICK, BATTLE_FIGHT_RESULTS, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MAIN_BUTTON_CLICK, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PIECE_PLACE, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_MAIN_BUTTON_CLICK, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TANKER_CLICK, UNDO_FUEL_SELECTION, UNDO_MOVE, UPDATE_FLAGS, TARGET_PIECE_SELECT, ENEMY_PIECE_SELECT, CLEAR_BATTLE, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_PIECE_SELECT } from "../redux/actions/actionTypes";
 
 /**
  * Section for Instructor's Game
@@ -52,6 +52,159 @@ export interface PlanningSelectAction extends Action {
     payload: {
         selectedPositionId: number;
     };
+}
+
+export interface PieceClickAction extends Action {
+    type: typeof PIECE_CLICK;
+    payload: {
+        selectedPiece: PieceType;
+    };
+}
+
+export interface PieceClearAction extends Action {
+    type: typeof PIECE_CLEAR_SELECTION;
+    payload: {};
+}
+
+export interface RefuelPopupToggleAction extends Action {
+    type: typeof REFUELPOPUP_MINIMIZE_TOGGLE;
+    payload: {};
+}
+
+export interface UndoMoveAction extends Action {
+    type: typeof UNDO_MOVE;
+    payload: {};
+}
+
+export interface PreventPlanAction extends Action {
+    type: typeof CANCEL_PLAN;
+    payload: {};
+}
+
+export interface RemoteSenseSelectingAction extends Action {
+    type: typeof REMOTE_SENSING_SELECTING;
+    payload: {
+        invItem: InvItemType;
+    };
+}
+
+export interface RaiseMoraleSelectingAction extends Action {
+    type: typeof RAISE_MORALE_SELECTING;
+    payload: {
+        invItem: InvItemType;
+    };
+}
+
+export interface BattlePopupToggleAction extends Action {
+    type: typeof BATTLEPOPUP_MINIMIZE_TOGGLE;
+    payload: {};
+}
+
+export interface BattlePieceSelectAction extends Action {
+    type: typeof BATTLE_PIECE_SELECT;
+    payload: {
+        battlePiece: any;
+        battlePieceIndex: number;
+    };
+}
+
+export interface ClearBattleAction extends Action {
+    type: typeof CLEAR_BATTLE;
+    payload: {
+        battle: any;
+    };
+}
+
+export interface EnemyPieceSelectAction extends Action {
+    type: typeof ENEMY_PIECE_SELECT;
+    payload: {
+        battlePiece: any;
+        battlePieceIndex: number;
+    };
+}
+
+export interface TargetPieceClickAction extends Action {
+    type: typeof TARGET_PIECE_SELECT;
+    payload: {
+        battlePiece: any;
+        battlePieceIndex: number;
+    };
+}
+
+export interface BioWeaponSelectingAction extends Action {
+    type: typeof BIO_WEAPON_SELECTING;
+    payload: {
+        invItem: InvItemType;
+    };
+}
+
+export interface CommInterruptSelectingAction extends Action {
+    type: typeof COMM_INTERRUPT_SELECTING;
+    payload: {
+        invItem: InvItemType;
+    };
+}
+
+export interface GoldenEyeSelectingAction extends Action {
+    type: typeof GOLDEN_EYE_SELECTING;
+    payload: {
+        invItem: InvItemType;
+    };
+}
+
+export interface InsurgencySelectingAction extends Action {
+    type: typeof INSURGENCY_SELECTING;
+    payload: {
+        invItem: InvItemType;
+    };
+}
+
+export interface RodsFromGodSelectingAction extends Action {
+    type: typeof RODS_FROM_GOD_SELECTING;
+    payload: {
+        invItem: InvItemType;
+    };
+}
+
+export interface StartPlanAction extends Action {
+    type: typeof START_PLAN;
+    payload: {};
+}
+
+export interface AircraftClickAction extends Action {
+    type: typeof AIRCRAFT_CLICK;
+    payload: {
+        aircraftPiece: any;
+        aircraftPieceIndex: number;
+    };
+}
+
+export interface TankerClickAction extends Action {
+    type: typeof TANKER_CLICK;
+    payload: {
+        tankerPiece: any;
+        tankerPieceIndex: number;
+    };
+}
+
+export interface UndoFuelSelectionAction extends Action {
+    type: typeof UNDO_FUEL_SELECTION;
+    payload: {
+        aircraftPiece: any;
+        aircraftPieceIndex: number;
+    };
+}
+
+export interface MenuSelectAction extends Action {
+    type: typeof MENU_SELECT;
+    payload: {
+        selectedMenuId: number;
+    };
+}
+
+export interface NewsPopupToggleAction extends Action {
+    type: typeof NEWSPOPUP_MINIMIZE_TOGGLE;
+    payload: {};
 }
 
 export interface ShopPurchaseRequestAction extends Action {
