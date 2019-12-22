@@ -4,7 +4,7 @@
         "linebreak-style": "off",
         "object-curly-newline": "off",
         "comma-dangle": "off",
-        "@typescript-eslint/indent": ["warn", 4],
+        "@typescript-eslint/indent": ["off", 4],
         "max-len": "off",
         "global-require": "off",
         "no-console": "off",
@@ -16,6 +16,10 @@
         "no-await-in-loop": "off",
         "radix": "off",
         "no-case-declarations": "off",
-        "operator-linebreak": "off"
+        "operator-linebreak": "off",
+        "no-shadow": "off",
+        "arrow-parens": "off",
+        "no-continue": "off",
+        "no-nested-ternary": "off"
     }
 }

@@ -62,7 +62,7 @@ const socketSetup = async (socket: Socket) => {
                     shopRefundRequest(socket, { type, payload });
                     break;
                 case SERVER_SHOP_CONFIRM_PURCHASE:
-                    shopConfirmPurchase(socket, { type });
+                    shopConfirmPurchase(socket);
                     break;
                 case SERVER_CONFIRM_PLAN:
                     confirmPlan(socket, { type, payload });
@@ -74,7 +74,7 @@ const socketSetup = async (socket: Socket) => {
                     piecePlace(socket, { type, payload });
                     break;
                 case SERVER_MAIN_BUTTON_CLICK:
-                    mainButtonClick(socket, { type });
+                    mainButtonClick(socket);
                     break;
                 case SERVER_CONFIRM_BATTLE_SELECTION:
                     confirmBattleSelection(socket, { type, payload });

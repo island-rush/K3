@@ -1,57 +1,92 @@
-import { FieldPacket } from "mysql2";
-//prettier-ignore
-import { ALL_FLAG_LOCATIONS, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from "../../react-client/src/constants/gameboardConstants";
-import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, CAPTURE_TYPES, NEWS_PHASE_ID, RED_TEAM_ID } from "../../react-client/src/constants/gameConstants";
-import { GameType, Instructor, Section } from "../../react-client/src/constants/interfaces";
-import { INITIAL_GAMESTATE } from "../../react-client/src/redux/actions/actiontypes";
-import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from "../actions/eventConstants";
-import { gameInitialNews, gameInitialPieces } from "../admin";
-import { Capability, Event, InvItem, Piece, Plan, ShopItem } from "../classes";
-import pool from "../database";
+// prettier-ignore
+import { ALL_FLAG_LOCATIONS, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../react-client/src/constants/gameboardConstants';
+import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, CAPTURE_TYPES, NEWS_PHASE_ID, RED_TEAM_ID } from '../../react-client/src/constants/gameConstants';
+import { GameType, Instructor, Section } from '../../react-client/src/constants/interfaces';
+import { INITIAL_GAMESTATE } from '../../react-client/src/redux/actions/actionTypes';
+import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from '../actions/eventConstants';
+import { gameInitialNews, gameInitialPieces } from '../admin';
+import { Capability, Event, InvItem, Piece, Plan, ShopItem } from '.';
+import pool from '../database';
 
 /**
  * Represents a row in the games table in the database.
  */
 class Game implements GameType {
     gameId: number;
+
     gameSection: string;
+
     gameInstructor: string;
+
     gameAdminPassword: string;
+
     gameActive: number;
+
     game0Password: string;
+
     game1Password: string;
+
     game0Controller0: number;
+
     game0Controller1: number;
+
     game0Controller2: number;
+
     game0Controller3: number;
+
     game0Controller4: number;
+
     game1Controller0: number;
+
     game1Controller1: number;
+
     game1Controller2: number;
+
     game1Controller3: number;
+
     game1Controller4: number;
+
     game0Status: number;
+
     game1Status: number;
+
     game0Points: number;
+
     game1Points: number;
+
     gamePhase: number;
+
     gameRound: number;
+
     gameSlice: number;
+
     flag0: number;
+
     flag1: number;
+
     flag2: number;
+
     flag3: number;
+
     flag4: number;
+
     flag5: number;
+
     flag6: number;
+
     flag7: number;
+
     flag8: number;
+
     flag9: number;
+
     flag10: number;
+
     flag11: number;
+
     flag12: number;
 
-    //TODO: refactor with 1 constructor with id, and another static factory method with section/instructor
+    // TODO: refactor with 1 constructor with id, and another static factory method with section/instructor
     constructor(options: GameOptions) {
         if ((options as GameConstructorOptionsWithId).gameId) {
             this.gameId = (options as GameConstructorOptionsWithId).gameId;
@@ -69,59 +104,63 @@ class Game implements GameType {
         let inserts: any[];
 
         if (this.gameId) {
-            queryString = "SELECT * FROM games WHERE gameId = ?";
+            queryString = 'SELECT * FROM games WHERE gameId = ?';
             inserts = [this.gameId];
         } else if (this.gameSection && this.gameInstructor) {
-            queryString = "SELECT * FROM games WHERE gameSection = ? AND gameInstructor = ?";
+            queryString = 'SELECT * FROM games WHERE gameSection = ? AND gameInstructor = ?';
             inserts = [this.gameSection, this.gameInstructor];
         }
 
-        const [rows, fields]: [any[], FieldPacket[]] = await pool.query(queryString, inserts);
+        const [rows]: any = await pool.query(queryString, inserts);
 
-        if (rows.length != 1) {
+        if (rows.length !== 1) {
             return null;
-        } else {
-            Object.assign(this, rows[0]);
-            return this;
         }
+
+        Object.assign(this, rows[0]);
+        return this;
     }
 
     /**
      * Method to dynamically grab loggedIn values from this game.
      */
     getLoggedIn(gameTeam: number, gameController: number): number {
-        if (gameTeam == 0) {
+        if (gameTeam === 0) {
             if (gameController === 0) {
                 return this.game0Controller0;
-            } else if (gameController === 1) {
+            }
+            if (gameController === 1) {
                 return this.game0Controller1;
-            } else if (gameController === 2) {
+            }
+            if (gameController === 2) {
                 return this.game0Controller2;
-            } else if (gameController === 3) {
+            }
+            if (gameController === 3) {
                 return this.game0Controller3;
-            } else {
-                return this.game0Controller4;
             }
-        } else {
-            if (gameController === 0) {
-                return this.game1Controller0;
-            } else if (gameController === 1) {
-                return this.game1Controller1;
-            } else if (gameController === 2) {
-                return this.game1Controller2;
-            } else if (gameController === 3) {
-                return this.game1Controller3;
-            } else {
-                return this.game1Controller4;
-            }
+
+            return this.game0Controller4;
         }
+        if (gameController === 0) {
+            return this.game1Controller0;
+        }
+        if (gameController === 1) {
+            return this.game1Controller1;
+        }
+        if (gameController === 2) {
+            return this.game1Controller2;
+        }
+        if (gameController === 3) {
+            return this.game1Controller3;
+        }
+        return this.game1Controller4;
     }
 
     /**
      * Delete this game.
      */
     async delete() {
-        const queryString = "DELETE FROM games WHERE gameId = ?";
+        const queryString = 'DELETE FROM games WHERE gameId = ?';
         const inserts = [this.gameId];
         await pool.query(queryString, inserts);
     }
@@ -131,8 +170,8 @@ class Game implements GameType {
      * Only includes gameId, gameSection, gameInstructor, gameActive
      */
     static async getGames() {
-        const queryString = "SELECT gameId, gameSection, gameInstructor, gameActive FROM games";
-        const [rows, fields] = await pool.query(queryString);
+        const queryString = 'SELECT gameId, gameSection, gameInstructor, gameActive FROM games';
+        const [rows]: any = await pool.query(queryString);
         return rows;
     }
 
@@ -140,7 +179,7 @@ class Game implements GameType {
      * Set the admin password for a specific game.
      */
     async setAdminPassword(gameAdminPasswordHash: string) {
-        const queryString = "UPDATE games SET gameAdminPassword = ? WHERE gameId = ?";
+        const queryString = 'UPDATE games SET gameAdminPassword = ? WHERE gameId = ?';
         const inserts = [gameAdminPasswordHash, this.gameId];
         await pool.query(queryString, inserts);
         Object.assign(this, { gameAdminPassword: gameAdminPasswordHash });
@@ -150,7 +189,7 @@ class Game implements GameType {
      * Set team passwords for a specific game.
      */
     async setTeamPasswords(game0PasswordHash: string, game1PasswordHash: string) {
-        const queryString = "UPDATE games SET game0Password = ?, game1Password = ? WHERE gameId = ?";
+        const queryString = 'UPDATE games SET game0Password = ?, game1Password = ? WHERE gameId = ?';
         const inserts = [game0PasswordHash, game1PasswordHash, this.gameId];
         await pool.query(queryString, inserts);
         Object.assign(this, { game0Password: game0PasswordHash, game1Password: game1PasswordHash });
@@ -160,9 +199,9 @@ class Game implements GameType {
      * Get a sql array of news alerts for this game.
      */
     static async getAllNews(gameId: number) {
-        const queryString = "SELECT * FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC";
+        const queryString = 'SELECT * FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC';
         const inserts = [gameId];
-        const [rows, fields] = await pool.query(queryString, inserts);
+        const [rows]: any = await pool.query(queryString, inserts);
         return rows;
     }
 
@@ -171,7 +210,7 @@ class Game implements GameType {
      */
     async setGameActive(newValue: number) {
         const queryString =
-            "UPDATE games SET gameActive = ?, game0Controller0 = 0, game0Controller1 = 0, game0Controller2 = 0, game0Controller3 = 0, game0Controller4 = 0, game1Controller0 = 0, game1Controller1 = 0, game1Controller2 = 0, game1Controller3 = 0, game1Controller4 = 0 WHERE gameId = ?";
+            'UPDATE games SET gameActive = ?, game0Controller0 = 0, game0Controller1 = 0, game0Controller2 = 0, game0Controller3 = 0, game0Controller4 = 0, game1Controller0 = 0, game1Controller1 = 0, game1Controller2 = 0, game1Controller3 = 0, game1Controller4 = 0 WHERE gameId = ?';
         const inserts = [newValue, this.gameId];
         await pool.query(queryString, inserts);
         const updatedInfo = {
@@ -194,36 +233,52 @@ class Game implements GameType {
      * Set loggedIn value for a specific team/controller in this game.
      */
     async setLoggedIn(gameTeam: number, gameController: number, value: number) {
-        const queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
-        const inserts = ["game" + gameTeam + "Controller" + gameController, value, this.gameId];
+        const queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
+        const inserts = [`game${gameTeam}Controller${gameController}`, value, this.gameId];
         await pool.query(queryString, inserts);
         switch (gameTeam) {
             case BLUE_TEAM_ID:
                 switch (gameController) {
                     case 0:
                         this.game0Controller0 = value;
+                        break;
                     case 1:
                         this.game0Controller1 = value;
+                        break;
                     case 2:
                         this.game0Controller2 = value;
+                        break;
                     case 3:
                         this.game0Controller3 = value;
+                        break;
                     case 4:
                         this.game0Controller4 = value;
+                        break;
+                    default:
+                        break;
                 }
+                break;
             case RED_TEAM_ID:
                 switch (gameController) {
                     case 0:
                         this.game1Controller0 = value;
+                        break;
                     case 1:
                         this.game1Controller1 = value;
+                        break;
                     case 2:
                         this.game1Controller2 = value;
+                        break;
                     case 3:
                         this.game1Controller3 = value;
+                        break;
                     case 4:
                         this.game1Controller4 = value;
+                        break;
+                    default:
                 }
+                break;
+            default:
         }
     }
 
@@ -244,17 +299,17 @@ class Game implements GameType {
 
         if (options.gameId) {
             queryString =
-                "INSERT INTO games (gameId, gameSection, gameInstructor, gameAdminPassword) SELECT ?,?,?,? WHERE NOT EXISTS(SELECT * from games WHERE gameSection=? AND gameInstructor = ?)";
+                'INSERT INTO games (gameId, gameSection, gameInstructor, gameAdminPassword) SELECT ?,?,?,? WHERE NOT EXISTS(SELECT * from games WHERE gameSection=? AND gameInstructor = ?)';
             inserts = [options.gameId, gameSection, gameInstructor, gameAdminPasswordHash, gameSection, gameInstructor];
         } else {
             queryString =
-                "INSERT INTO games (gameSection, gameInstructor, gameAdminPassword) SELECT ?,?,? WHERE NOT EXISTS(SELECT * from games WHERE gameSection=? AND gameInstructor = ?)";
+                'INSERT INTO games (gameSection, gameInstructor, gameAdminPassword) SELECT ?,?,? WHERE NOT EXISTS(SELECT * from games WHERE gameSection=? AND gameInstructor = ?)';
             inserts = [gameSection, gameInstructor, gameAdminPasswordHash, gameSection, gameInstructor];
         }
 
-        const [result, fields] = await pool.query(queryString, inserts);
+        const [result]: any = await pool.query(queryString, inserts);
 
-        if (result.affectedRows == 0) return;
+        if (result.affectedRows === 0) return null;
 
         const thisGame = await new Game({ gameSection, gameInstructor }).init();
 
@@ -268,10 +323,10 @@ class Game implements GameType {
      * Set the points for a specific team in this game.
      */
     async setPoints(gameTeam: number, newPoints: number) {
-        const queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
-        const inserts = ["game" + gameTeam + "Points", newPoints, this.gameId];
+        const queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
+        const inserts = [`game${gameTeam}Points`, newPoints, this.gameId];
         await pool.query(queryString, inserts);
-        if (gameTeam == 0) {
+        if (gameTeam === 0) {
             this.game0Points = newPoints;
         } else {
             this.game1Points = newPoints;
@@ -282,10 +337,10 @@ class Game implements GameType {
      * Set the status for a specific team in this game.
      */
     async setStatus(gameTeam: number, newStatus: number) {
-        const queryString = "UPDATE games set ?? = ? WHERE gameId = ?";
-        const inserts = ["game" + gameTeam + "Status", newStatus, this.gameId];
+        const queryString = 'UPDATE games set ?? = ? WHERE gameId = ?';
+        const inserts = [`game${gameTeam}Status`, newStatus, this.gameId];
         await pool.query(queryString, inserts);
-        if (gameTeam == 0) {
+        if (gameTeam === BLUE_TEAM_ID) {
             this.game0Status = newStatus;
         } else {
             this.game1Status = newStatus;
@@ -296,7 +351,7 @@ class Game implements GameType {
      * Set the gamePhase value in this game.
      */
     async setPhase(newGamePhase: number) {
-        const queryString = "UPDATE games set gamePhase = ? WHERE gameId = ?";
+        const queryString = 'UPDATE games set gamePhase = ? WHERE gameId = ?';
         const inserts = [newGamePhase, this.gameId];
         await pool.query(queryString, inserts);
         this.gamePhase = newGamePhase;
@@ -308,7 +363,7 @@ class Game implements GameType {
      * gameSlice => planning or executing
      */
     async setSlice(newGameSlice: number) {
-        const queryString = "UPDATE games SET gameSlice = ? WHERE gameId = ?";
+        const queryString = 'UPDATE games SET gameSlice = ? WHERE gameId = ?';
         const inserts = [newGameSlice, this.gameId];
         await pool.query(queryString, inserts);
         this.gameSlice = newGameSlice;
@@ -320,7 +375,7 @@ class Game implements GameType {
      * Usually 1, 2, or 3
      */
     async setRound(newGameRound: number) {
-        const queryString = "UPDATE games SET gameRound = ? WHERE gameId = ?";
+        const queryString = 'UPDATE games SET gameRound = ? WHERE gameId = ?';
         const inserts = [newGameRound, this.gameId];
         await pool.query(queryString, inserts);
         this.gameRound = newGameRound;
@@ -331,37 +386,37 @@ class Game implements GameType {
      */
     async updateFlags() {
         let didUpdateFlags = false;
-        //only certain pieces can capture
-        //see if any pieces are currently residing on flags by themselves, and if so, set the island# in the database and update 'this' object correspondingly
-        let queryString = "SELECT * FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?) AND pieceTypeId in (?)";
+        // only certain pieces can capture
+        // see if any pieces are currently residing on flags by themselves, and if so, set the island# in the database and update 'this' object correspondingly
+        let queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?) AND pieceTypeId in (?)';
         let inserts = [this.gameId, ALL_FLAG_LOCATIONS, CAPTURE_TYPES];
-        let [results, fields] = await pool.query(queryString, inserts);
+        const [results]: any = await pool.query(queryString, inserts);
 
         if (results.length === 0) {
-            return;
+            return null;
         }
 
-        //need to set all positions that have pieces on them (that are different from current values?)
-        //update if only 1 team's pieces there, AND if not already the other team? (or update anyway if all 1 team)
+        // need to set all positions that have pieces on them (that are different from current values?)
+        // update if only 1 team's pieces there, AND if not already the other team? (or update anyway if all 1 team)
 
-        //TODO: need major refactoring here, this is quick and dirty (but should work)
-        let eachFlagsTeams: any = [[], [], [], [], [], [], [], [], [], [], [], [], []];
+        // TODO: need major refactoring here, this is quick and dirty (but should work)
+        const eachFlagsTeams: any = [[], [], [], [], [], [], [], [], [], [], [], [], []];
         for (let x = 0; x < results.length; x++) {
-            let thisPiece = results[x];
-            let { piecePositionId, pieceTeamId } = thisPiece;
-            let flagNum = ALL_FLAG_LOCATIONS.indexOf(piecePositionId);
+            const thisPiece = results[x];
+            const { piecePositionId, pieceTeamId } = thisPiece;
+            const flagNum = ALL_FLAG_LOCATIONS.indexOf(piecePositionId);
             eachFlagsTeams[flagNum].push(pieceTeamId);
         }
 
         for (let y = 0; y < eachFlagsTeams.length; y++) {
-            let thisFlagsTeams = eachFlagsTeams[y];
+            const thisFlagsTeams = eachFlagsTeams[y];
             if (thisFlagsTeams.length === 0) continue;
             if (thisFlagsTeams.includes(BLUE_TEAM_ID) && thisFlagsTeams.includes(RED_TEAM_ID)) continue;
-            //else update this thing
+            // else update this thing
             this.setFlag(y, thisFlagsTeams[0]);
-            //sql update
-            queryString = "UPDATE games SET ?? = ? WHERE gameId = ?";
-            inserts = ["flag" + y, thisFlagsTeams[0], this.gameId];
+            // sql update
+            queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
+            inserts = [`flag${y}`, thisFlagsTeams[0], this.gameId];
             await pool.query(queryString, inserts);
             didUpdateFlags = true;
         }
@@ -421,18 +476,18 @@ class Game implements GameType {
      * Delete old news, and get next news alert from database.
      */
     async getNextNews() {
-        //Delete the old news
-        let queryString = "DELETE FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1";
-        let inserts = [this.gameId];
+        // Delete the old news
+        let queryString = 'DELETE FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
+        const inserts = [this.gameId];
         await pool.query(queryString, inserts);
 
-        //Grab the next news
-        queryString = "SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1";
-        const [resultNews, fields] = await pool.query(queryString, inserts);
+        // Grab the next news
+        queryString = 'SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
+        const [resultNews]: any = await pool.query(queryString, inserts);
         const { newsTitle, newsInfo } =
             resultNews[0] !== undefined
                 ? resultNews[0]
-                : { newsTitle: "No More News", newsInfo: "Obviously you've been playing this game too long..." };
+                : { newsTitle: 'No More News', newsInfo: "Obviously you've been playing this game too long..." };
 
         return {
             active: true,
@@ -445,7 +500,7 @@ class Game implements GameType {
      * Globally (for this game), give points to teams based on flags that they own.
      */
     async addPoints() {
-        //add points based on the island ownerships inside this object (game)
+        // add points based on the island ownerships inside this object (game)
         let bluePoints = this.game0Points;
         let redPoints = this.game1Points;
 
@@ -490,40 +545,37 @@ class Game implements GameType {
      * Dynamically get status for specific team.
      */
     getStatus(gameTeam: number) {
-        if (gameTeam == 0) {
+        if (gameTeam === BLUE_TEAM_ID) {
             return this.game0Status;
-        } else {
-            return this.game1Status;
         }
+        return this.game1Status;
     }
 
     /**
      * Dynamically get points for specific team.
      */
     getPoints(gameTeam: number) {
-        if (gameTeam == 0) {
+        if (gameTeam === BLUE_TEAM_ID) {
             return this.game0Points;
-        } else {
-            return this.game1Points;
         }
+        return this.game1Points;
     }
 
     /**
      * Dynamically get passwordhash for specific team.
      */
     getPasswordHash(gameTeam: number) {
-        if (gameTeam == 0) {
+        if (gameTeam === BLUE_TEAM_ID) {
             return this.game0Password;
-        } else {
-            return this.game1Password;
         }
+        return this.game1Password;
     }
 
     /**
      * Generates a Redux Action, contains all current game information / state.
      */
     async initialStateAction(gameTeam: number, gameControllers: any) {
-        let serverAction: any = {
+        const serverAction: any = {
             type: INITIAL_GAMESTATE,
             payload: {}
         };
@@ -567,15 +619,15 @@ class Game implements GameType {
         serverAction.payload.gameboardMeta.confirmedCommInterrupt = await Capability.getCommInterrupt(this.gameId, gameTeam);
         serverAction.payload.gameboardMeta.confirmedGoldenEye = await Capability.getGoldenEye(this.gameId, gameTeam);
 
-        //Could put news into its own object, but don't really use it much...(TODO: figure out if need to refactor this...)
-        if (this.gamePhase == NEWS_PHASE_ID) {
-            let queryString = "SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1";
-            let inserts = [this.gameId];
-            const [resultNews, fields] = await pool.query(queryString, inserts);
+        // Could put news into its own object, but don't really use it much...(TODO: figure out if need to refactor this...)
+        if (this.gamePhase === NEWS_PHASE_ID) {
+            const queryString = 'SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
+            const inserts = [this.gameId];
+            const [resultNews]: any = await pool.query(queryString, inserts);
             const { newsTitle, newsInfo } =
                 resultNews[0] !== undefined
                     ? resultNews[0]
-                    : { newsTitle: "No More News", newsInfo: "Obviously you've been playing this game too long..." };
+                    : { newsTitle: 'No More News', newsInfo: "Obviously you've been playing this game too long..." };
 
             serverAction.payload.gameboardMeta.news = {
                 active: true,
@@ -584,9 +636,9 @@ class Game implements GameType {
             };
         }
 
-        //TODO: get these values from the database (potentially throw this into the event object)
-        //TODO: current event could be a refuel (or something else...need to handle all of them, and set other states as false...)
-        //TODO: don't have to check if not in the combat phase...(prevent these checks for added efficiency?)
+        // TODO: get these values from the database (potentially throw this into the event object)
+        // TODO: current event could be a refuel (or something else...need to handle all of them, and set other states as false...)
+        // TODO: don't have to check if not in the combat phase...(prevent these checks for added efficiency?)
         const currentEvent = await Event.getNext(this.gameId, gameTeam);
 
         if (currentEvent) {
@@ -594,15 +646,15 @@ class Game implements GameType {
             switch (eventTypeId) {
                 case POS_BATTLE_EVENT_TYPE:
                 case COL_BATTLE_EVENT_TYPE:
-                    let friendlyPiecesList: any = await currentEvent.getTeamItems(gameTeam == BLUE_TEAM_ID ? BLUE_TEAM_ID : RED_TEAM_ID);
-                    let enemyPiecesList: any = await currentEvent.getTeamItems(gameTeam == BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID);
-                    let friendlyPieces: any = [];
-                    let enemyPieces = [];
+                    const friendlyPiecesList: any = await currentEvent.getTeamItems(gameTeam === BLUE_TEAM_ID ? BLUE_TEAM_ID : RED_TEAM_ID);
+                    const enemyPiecesList: any = await currentEvent.getTeamItems(gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID);
+                    const friendlyPieces: any = [];
+                    const enemyPieces = [];
 
-                    //formatting for the frontend
+                    // formatting for the frontend
                     for (let x = 0; x < friendlyPiecesList.length; x++) {
-                        //need to transform pieces and stuff...
-                        let thisFriendlyPiece = {
+                        // need to transform pieces and stuff...
+                        const thisFriendlyPiece = {
                             piece: {
                                 pieceId: friendlyPiecesList[x].pieceId,
                                 pieceGameId: friendlyPiecesList[x].pieceGameId,
@@ -630,7 +682,7 @@ class Game implements GameType {
                         friendlyPieces.push(thisFriendlyPiece);
                     }
                     for (let y = 0; y < enemyPiecesList.length; y++) {
-                        let thisEnemyPiece: any = {
+                        const thisEnemyPiece: any = {
                             targetPiece: null,
                             targetPieceIndex: -1
                         };
@@ -638,12 +690,12 @@ class Game implements GameType {
                         enemyPieces.push(thisEnemyPiece);
                     }
 
-                    //now need to get the targetPieceIndex from the thing....if needed....
+                    // now need to get the targetPieceIndex from the thing....if needed....
                     for (let z = 0; z < friendlyPieces.length; z++) {
                         if (friendlyPieces[z].targetPiece != null) {
                             const { pieceId } = friendlyPieces[z].targetPiece;
 
-                            friendlyPieces[z].targetPieceIndex = enemyPieces.findIndex(enemyPieceThing => enemyPieceThing.piece.pieceId == pieceId);
+                            friendlyPieces[z].targetPieceIndex = enemyPieces.findIndex(enemyPieceThing => enemyPieceThing.piece.pieceId === pieceId);
                         }
                     }
 
@@ -654,14 +706,14 @@ class Game implements GameType {
                     };
                     break;
                 case REFUEL_EVENT_TYPE:
-                    //need to get tankers and aircraft and put that into the payload...
-                    let tankers = [];
-                    let aircraft = [];
+                    // need to get tankers and aircraft and put that into the payload...
+                    const tankers = [];
+                    const aircraft = [];
                     const allRefuelItems: any = await currentEvent.getRefuelItems();
 
                     for (let x = 0; x < allRefuelItems.length; x++) {
-                        let thisRefuelItem = allRefuelItems[x];
-                        let { pieceTypeId } = thisRefuelItem;
+                        const thisRefuelItem = allRefuelItems[x];
+                        const { pieceTypeId } = thisRefuelItem;
                         if (pieceTypeId === AIR_REFUELING_SQUADRON_ID) {
                             tankers.push(thisRefuelItem);
                         } else {
@@ -678,7 +730,7 @@ class Game implements GameType {
                     };
                     break;
                 default:
-                //do nothing, unknown event type...should do something...
+                // do nothing, unknown event type...should do something...
             }
         }
 
