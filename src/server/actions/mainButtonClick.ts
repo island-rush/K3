@@ -143,8 +143,8 @@ const mainButtonClick = async (socket: Socket) => {
         }
     };
 
-    const newsPhaseAction0 = newsPhaseAction;
-    const newsPhaseAction1 = newsPhaseAction;
+    const newsPhaseAction0 = JSON.parse(JSON.stringify(newsPhaseAction));
+    const newsPhaseAction1 = JSON.parse(JSON.stringify(newsPhaseAction));
     newsPhaseAction0.payload.gamePoints = thisGame.game0Points;
     newsPhaseAction1.payload.gamePoints = thisGame.game1Points;
 
