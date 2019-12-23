@@ -4,7 +4,7 @@ import { LIST_ALL_CAPABILITIES, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE
 import { shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from '../../redux/actions';
 import PurchaseableItem from './PurchaseableItem';
 import ShopItem from './ShopItem';
-import { ShopItemType } from '../../constants/interfaces';
+import { ShopItemType } from '../../interfaces/classTypes';
 
 const shopStyle: any = {
     backgroundColor: 'Yellow',

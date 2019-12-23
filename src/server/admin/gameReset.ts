@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { TeacherSession } from '../../react-client/src/constants/interfaces';
 import { Game } from '../classes';
 import { ACCESS_TAG } from '../pages/errorTypes';
+import { TeacherSession } from '../../react-client/src/interfaces/sessions';
 
 /**
  * Reset a game from an express route /gameReset

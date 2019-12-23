@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { TYPE_NAMES } from '../../constants/gameConstants';
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../styleConstants';
-import { PieceType } from '../../constants/interfaces';
+import { PieceType } from '../../interfaces/classTypes';
 
 const pieceStyle = {
     backgroundColor: 'grey',
@@ -58,7 +58,7 @@ class Piece extends Component<Props> {
 
         const title = `${TYPE_NAMES[piece.pieceTypeId]}\nMoves: ${piece.pieceMoves}\nFuel: ${
             piece.pieceFuel !== -1 ? piece.pieceFuel : 'N/A'
-        }${disabledText}`;
+            }${disabledText}`;
 
         const onClick = (event: any) => {
             event.preventDefault();

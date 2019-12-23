@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
-import { Password, TeacherSession } from '../../react-client/src/constants/interfaces';
+import { Password } from '../../react-client/src/constants/interfaces';
 import { Game } from '../classes';
 import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from '../pages/errorTypes';
+import { TeacherSession } from '../../react-client/src/interfaces/sessions';
 
 /**
  * Set each team's password.

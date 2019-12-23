@@ -3,8 +3,10 @@ import { distanceMatrix } from '../../../react-client/src/constants/distanceMatr
 import { AIRFIELD_TYPE } from '../../../react-client/src/constants/gameboardConstants';
 // prettier-ignore
 import { ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_MAIN } from '../../../react-client/src/constants/gameConstants';
-import { EnterContainerAction, EnterContainerRequestAction, GameSession, PieceType } from '../../../react-client/src/constants/interfaces';
+import { EnterContainerAction, EnterContainerRequestAction } from '../../../react-client/src/constants/interfaces';
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
+import { PieceType } from '../../../react-client/src/interfaces/classTypes';
+import { GameSession } from '../../../react-client/src/interfaces/sessions';
 import { OUTER_PIECE_CLICK_ACTION } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { Game, Piece } from '../../classes';

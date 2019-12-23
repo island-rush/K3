@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
-import { EmitType, ExitTransportContainerAction, PieceType } from '../../../constants/interfaces';
+import { EmitType, ExitTransportContainerAction } from '../../../constants/interfaces';
 import { INNER_TRANSPORT_PIECE_CLICK_ACTION } from '../actionTypes';
+import { PieceType } from '../../../interfaces/classTypes';
 
 /**
  * Move a piece from inside a transport to outside (adjacent land)

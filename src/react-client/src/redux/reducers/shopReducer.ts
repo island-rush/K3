@@ -1,6 +1,8 @@
 import { AnyAction } from 'redux';
-import { ShopItemType, ShopPurchaseAction, ShopRefundAction, ShopState } from '../../constants/interfaces';
+import { ShopState } from '../../interfaces/reducerTypes';
+import { ShopPurchaseAction, ShopRefundAction } from '../../constants/interfaces';
 import { INITIAL_GAMESTATE, SHOP_CLEAR, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../actions/actionTypes';
+import { ShopItemType } from '../../interfaces/classTypes';
 
 const initialShopState: ShopState = [];
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TYPE_IMAGES } from '../styleConstants';
-import { ShopItemType } from '../../constants/interfaces';
+import { ShopItemType } from '../../interfaces/classTypes';
 
 const shopItemStyle = {
     backgroundColor: 'green',

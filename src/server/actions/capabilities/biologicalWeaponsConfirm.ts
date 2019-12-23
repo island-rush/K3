@@ -1,11 +1,12 @@
 import { Socket } from 'socket.io';
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../react-client/src/constants/gameConstants';
-import { BioWeaponsAction, BioWeaponsRequestAction, GameSession } from '../../../react-client/src/constants/interfaces';
+import { BioWeaponsAction, BioWeaponsRequestAction } from '../../../react-client/src/constants/interfaces';
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
 import { BIO_WEAPON_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
 import { Capability, Game, InvItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import sendUserFeedback from '../sendUserFeedback';
+import { GameSession } from '../../../react-client/src/interfaces/sessions';
 
 /**
  * User request to use BioWeapons capability.

@@ -1,8 +1,9 @@
 import { Dispatch } from 'redux';
 import { CONTAINER_TYPES } from '../../../constants/gameConstants';
-import { EmitType, PieceOpenAction, PieceType } from '../../../constants/interfaces';
+import { EmitType, PieceOpenAction } from '../../../constants/interfaces';
 import { PIECE_OPEN_ACTION } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
+import { PieceType } from '../../../interfaces/classTypes';
 
 /**
  * Double Click a container piece to open it.

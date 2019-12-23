@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { TRANSPORT_TYPE_ID } from '../../../constants/gameConstants';
 import ContainerPiece from './ContainerPiece';
-import { PieceType } from '../../../constants/interfaces';
+import { PieceType } from '../../../interfaces/classTypes';
 
 const containerPopupStyle: any = {
     position: 'absolute',
@@ -74,14 +74,14 @@ class ContainerPopup extends Component<Props> {
             container.containerPiece === null
                 ? null
                 : container.containerPiece.pieceContents.pieces.map((piece: PieceType, index: number) => (
-                      <ContainerPiece
-                          key={index}
-                          piece={piece}
-                          container={container}
-                          //could need extra stuff for tanks in transport (need extra step to select the hex to go in)
-                          clickFunction={container.containerPiece.pieceTypeId === TRANSPORT_TYPE_ID ? innerTransportPieceClick : innerPieceClick}
-                      />
-                  ));
+                    <ContainerPiece
+                        key={index}
+                        piece={piece}
+                        container={container}
+                        //could need extra stuff for tanks in transport (need extra step to select the hex to go in)
+                        clickFunction={container.containerPiece.pieceTypeId === TRANSPORT_TYPE_ID ? innerTransportPieceClick : innerPieceClick}
+                    />
+                ));
 
         return (
             <div style={container.active && !container.isSelectingHex ? containerPopupStyle : invisibleStyle}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../constants/gameConstants';
 import { TYPE_IMAGES } from '../styleConstants';
-import { InvItemType } from '../../constants/interfaces';
+import { InvItemType } from '../../interfaces/classTypes';
 
 const invItemStyle = {
     position: 'relative',

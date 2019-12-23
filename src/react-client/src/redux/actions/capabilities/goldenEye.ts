@@ -1,8 +1,9 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { EmitType, GoldenEyeSelectingAction, InvItemType } from '../../../constants/interfaces';
+import { EmitType, GoldenEyeSelectingAction } from '../../../constants/interfaces';
 import { GOLDEN_EYE_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
+import { InvItemType } from '../../../interfaces/classTypes';
 
 const goldenEye = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {

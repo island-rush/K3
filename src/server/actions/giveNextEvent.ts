@@ -1,11 +1,13 @@
 import { Socket } from 'socket.io';
-import { EventBattleAction, EventRefuelAction, GameSession, GameType, NoMoreEventsAction } from '../../react-client/src/constants/interfaces';
+import { EventBattleAction, EventRefuelAction, NoMoreEventsAction } from '../../react-client/src/constants/interfaces';
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from '../../react-client/src/constants/gameConstants';
 import { SOCKET_SERVER_SENDING_ACTION } from '../../react-client/src/constants/otherConstants';
 import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from '../../react-client/src/redux/actions/actionTypes';
 import { Event, Piece } from '../classes';
 import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from './eventConstants';
 import sendUserFeedback from './sendUserFeedback';
+import { GameSession } from '../../react-client/src/interfaces/sessions';
+import { GameType } from '../../react-client/src/interfaces/classTypes';
 
 /**
  * Find the next event in the EventQueue and send to this team (through a socket)

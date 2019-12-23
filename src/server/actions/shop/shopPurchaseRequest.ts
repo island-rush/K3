@@ -1,11 +1,12 @@
 import { Socket } from 'socket.io';
 import { BLUE_TEAM_ID, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from '../../../react-client/src/constants/gameConstants';
-import { GameSession, ShopPurchaseAction, ShopPurchaseRequestAction } from '../../../react-client/src/constants/interfaces';
+import { ShopPurchaseAction, ShopPurchaseRequestAction } from '../../../react-client/src/constants/interfaces';
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
 import { SHOP_PURCHASE } from '../../../react-client/src/redux/actions/actionTypes';
 import { Game, ShopItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import sendUserFeedback from '../sendUserFeedback';
+import { GameSession } from '../../../react-client/src/interfaces/sessions';
 
 /**
  * Client is requesting to buy something from the shop and place it into their cart. (Insert ShopItem)
