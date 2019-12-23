@@ -10,7 +10,7 @@
         "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend",
         "dev:debug": "concurrently \"npm:devBackend:debug\" \"npm:devFrontend\"",
         "devBackend": "nodemon -r dotenv/config ./src/server.ts",
-        "devFrontend": "cd ./src/react-client && npm start",
+        "devFrontend": "cd ./src/react-client && cross-env NODE_OPTIONS=--max_old_space_size=4096 npm start",
         "buildClient": "cd ./src/react-client && npm run build && cd ../..",
         "moveFrontend": "copyfiles -u 1 ./src/react-client/build/**/*.* ./dist",
         "compileBackend": "tsc -p . && copyfiles -u 3 ./src/server/pages/**/*.html ./dist/server/pages",
