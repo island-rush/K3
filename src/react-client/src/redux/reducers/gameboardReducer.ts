@@ -1,28 +1,31 @@
 //prettier-ignore
+import { AnyAction } from "redux";
+import { ClearBattleAction, EventBattleAction, FuelResultsAction, GameInitialStateAction, InvItemPlaceAction, NoMoreEventsAction, PieceType, RaiseMoraleAction, SliceChangeAction } from '../../constants/interfaces';
 import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from "../actions/actionTypes";
 import { initialGameboardEmpty } from './initialGameboardEmpty';
-import { PieceType } from '../../constants/interfaces';
 
 //TODO: should do the return at the bottom, not inside each case...(see metaReducer...)
-function gameboardReducer(state = initialGameboardEmpty, { type, payload }: { type: string; payload: any }) {
+function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
+    const { type } = action;
     let stateDeepCopy = JSON.parse(JSON.stringify(state));
     let freshBoard;
     let positions;
     switch (type) {
         case INITIAL_GAMESTATE:
-            positions = Object.keys(payload.gameboardPieces);
+            positions = Object.keys((action as GameInitialStateAction).payload.gameboardPieces);
             for (let x = 0; x < positions.length; x++) {
-                stateDeepCopy[positions[x]].pieces = payload.gameboardPieces[positions[x]];
+                stateDeepCopy[positions[x]].pieces = (action as GameInitialStateAction).payload.gameboardPieces[positions[x]];
             }
             return stateDeepCopy;
         case NEW_ROUND:
         case PLACE_PHASE:
-            if (payload.gameboardPieces) {
+            if ((action as AnyAction).payload.gameboardPieces) {
                 //this would happen on the 1st event (from executeStep)
                 freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
-                positions = Object.keys(payload.gameboardPieces);
+                positions = Object.keys((action as AnyAction).payload.gameboardPieces);
                 for (let x = 0; x < positions.length; x++) {
-                    freshBoard[positions[x]].pieces = payload.gameboardPieces[positions[x]];
+                    // TODO: refactor with common action
+                    freshBoard[positions[x]].pieces = (action as AnyAction).payload.gameboardPieces[positions[x]];
                 }
                 return freshBoard;
             } else {
@@ -30,18 +33,18 @@ function gameboardReducer(state = initialGameboardEmpty, { type, payload }: { ty
             }
         case SLICE_CHANGE:
             freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
-            positions = Object.keys(payload.gameboardPieces);
+            positions = Object.keys((action as SliceChangeAction).payload.gameboardPieces);
             for (let x = 0; x < positions.length; x++) {
-                freshBoard[positions[x]].pieces = payload.gameboardPieces[positions[x]];
+                freshBoard[positions[x]].pieces = (action as SliceChangeAction).payload.gameboardPieces[positions[x]];
             }
             return freshBoard;
         case NO_MORE_EVENTS:
-            if (payload.gameboardPieces) {
+            if ((action as NoMoreEventsAction).payload.gameboardPieces) {
                 //this would happen on the 1st event (from executeStep)
                 freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
-                positions = Object.keys(payload.gameboardPieces);
+                positions = Object.keys((action as NoMoreEventsAction).payload.gameboardPieces);
                 for (let x = 0; x < positions.length; x++) {
-                    freshBoard[positions[x]].pieces = payload.gameboardPieces[positions[x]];
+                    freshBoard[positions[x]].pieces = (action as NoMoreEventsAction).payload.gameboardPieces[positions[x]];
                 }
                 return freshBoard;
             } else {
@@ -49,26 +52,26 @@ function gameboardReducer(state = initialGameboardEmpty, { type, payload }: { ty
             }
         case REMOTE_SENSING_SELECTED:
             freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
-            positions = Object.keys(payload.gameboardPieces);
+            positions = Object.keys((action as NoMoreEventsAction).payload.gameboardPieces);
             for (let x = 0; x < positions.length; x++) {
-                freshBoard[positions[x]].pieces = payload.gameboardPieces[positions[x]];
+                freshBoard[positions[x]].pieces = (action as NoMoreEventsAction).payload.gameboardPieces[positions[x]];
             }
             return freshBoard;
         case RAISE_MORALE_SELECTED:
             freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
-            positions = Object.keys(payload.gameboardPieces);
+            positions = Object.keys((action as RaiseMoraleAction).payload.gameboardPieces);
             for (let x = 0; x < positions.length; x++) {
-                freshBoard[positions[x]].pieces = payload.gameboardPieces[positions[x]];
+                freshBoard[positions[x]].pieces = (action as RaiseMoraleAction).payload.gameboardPieces[positions[x]];
             }
             return freshBoard;
         case EVENT_BATTLE:
             //TODO: refactor, done twice? (event_refuel...)
-            if (payload.gameboardPieces) {
+            if ((action as EventBattleAction).payload.gameboardPieces) {
                 //this would happen on the 1st event (from executeStep)
                 freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
-                positions = Object.keys(payload.gameboardPieces);
+                positions = Object.keys((action as EventBattleAction).payload.gameboardPieces);
                 for (let x = 0; x < positions.length; x++) {
-                    freshBoard[positions[x]].pieces = payload.gameboardPieces[positions[x]];
+                    freshBoard[positions[x]].pieces = (action as EventBattleAction).payload.gameboardPieces[positions[x]];
                 }
                 return freshBoard;
             } else {
@@ -78,19 +81,20 @@ function gameboardReducer(state = initialGameboardEmpty, { type, payload }: { ty
         case OUTER_PIECE_CLICK_ACTION:
         case INNER_PIECE_CLICK_ACTION:
         case EVENT_REFUEL:
-            if (payload.gameboardPieces) {
+            if ((action as AnyAction).payload.gameboardPieces) {
                 //this would happen on the 1st event (from executeStep)
                 freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
-                positions = Object.keys(payload.gameboardPieces);
+                // TODO: refactor AnyAction to be something else
+                positions = Object.keys((action as AnyAction).payload.gameboardPieces);
                 for (let x = 0; x < positions.length; x++) {
-                    freshBoard[positions[x]].pieces = payload.gameboardPieces[positions[x]];
+                    freshBoard[positions[x]].pieces = (action as AnyAction).payload.gameboardPieces[positions[x]];
                 }
                 return freshBoard;
             } else {
                 return stateDeepCopy;
             }
         case REFUEL_RESULTS:
-            const { fuelUpdates } = payload;
+            const { fuelUpdates } = (action as FuelResultsAction).payload;
 
             for (let y = 0; y < fuelUpdates.length; y++) {
                 //need to find the piece on the board and update it, would be nice if we had the position...
@@ -106,11 +110,11 @@ function gameboardReducer(state = initialGameboardEmpty, { type, payload }: { ty
 
             return stateDeepCopy;
         case PIECE_PLACE:
-            stateDeepCopy[payload.positionId].pieces.push(payload.newPiece);
+            stateDeepCopy[(action as InvItemPlaceAction).payload.positionId].pieces.push((action as InvItemPlaceAction).payload.newPiece);
             return stateDeepCopy;
         case CLEAR_BATTLE:
             //remove pieces from the masterRecord that won?
-            const { masterRecord, friendlyPieces, enemyPieces } = payload.battle;
+            const { masterRecord, friendlyPieces, enemyPieces } = (action as ClearBattleAction).payload.battle;
 
             for (let x = 0; x < masterRecord.length; x++) {
                 let currentRecord = masterRecord[x];

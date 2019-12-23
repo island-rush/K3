@@ -1,4 +1,6 @@
-export const initialGameboardEmpty: { type: string; pieces: any }[] = [
+import { GameboardState } from "../../constants/interfaces";
+
+export const initialGameboardEmpty: GameboardState = [
     { type: 'land', pieces: [] },
     { type: 'land', pieces: [] },
     { type: 'land', pieces: [] },

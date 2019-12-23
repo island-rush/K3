@@ -1,10 +1,10 @@
 //prettier-ignore
 import { AnyAction } from "redux";
-import { InvItemType, ShopConfirmPurchaseAction, InvItemPlaceAction } from '../../constants/interfaces';
+import { InvItemPlaceAction, InvItemType, InvState, ShopConfirmPurchaseAction } from '../../constants/interfaces';
 //prettier-ignore
 import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SHOP_TRANSFER } from "../actions/actionTypes";
 
-const initialInvState: InvItemType[] = [];
+const initialInvState: InvState = [];
 
 function invReducer(state = initialInvState, action: AnyAction) {
     const { type } = action;
@@ -26,6 +26,7 @@ function invReducer(state = initialInvState, action: AnyAction) {
         case GOLDEN_EYE_SELECTED:
         case COMM_INTERRUP_SELECTED:
             return state.filter((invItem: InvItemType) => {
+                // TODO: change 'AnyAction' to some subset of all of these actions (they all have payloads with invItem)
                 return invItem.invItemId !== (action as AnyAction).payload.invItem.invItemId;
             });
         default:
