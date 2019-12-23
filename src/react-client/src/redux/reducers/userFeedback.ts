@@ -1,12 +1,16 @@
 //prettier-ignore
-import { AIRCRAFT_CLICK, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MAIN_BUTTON_CLICK, MENU_SELECT, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECES_MOVE, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLACE_PHASE, PLAN_WAS_CONFIRMED, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TARGET_PIECE_SELECT, UPDATE_FLAGS } from "../actions/actionTypes";
+import { AnyAction } from "redux";
+import { UserfeedbackAction } from '../../constants/interfaces';
+//prettier-ignore
+import { AIRCRAFT_CLICK, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MAIN_BUTTON_CLICK, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLACE_PHASE, PLAN_WAS_CONFIRMED, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TARGET_PIECE_SELECT, UPDATE_FLAGS } from "../actions/actionTypes";
 
 const initialUserFeedback = 'Loading...';
 
-function userFeedbackReducer(state: string = initialUserFeedback, { type, payload }: { type: string; payload: { userFeedback: string } }) {
+function userFeedbackReducer(state: string = initialUserFeedback, action: AnyAction) {
+    const { type } = action;
     switch (type) {
         case SET_USERFEEDBACK:
-            return payload.userFeedback;
+            return (action as UserfeedbackAction).payload.userFeedback;
         case INITIAL_GAMESTATE:
             return 'Welcome to Island Rush!';
         case SHOP_REFUND:
@@ -71,16 +75,12 @@ function userFeedbackReducer(state: string = initialUserFeedback, { type, payloa
             return 'New Round of Combat!...';
         case PLACE_PHASE:
             return 'Place troops onto the board from inventory...';
-        case PIECES_MOVE:
-            return 'Executed a step!';
         case BATTLE_PIECE_SELECT:
             return 'Selected Piece to attack with...';
         case TARGET_PIECE_SELECT:
             return 'Target piece clicked?';
         case ENEMY_PIECE_SELECT:
             return 'Enemy piece clicked?';
-        case MENU_SELECT:
-            return 'selected the menu';
         case NO_MORE_EVENTS:
             return 'ready to execute next step!';
         case BATTLE_FIGHT_RESULTS:

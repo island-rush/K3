@@ -33,6 +33,31 @@ export interface UserfeedbackAction extends Action {
     };
 }
 
+export interface GameInfoState {
+    gameSection: GameType['gameSection'];
+    gameInstructor: GameType['gameInstructor'];
+    gameTeam: GameSession['gameTeam'];
+    gameControllers: GameSession['gameControllers'];
+    gamePhase: GameType['gamePhase'];
+    gameRound: GameType['gameRound'];
+    gameSlice: GameType['gameSlice'];
+    gameStatus: GameType['game0Status'];
+    gamePoints: GameType['game0Points'];
+    flag0: GameType['flag0'];
+    flag1: GameType['flag1'];
+    flag2: GameType['flag2'];
+    flag3: GameType['flag3'];
+    flag4: GameType['flag4'];
+    flag5: GameType['flag5'];
+    flag6: GameType['flag6'];
+    flag7: GameType['flag7'];
+    flag8: GameType['flag8'];
+    flag9: GameType['flag9'];
+    flag10: GameType['flag10'];
+    flag11: GameType['flag11'];
+    flag12: GameType['flag12'];
+}
+
 export interface PositionSelectAction extends Action {
     type: typeof POSITION_SELECT;
     payload: {

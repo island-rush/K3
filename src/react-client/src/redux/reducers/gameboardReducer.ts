@@ -1,5 +1,5 @@
 //prettier-ignore
-import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECES_MOVE, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from "../actions/actionTypes";
+import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from "../actions/actionTypes";
 import { initialGameboardEmpty } from './initialGameboardEmpty';
 import { PieceType } from '../../constants/interfaces';
 
@@ -28,14 +28,6 @@ function gameboardReducer(state = initialGameboardEmpty, { type, payload }: { ty
             } else {
                 return stateDeepCopy; //TODO: return at the bottom instead? (be consistent)
             }
-        case PIECES_MOVE:
-            //TODO: consolidate this with initial gamestate (or change)
-            freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
-            positions = Object.keys(payload.gameboardPieces);
-            for (let x = 0; x < positions.length; x++) {
-                freshBoard[positions[x]].pieces = payload.gameboardPieces[positions[x]];
-            }
-            return freshBoard;
         case SLICE_CHANGE:
             freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
             positions = Object.keys(payload.gameboardPieces);
