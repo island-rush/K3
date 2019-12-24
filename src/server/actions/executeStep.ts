@@ -6,7 +6,7 @@ import { NEW_ROUND, PLACE_PHASE, UPDATE_FLAGS } from '../../react-client/src/red
 import { Capability, Event, Game, Piece, Plan } from '../classes';
 import { BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from './eventConstants';
 import giveNextEvent from './giveNextEvent';
-import { GameSession } from '../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../types/sessionTypes';
 
 /**
  * Move pieces / step through plans

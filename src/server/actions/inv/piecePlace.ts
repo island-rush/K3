@@ -9,7 +9,7 @@ import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/
 import { Game, InvItem } from '../../classes';
 import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import sendUserFeedback from '../sendUserFeedback';
-import { GameSession } from '../../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../../types/sessionTypes';
 
 /**
  * User request to move piece from inventory to a position on the board.

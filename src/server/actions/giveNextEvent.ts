@@ -6,7 +6,7 @@ import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from '../../react-client/s
 import { Event, Piece } from '../classes';
 import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from './eventConstants';
 import sendUserFeedback from './sendUserFeedback';
-import { GameSession } from '../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../types/sessionTypes';
 import { GameType } from '../../react-client/src/interfaces/classTypes';
 
 /**

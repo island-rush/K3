@@ -9,7 +9,7 @@ import { SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVE
 import { biologicalWeaponsConfirm, commInterruptConfirm, confirmBattleSelection, confirmFuelSelection, confirmPlan, deletePlan, enterContainer, exitContainer, exitTransportContainer, goldenEyeConfirm, insurgencyConfirm, mainButtonClick, piecePlace, raiseMoraleConfirm, remoteSensingConfirm, rodsFromGodConfirm, sendUserFeedback, shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from './actions';
 import { Game } from './classes';
 import { BAD_SESSION, GAME_DOES_NOT_EXIST, NOT_LOGGED_IN_TAG } from './pages/errorTypes';
-import { GameSession } from '../react-client/src/interfaces/sessions';
+import { GameSession } from '../types/sessionTypes';
 
 /**
  * Configures a socket to handle game requests between client and server.

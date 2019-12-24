@@ -6,7 +6,7 @@ import { ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICO
 import { EnterContainerAction, EnterContainerRequestAction } from '../../../react-client/src/interfaces/interfaces';
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
 import { PieceType } from '../../../react-client/src/interfaces/classTypes';
-import { GameSession } from '../../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../../types/sessionTypes';
 import { OUTER_PIECE_CLICK_ACTION } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { Game, Piece } from '../../classes';

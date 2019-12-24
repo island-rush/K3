@@ -7,7 +7,7 @@ import { RAISE_MORALE_SELECTED } from '../../../react-client/src/redux/actions/a
 import { Capability, Game, InvItem, Piece } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import sendUserFeedback from '../sendUserFeedback';
-import { GameSession } from '../../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../../types/sessionTypes';
 
 /**
  * User request to use Raise Morale capability on a set of troops for a commander.

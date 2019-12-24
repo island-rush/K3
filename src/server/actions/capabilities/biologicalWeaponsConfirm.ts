@@ -6,7 +6,7 @@ import { BIO_WEAPON_SELECTED } from '../../../react-client/src/redux/actions/act
 import { Capability, Game, InvItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import sendUserFeedback from '../sendUserFeedback';
-import { GameSession } from '../../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../../types/sessionTypes';
 
 /**
  * User request to use BioWeapons capability.

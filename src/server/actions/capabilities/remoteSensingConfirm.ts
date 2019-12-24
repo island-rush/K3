@@ -6,7 +6,7 @@ import { REMOTE_SENSING_SELECTED } from '../../../react-client/src/redux/actions
 import { Capability, Game, InvItem, Piece } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import sendUserFeedback from '../sendUserFeedback';
-import { GameSession } from '../../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../../types/sessionTypes';
 
 /**
  * User request to use remote sensing capability on a position.

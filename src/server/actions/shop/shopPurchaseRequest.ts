@@ -6,7 +6,7 @@ import { SHOP_PURCHASE } from '../../../react-client/src/redux/actions/actionTyp
 import { Game, ShopItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import sendUserFeedback from '../sendUserFeedback';
-import { GameSession } from '../../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../../types/sessionTypes';
 
 /**
  * Client is requesting to buy something from the shop and place it into their cart. (Insert ShopItem)

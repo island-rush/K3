@@ -6,7 +6,7 @@ import { SHOP_TRANSFER } from '../../../react-client/src/redux/actions/actionTyp
 import { Game, InvItem, ShopItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import sendUserFeedback from '../sendUserFeedback';
-import { GameSession } from '../../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../../types/sessionTypes';
 
 /** *
  * Transfers ShopItems into InvItems ("confirms" them, no longer able to refund once inside inventory...)

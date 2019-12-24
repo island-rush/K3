@@ -6,7 +6,7 @@ import { DELETE_PLAN } from '../../../react-client/src/redux/actions/actionTypes
 import { Game, Piece } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import sendUserFeedback from '../sendUserFeedback';
-import { GameSession } from '../../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../../types/sessionTypes';
 
 /**
  * Client request to delete a plan for a piece.

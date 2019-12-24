@@ -9,7 +9,7 @@ import { Capability, Game, Piece } from '../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../pages/errorTypes';
 import executeStep from './executeStep';
 import sendUserFeedback from './sendUserFeedback';
-import { GameSession } from '../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../types/sessionTypes';
 
 const mainButtonClick = async (socket: Socket) => {
     // Grab Session

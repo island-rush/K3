@@ -6,7 +6,7 @@ import { RODS_FROM_GOD_SELECTED } from '../../../react-client/src/redux/actions/
 import { Capability, Game, InvItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import sendUserFeedback from '../sendUserFeedback';
-import { GameSession } from '../../../react-client/src/interfaces/sessions';
+import { GameSession } from '../../../types/sessionTypes';
 
 // TODO: does this affect all pieces? or only ground since that makes sense....(compare to bio weapons)
 /**

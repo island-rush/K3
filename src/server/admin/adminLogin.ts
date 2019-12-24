@@ -3,7 +3,7 @@ import md5 from 'md5';
 import { Section, Instructor, Password } from '../../react-client/src/interfaces/interfaces';
 import { Game } from '../classes';
 import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from '../pages/errorTypes';
-import { TeacherSession } from '../../react-client/src/interfaces/sessions';
+import { TeacherSession } from '../../types/sessionTypes';
 
 /**
  * Verify credentials and redirect to /teacher or /courseDirector.

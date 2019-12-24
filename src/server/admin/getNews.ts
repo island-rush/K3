@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { Game } from '../classes';
 import { ACCESS_TAG } from '../pages/errorTypes';
-import { TeacherSession } from '../../react-client/src/interfaces/sessions';
+import { TeacherSession } from '../../types/sessionTypes';
 
 /**
  * Get array of news data for a particular game.

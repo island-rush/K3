@@ -3,12 +3,7 @@
  */
 export interface GameSession {
     gameId: number;
-
-    /**
-     * Indicates Blue or Red Team (0 / 1)
-     */
     gameTeam: number;
-
     gameControllers: number[];
 }
 
@@ -17,10 +12,6 @@ export interface GameSession {
  */
 export interface TeacherSession {
     gameId: number;
-
-    /**
-     *
-     */
     gameSection: string;
     gameInstructor: string;
 }

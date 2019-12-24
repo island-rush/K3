@@ -1,5 +1,5 @@
 import { GameType, ShopItemType, InvItemType, PieceType } from './classTypes';
-import { GameSession } from './sessions';
+import { GameSession } from '../../../types/sessionTypes';
 
 export type ShopState = ShopItemType[];
 

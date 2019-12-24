@@ -3,7 +3,7 @@ import md5 from 'md5';
 import { Password } from '../../react-client/src/interfaces/interfaces';
 import { Game } from '../classes';
 import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from '../pages/errorTypes';
-import { TeacherSession } from '../../react-client/src/interfaces/sessions';
+import { TeacherSession } from '../../types/sessionTypes';
 
 /**
  * Set each team's password.
