@@ -528,6 +528,8 @@ export type PositionCapabilityRequestAction =
     | CommInterruptRequestAction
     | GoldenEyeRequestAction;
 
+export type InvItemCapabilityAction = RodsFromGodAction | RemoteSensingAction | InsurgencyAction | BioWeaponsAction | RaiseMoraleAction | GoldenEyeAction | CommInterruptAction;
+
 export interface DeletePlanRequestAction extends Action {
     type: typeof SERVER_DELETE_PLAN;
     payload: {
@@ -616,3 +618,7 @@ export interface FuelResultsAction extends Action {
         fuelUpdates: any;
     };
 }
+
+export type UpdatePiecesCombinedAction = NewRoundAction | PlacePhaseAction;
+export type GameboardPiecesUpdateAction = CombatPhaseAction | EnterContainerAction | ExitContainerAction | EventRefuelAction;
+export type SelectingAction = InsurgencySelectingAction | BioWeaponSelectingAction | CommInterruptSelectingAction | RodsFromGodSelectingAction | GoldenEyeSelectingAction | RemoteSenseSelectingAction;

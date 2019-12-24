@@ -1,9 +1,9 @@
 //prettier-ignore
 import { AnyAction } from "redux";
-import { ClearBattleAction, EventBattleAction, FuelResultsAction, GameInitialStateAction, InvItemPlaceAction, NoMoreEventsAction, RaiseMoraleAction, SliceChangeAction } from '../../interfaces/interfaces';
+import { PieceType } from "../../interfaces/classTypes";
+import { ClearBattleAction, EventBattleAction, FuelResultsAction, GameboardPiecesUpdateAction, GameInitialStateAction, InvItemPlaceAction, NoMoreEventsAction, RaiseMoraleAction, SliceChangeAction, UpdatePiecesCombinedAction } from '../../interfaces/interfaces';
 import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from "../actions/actionTypes";
 import { initialGameboardEmpty } from './initialGameboardEmpty';
-import { PieceType } from "../../interfaces/classTypes";
 
 //TODO: should do the return at the bottom, not inside each case...(see metaReducer...)
 function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
@@ -20,13 +20,13 @@ function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
             return stateDeepCopy;
         case NEW_ROUND:
         case PLACE_PHASE:
-            if ((action as AnyAction).payload.gameboardPieces) {
+            if ((action as UpdatePiecesCombinedAction).payload.gameboardPieces) {
                 //this would happen on the 1st event (from executeStep)
                 freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
-                positions = Object.keys((action as AnyAction).payload.gameboardPieces);
+                positions = Object.keys((action as UpdatePiecesCombinedAction).payload.gameboardPieces);
                 for (let x = 0; x < positions.length; x++) {
                     // TODO: refactor with common action
-                    freshBoard[positions[x]].pieces = (action as AnyAction).payload.gameboardPieces[positions[x]];
+                    freshBoard[positions[x]].pieces = (action as UpdatePiecesCombinedAction).payload.gameboardPieces[positions[x]];
                 }
                 return freshBoard;
             } else {
@@ -82,13 +82,12 @@ function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
         case OUTER_PIECE_CLICK_ACTION:
         case INNER_PIECE_CLICK_ACTION:
         case EVENT_REFUEL:
-            if ((action as AnyAction).payload.gameboardPieces) {
+            if ((action as GameboardPiecesUpdateAction).payload.gameboardPieces) {
                 //this would happen on the 1st event (from executeStep)
                 freshBoard = JSON.parse(JSON.stringify(initialGameboardEmpty));
-                // TODO: refactor AnyAction to be something else
-                positions = Object.keys((action as AnyAction).payload.gameboardPieces);
+                positions = Object.keys((action as GameboardPiecesUpdateAction).payload.gameboardPieces);
                 for (let x = 0; x < positions.length; x++) {
-                    freshBoard[positions[x]].pieces = (action as AnyAction).payload.gameboardPieces[positions[x]];
+                    freshBoard[positions[x]].pieces = (action as GameboardPiecesUpdateAction).payload.gameboardPieces[positions[x]];
                 }
                 return freshBoard;
             } else {

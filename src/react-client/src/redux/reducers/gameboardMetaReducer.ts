@@ -3,12 +3,12 @@ import { AnyAction } from 'redux';
 import { distanceMatrix } from '../../constants/distanceMatrix';
 import { ALL_GROUND_TYPES } from '../../constants/gameboardConstants';
 import { TRANSPORT_TYPE_ID, TYPE_FUEL } from '../../constants/gameConstants';
-import { AircraftClickAction, BattlePieceSelectAction, BattleResultsAction, BioWeaponsAction, CommInterruptAction, ConfirmPlanAction, DeletePlanAction, EnemyPieceSelectAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, ExitTransportContainerAction, GameInitialStateAction, GoldenEyeAction, HighlightPositionsAction, InsurgencyAction, MenuSelectAction, NewRoundAction, NewsPhaseAction, PieceClickAction, PieceOpenAction, PlacePhaseAction, PlanningSelectAction, PositionSelectAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSensingAction, RodsFromGodAction, SliceChangeAction, TankerClickAction, TargetPieceClickAction, UndoFuelSelectionAction } from '../../interfaces/interfaces';
+import { PieceType } from '../../interfaces/classTypes';
+import { AircraftClickAction, BattlePieceSelectAction, BattleResultsAction, BioWeaponsAction, CommInterruptAction, ConfirmPlanAction, DeletePlanAction, EnemyPieceSelectAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, ExitTransportContainerAction, GameInitialStateAction, GoldenEyeAction, HighlightPositionsAction, InsurgencyAction, MenuSelectAction, NewRoundAction, NewsPhaseAction, PieceClickAction, PieceOpenAction, PlacePhaseAction, PlanningSelectAction, PositionSelectAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSensingAction, RodsFromGodAction, SelectingAction, SliceChangeAction, TankerClickAction, TargetPieceClickAction, UndoFuelSelectionAction } from '../../interfaces/interfaces';
 import { GameboardMetaState } from '../../interfaces/reducerTypes';
 //prettier-ignore
 import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, CLEAR_BATTLE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE } from "../actions/actionTypes";
 import { initialGameboardEmpty } from './initialGameboardEmpty';
-import { PieceType } from '../../interfaces/classTypes';
 
 const initialGameboardMeta: GameboardMetaState = {
     //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
@@ -232,10 +232,9 @@ function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
         case RODS_FROM_GOD_SELECTING:
         case GOLDEN_EYE_SELECTING:
         case REMOTE_SENSING_SELECTING:
-            // TODO: refactor AnyAction
             stateDeepCopy.planning.active = true;
             stateDeepCopy.planning.capability = true;
-            stateDeepCopy.planning.invItem = (action as AnyAction).payload.invItem;
+            stateDeepCopy.planning.invItem = (action as SelectingAction).payload.invItem;
             stateDeepCopy.selectedMenuId = 0;
             break;
         case RODS_FROM_GOD_SELECTED:

@@ -1,8 +1,8 @@
 import { AnyAction } from 'redux';
-import { ShopState } from '../../interfaces/reducerTypes';
-import { ShopPurchaseAction, ShopRefundAction } from '../../interfaces/interfaces';
-import { INITIAL_GAMESTATE, SHOP_CLEAR, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../actions/actionTypes';
 import { ShopItemType } from '../../interfaces/classTypes';
+import { GameInitialStateAction, ShopPurchaseAction, ShopRefundAction } from '../../interfaces/interfaces';
+import { ShopState } from '../../interfaces/reducerTypes';
+import { INITIAL_GAMESTATE, SHOP_CLEAR, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../actions/actionTypes';
 
 const initialShopState: ShopState = [];
 
@@ -10,7 +10,7 @@ function shopReducer(state = initialShopState, action: AnyAction) {
     const { type } = action;
     switch (type) {
         case INITIAL_GAMESTATE:
-            state = (action as AnyAction).payload.shopItems;
+            state = (action as GameInitialStateAction).payload.shopItems;
             break;
         case SHOP_PURCHASE:
             state = state.concat([(action as ShopPurchaseAction).payload.shopItem]); //need to append the payload to the state
