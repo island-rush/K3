@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { EmitType, InsurgencySelectingAction } from '../../../constants/interfaces';
+import { EmitType, InsurgencySelectingAction } from '../../../interfaces/interfaces';
 import { INSURGENCY_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../interfaces/classTypes';

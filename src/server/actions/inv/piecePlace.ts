@@ -2,7 +2,7 @@ import { Socket } from 'socket.io';
 import { ALL_AIRFIELD_LOCATIONS, TEAM_MAIN_ISLAND_STARTING_POSITIONS } from '../../../react-client/src/constants/gameboardConstants';
 // prettier-ignore
 import { MISSILE_TYPE_ID, PLACE_PHASE_ID, RADAR_TYPE_ID, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN } from '../../../react-client/src/constants/gameConstants';
-import { InvItemPlaceAction, InvItemPlaceRequestAction } from '../../../react-client/src/constants/interfaces';
+import { InvItemPlaceAction, InvItemPlaceRequestAction } from '../../../react-client/src/interfaces/interfaces';
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
 import { PIECE_PLACE } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';

@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { UserfeedbackAction } from '../../react-client/src/constants/interfaces';
+import { UserfeedbackAction } from '../../react-client/src/interfaces/interfaces';
 import { SOCKET_SERVER_SENDING_ACTION } from '../../react-client/src/constants/otherConstants';
 import { SET_USERFEEDBACK } from '../../react-client/src/redux/actions/actionTypes';
 

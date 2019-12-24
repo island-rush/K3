@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { EmitType, RaiseMoraleSelectingAction } from '../../../constants/interfaces';
+import { EmitType, RaiseMoraleSelectingAction } from '../../../interfaces/interfaces';
 import { RAISE_MORALE_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../interfaces/classTypes';

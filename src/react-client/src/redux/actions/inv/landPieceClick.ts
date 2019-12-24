@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { PLACE_PHASE_ID } from '../../../constants/gameConstants';
-import { EmitType, InvItemPlaceRequestAction } from '../../../constants/interfaces';
+import { EmitType, InvItemPlaceRequestAction } from '../../../interfaces/interfaces';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
 import { SERVER_PIECE_PLACE } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';

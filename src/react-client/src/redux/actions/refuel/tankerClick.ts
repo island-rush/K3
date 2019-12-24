@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, TankerClickAction } from '../../../constants/interfaces';
+import { EmitType, TankerClickAction } from '../../../interfaces/interfaces';
 import { TANKER_CLICK } from '../actionTypes';
 import { PieceType } from '../../../interfaces/classTypes';
 

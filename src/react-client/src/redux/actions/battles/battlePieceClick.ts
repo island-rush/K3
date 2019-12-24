@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { WAITING_STATUS } from '../../../constants/gameConstants';
-import { BattlePieceSelectAction, EmitType } from '../../../constants/interfaces';
+import { BattlePieceSelectAction, EmitType } from '../../../interfaces/interfaces';
 import { BATTLE_PIECE_SELECT } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 

@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, RefuelPopupToggleAction } from '../../../constants/interfaces';
+import { EmitType, RefuelPopupToggleAction } from '../../../interfaces/interfaces';
 import { REFUELPOPUP_MINIMIZE_TOGGLE } from '../actionTypes';
 
 /**

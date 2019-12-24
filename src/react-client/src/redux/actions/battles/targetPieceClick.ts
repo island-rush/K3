@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { WAITING_STATUS } from '../../../constants/gameConstants';
-import { EmitType, TargetPieceClickAction } from '../../../constants/interfaces';
+import { EmitType, TargetPieceClickAction } from '../../../interfaces/interfaces';
 import { TARGET_PIECE_SELECT } from '../actionTypes';
 
 const targetPieceClick = (battlePiece: any, battlePieceIndex: number) => {

@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { BattlePopupToggleAction, EmitType } from '../../../constants/interfaces';
+import { BattlePopupToggleAction, EmitType } from '../../../interfaces/interfaces';
 import { BATTLEPOPUP_MINIMIZE_TOGGLE } from '../actionTypes';
 
 const battlePopupMinimizeToggle = () => {

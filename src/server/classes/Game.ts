@@ -1,7 +1,7 @@
 // prettier-ignore
 import { ALL_FLAG_LOCATIONS, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../react-client/src/constants/gameboardConstants';
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, CAPTURE_TYPES, NEWS_PHASE_ID, RED_TEAM_ID } from '../../react-client/src/constants/gameConstants';
-import { Instructor, Section } from '../../react-client/src/constants/interfaces';
+import { Instructor, Section } from '../../react-client/src/interfaces/interfaces';
 import { INITIAL_GAMESTATE } from '../../react-client/src/redux/actions/actionTypes';
 import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from '../actions/eventConstants';
 import { gameInitialNews, gameInitialPieces } from '../admin';

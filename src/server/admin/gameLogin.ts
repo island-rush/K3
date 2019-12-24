@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
 import { LOGGED_IN_VALUE } from '../../react-client/src/constants/gameConstants';
-import { Section, Instructor } from '../../react-client/src/constants/interfaces';
+import { Section, Instructor } from '../../react-client/src/interfaces/interfaces';
 import { Game } from '../classes';
 import { ALREADY_IN_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGIN_TAG } from '../pages/errorTypes';
 import { GameSession } from '../../react-client/src/interfaces/sessions';

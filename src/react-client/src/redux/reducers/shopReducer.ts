@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 import { ShopState } from '../../interfaces/reducerTypes';
-import { ShopPurchaseAction, ShopRefundAction } from '../../constants/interfaces';
+import { ShopPurchaseAction, ShopRefundAction } from '../../interfaces/interfaces';
 import { INITIAL_GAMESTATE, SHOP_CLEAR, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../actions/actionTypes';
 import { ShopItemType } from '../../interfaces/classTypes';
 

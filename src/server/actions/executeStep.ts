@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { BLUE_TEAM_ID, PLACE_PHASE_ID, RED_TEAM_ID, WAITING_STATUS } from '../../react-client/src/constants/gameConstants';
-import { NewRoundAction, PlacePhaseAction, UpdateFlagAction } from '../../react-client/src/constants/interfaces';
+import { NewRoundAction, PlacePhaseAction, UpdateFlagAction } from '../../react-client/src/interfaces/interfaces';
 import { SOCKET_SERVER_SENDING_ACTION } from '../../react-client/src/constants/otherConstants';
 import { NEW_ROUND, PLACE_PHASE, UPDATE_FLAGS } from '../../react-client/src/redux/actions/actionTypes';
 import { Capability, Event, Game, Piece, Plan } from '../classes';

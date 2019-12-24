@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { ConfirmFuelSelectionRequestAction, EmitType } from '../../../constants/interfaces';
+import { ConfirmFuelSelectionRequestAction, EmitType } from '../../../interfaces/interfaces';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
 import { SERVER_CONFIRM_FUEL_SELECTION } from '../actionTypes';
 

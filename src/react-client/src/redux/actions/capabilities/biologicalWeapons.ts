@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { BioWeaponSelectingAction, EmitType } from '../../../constants/interfaces';
+import { BioWeaponSelectingAction, EmitType } from '../../../interfaces/interfaces';
 import { BIO_WEAPON_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../interfaces/classTypes';

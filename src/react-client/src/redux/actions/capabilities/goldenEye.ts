@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
-import { EmitType, GoldenEyeSelectingAction } from '../../../constants/interfaces';
+import { EmitType, GoldenEyeSelectingAction } from '../../../interfaces/interfaces';
 import { GOLDEN_EYE_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../interfaces/classTypes';

@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, MenuSelectAction } from '../../constants/interfaces';
+import { EmitType, MenuSelectAction } from '../../interfaces/interfaces';
 import { MENU_SELECT } from './actionTypes';
 
 /**

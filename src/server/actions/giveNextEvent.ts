@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { EventBattleAction, EventRefuelAction, NoMoreEventsAction } from '../../react-client/src/constants/interfaces';
+import { EventBattleAction, EventRefuelAction, NoMoreEventsAction } from '../../react-client/src/interfaces/interfaces';
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID } from '../../react-client/src/constants/gameConstants';
 import { SOCKET_SERVER_SENDING_ACTION } from '../../react-client/src/constants/otherConstants';
 import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from '../../react-client/src/redux/actions/actionTypes';

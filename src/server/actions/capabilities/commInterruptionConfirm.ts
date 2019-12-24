@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
 import { COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../react-client/src/constants/gameConstants';
-import { CommInterruptAction, CommInterruptRequestAction } from '../../../react-client/src/constants/interfaces';
+import { CommInterruptAction, CommInterruptRequestAction } from '../../../react-client/src/interfaces/interfaces';
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
 import { COMM_INTERRUP_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
 import { Capability, Game, InvItem } from '../../classes';

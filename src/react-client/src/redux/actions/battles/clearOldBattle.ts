@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { ClearBattleAction, EmitType } from '../../../constants/interfaces';
+import { ClearBattleAction, EmitType } from '../../../interfaces/interfaces';
 import { CLEAR_BATTLE } from '../actionTypes';
 
 const clearOldBattle = () => {

@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { ALL_COMMANDER_TYPES } from '../../../constants/gameConstants';
-import { EmitType, RaiseMoraleRequestAction } from '../../../constants/interfaces';
+import { EmitType, RaiseMoraleRequestAction } from '../../../interfaces/interfaces';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
 import { SERVER_RAISE_MORALE_CONFIRM } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';

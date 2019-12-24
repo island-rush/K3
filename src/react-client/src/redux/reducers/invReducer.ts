@@ -1,6 +1,6 @@
 //prettier-ignore
 import { AnyAction } from "redux";
-import { InvItemPlaceAction, ShopConfirmPurchaseAction } from '../../constants/interfaces';
+import { InvItemPlaceAction, ShopConfirmPurchaseAction } from '../../interfaces/interfaces';
 import { InvState } from "../../interfaces/reducerTypes";
 //prettier-ignore
 import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SHOP_TRANSFER } from "../actions/actionTypes";
