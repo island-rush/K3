@@ -4,7 +4,7 @@ import { SET_USERFEEDBACK } from './actionTypes';
 /**
  * Helper function to create Redux Action to send userfeedback to the state.
  */
-const setUserfeedbackAction = (userFeedback: string) => {
+export const setUserfeedbackAction = (userFeedback: string) => {
     const userFeedbackAction: UserfeedbackAction = {
         type: SET_USERFEEDBACK,
         payload: {

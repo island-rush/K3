@@ -13,7 +13,7 @@ import setUserfeedbackAction from './setUserfeedbackAction';
 /**
  * Change the state based on position that was clicked by the user.
  */
-const selectPosition = (selectedPositionId: number) => {
+export const selectPosition = (selectedPositionId: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 

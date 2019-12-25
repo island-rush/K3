@@ -7,7 +7,7 @@ import { SERVER_SHOP_CONFIRM_PURCHASE } from '../actionTypes';
 /**
  * Action to confirm all purchases in the cart.
  */
-const shopConfirmPurchase = () => {
+export const shopConfirmPurchase = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const clientAction: ShopConfirmPurchaseRequestAction = {
             type: SERVER_SHOP_CONFIRM_PURCHASE

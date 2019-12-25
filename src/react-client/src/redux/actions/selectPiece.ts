@@ -6,7 +6,7 @@ import { PieceType } from '../../interfaces/classTypes';
 /**
  * Change the state based on the piece that the user selected.
  */
-const selectPiece = (selectedPiece: PieceType) => {
+export const selectPiece = (selectedPiece: PieceType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 

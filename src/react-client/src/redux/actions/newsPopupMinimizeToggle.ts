@@ -5,7 +5,7 @@ import { NEWSPOPUP_MINIMIZE_TOGGLE } from './actionTypes';
 /**
  * Dispatch to state that user toggled minimize for news popup.
  */
-const newsPopupMinimizeToggle = () => {
+export const newsPopupMinimizeToggle = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const newsPopupMinimizeToggleAction: NewsPopupToggleAction = {
             type: NEWSPOPUP_MINIMIZE_TOGGLE,

@@ -5,7 +5,7 @@ import { MENU_SELECT } from './actionTypes';
 /**
  * Dispatch to Redux store that user selected menu.
  */
-const menuSelect = (selectedMenuId: number) => {
+export const menuSelect = (selectedMenuId: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 

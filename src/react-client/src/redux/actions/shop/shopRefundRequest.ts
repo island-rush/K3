@@ -7,7 +7,7 @@ import { ShopItemType } from '../../../interfaces/classTypes';
 /**
  * Action to refund an item from the shop.
  */
-const shopRefundRequest = (shopItem: ShopItemType) => {
+export const shopRefundRequest = (shopItem: ShopItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const clientAction: ShopRefundRequestAction = {
             type: SERVER_SHOP_REFUND_REQUEST,

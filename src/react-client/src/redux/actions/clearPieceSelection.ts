@@ -7,7 +7,7 @@ import { PIECE_CLEAR_SELECTION } from './actionTypes';
 /**
  * Action to de-select all pieces in the zoombox
  */
-const clearPieceSelection = () => {
+export const clearPieceSelection = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 
