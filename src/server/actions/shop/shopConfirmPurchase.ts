@@ -11,7 +11,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /** *
  * Transfers ShopItems into InvItems ("confirms" them, no longer able to refund once inside inventory...)
  */
-const shopConfirmPurchase = async (socket: Socket) => {
+export const shopConfirmPurchase = async (socket: Socket) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

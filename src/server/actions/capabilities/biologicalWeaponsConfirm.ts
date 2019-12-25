@@ -11,7 +11,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * User request to use BioWeapons capability.
  */
-const biologicalWeaponsConfirm = async (socket: Socket, action: BioWeaponsRequestAction) => {
+export const biologicalWeaponsConfirm = async (socket: Socket, action: BioWeaponsRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

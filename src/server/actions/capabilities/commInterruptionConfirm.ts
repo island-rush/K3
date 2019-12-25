@@ -12,7 +12,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * User Request to use CommInterrupt capability.
  */
-const commInterruptConfirm = async (socket: Socket, action: CommInterruptRequestAction) => {
+export const commInterruptConfirm = async (socket: Socket, action: CommInterruptRequestAction) => {
     // Grab Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

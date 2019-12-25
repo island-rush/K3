@@ -16,7 +16,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * User request to move piece outside of a container to the same position.
  */
-const exitContainer = async (socket: Socket, action: ExitContainerRequestAction) => {
+export const exitContainer = async (socket: Socket, action: ExitContainerRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

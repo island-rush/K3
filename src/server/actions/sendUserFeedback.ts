@@ -6,7 +6,7 @@ import { SET_USERFEEDBACK } from '../../react-client/src/redux/actions/actionTyp
 /**
  * Helper function to reply to user with specific userfeedback.
  */
-const sendUserFeedback = async (socket: Socket, userFeedback: string) => {
+export const sendUserFeedback = async (socket: Socket, userFeedback: string) => {
     const serverAction: UserfeedbackAction = {
         type: SET_USERFEEDBACK,
         payload: {

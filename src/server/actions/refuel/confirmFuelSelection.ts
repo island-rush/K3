@@ -12,7 +12,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * Client Request to transfer fuel from tankers to other aircraft. Finishes a Refuel Event
  */
-const confirmFuelSelection = async (socket: Socket, action: ConfirmFuelSelectionRequestAction) => {
+export const confirmFuelSelection = async (socket: Socket, action: ConfirmFuelSelectionRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

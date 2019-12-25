@@ -10,7 +10,7 @@ import sendUserFeedback from '../sendUserFeedback';
 /**
  * User request to use BiologicalWarfare capability.
  */
-const goldenEyeConfirm = async (socket: Socket, action: GoldenEyeRequestAction) => {
+export const goldenEyeConfirm = async (socket: Socket, action: GoldenEyeRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
 

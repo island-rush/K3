@@ -13,7 +13,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * User Request to confirm a plan for a piece.
  */
-const confirmPlan = async (socket: Socket, action: ConfirmPlanRequestAction) => {
+export const confirmPlan = async (socket: Socket, action: ConfirmPlanRequestAction) => {
     // Grab Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

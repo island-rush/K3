@@ -11,7 +11,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * Client is requesting to buy something from the shop and place it into their cart. (Insert ShopItem)
  */
-const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRequestAction) => {
+export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRequestAction) => {
     // Grab the session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

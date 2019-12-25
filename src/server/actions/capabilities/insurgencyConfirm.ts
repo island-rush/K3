@@ -11,7 +11,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * User Request to use Insurgency Capability
  */
-const insurgencyConfirm = async (socket: Socket, action: InsurgencyRequestAction) => {
+export const insurgencyConfirm = async (socket: Socket, action: InsurgencyRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

@@ -11,7 +11,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * Client request to delete a plan for a piece.
  */
-const deletePlan = async (socket: Socket, action: DeletePlanRequestAction) => {
+export const deletePlan = async (socket: Socket, action: DeletePlanRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam }: GameSession = socket.handshake.session.ir3;
 

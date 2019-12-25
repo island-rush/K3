@@ -11,7 +11,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * Client is requesting to refund a certain ShopItem in their cart
  */
-const shopRefundRequest = async (socket: Socket, action: ShopRefundRequestAction) => {
+export const shopRefundRequest = async (socket: Socket, action: ShopRefundRequestAction) => {
     // Grab Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

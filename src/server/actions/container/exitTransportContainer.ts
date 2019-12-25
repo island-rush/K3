@@ -13,7 +13,7 @@ import sendUserFeedback from '../sendUserFeedback';
 /**
  * User request to move piece outside of a transport container to an adjacent land piece
  */
-const exitTransportContainer = async (socket: Socket, action: ExitTransportContainerRequestAction) => {
+export const exitTransportContainer = async (socket: Socket, action: ExitTransportContainerRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
 

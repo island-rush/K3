@@ -11,7 +11,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * User request to use remote sensing capability on a position.
  */
-const remoteSensingConfirm = async (socket: Socket, action: RemoteSensingRequestAction) => {
+export const remoteSensingConfirm = async (socket: Socket, action: RemoteSensingRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

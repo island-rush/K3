@@ -14,7 +14,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * User request to confirm their battle selections. (what pieces are attacking what other pieces)
  */
-const confirmBattleSelection = async (socket: Socket, action: ConfirmBattleSelectionRequestAction) => {
+export const confirmBattleSelection = async (socket: Socket, action: ConfirmBattleSelectionRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

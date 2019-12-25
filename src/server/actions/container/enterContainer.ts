@@ -16,7 +16,7 @@ import sendUserFeedback from '../sendUserFeedback';
 /**
  * User request to put one piece inside of another.
  */
-const enterContainer = async (socket: Socket, action: EnterContainerRequestAction) => {
+export const enterContainer = async (socket: Socket, action: EnterContainerRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

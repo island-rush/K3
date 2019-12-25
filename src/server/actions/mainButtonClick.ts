@@ -11,7 +11,7 @@ import executeStep from './executeStep';
 import sendUserFeedback from './sendUserFeedback';
 import { GameSession } from '../../types/sessionTypes';
 
-const mainButtonClick = async (socket: Socket) => {
+export const mainButtonClick = async (socket: Socket) => {
     // Grab Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

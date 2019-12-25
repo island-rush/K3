@@ -12,7 +12,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * User request to use Raise Morale capability on a set of troops for a commander.
  */
-const raiseMoraleConfirm = async (socket: Socket, action: RaiseMoraleRequestAction) => {
+export const raiseMoraleConfirm = async (socket: Socket, action: RaiseMoraleRequestAction) => {
     // Grab Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

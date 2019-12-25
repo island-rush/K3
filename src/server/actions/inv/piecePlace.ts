@@ -14,7 +14,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * User request to move piece from inventory to a position on the board.
  */
-const piecePlace = async (socket: Socket, action: InvItemPlaceRequestAction) => {
+export const piecePlace = async (socket: Socket, action: InvItemPlaceRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 

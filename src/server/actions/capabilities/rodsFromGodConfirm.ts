@@ -12,7 +12,7 @@ import { GameSession } from '../../../types/sessionTypes';
 /**
  * User Request to use rods from god on a certain position.
  */
-const rodsFromGodConfirm = async (socket: Socket, action: RodsFromGodRequestAction) => {
+export const rodsFromGodConfirm = async (socket: Socket, action: RodsFromGodRequestAction) => {
     // Grab the Session
     const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
