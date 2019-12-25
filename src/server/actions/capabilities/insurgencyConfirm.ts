@@ -5,7 +5,7 @@ import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../r
 import { INSURGENCY_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
 import { Capability, Game, InvItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
-import sendUserFeedback from '../sendUserFeedback';
+import { sendUserFeedback } from '../sendUserFeedback';
 import { GameSession } from '../../../types/sessionTypes';
 
 /**

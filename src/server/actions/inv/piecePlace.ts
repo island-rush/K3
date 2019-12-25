@@ -8,7 +8,7 @@ import { PIECE_PLACE } from '../../../react-client/src/redux/actions/actionTypes
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { Game, InvItem } from '../../classes';
 import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
-import sendUserFeedback from '../sendUserFeedback';
+import { sendUserFeedback } from '../sendUserFeedback';
 import { GameSession } from '../../../types/sessionTypes';
 
 /**

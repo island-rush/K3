@@ -8,7 +8,7 @@ import { COMBAT_PHASE, MAIN_BUTTON_CLICK, NEWS_PHASE, PURCHASE_PHASE, SLICE_CHAN
 import { Capability, Game, Piece } from '../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../pages/errorTypes';
 import executeStep from './executeStep';
-import sendUserFeedback from './sendUserFeedback';
+import { sendUserFeedback } from './sendUserFeedback';
 import { GameSession } from '../../types/sessionTypes';
 
 export const mainButtonClick = async (socket: Socket) => {

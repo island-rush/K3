@@ -8,7 +8,7 @@ import { BATTLE_FIGHT_RESULTS, UPDATE_FLAGS } from '../../../react-client/src/re
 import { Event, Game } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import giveNextEvent from '../giveNextEvent';
-import sendUserFeedback from '../sendUserFeedback';
+import { sendUserFeedback } from '../sendUserFeedback';
 import { GameSession } from '../../../types/sessionTypes';
 
 /**

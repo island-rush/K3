@@ -5,7 +5,7 @@ import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../r
 import { SHOP_PURCHASE } from '../../../react-client/src/redux/actions/actionTypes';
 import { Game, ShopItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
-import sendUserFeedback from '../sendUserFeedback';
+import { sendUserFeedback } from '../sendUserFeedback';
 import { GameSession } from '../../../types/sessionTypes';
 
 /**

@@ -8,7 +8,7 @@ import { INNER_PIECE_CLICK_ACTION } from '../../../react-client/src/redux/action
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { Game, Piece } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
-import sendUserFeedback from '../sendUserFeedback';
+import { sendUserFeedback } from '../sendUserFeedback';
 
 /**
  * User request to move piece outside of a transport container to an adjacent land piece

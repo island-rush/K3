@@ -6,7 +6,7 @@ import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../r
 import { RAISE_MORALE_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
 import { Capability, Game, InvItem, Piece } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
-import sendUserFeedback from '../sendUserFeedback';
+import { sendUserFeedback } from '../sendUserFeedback';
 import { GameSession } from '../../../types/sessionTypes';
 
 /**
