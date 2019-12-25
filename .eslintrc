@@ -1,10 +1,15 @@
 {
-    "extends": ["airbnb-typescript/base"],
+    "extends": [
+        "airbnb-typescript/base"
+    ],
     "rules": {
         "linebreak-style": "off",
         "object-curly-newline": "off",
         "comma-dangle": "off",
-        "@typescript-eslint/indent": ["off", 4],
+        "@typescript-eslint/indent": [
+            "off",
+            4
+        ],
         "max-len": "off",
         "global-require": "off",
         "no-console": "off",
@@ -20,7 +25,13 @@
         "no-shadow": "off",
         "arrow-parens": "off",
         "no-continue": "off",
-        "no-nested-ternary": "off"
+        "no-nested-ternary": "off",
+        "import/export": "warn",
+        "import/prefer-default-export": "off"
     },
-    "ignorePatterns": ["dist", "node_modules", "src/react-client"]
+    "ignorePatterns": [
+        "dist",
+        "node_modules",
+        "src/react-client"
+    ]
 }
