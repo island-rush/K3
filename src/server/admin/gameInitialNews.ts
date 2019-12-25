@@ -13,7 +13,7 @@ const news = (gameId: number, newsOrder: number, newsOptions: NewsOptions) => {
 /**
  * Inserts a list of pre-defined news alerts into a game.
  */
-const gameInitialNews = async (gameId: number) => {
+export const gameInitialNews = async (gameId: number) => {
     let newsOrder = 0;
 
     const allInserts = [

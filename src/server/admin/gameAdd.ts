@@ -7,7 +7,7 @@ import { ACCESS_TAG, BAD_REQUEST_TAG } from '../pages/errorTypes';
 /**
  * Add a game from an express route /gameAdd
  */
-const gameAdd = async (req: Request, res: Response) => {
+export const gameAdd = async (req: Request, res: Response) => {
     // Verify Session Exists
     if (!req.session.ir3coursedirector) {
         res.redirect(403, `/index.html?error=${ACCESS_TAG}`); // TODO: this is different from gameDelete.js status.redirect....

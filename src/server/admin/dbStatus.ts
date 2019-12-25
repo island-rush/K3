@@ -7,7 +7,7 @@ import pool from '../database';
  *
  * Responds with 'Connected'.
  */
-const dbStatus = async (req: Request, res: Response) => {
+export const dbStatus = async (req: Request, res: Response) => {
     const conn: PoolConnection = await pool.getConnection();
     res.send('Connected');
     conn.release();

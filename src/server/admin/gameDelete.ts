@@ -5,7 +5,7 @@ import { ACCESS_TAG } from '../pages/errorTypes';
 /**
  * Delete a game from an express route /gameDelete
  */
-const gameDelete = async (req: Request, res: Response) => {
+export const gameDelete = async (req: Request, res: Response) => {
     // Verify Session Exists
     if (!req.session.ir3coursedirector) {
         res.status(403).redirect(`/index.html?error=${ACCESS_TAG}`);

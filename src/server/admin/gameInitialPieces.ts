@@ -30,7 +30,7 @@ const piece = (pieceGameId: number, pieceTeamId: number, pieceTypeId: number, pi
 /**
  * Inserts a list of pre-defined pieces into a game.
  */
-const gameInitialPieces = async (gameId: number) => {
+export const gameInitialPieces = async (gameId: number) => {
     const firstPieces: number[][] = [
         // typical battle setup
         piece(gameId, BLUE_TEAM_ID, TANK_COMPANY_TYPE_ID, 0),

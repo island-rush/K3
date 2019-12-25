@@ -6,7 +6,7 @@ import { TeacherSession } from '../../types/sessionTypes';
 /**
  * Get array of news data for a particular game.
  */
-const getNews = async (req: Request, res: Response) => {
+export const getNews = async (req: Request, res: Response) => {
     // Verify Session
     if (!req.session.ir3teacher) {
         res.redirect(`/index.html?error=${ACCESS_TAG}`);

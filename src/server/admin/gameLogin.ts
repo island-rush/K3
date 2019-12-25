@@ -9,7 +9,7 @@ import { GameSession } from '../../types/sessionTypes';
 /**
  * Verify credentials and redirect to /game
  */
-const gameLogin = async (req: Request, res: Response) => {
+export const gameLogin = async (req: Request, res: Response) => {
     // Verify Request Exists //TODO: double check variables are within db constraints
     if (!req.body.gameSection || !req.body.gameInstructor || !req.body.gameTeam || !req.body.gameTeamPassword || !req.body.gameControllers) {
         res.redirect(`/index.html?error=${BAD_REQUEST_TAG}`);

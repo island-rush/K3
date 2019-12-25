@@ -8,7 +8,7 @@ import { BAD_SESSION } from '../pages/errorTypes';
  *
  * This is meant as a one-time function to help developers.
  */
-const insertDatabaseTables = async (req: Request, res: Response) => {
+export const insertDatabaseTables = async (req: Request, res: Response) => {
     // Verify Session
     if (!req.session.ir3coursedirector) {
         res.redirect(`/index.html?error=${BAD_SESSION}`);

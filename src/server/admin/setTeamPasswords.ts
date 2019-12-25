@@ -10,7 +10,7 @@ import { TeacherSession } from '../../types/sessionTypes';
  *
  * These passwords are used to log into the game.
  */
-const setTeamPasswords = async (req: Request, res: Response) => {
+export const setTeamPasswords = async (req: Request, res: Response) => {
     // Verify Session
     if (!req.session.ir3teacher) {
         res.status(403).redirect(`/index.html?error=${ACCESS_TAG}`);

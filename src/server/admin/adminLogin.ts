@@ -8,7 +8,7 @@ import { TeacherSession } from '../../types/sessionTypes';
 /**
  * Verify credentials and redirect to /teacher or /courseDirector.
  */
-const adminLogin = async (req: Request, res: Response) => {
+export const adminLogin = async (req: Request, res: Response) => {
     // Verify Request Information
     if (!req.body.adminSection || !req.body.adminInstructor || !req.body.adminPassword) {
         res.redirect(`/index.html?error=${BAD_REQUEST_TAG}`);

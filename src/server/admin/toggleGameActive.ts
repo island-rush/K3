@@ -5,7 +5,7 @@ import { TeacherSession } from '../../types/sessionTypes';
 /**
  * Toggle a game from active->inactive, or vice versa.
  */
-const toggleGameActive = async (req: Request, res: Response) => {
+export const toggleGameActive = async (req: Request, res: Response) => {
     // Verify Session
     if (!req.session.ir3teacher) {
         res.sendStatus(403); // TODO: redirect here?

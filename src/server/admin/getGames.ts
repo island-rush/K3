@@ -5,7 +5,7 @@ import { ACCESS_TAG } from '../pages/errorTypes';
 /**
  * Get an array of game data for all of island rush.
  */
-const getGames = async (req: Request, res: Response) => {
+export const getGames = async (req: Request, res: Response) => {
     // Verify Session
     if (!req.session.ir3coursedirector) {
         res.redirect(`/index.html?error=${ACCESS_TAG}`);

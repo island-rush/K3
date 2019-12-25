@@ -6,7 +6,7 @@ import { TeacherSession } from '../../types/sessionTypes';
 /**
  * Reset a game from an express route /gameReset
  */
-const gameReset = async (req: Request, res: Response) => {
+export const gameReset = async (req: Request, res: Response) => {
     // Verify Session
     if (!req.session.ir3teacher) {
         res.status(403).redirect(`/index.html?error=${ACCESS_TAG}`);
