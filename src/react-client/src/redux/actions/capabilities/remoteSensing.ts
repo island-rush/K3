@@ -5,7 +5,7 @@ import { REMOTE_SENSING_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../interfaces/classTypes';
 
-const remoteSensing = (invItem: InvItemType) => {
+export const remoteSensing = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;

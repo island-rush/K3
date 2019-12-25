@@ -7,7 +7,7 @@ import { InvItemType } from '../../../interfaces/classTypes';
 
 //TODO: need to get rid of boost = x from the component when the raise morale is expired
 
-const raiseMorale = (invItem: InvItemType) => {
+export const raiseMorale = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;

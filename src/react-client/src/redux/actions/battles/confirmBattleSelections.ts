@@ -5,7 +5,7 @@ import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants'
 import { SERVER_CONFIRM_BATTLE_SELECTION } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
-const confirmBattleSelections = () => {
+export const confirmBattleSelections = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         //check the local state before sending to the server
         const { gameboardMeta, gameInfo } = getState();

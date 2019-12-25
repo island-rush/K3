@@ -5,7 +5,7 @@ import { COMM_INTERRUPT_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../interfaces/classTypes';
 
-const communicationsInterruption = (invItem: InvItemType) => {
+export const communicationsInterruption = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;

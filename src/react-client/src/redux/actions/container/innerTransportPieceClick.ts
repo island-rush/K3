@@ -6,7 +6,7 @@ import { PieceType } from '../../../interfaces/classTypes';
 /**
  * Move a piece from inside a transport to outside (adjacent land)
  */
-const innerTransportPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
+export const innerTransportPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         //TODO: figure out if inner piece click is allowed
         //TODO: could probably see if there is even land next to where this piece is (don't allow if in the open ocean?)

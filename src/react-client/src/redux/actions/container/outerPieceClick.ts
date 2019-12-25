@@ -7,7 +7,7 @@ import { PieceType } from '../../../interfaces/classTypes';
 /**
  * Action to move outside piece to the inside of a container.
  */
-const outerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
+export const outerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         //TODO: figure out if this is allowed (like all other actions)
 

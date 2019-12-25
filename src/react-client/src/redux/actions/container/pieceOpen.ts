@@ -8,7 +8,7 @@ import { PieceType } from '../../../interfaces/classTypes';
 /**
  * Double Click a container piece to open it.
  */
-const pieceOpen = (selectedPiece: PieceType) => {
+export const pieceOpen = (selectedPiece: PieceType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboard } = getState();
 

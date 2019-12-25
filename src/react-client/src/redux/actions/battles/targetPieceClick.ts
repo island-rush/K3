@@ -3,7 +3,7 @@ import { WAITING_STATUS } from '../../../constants/gameConstants';
 import { EmitType, TargetPieceClickAction } from '../../../interfaces/interfaces';
 import { TARGET_PIECE_SELECT } from '../actionTypes';
 
-const targetPieceClick = (battlePiece: any, battlePieceIndex: number) => {
+export const targetPieceClick = (battlePiece: any, battlePieceIndex: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         //check the local state before sending to the server
 

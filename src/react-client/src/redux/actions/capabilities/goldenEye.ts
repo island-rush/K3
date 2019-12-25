@@ -5,7 +5,7 @@ import { GOLDEN_EYE_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../interfaces/classTypes';
 
-const goldenEye = (invItem: InvItemType) => {
+export const goldenEye = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;

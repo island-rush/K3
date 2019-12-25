@@ -7,7 +7,7 @@ import { PieceType } from '../../../interfaces/classTypes';
 /**
  * Move piece from inside container to outside (same position)
  */
-const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
+export const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         //TODO: figure out if inner piece click is allowed
 

@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 import { ClearBattleAction, EmitType } from '../../../interfaces/interfaces';
 import { CLEAR_BATTLE } from '../actionTypes';
 
-const clearOldBattle = () => {
+export const clearOldBattle = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
         const { battle } = gameboardMeta;

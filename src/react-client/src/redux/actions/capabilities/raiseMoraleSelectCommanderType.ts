@@ -5,7 +5,7 @@ import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants'
 import { SERVER_RAISE_MORALE_CONFIRM } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
-const raiseMoraleSelectCommanderType = (selectedCommanderType: number) => {
+export const raiseMoraleSelectCommanderType = (selectedCommanderType: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
         const { invItem } = gameboardMeta.planning;

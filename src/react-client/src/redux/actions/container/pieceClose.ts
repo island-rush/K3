@@ -6,7 +6,7 @@ import { PieceType } from '../../../interfaces/classTypes';
 /**
  * Action to close the container popup.
  */
-const pieceClose = (selectedPiece: PieceType) => {
+export const pieceClose = (selectedPiece: PieceType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         // const { gameboardMeta } = getState();
 

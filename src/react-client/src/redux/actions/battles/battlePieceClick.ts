@@ -4,7 +4,7 @@ import { BattlePieceSelectAction, EmitType } from '../../../interfaces/interface
 import { BATTLE_PIECE_SELECT } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
-const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
+export const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gameStatus } = gameInfo;

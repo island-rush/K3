@@ -4,7 +4,7 @@ import { EmitType, EnemyPieceSelectAction } from '../../../interfaces/interfaces
 import { ENEMY_PIECE_SELECT } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
-const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
+export const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta, gameInfo } = getState();
         const { gameStatus } = gameInfo;

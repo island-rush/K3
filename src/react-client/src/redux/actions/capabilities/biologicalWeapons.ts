@@ -5,7 +5,7 @@ import { BIO_WEAPON_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../interfaces/classTypes';
 
-const biologicalWeapons = (invItem: InvItemType) => {
+export const biologicalWeapons = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
