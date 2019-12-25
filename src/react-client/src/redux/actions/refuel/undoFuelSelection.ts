@@ -6,7 +6,7 @@ import { PieceType } from '../../../interfaces/classTypes';
 /**
  * Action to undo a fuel selection from tanker to another aircraft piece.
  */
-const undoFuelSelection = (aircraftPiece: PieceType, aircraftPieceIndex: number) => {
+export const undoFuelSelection = (aircraftPiece: PieceType, aircraftPieceIndex: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         // const { gameboardMeta } = getState();
         // const { selectedTankerPieceId } = gameboardMeta.refuel;

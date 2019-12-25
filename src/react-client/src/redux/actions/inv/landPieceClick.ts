@@ -9,7 +9,7 @@ import { InvItemType } from '../../../interfaces/classTypes';
 /**
  * Action to select inv item to place on the board (land item)
  */
-const landPieceClick = (invItem: InvItemType) => {
+export const landPieceClick = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta, gameInfo } = getState();
 

@@ -9,7 +9,7 @@ import { InvItemType } from '../../../interfaces/classTypes';
 /**
  * Action to put air piece inv item on the board.
  */
-const airPieceClick = (invItem: InvItemType) => {
+export const airPieceClick = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta, gameInfo } = getState();
 

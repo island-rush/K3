@@ -6,7 +6,7 @@ import setUserfeedbackAction from '../setUserfeedbackAction';
 /**
  * Action to under a move from a plan.
  */
-const undoMove = () => {
+export const undoMove = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 

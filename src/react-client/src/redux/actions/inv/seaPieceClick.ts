@@ -9,7 +9,7 @@ import { InvItemType } from '../../../interfaces/classTypes';
 /**
  * Click an inv item to put into a sea position.
  */
-const seaPieceClick = (invItem: InvItemType) => {
+export const seaPieceClick = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta, gameInfo } = getState();
 

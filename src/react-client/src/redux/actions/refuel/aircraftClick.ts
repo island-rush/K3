@@ -8,7 +8,7 @@ import { PieceType } from '../../../interfaces/classTypes';
 /**
  * Action to select aircraft to receive fuel from tanker.
  */
-const aircraftClick = (aircraftPiece: PieceType, aircraftPieceIndex: number) => {
+export const aircraftClick = (aircraftPiece: PieceType, aircraftPieceIndex: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
         const { selectedTankerPieceId, aircraft } = gameboardMeta.refuel;

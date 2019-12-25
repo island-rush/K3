@@ -8,7 +8,7 @@ import setUserfeedbackAction from '../setUserfeedbackAction';
 /**
  * Action to cancel a plan for a piece.
  */
-const cancelPlan = () => {
+export const cancelPlan = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 

@@ -6,7 +6,7 @@ import { PieceType } from '../../../interfaces/classTypes';
 /**
  * Action to select tanker to give fuel to other pieces.
  */
-const tankerClick = (tankerPiece: PieceType, tankerPieceIndex: number) => {
+export const tankerClick = (tankerPiece: PieceType, tankerPieceIndex: number) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         //TODO: check for bad state (wrong phase? ...use userFeedback...)
 

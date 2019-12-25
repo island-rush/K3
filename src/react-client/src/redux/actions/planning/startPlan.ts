@@ -8,7 +8,7 @@ import setUserfeedbackAction from '../setUserfeedbackAction';
 /**
  * Action to set gamestate in a planning state to click positions for a plan for a piece.
  */
-const startPlan = () => {
+export const startPlan = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta, gameInfo } = getState();
 

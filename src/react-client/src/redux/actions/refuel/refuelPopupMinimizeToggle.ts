@@ -5,7 +5,7 @@ import { REFUELPOPUP_MINIMIZE_TOGGLE } from '../actionTypes';
 /**
  * Action to toggle refuel popup minimized.
  */
-const refuelPopupMinimizeToggle = () => {
+export const refuelPopupMinimizeToggle = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const refuelPopupMinimizeAction: RefuelPopupToggleAction = {
             type: REFUELPOPUP_MINIMIZE_TOGGLE,

@@ -7,7 +7,7 @@ import setUserfeedbackAction from '../setUserfeedbackAction';
 /**
  * Action to confirm a list of moves as a plan for a piece.
  */
-const confirmPlan = () => {
+export const confirmPlan = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         const { gameboardMeta } = getState();
 

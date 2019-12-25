@@ -6,7 +6,7 @@ import { SERVER_CONFIRM_FUEL_SELECTION } from '../actionTypes';
 /**
  * Action to confirm all fuel selections from specific tankers to specific aircraft.
  */
-const confirmFuelSelections = () => {
+export const confirmFuelSelections = () => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {
         //check the local state before sending to the server
         // const { gameboardMeta } = getState();
