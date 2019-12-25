@@ -4,7 +4,7 @@ import { PlanType } from '../../react-client/src/interfaces/classTypes';
 /**
  * Represents rows for plans in the database.
  */
-class Plan implements PlanType {
+export class Plan implements PlanType {
     planGameId: number;
 
     planTeamId: number;

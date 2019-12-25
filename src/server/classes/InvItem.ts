@@ -6,7 +6,7 @@ import Piece from './Piece';
 /**
  * Represents row in invItems table in the database.
  */
-class InvItem implements InvItemType {
+export class InvItem implements InvItemType {
     invItemId: number;
 
     invItemGameId: number;

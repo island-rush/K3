@@ -6,7 +6,7 @@ import pool from '../database';
 /**
  * List of static functions for handling capabilities.
  */
-class Capability {
+export class Capability {
     static async rodsFromGodInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
         // TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
         let queryString = 'SELECT * FROM rodsFromGod WHERE gameId = ? AND teamId = ? AND positionId = ?';

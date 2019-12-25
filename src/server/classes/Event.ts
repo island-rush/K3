@@ -7,7 +7,7 @@ import { EventType } from '../../react-client/src/interfaces/classTypes';
  *
  * Also contains other helping functions that deal with events and event items.
  */
-class Event implements EventType {
+export class Event implements EventType {
     eventId: number;
 
     eventGameId: number;

@@ -4,7 +4,7 @@ import pool from '../database';
 /**
  * Represents rows for shopItems table in database.
  */
-class ShopItem implements ShopItemType {
+export class ShopItem implements ShopItemType {
     shopItemId: number;
 
     shopItemGameId: number;

@@ -12,7 +12,7 @@ import { GameType } from '../../react-client/src/interfaces/classTypes';
 /**
  * Represents a row in the games table in the database.
  */
-class Game implements GameType {
+export class Game implements GameType {
     gameId: number;
 
     gameSection: string;

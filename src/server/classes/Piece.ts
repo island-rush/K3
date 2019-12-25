@@ -7,7 +7,7 @@ import pool from '../database';
 /**
  * Represents a row in the pieces database table.
  */
-class Piece implements PieceType {
+export class Piece implements PieceType {
     pieceId: number;
 
     pieceGameId: number;
