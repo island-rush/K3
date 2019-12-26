@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ANTI_SATELLITE_MISSILES_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID } from '../../../../constants';
+import { InvItemType } from '../../interfaces/classTypes';
 import { antiSatelliteMissiles, remoteSensing, rodsFromGod } from '../../redux/actions';
 import InvItem from './InvItem';
-import { InvItemType } from '../../interfaces/classTypes';
 
 const spaceAreaStyle: any = {
     backgroundColor: 'Yellow',
