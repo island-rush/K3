@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { distanceMatrix } from '../../../constants/distanceMatrix';
+import { distanceMatrix } from '../../../constants';
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from '../../../react-client/src/constants/gameConstants';
 import { ConfirmPlanAction, ConfirmPlanRequestAction } from '../../../react-client/src/interfaces/interfaces';
 import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';

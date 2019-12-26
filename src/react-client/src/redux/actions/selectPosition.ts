@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { distanceMatrix } from '../../../../constants/distanceMatrix';
+import { distanceMatrix } from '../../../../constants';
 //prettier-ignore
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, TYPE_TERRAIN } from "../../constants/gameConstants";
 //prettier-ignore

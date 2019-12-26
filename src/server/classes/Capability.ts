@@ -1,4 +1,4 @@
-import { distanceMatrix } from '../../constants/distanceMatrix';
+import { distanceMatrix } from '../../constants';
 // prettier-ignore
 import { ACTIVATED, BIO_WEAPONS_ROUNDS, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, RAISE_MORALE_ROUNDS, RED_TEAM_ID, REMOTE_SENSING_ROUNDS, TYPE_AIR, TYPE_AIR_PIECES, TYPE_GROUND_PIECES, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../react-client/src/constants/gameConstants';
 import pool from '../database';

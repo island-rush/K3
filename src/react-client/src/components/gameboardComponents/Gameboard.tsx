@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { distanceMatrix } from '../../../../constants/distanceMatrix';
+import { distanceMatrix } from '../../../../constants';
 //prettier-ignore
 import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, FLAG_ISLAND_OWNERSHIP, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE } from "../../constants/gameboardConstants";
 //prettier-ignore

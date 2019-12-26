@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { distanceMatrix } from '../../../constants/distanceMatrix';
+import { distanceMatrix } from '../../../constants';
 import { ALL_GROUND_TYPES } from '../../../react-client/src/constants/gameboardConstants';
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../react-client/src/constants/gameConstants';
 import { ExitContainerAction, ExitTransportContainerRequestAction } from '../../../react-client/src/interfaces/interfaces';
