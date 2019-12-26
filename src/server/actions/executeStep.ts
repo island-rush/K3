@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
-import { BLUE_TEAM_ID, PLACE_PHASE_ID, RED_TEAM_ID, SOCKET_SERVER_SENDING_ACTION, WAITING_STATUS } from '../../constants';
+// prettier-ignore
+import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, SOCKET_SERVER_SENDING_ACTION, WAITING_STATUS } from '../../constants';
 import { NEW_ROUND, PLACE_PHASE, UPDATE_FLAGS } from '../../react-client/src/redux/actions/actionTypes';
 import { GameSession, NewRoundAction, PlacePhaseAction, UpdateFlagAction } from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
-import { BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from './eventConstants';
 import giveNextEvent from './giveNextEvent';
 
 /**
