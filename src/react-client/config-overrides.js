@@ -1,3 +1,7 @@
-const { removeModuleScopePlugin } = require('customize-cra')
+const { removeModuleScopePlugin, override, babelInclude } = require("customize-cra");
+const path = require("path");
 
-module.exports = removeModuleScopePlugin()
+module.exports = override(
+    removeModuleScopePlugin(),
+    babelInclude([path.resolve("src"), path.resolve("../constants"), path.resolve("../types")])
+);
