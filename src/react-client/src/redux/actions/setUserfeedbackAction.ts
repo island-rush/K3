@@ -1,4 +1,4 @@
-import { UserfeedbackAction } from '../../interfaces/interfaces';
+import { UserfeedbackAction } from '../../../../types';
 import { SET_USERFEEDBACK } from './actionTypes';
 
 /**

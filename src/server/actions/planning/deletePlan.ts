@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../constants';
-import { DeletePlanAction, DeletePlanRequestAction } from '../../../react-client/src/interfaces/interfaces';
+import { DeletePlanAction, DeletePlanRequestAction } from '../../../types';
 import { DELETE_PLAN } from '../../../react-client/src/redux/actions/actionTypes';
 import { GameSession } from '../../../types/sessionTypes';
 import { Game, Piece } from '../../classes';

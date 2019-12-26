@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, NewsPopupToggleAction } from '../../interfaces/interfaces';
+import { EmitType, NewsPopupToggleAction } from '../../../../types';
 import { NEWSPOPUP_MINIMIZE_TOGGLE } from './actionTypes';
 
 /**

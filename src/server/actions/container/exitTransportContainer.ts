@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { ALL_GROUND_TYPES, COMBAT_PHASE_ID, CONTAINER_TYPES, distanceMatrix, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { ExitContainerAction, ExitTransportContainerRequestAction } from '../../../react-client/src/interfaces/interfaces';
+import { ExitContainerAction, ExitTransportContainerRequestAction } from '../../../types';
 import { INNER_PIECE_CLICK_ACTION } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { Game, Piece } from '../../classes';

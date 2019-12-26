@@ -1,7 +1,7 @@
 import { Action, AnyAction } from 'redux';
-import { InvItemType, PieceType, ShopItemType } from '../../../types';
-//prettier-ignore
-import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, CLEAR_BATTLE, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MAIN_BUTTON_CLICK, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PIECE_PLACE, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_MAIN_BUTTON_CLICK, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE, UPDATE_FLAGS } from "../redux/actions/actionTypes";
+import { InvItemType, PieceType, ShopItemType } from '.';
+// prettier-ignore
+import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CANCEL_PLAN, CLEAR_BATTLE, COMBAT_PHASE, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, MAIN_BUTTON_CLICK, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PIECE_PLACE, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_MAIN_BUTTON_CLICK, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE, UPDATE_FLAGS } from '../react-client/src/redux/actions/actionTypes';
 
 export type Section = string;
 
@@ -68,19 +68,6 @@ export interface PreventPlanAction extends Action {
     payload: {};
 }
 
-export interface RemoteSenseSelectingAction extends Action {
-    type: typeof REMOTE_SENSING_SELECTING;
-    payload: {
-        invItem: InvItemType;
-    };
-}
-
-export interface RaiseMoraleSelectingAction extends Action {
-    type: typeof RAISE_MORALE_SELECTING;
-    payload: {
-        invItem: InvItemType;
-    };
-}
 
 export interface BattlePopupToggleAction extends Action {
     type: typeof BATTLEPOPUP_MINIMIZE_TOGGLE;
@@ -115,41 +102,6 @@ export interface TargetPieceClickAction extends Action {
     payload: {
         battlePiece: any;
         battlePieceIndex: number;
-    };
-}
-
-export interface BioWeaponSelectingAction extends Action {
-    type: typeof BIO_WEAPON_SELECTING;
-    payload: {
-        invItem: InvItemType;
-    };
-}
-
-export interface CommInterruptSelectingAction extends Action {
-    type: typeof COMM_INTERRUPT_SELECTING;
-    payload: {
-        invItem: InvItemType;
-    };
-}
-
-export interface GoldenEyeSelectingAction extends Action {
-    type: typeof GOLDEN_EYE_SELECTING;
-    payload: {
-        invItem: InvItemType;
-    };
-}
-
-export interface InsurgencySelectingAction extends Action {
-    type: typeof INSURGENCY_SELECTING;
-    payload: {
-        invItem: InvItemType;
-    };
-}
-
-export interface RodsFromGodSelectingAction extends Action {
-    type: typeof RODS_FROM_GOD_SELECTING;
-    payload: {
-        invItem: InvItemType;
     };
 }
 
@@ -399,136 +351,12 @@ export interface ExitTransportContainerRequestAction extends Action {
     };
 }
 
-export interface RodsFromGodRequestAction extends Action {
-    type: typeof SERVER_RODS_FROM_GOD_CONFIRM;
-    payload: {
-        selectedPositionId: number;
-        invItem: InvItemType;
-    };
-}
-
-export interface RodsFromGodAction extends Action {
-    type: typeof RODS_FROM_GOD_SELECTED;
-    payload: {
-        invItem: InvItemType;
-        selectedPositionId: number;
-    };
-}
-
-export interface RemoteSensingRequestAction extends Action {
-    type: typeof SERVER_REMOTE_SENSING_CONFIRM;
-    payload: {
-        selectedPositionId: number;
-        invItem: InvItemType;
-    };
-}
-
-export interface RemoteSensingAction extends Action {
-    type: typeof REMOTE_SENSING_SELECTED;
-    payload: {
-        invItem: InvItemType;
-        confirmedRemoteSense: any;
-        gameboardPieces: any;
-    };
-}
-
 export interface MainButtonClickRequestAction extends Action {
     type: typeof SERVER_MAIN_BUTTON_CLICK;
 }
 export interface MainButtonClickAction extends Action {
     type: typeof MAIN_BUTTON_CLICK;
 }
-
-export interface InsurgencyRequestAction extends Action {
-    type: typeof SERVER_INSURGENCY_CONFIRM;
-    payload: {
-        selectedPositionId: number;
-        invItem: InvItemType;
-    };
-}
-
-export interface InsurgencyAction extends Action {
-    type: typeof INSURGENCY_SELECTED;
-    payload: {
-        invItem: InvItemType;
-        selectedPositionId: number;
-    };
-}
-
-export interface BioWeaponsRequestAction extends Action {
-    type: typeof SERVER_BIOLOGICAL_WEAPONS_CONFIRM;
-    payload: {
-        selectedPositionId: number;
-        invItem: InvItemType;
-    };
-}
-
-export interface BioWeaponsAction extends Action {
-    type: typeof BIO_WEAPON_SELECTED;
-    payload: {
-        invItem: InvItemType;
-        selectedPositionId: number;
-    };
-}
-
-export interface RaiseMoraleRequestAction extends Action {
-    type: typeof SERVER_RAISE_MORALE_CONFIRM;
-    payload: {
-        selectedCommanderType: number;
-        invItem: InvItemType;
-    };
-}
-
-export interface RaiseMoraleAction extends Action {
-    type: typeof RAISE_MORALE_SELECTED;
-    payload: {
-        invItem: InvItemType;
-        confirmedRaiseMorale: any;
-        gameboardPieces: any;
-    };
-}
-
-export interface CommInterruptRequestAction extends Action {
-    type: typeof SERVER_COMM_INTERRUPT_CONFIRM;
-    payload: {
-        selectedPositionId: number;
-        invItem: InvItemType;
-    };
-}
-
-export interface CommInterruptAction extends Action {
-    type: typeof COMM_INTERRUP_SELECTED;
-    payload: {
-        invItem: InvItemType;
-        confirmedCommInterrupt: any;
-    };
-}
-
-export interface GoldenEyeRequestAction extends Action {
-    type: typeof SERVER_GOLDEN_EYE_CONFIRM;
-    payload: {
-        selectedPositionId: number;
-        invItem: InvItemType;
-    };
-}
-
-export interface GoldenEyeAction extends Action {
-    type: typeof GOLDEN_EYE_SELECTED;
-    payload: {
-        invItem: InvItemType;
-        selectedPositionId: number;
-    };
-}
-
-export type PositionCapabilityRequestAction =
-    | RodsFromGodRequestAction
-    | RemoteSensingRequestAction
-    | InsurgencyRequestAction
-    | BioWeaponsRequestAction
-    | CommInterruptRequestAction
-    | GoldenEyeRequestAction;
-
-export type InvItemCapabilityAction = RodsFromGodAction | RemoteSensingAction | InsurgencyAction | BioWeaponsAction | RaiseMoraleAction | GoldenEyeAction | CommInterruptAction;
 
 export interface DeletePlanRequestAction extends Action {
     type: typeof SERVER_DELETE_PLAN;
@@ -621,4 +449,3 @@ export interface FuelResultsAction extends Action {
 
 export type UpdatePiecesCombinedAction = NewRoundAction | PlacePhaseAction;
 export type GameboardPiecesUpdateAction = CombatPhaseAction | EnterContainerAction | ExitContainerAction | EventRefuelAction;
-export type SelectingAction = InsurgencySelectingAction | BioWeaponSelectingAction | CommInterruptSelectingAction | RodsFromGodSelectingAction | GoldenEyeSelectingAction | RemoteSenseSelectingAction;

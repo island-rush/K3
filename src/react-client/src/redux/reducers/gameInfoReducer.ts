@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PLACE_PHASE_ID, PURCHASE_PHASE_ID, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, WAITING_STATUS } from "../../../../constants";
 import { GameInfoState } from "../../../../types";
 //prettier-ignore
-import { EventBattleAction, GameInitialStateAction, NewRoundAction, NewsPhaseAction, NoMoreEventsAction, ShopPurchaseAction, ShopRefundAction, UpdateFlagAction } from '../../interfaces/interfaces';
+import { EventBattleAction, GameInitialStateAction, NewRoundAction, NewsPhaseAction, NoMoreEventsAction, ShopPurchaseAction, ShopRefundAction, UpdateFlagAction } from '../../../../types';
 //prettier-ignore
 import { COMBAT_PHASE, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, PLACE_PHASE, PURCHASE_PHASE, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, UPDATE_FLAGS } from "../actions/actionTypes";
 

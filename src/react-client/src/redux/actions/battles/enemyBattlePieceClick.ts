@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { WAITING_STATUS } from '../../../../../constants';
-import { EmitType, EnemyPieceSelectAction } from '../../../interfaces/interfaces';
+import { EmitType, EnemyPieceSelectAction } from '../../../../../types';
 import { ENEMY_PIECE_SELECT } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 

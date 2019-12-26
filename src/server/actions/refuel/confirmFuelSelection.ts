@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { COMBAT_PHASE_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_AIR, TYPE_FUEL } from '../../../constants';
-import { ConfirmFuelSelectionRequestAction, FuelResultsAction } from '../../../react-client/src/interfaces/interfaces';
+import { ConfirmFuelSelectionRequestAction, FuelResultsAction } from '../../../types';
 import { REFUEL_RESULTS } from '../../../react-client/src/redux/actions/actionTypes';
 import { GameSession } from '../../../types/sessionTypes';
 import { Event, Game } from '../../classes';

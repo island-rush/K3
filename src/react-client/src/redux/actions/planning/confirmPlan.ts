@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { ConfirmPlanRequestAction, EmitType } from '../../../interfaces/interfaces';
+import { ConfirmPlanRequestAction, EmitType } from '../../../../../types';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
 import { SERVER_CONFIRM_PLAN } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';

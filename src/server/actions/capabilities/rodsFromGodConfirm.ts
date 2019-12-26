@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { COMBAT_PHASE_ID, RODS_FROM_GOD_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { RodsFromGodAction, RodsFromGodRequestAction } from '../../../react-client/src/interfaces/interfaces';
+import { RodsFromGodAction, RodsFromGodRequestAction } from '../../../types';
 import { RODS_FROM_GOD_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
 import { GameSession } from '../../../types/sessionTypes';
 import { Capability, Game, InvItem } from '../../classes';

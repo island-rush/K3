@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { PURCHASE_PHASE_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { ShopConfirmPurchaseAction } from '../../../react-client/src/interfaces/interfaces';
+import { ShopConfirmPurchaseAction } from '../../../types';
 import { SHOP_TRANSFER } from '../../../react-client/src/redux/actions/actionTypes';
 import { GameSession } from '../../../types/sessionTypes';
 import { Game, InvItem, ShopItem } from '../../classes';

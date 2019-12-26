@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, ShopConfirmPurchaseRequestAction } from '../../../interfaces/interfaces';
+import { EmitType, ShopConfirmPurchaseRequestAction } from '../../../../../types';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
 import { SERVER_SHOP_CONFIRM_PURCHASE } from '../actionTypes';
 

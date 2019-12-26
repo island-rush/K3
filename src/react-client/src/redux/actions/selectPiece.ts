@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, PieceClickAction } from '../../interfaces/interfaces';
+import { EmitType, PieceClickAction } from '../../../../types';
 import { PIECE_CLICK } from './actionTypes';
 import { PieceType } from '../../../../types';
 

@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType, MainButtonClickRequestAction } from '../../interfaces/interfaces';
+import { EmitType, MainButtonClickRequestAction } from '../../../../types';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../constants';
 import { SERVER_MAIN_BUTTON_CLICK } from './actionTypes';
 

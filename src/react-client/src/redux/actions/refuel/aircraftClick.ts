@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { AircraftClickAction, EmitType } from '../../../interfaces/interfaces';
+import { AircraftClickAction, EmitType } from '../../../../../types';
 import { AIRCRAFT_CLICK } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { PieceType } from '../../../../../types';

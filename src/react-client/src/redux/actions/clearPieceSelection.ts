@@ -1,7 +1,7 @@
 //TODO: get rid of this function and use pieceClick(-1) or something that could handle it that way
 
 import { Dispatch } from 'redux';
-import { EmitType, PieceClearAction } from '../../interfaces/interfaces';
+import { EmitType, PieceClearAction } from '../../../../types';
 import { PIECE_CLEAR_SELECTION } from './actionTypes';
 
 /**

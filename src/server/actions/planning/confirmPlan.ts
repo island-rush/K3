@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, distanceMatrix, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
-import { ConfirmPlanAction, ConfirmPlanRequestAction } from '../../../react-client/src/interfaces/interfaces';
+import { ConfirmPlanAction, ConfirmPlanRequestAction } from '../../../types';
 import { PLAN_WAS_CONFIRMED } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { GameSession } from '../../../types/sessionTypes';

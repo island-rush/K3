@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMBAT_PHASE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { BioWeaponsAction, BioWeaponsRequestAction } from '../../../react-client/src/interfaces/interfaces';
+import { BioWeaponsAction, BioWeaponsRequestAction } from '../../../types';
 import { BIO_WEAPON_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
 import { GameSession } from '../../../types/sessionTypes';
 import { Capability, Game, InvItem } from '../../classes';

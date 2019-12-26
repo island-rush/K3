@@ -4,7 +4,7 @@
 
 import { Socket } from 'socket.io';
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN, TYPE_TERRAIN } from '../../../constants';
-import { ExitContainerAction, ExitContainerRequestAction } from '../../../react-client/src/interfaces/interfaces';
+import { ExitContainerAction, ExitContainerRequestAction } from '../../../types';
 import { INNER_PIECE_CLICK_ACTION } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { GameSession } from '../../../types/sessionTypes';

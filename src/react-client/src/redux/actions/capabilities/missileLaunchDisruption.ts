@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { EmitType } from '../../../interfaces/interfaces';
+import { EmitType } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../../../types';
 
