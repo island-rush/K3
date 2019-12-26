@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { distanceMatrix } from '../../constants/distanceMatrix';
+import { distanceMatrix } from '../../../../constants/distanceMatrix';
 //prettier-ignore
 import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, FLAG_ISLAND_OWNERSHIP, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE } from "../../constants/gameboardConstants";
 //prettier-ignore
@@ -152,7 +152,7 @@ class Gameboard extends Component<Props> {
         } = this.props;
 
         //prettier-ignore
-        const {confirmedGoldenEye, confirmedCommInterrupt, confirmedBioWeapons, confirmedInsurgency, confirmedRods, confirmedRemoteSense, selectedPosition, news, battle, container, planning, selectedPiece, confirmedPlans, highlightedPositions } = gameboardMeta;
+        const { confirmedGoldenEye, confirmedCommInterrupt, confirmedBioWeapons, confirmedInsurgency, confirmedRods, confirmedRemoteSense, selectedPosition, news, battle, container, planning, selectedPiece, confirmedPlans, highlightedPositions } = gameboardMeta;
 
         let planningPositions: any = []; //all of the positions part of a plan
         let containerPositions: any = []; //specific positions part of a plan of type container
@@ -246,26 +246,26 @@ class Gameboard extends Component<Props> {
                     parseInt(selectedPosition) === parseInt(positionIndex)
                         ? 'selectedPos'
                         : containerPositions.includes(parseInt(positionIndex))
-                        ? 'containerPos'
-                        : planningPositions.includes(parseInt(positionIndex))
-                        ? 'plannedPos'
-                        : highlightedPositions.includes(parseInt(positionIndex))
-                        ? 'highlightedPos'
-                        : battlePositions.includes(parseInt(positionIndex))
-                        ? 'battlePos'
-                        : confirmedRods.includes(parseInt(positionIndex))
-                        ? 'battlePos'
-                        : confirmedBioWeapons.includes(parseInt(positionIndex))
-                        ? 'bioWeaponPos'
-                        : confirmedInsurgency.includes(parseInt(positionIndex))
-                        ? 'battlePos'
-                        : remoteSensedPositions.includes(parseInt(positionIndex))
-                        ? 'remoteSensePos'
-                        : commInterruptPositions.includes(parseInt(positionIndex))
-                        ? 'commInterruptPos'
-                        : goldenEyePositions.includes(parseInt(positionIndex))
-                        ? 'goldenEyePos'
-                        : ''
+                            ? 'containerPos'
+                            : planningPositions.includes(parseInt(positionIndex))
+                                ? 'plannedPos'
+                                : highlightedPositions.includes(parseInt(positionIndex))
+                                    ? 'highlightedPos'
+                                    : battlePositions.includes(parseInt(positionIndex))
+                                        ? 'battlePos'
+                                        : confirmedRods.includes(parseInt(positionIndex))
+                                            ? 'battlePos'
+                                            : confirmedBioWeapons.includes(parseInt(positionIndex))
+                                                ? 'bioWeaponPos'
+                                                : confirmedInsurgency.includes(parseInt(positionIndex))
+                                                    ? 'battlePos'
+                                                    : remoteSensedPositions.includes(parseInt(positionIndex))
+                                                        ? 'remoteSensePos'
+                                                        : commInterruptPositions.includes(parseInt(positionIndex))
+                                                            ? 'commInterruptPos'
+                                                            : goldenEyePositions.includes(parseInt(positionIndex))
+                                                                ? 'goldenEyePos'
+                                                                : ''
                 }
                 //TODO: pass down what the highlighting means into the title
                 title={titleSolver(gameboard[positionIndex], gameInfo, parseInt(positionIndex))}

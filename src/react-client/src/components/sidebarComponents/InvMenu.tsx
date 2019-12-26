@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 //prettier-ignore
 import { ANTI_SATELLITE_MISSILES_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, CYBER_DOMINANCE_TYPE_ID, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, LIST_ALL_CAPABILITIES, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, RAISE_MORALE_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SOF_TEAM_TYPE_ID, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from "../../constants/gameConstants";
 //prettier-ignore
-import { airPieceClick, antiSatelliteMissiles, atcScamble, biologicalWeapons, communicationsInterruption, cyberDominance, droneSwarms, goldenEye, insurgency, landPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines, seaPieceClick } from "../../redux/actions";
+import { airPieceClick, antiSatelliteMissiles, atcScramble, biologicalWeapons, communicationsInterruption, cyberDominance, droneSwarms, goldenEye, insurgency, landPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines, seaPieceClick } from "../../redux/actions";
 import InvItem from './InvItem';
 import { InvItemType } from '../../interfaces/classTypes';
 
@@ -77,7 +77,7 @@ interface Props {
     airPieceClick: any;
     landPieceClick: any;
     seaPieceClick: any;
-    atcScamble: any;
+    atcScramble: any;
     cyberDominance: any;
     missileLaunchDisruption: any;
     communicationsInterruption: any;
@@ -97,10 +97,10 @@ class InvMenu extends Component<Props> {
     render() {
         //TODO: selected is a poorly chosen variable name, change to MenuIsVisible or something (since selected is used for other components too)
         //prettier-ignore
-        const { confirmedRaiseMorale, selected, invItems, airPieceClick, landPieceClick, seaPieceClick, atcScamble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } = this.props;
+        const { confirmedRaiseMorale, selected, invItems, airPieceClick, landPieceClick, seaPieceClick, atcScramble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } = this.props;
 
         let capabilityFunctions: any = {};
-        capabilityFunctions[ATC_SCRAMBLE_TYPE_ID] = atcScamble;
+        capabilityFunctions[ATC_SCRAMBLE_TYPE_ID] = atcScramble;
         capabilityFunctions[CYBER_DOMINANCE_TYPE_ID] = cyberDominance;
         capabilityFunctions[MISSILE_LAUNCH_DISRUPTION_TYPE_ID] = missileLaunchDisruption;
         capabilityFunctions[COMMUNICATIONS_INTERRUPTION_TYPE_ID] = communicationsInterruption;
@@ -198,7 +198,7 @@ const mapActionsToProps = {
     landPieceClick,
     seaPieceClick,
     //TODO: refactor to use names / variables instead of hard coded numbers? (refactor to throw these in an object/array)
-    atcScamble,
+    atcScramble,
     cyberDominance,
     missileLaunchDisruption,
     communicationsInterruption,
