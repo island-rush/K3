@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
+import { TeacherSession } from '../../types';
 import { Game } from '../classes';
 import { ACCESS_TAG } from '../pages/errorTypes';
-import { TeacherSession } from '../../types/sessionTypes';
 
 /**
  * Reset a game from an express route /gameReset

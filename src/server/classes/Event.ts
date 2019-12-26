@@ -1,6 +1,6 @@
 import { ATTACK_MATRIX } from '../../constants';
-import pool from '../database';
 import { EventType } from '../../types';
+import { pool } from '../database';
 
 /**
  * Represents event row in eventqueue table in the database.

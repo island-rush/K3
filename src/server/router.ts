@@ -7,7 +7,7 @@ import { DATABASE_TAG, LOGIN_TAG } from './pages/errorTypes';
 /**
  * Express Router to handle different routes on the server.
  */
-const router: Router = Router();
+export const router: Router = Router();
 
 // --------------------------------------
 // Sending Files

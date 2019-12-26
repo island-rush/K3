@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { PoolConnection } from 'mysql2/promise';
-import pool from '../database';
+import { pool } from '../database';
 
 /**
  * Simple function connects to database.

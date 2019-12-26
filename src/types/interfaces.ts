@@ -68,7 +68,6 @@ export interface PreventPlanAction extends Action {
     payload: {};
 }
 
-
 export interface BattlePopupToggleAction extends Action {
     type: typeof BATTLEPOPUP_MINIMIZE_TOGGLE;
     payload: {};

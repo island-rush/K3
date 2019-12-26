@@ -1,5 +1,5 @@
-import pool from '../database';
 import { PlanType } from '../../types';
+import { pool } from '../database';
 
 /**
  * Represents rows for plans in the database.

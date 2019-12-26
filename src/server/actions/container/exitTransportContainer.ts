@@ -1,8 +1,9 @@
 import { Socket } from 'socket.io';
+// prettier-ignore
 import { ALL_GROUND_TYPES, COMBAT_PHASE_ID, CONTAINER_TYPES, distanceMatrix, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { ExitContainerAction, ExitTransportContainerRequestAction } from '../../../types';
 import { INNER_PIECE_CLICK_ACTION } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
+import { ExitContainerAction, ExitTransportContainerRequestAction, GameSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import { sendUserFeedback } from '../sendUserFeedback';
@@ -12,7 +13,7 @@ import { sendUserFeedback } from '../sendUserFeedback';
  */
 export const exitTransportContainer = async (socket: Socket, action: ExitTransportContainerRequestAction) => {
     // Grab the Session
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
     const { selectedPiece, containerPiece, selectedPositionId } = action.payload;
 

@@ -1,13 +1,12 @@
 import connectAzuretables, { AzureTableStoreFactory, AzureTableStoreOptions } from 'connect-azuretables';
 import express, { Application, Request, RequestHandler, Response } from 'express';
 import session from 'express-session';
+import sharedsession from 'express-socket.io-session';
 import http, { Server } from 'http';
 import { SessionOptions } from 'http2';
 import { Socket } from 'socket.io';
-import sharedsession from 'express-socket.io-session';
-import router from './server/router';
-import socketSetup from './server/socketSetup';
-
+import { router } from './server/router';
+import { socketSetup } from './server/socketSetup';
 
 // Create the server
 const app: Application = express();

@@ -8,3 +8,5 @@ export * from './shop';
 
 export * from './mainButtonClick';
 export * from './sendUserFeedback';
+
+export * from './eventConstants';

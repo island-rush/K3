@@ -1,4 +1,5 @@
 import { Action } from 'redux';
+// prettier-ignore
 import { REMOTE_SENSING_SELECTING, RAISE_MORALE_SELECTING, BIO_WEAPON_SELECTING, COMM_INTERRUPT_SELECTING, GOLDEN_EYE_SELECTING, INSURGENCY_SELECTING, RODS_FROM_GOD_SELECTING, SERVER_RODS_FROM_GOD_CONFIRM, RODS_FROM_GOD_SELECTED, SERVER_REMOTE_SENSING_CONFIRM, REMOTE_SENSING_SELECTED, SERVER_INSURGENCY_CONFIRM, INSURGENCY_SELECTED, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, BIO_WEAPON_SELECTED, SERVER_RAISE_MORALE_CONFIRM, RAISE_MORALE_SELECTED, SERVER_COMM_INTERRUPT_CONFIRM, COMM_INTERRUP_SELECTED, SERVER_GOLDEN_EYE_CONFIRM, GOLDEN_EYE_SELECTED } from '../react-client/src/redux/actions/actionTypes';
 import { InvItemType } from './classes';
 
@@ -173,5 +174,18 @@ export type PositionCapabilityRequestAction =
     | CommInterruptRequestAction
     | GoldenEyeRequestAction;
 
-export type InvItemCapabilityAction = RodsFromGodAction | RemoteSensingAction | InsurgencyAction | BioWeaponsAction | RaiseMoraleAction | GoldenEyeAction | CommInterruptAction;
-export type SelectingAction = InsurgencySelectingAction | BioWeaponSelectingAction | CommInterruptSelectingAction | RodsFromGodSelectingAction | GoldenEyeSelectingAction | RemoteSenseSelectingAction;
+export type InvItemCapabilityAction =
+    | RodsFromGodAction
+    | RemoteSensingAction
+    | InsurgencyAction
+    | BioWeaponsAction
+    | RaiseMoraleAction
+    | GoldenEyeAction
+    | CommInterruptAction;
+export type SelectingAction =
+    | InsurgencySelectingAction
+    | BioWeaponSelectingAction
+    | CommInterruptSelectingAction
+    | RodsFromGodSelectingAction
+    | GoldenEyeSelectingAction
+    | RemoteSenseSelectingAction;

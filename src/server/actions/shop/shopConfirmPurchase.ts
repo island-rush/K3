@@ -1,8 +1,7 @@
 import { Socket } from 'socket.io';
 import { PURCHASE_PHASE_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { ShopConfirmPurchaseAction } from '../../../types';
 import { SHOP_TRANSFER } from '../../../react-client/src/redux/actions/actionTypes';
-import { GameSession } from '../../../types/sessionTypes';
+import { GameSession, ShopConfirmPurchaseAction } from '../../../types';
 import { Game, InvItem, ShopItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import { sendUserFeedback } from '../sendUserFeedback';

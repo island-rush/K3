@@ -1,12 +1,12 @@
 // prettier-ignore
 import { Capability, Event, InvItem, Piece, Plan, ShopItem } from '.';
+// prettier-ignore
 import { AIR_REFUELING_SQUADRON_ID, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NEWS_PHASE_ID, NOYARC_ISLAND_ID, RED_TEAM_ID, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../constants';
 import { INITIAL_GAMESTATE } from '../../react-client/src/redux/actions/actionTypes';
 import { GameType, Instructor, Section } from '../../types';
-import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from '../actions/eventConstants';
+import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from '../actions';
 import { gameInitialNews, gameInitialPieces } from '../admin';
-import pool from '../database';
-
+import { pool } from '../database';
 
 /**
  * Represents a row in the games table in the database.
@@ -669,15 +669,15 @@ export class Game implements GameType {
                                 friendlyPiecesList[x].tpieceId == null
                                     ? null
                                     : {
-                                        pieceId: friendlyPiecesList[x].tpieceId,
-                                        pieceGameId: friendlyPiecesList[x].tpieceGameId,
-                                        pieceTeamId: friendlyPiecesList[x].tpieceTeamId,
-                                        pieceTypeId: friendlyPiecesList[x].tpieceTypeId,
-                                        piecePositionId: friendlyPiecesList[x].tpiecePositionId,
-                                        pieceVisible: friendlyPiecesList[x].tpieceVisible,
-                                        pieceMoves: friendlyPiecesList[x].tpieceMoves,
-                                        pieceFuel: friendlyPiecesList[x].tpieceFuel
-                                    }
+                                          pieceId: friendlyPiecesList[x].tpieceId,
+                                          pieceGameId: friendlyPiecesList[x].tpieceGameId,
+                                          pieceTeamId: friendlyPiecesList[x].tpieceTeamId,
+                                          pieceTypeId: friendlyPiecesList[x].tpieceTypeId,
+                                          piecePositionId: friendlyPiecesList[x].tpiecePositionId,
+                                          pieceVisible: friendlyPiecesList[x].tpieceVisible,
+                                          pieceMoves: friendlyPiecesList[x].tpieceMoves,
+                                          pieceFuel: friendlyPiecesList[x].tpieceFuel
+                                      }
                         };
                         friendlyPieces.push(thisFriendlyPiece);
                     }

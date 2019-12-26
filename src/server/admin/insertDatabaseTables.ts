@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import fs from 'fs';
-import pool from '../database';
+import { pool } from '../database';
 import { BAD_SESSION } from '../pages/errorTypes';
 
 /**

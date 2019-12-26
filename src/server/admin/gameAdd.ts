@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
-import { Section, Instructor, Password } from '../../types';
+import { Instructor, Password, Section } from '../../types';
 import { Game } from '../classes';
 import { ACCESS_TAG, BAD_REQUEST_TAG } from '../pages/errorTypes';
 

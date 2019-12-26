@@ -1,13 +1,9 @@
-/**
- * This function for letting pieces leave containers within the same position
- */
-
 import { Socket } from 'socket.io';
+// prettier-ignore
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN, TYPE_TERRAIN } from '../../../constants';
-import { ExitContainerAction, ExitContainerRequestAction } from '../../../types';
 import { INNER_PIECE_CLICK_ACTION } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
-import { GameSession } from '../../../types/sessionTypes';
+import { ExitContainerAction, ExitContainerRequestAction, GameSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import { sendUserFeedback } from '../sendUserFeedback';

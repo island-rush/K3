@@ -1,7 +1,8 @@
 import { Socket } from 'socket.io';
+// prettier-ignore
 import { COMBAT_PHASE_ID, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { GoldenEyeAction, GoldenEyeRequestAction } from '../../../types';
 import { GOLDEN_EYE_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
+import { GameSession, GoldenEyeAction, GoldenEyeRequestAction } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import { sendUserFeedback } from '../sendUserFeedback';
@@ -11,7 +12,7 @@ import { sendUserFeedback } from '../sendUserFeedback';
  */
 export const goldenEyeConfirm = async (socket: Socket, action: GoldenEyeRequestAction) => {
     // Grab the Session
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3;
+    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
 
     if (action.payload == null || action.payload.selectedPositionId == null) {
         sendUserFeedback(socket, 'Server Error: Malformed Payload (missing selectedPositionId)');

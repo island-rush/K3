@@ -1,8 +1,8 @@
 import { Socket } from 'socket.io';
+// prettier-ignore
 import { COMBAT_PHASE_ID, REMOTE_SENSING_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { RemoteSensingAction, RemoteSensingRequestAction } from '../../../types';
 import { REMOTE_SENSING_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
-import { GameSession } from '../../../types/sessionTypes';
+import { GameSession, RemoteSensingAction, RemoteSensingRequestAction } from '../../../types';
 import { Capability, Game, InvItem, Piece } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import { sendUserFeedback } from '../sendUserFeedback';

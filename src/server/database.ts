@@ -1,9 +1,3 @@
-/**
- * Database configuration, for accessing a mysql database using mysql2
- * Creates a pool of connections to use
- * Exports the pool for use in other files (Classes)
- */
-
 import mysql, { Pool, PoolOptions } from 'mysql2/promise';
 
 const host: string = process.env.DB_HOSTNAME;
@@ -23,6 +17,6 @@ const databaseConfig: PoolOptions = {
 /**
  * Pool of database connections.
  */
-const pool: Pool = mysql.createPool(databaseConfig);
+export const pool: Pool = mysql.createPool(databaseConfig);
 
 export default pool;

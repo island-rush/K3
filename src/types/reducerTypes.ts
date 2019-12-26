@@ -52,8 +52,8 @@ export interface GameboardMetaState {
         enemyPieces: any[];
     };
     refuel: {
-        isMinimized: boolean,
-        active: boolean,
+        isMinimized: boolean;
+        active: boolean;
         selectedTankerPieceId: number;
         selectedTankerPieceIndex: number;
         tankers: any;

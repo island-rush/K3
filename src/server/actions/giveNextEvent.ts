@@ -1,8 +1,7 @@
 import { Socket } from 'socket.io';
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, RED_TEAM_ID, SOCKET_SERVER_SENDING_ACTION } from '../../constants';
 import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from '../../react-client/src/redux/actions/actionTypes';
-import { EventBattleAction, EventRefuelAction, GameType, NoMoreEventsAction } from '../../types';
-import { GameSession } from '../../types/sessionTypes';
+import { EventBattleAction, EventRefuelAction, GameSession, GameType, NoMoreEventsAction } from '../../types';
 import { Event, Piece } from '../classes';
 import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from './eventConstants';
 import { sendUserFeedback } from './sendUserFeedback';

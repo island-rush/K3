@@ -1,4 +1,4 @@
-import pool from '../database';
+import { pool } from '../database';
 
 /**
  * Helper function, generates array of inserts for gameInitialNews.

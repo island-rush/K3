@@ -1,7 +1,7 @@
+import { Piece } from '.';
 import { TYPE_FUEL, TYPE_MOVES } from '../../constants';
 import { InvItemType } from '../../types';
-import pool from '../database';
-import { Piece } from '.';
+import { pool } from '../database';
 
 /**
  * Represents row in invItems table in the database.
