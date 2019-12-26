@@ -1,4 +1,4 @@
-import { GameboardState } from "../../interfaces/reducerTypes";
+import { GameboardState } from "../../../../types";
 
 export const initialGameboardEmpty: GameboardState = [
     { type: 'land', pieces: [] },
