@@ -4,7 +4,7 @@ export type ShopState = ShopItemType[];
 
 export type InvState = InvItemType[];
 
-export type GameboardState = Array<{ type: string; pieces: PieceType[] }>;
+export type GameboardState = { type: string; pieces: PieceType[] }[];
 
 export interface GameInfoState {
     gameSection: GameType['gameSection'];
