@@ -1,13 +1,13 @@
-import { AzureTableStoreFactory, AzureTableStoreOptions } from 'connect-azuretables';
+import connectAzuretables, { AzureTableStoreFactory, AzureTableStoreOptions } from 'connect-azuretables';
 import express, { Application, Request, RequestHandler, Response } from 'express';
 import session from 'express-session';
 import http, { Server } from 'http';
 import { SessionOptions } from 'http2';
 import { Socket } from 'socket.io';
+import sharedsession from 'express-socket.io-session';
 import router from './server/router';
 import socketSetup from './server/socketSetup';
 
-import sharedsession = require('express-socket.io-session');
 
 // Create the server
 const app: Application = express();
@@ -17,7 +17,7 @@ const server: Server = http.createServer(app);
 let fullSession: RequestHandler;
 if (process.env.SESSION_TYPE === 'azure') {
     // Azure Sessions uses Azure Storage Account (tables) -> Probably best for auto-scaling with multiple instances
-    const AzureTablesStoreFactory: AzureTableStoreFactory = require('connect-azuretables')(session);
+    const AzureTablesStoreFactory: AzureTableStoreFactory = connectAzuretables(session);
     const AzureOptions: AzureTableStoreOptions = {
         sessionTimeOut: 120
     };
@@ -29,6 +29,7 @@ if (process.env.SESSION_TYPE === 'azure') {
     });
 } else {
     // LokiStore session uses session-store.db file in root directory -> Probably best for single-instance or offline development
+    // Required instead of imported because missing type declarations
     const LokiStore = require('connect-loki')(session);
     const lokiOptions: SessionOptions = {};
     fullSession = session({

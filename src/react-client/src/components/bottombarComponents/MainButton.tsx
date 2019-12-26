@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { COMBAT_PHASE_ID, NEWS_PHASE_ID, PLACE_PHASE_ID, PURCHASE_PHASE_ID, SLICE_PLANNING_ID, WAITING_STATUS } from '../../constants/gameConstants';
+import { COMBAT_PHASE_ID, NEWS_PHASE_ID, PLACE_PHASE_ID, PURCHASE_PHASE_ID, SLICE_PLANNING_ID, WAITING_STATUS } from '../../../../constants';
 
 const mainButtonStyle: any = {
     backgroundColor: 'grey',

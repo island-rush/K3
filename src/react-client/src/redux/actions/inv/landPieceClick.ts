@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux';
-import { PLACE_PHASE_ID } from '../../../constants/gameConstants';
+import { PLACE_PHASE_ID } from '../../../../../constants';
 import { EmitType, InvItemPlaceRequestAction } from '../../../interfaces/interfaces';
-import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
+// TODO: this is only imported to the frontend, export it from frontend file like websocket thing
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
 import { SERVER_PIECE_PLACE } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../interfaces/classTypes';

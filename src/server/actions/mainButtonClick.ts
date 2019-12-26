@@ -1,15 +1,14 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, TYPE_MAIN, WAITING_STATUS } from '../../react-client/src/constants/gameConstants';
+import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN, WAITING_STATUS } from '../../constants';
 // prettier-ignore
 import { CombatPhaseAction, MainButtonClickAction, NewsPhaseAction, PurchasePhaseAction, SliceChangeAction } from '../../react-client/src/interfaces/interfaces';
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../react-client/src/constants/otherConstants';
 import { COMBAT_PHASE, MAIN_BUTTON_CLICK, NEWS_PHASE, PURCHASE_PHASE, SLICE_CHANGE } from '../../react-client/src/redux/actions/actionTypes';
+import { GameSession } from '../../types/sessionTypes';
 import { Capability, Game, Piece } from '../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../pages/errorTypes';
 import executeStep from './executeStep';
 import { sendUserFeedback } from './sendUserFeedback';
-import { GameSession } from '../../types/sessionTypes';
 
 export const mainButtonClick = async (socket: Socket) => {
     // Grab Session

@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { EmitType, PreventPlanAction } from '../../../interfaces/interfaces';
-import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
 import { CANCEL_PLAN, SERVER_DELETE_PLAN } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 

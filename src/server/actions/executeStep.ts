@@ -1,12 +1,11 @@
 import { Socket } from 'socket.io';
-import { BLUE_TEAM_ID, PLACE_PHASE_ID, RED_TEAM_ID, WAITING_STATUS } from '../../react-client/src/constants/gameConstants';
+import { BLUE_TEAM_ID, PLACE_PHASE_ID, RED_TEAM_ID, SOCKET_SERVER_SENDING_ACTION, WAITING_STATUS } from '../../constants';
 import { NewRoundAction, PlacePhaseAction, UpdateFlagAction } from '../../react-client/src/interfaces/interfaces';
-import { SOCKET_SERVER_SENDING_ACTION } from '../../react-client/src/constants/otherConstants';
 import { NEW_ROUND, PLACE_PHASE, UPDATE_FLAGS } from '../../react-client/src/redux/actions/actionTypes';
+import { GameSession } from '../../types/sessionTypes';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
 import { BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from './eventConstants';
 import giveNextEvent from './giveNextEvent';
-import { GameSession } from '../../types/sessionTypes';
 
 /**
  * Move pieces / step through plans

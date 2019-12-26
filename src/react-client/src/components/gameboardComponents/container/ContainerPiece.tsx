@@ -1,5 +1,5 @@
 import React from 'react';
-import { TYPE_NAMES } from '../../../constants/gameConstants';
+import { TYPE_NAMES } from '../../../../../constants';
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../../styleConstants';
 import { PieceType } from '../../../interfaces/classTypes';
 

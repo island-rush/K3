@@ -1,15 +1,14 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, WAITING_STATUS } from '../../../react-client/src/constants/gameConstants';
+import { BLUE_TEAM_ID, COMBAT_PHASE_ID, NOT_WAITING_STATUS, RED_TEAM_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN, WAITING_STATUS } from '../../../constants';
 // prettier-ignore
 import { BattleResultsAction, ConfirmBattleSelectionRequestAction, UpdateFlagAction } from '../../../react-client/src/interfaces/interfaces';
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
 import { BATTLE_FIGHT_RESULTS, UPDATE_FLAGS } from '../../../react-client/src/redux/actions/actionTypes';
+import { GameSession } from '../../../types/sessionTypes';
 import { Event, Game } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import giveNextEvent from '../giveNextEvent';
 import { sendUserFeedback } from '../sendUserFeedback';
-import { GameSession } from '../../../types/sessionTypes';
 
 /**
  * User request to confirm their battle selections. (what pieces are attacking what other pieces)

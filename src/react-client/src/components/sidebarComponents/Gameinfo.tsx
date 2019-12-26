@@ -1,5 +1,5 @@
 import React from 'react';
-import { TYPE_OWNER_NAMES } from '../../constants/gameConstants';
+import { TYPE_OWNER_NAMES } from '../../../../constants';
 
 const gameinfoStyle: any = {
     backgroundColor: 'Yellow',

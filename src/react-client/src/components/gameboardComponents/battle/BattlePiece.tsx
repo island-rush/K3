@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TYPE_NAMES } from '../../../constants/gameConstants';
+import { TYPE_NAMES } from '../../../../../constants';
 import { ARROW_IMAGE, DICE_IMAGES, TYPE_IMAGES } from '../../styleConstants';
 
 const battlePieceStyle: any = {

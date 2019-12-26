@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
-import { PLACE_PHASE_ID } from '../../../constants/gameConstants';
+import { PLACE_PHASE_ID } from '../../../../../constants';
 import { EmitType, InvItemPlaceRequestAction } from '../../../interfaces/interfaces';
-import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
 import { SERVER_PIECE_PLACE } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../interfaces/classTypes';

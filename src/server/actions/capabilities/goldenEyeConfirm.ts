@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io';
-import { COMBAT_PHASE_ID, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../react-client/src/constants/gameConstants';
+import { COMBAT_PHASE_ID, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
 import { GoldenEyeAction, GoldenEyeRequestAction } from '../../../react-client/src/interfaces/interfaces';
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
 import { GOLDEN_EYE_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
 import { Capability, Game, InvItem } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';

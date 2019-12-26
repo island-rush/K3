@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from '../../../constants/gameConstants';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from '../../../../../constants';
 import { EmitType, StartPlanAction } from '../../../interfaces/interfaces';
 import { START_PLAN } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';

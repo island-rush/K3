@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../constants/gameConstants';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
 import { EmitType, RodsFromGodSelectingAction } from '../../../interfaces/interfaces';
 import { RODS_FROM_GOD_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';

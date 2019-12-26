@@ -1,4 +1,4 @@
-import { ATTACK_MATRIX } from '../../react-client/src/constants/gameConstants';
+import { ATTACK_MATRIX } from '../../constants';
 import pool from '../database';
 import { EventType } from '../../react-client/src/interfaces/classTypes';
 

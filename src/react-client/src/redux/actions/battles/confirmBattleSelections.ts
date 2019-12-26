@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
-import { WAITING_STATUS } from '../../../constants/gameConstants';
+import { WAITING_STATUS } from '../../../../../constants';
 import { ConfirmBattleSelectionRequestAction, EmitType } from '../../../interfaces/interfaces';
-import { SOCKET_CLIENT_SENDING_ACTION } from '../../../constants/otherConstants';
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
 import { SERVER_CONFIRM_BATTLE_SELECTION } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 

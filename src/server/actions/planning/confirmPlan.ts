@@ -1,14 +1,12 @@
 import { Socket } from 'socket.io';
-import { distanceMatrix } from '../../../constants';
-import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from '../../../react-client/src/constants/gameConstants';
+import { COMBAT_PHASE_ID, CONTAINER_TYPES, distanceMatrix, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
 import { ConfirmPlanAction, ConfirmPlanRequestAction } from '../../../react-client/src/interfaces/interfaces';
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
 import { PLAN_WAS_CONFIRMED } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
+import { GameSession } from '../../../types/sessionTypes';
 import { Game, Piece, Plan } from '../../classes';
 import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import { sendUserFeedback } from '../sendUserFeedback';
-import { GameSession } from '../../../types/sessionTypes';
 
 /**
  * User Request to confirm a plan for a piece.

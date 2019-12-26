@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TRANSPORT_TYPE_ID } from '../../../constants/gameConstants';
+import { TRANSPORT_TYPE_ID } from '../../../../../constants';
 import ContainerPiece from './ContainerPiece';
 import { PieceType } from '../../../interfaces/classTypes';
 

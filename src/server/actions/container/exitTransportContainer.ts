@@ -1,9 +1,6 @@
 import { Socket } from 'socket.io';
-import { distanceMatrix } from '../../../constants';
-import { ALL_GROUND_TYPES } from '../../../react-client/src/constants/gameboardConstants';
-import { COMBAT_PHASE_ID, CONTAINER_TYPES, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../react-client/src/constants/gameConstants';
+import { ALL_GROUND_TYPES, COMBAT_PHASE_ID, CONTAINER_TYPES, distanceMatrix, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
 import { ExitContainerAction, ExitTransportContainerRequestAction } from '../../../react-client/src/interfaces/interfaces';
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../react-client/src/constants/otherConstants';
 import { INNER_PIECE_CLICK_ACTION } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { Game, Piece } from '../../classes';

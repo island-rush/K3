@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { WAITING_STATUS } from '../../../constants/gameConstants';
+import { WAITING_STATUS } from '../../../../../constants';
 import { EmitType, TargetPieceClickAction } from '../../../interfaces/interfaces';
 import { TARGET_PIECE_SELECT } from '../actionTypes';
 

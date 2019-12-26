@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { CONTAINER_TYPES } from '../../../constants/gameConstants';
+import { CONTAINER_TYPES } from '../../../../../constants';
 import { EmitType, PieceOpenAction } from '../../../interfaces/interfaces';
 import { PIECE_OPEN_ACTION } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';

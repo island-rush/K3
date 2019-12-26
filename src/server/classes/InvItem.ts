@@ -1,7 +1,7 @@
-import { TYPE_FUEL, TYPE_MOVES } from '../../react-client/src/constants/gameConstants';
+import { TYPE_FUEL, TYPE_MOVES } from '../../constants';
 import { InvItemType } from '../../react-client/src/interfaces/classTypes';
 import pool from '../database';
-import Piece from './Piece';
+import { Piece } from '.';
 
 /**
  * Represents row in invItems table in the database.

@@ -1,5 +1,5 @@
 import React from 'react';
-import { TYPE_COSTS, TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../constants/gameConstants';
+import { TYPE_COSTS, TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { TYPE_IMAGES } from '../styleConstants';
 
 const purchaseableItemStyle = {

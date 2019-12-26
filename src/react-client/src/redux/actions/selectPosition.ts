@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux';
 import { distanceMatrix } from '../../../../constants';
 //prettier-ignore
-import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, TYPE_TERRAIN } from "../../constants/gameConstants";
+import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, TYPE_TERRAIN } from "../../../../constants";
 //prettier-ignore
 import { EmitType, ExitTransportContainerRequestAction, HighlightPositionsAction, PlanningSelectAction, PositionCapabilityRequestAction, PositionSelectAction } from "../../interfaces/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from '../../constants/otherConstants';
+import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../constants';
 import { initialGameboardEmpty } from '../reducers/initialGameboardEmpty';
 //prettier-ignore
 import { HIGHLIGHT_POSITIONS, PLANNING_SELECT, POSITION_SELECT, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM } from "./actionTypes";
