@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { EmitType, PieceCloseAction } from '../../../interfaces/interfaces';
 import { PIECE_CLOSE_ACTION } from '../actionTypes';
-import { PieceType } from '../../../interfaces/classTypes';
+import { PieceType } from '../../../../../types';
 
 /**
  * Action to close the container popup.

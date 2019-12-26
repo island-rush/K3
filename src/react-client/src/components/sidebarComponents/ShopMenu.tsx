@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LIST_ALL_CAPABILITIES, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../../../constants';
-import { ShopItemType } from '../../interfaces/classTypes';
+import { ShopItemType } from '../../../../types';
 import { shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from '../../redux/actions';
 import PurchaseableItem from './PurchaseableItem';
 import ShopItem from './ShopItem';

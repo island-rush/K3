@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux/actions';
 import { ZOOMBOX_BACKGROUNDS } from '../styleConstants';
 import Piece from './Piece';
-import { PieceType } from '../../interfaces/classTypes';
+import { PieceType } from '../../../../types';
 
 const zoomboxStyle = {
     position: 'absolute',

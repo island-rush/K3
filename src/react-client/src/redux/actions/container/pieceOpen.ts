@@ -3,7 +3,7 @@ import { CONTAINER_TYPES } from '../../../../../constants';
 import { EmitType, PieceOpenAction } from '../../../interfaces/interfaces';
 import { PIECE_OPEN_ACTION } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { PieceType } from '../../../interfaces/classTypes';
+import { PieceType } from '../../../../../types';
 
 /**
  * Double Click a container piece to open it.

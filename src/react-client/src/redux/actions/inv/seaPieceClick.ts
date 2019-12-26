@@ -4,7 +4,7 @@ import { EmitType, InvItemPlaceRequestAction } from '../../../interfaces/interfa
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
 import { SERVER_PIECE_PLACE } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../interfaces/classTypes';
+import { InvItemType } from '../../../../../types';
 
 /**
  * Click an inv item to put into a sea position.

@@ -3,7 +3,7 @@ import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
 import { EmitType, RemoteSenseSelectingAction } from '../../../interfaces/interfaces';
 import { REMOTE_SENSING_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../interfaces/classTypes';
+import { InvItemType } from '../../../../../types';
 
 export const remoteSensing = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {

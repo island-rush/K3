@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { EmitType, PieceClickAction } from '../../interfaces/interfaces';
 import { PIECE_CLICK } from './actionTypes';
-import { PieceType } from '../../interfaces/classTypes';
+import { PieceType } from '../../../../types';
 
 /**
  * Change the state based on the piece that the user selected.

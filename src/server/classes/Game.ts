@@ -1,7 +1,7 @@
 // prettier-ignore
 import { Capability, Event, InvItem, Piece, Plan, ShopItem } from '.';
 import { AIR_REFUELING_SQUADRON_ID, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NEWS_PHASE_ID, NOYARC_ISLAND_ID, RED_TEAM_ID, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../constants';
-import { GameType } from '../../react-client/src/interfaces/classTypes';
+import { GameType } from '../../types';
 import { Instructor, Section } from '../../react-client/src/interfaces/interfaces';
 import { INITIAL_GAMESTATE } from '../../react-client/src/redux/actions/actionTypes';
 import { COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, REFUEL_EVENT_TYPE } from '../actions/eventConstants';

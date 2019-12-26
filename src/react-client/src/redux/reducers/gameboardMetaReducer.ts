@@ -3,7 +3,7 @@ import { AnyAction } from 'redux';
 import { distanceMatrix } from '../../../../constants';
 import { ALL_GROUND_TYPES } from '../../../../constants';
 import { TRANSPORT_TYPE_ID, TYPE_FUEL } from '../../../../constants';
-import { PieceType } from '../../interfaces/classTypes';
+import { PieceType } from '../../../../types';
 import { AircraftClickAction, BattlePieceSelectAction, BattleResultsAction, BioWeaponsAction, CommInterruptAction, ConfirmPlanAction, DeletePlanAction, EnemyPieceSelectAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, ExitTransportContainerAction, GameInitialStateAction, GoldenEyeAction, HighlightPositionsAction, InsurgencyAction, MenuSelectAction, NewRoundAction, NewsPhaseAction, PieceClickAction, PieceOpenAction, PlacePhaseAction, PlanningSelectAction, PositionSelectAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSensingAction, RodsFromGodAction, SelectingAction, SliceChangeAction, TankerClickAction, TargetPieceClickAction, UndoFuelSelectionAction } from '../../interfaces/interfaces';
 import { GameboardMetaState } from '../../interfaces/reducerTypes';
 //prettier-ignore

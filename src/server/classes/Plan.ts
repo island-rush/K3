@@ -1,5 +1,5 @@
 import pool from '../database';
-import { PlanType } from '../../react-client/src/interfaces/classTypes';
+import { PlanType } from '../../types';
 
 /**
  * Represents rows for plans in the database.

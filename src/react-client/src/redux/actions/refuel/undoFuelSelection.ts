@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { EmitType, UndoFuelSelectionAction } from '../../../interfaces/interfaces';
 import { UNDO_FUEL_SELECTION } from '../actionTypes';
-import { PieceType } from '../../../interfaces/classTypes';
+import { PieceType } from '../../../../../types';
 
 /**
  * Action to undo a fuel selection from tanker to another aircraft piece.

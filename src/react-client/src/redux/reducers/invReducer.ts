@@ -1,6 +1,6 @@
 //prettier-ignore
 import { AnyAction } from "redux";
-import { InvItemType } from "../../interfaces/classTypes";
+import { InvItemType } from "../../../../types";
 import { GameInitialStateAction, InvItemPlaceAction, ShopConfirmPurchaseAction, InvItemCapabilityAction } from '../../interfaces/interfaces';
 import { InvState } from "../../interfaces/reducerTypes";
 //prettier-ignore

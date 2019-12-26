@@ -3,7 +3,7 @@ import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
 import { EmitType, RaiseMoraleSelectingAction } from '../../../interfaces/interfaces';
 import { RAISE_MORALE_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../interfaces/classTypes';
+import { InvItemType } from '../../../../../types';
 
 //TODO: need to get rid of boost = x from the component when the raise morale is expired
 

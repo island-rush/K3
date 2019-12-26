@@ -1,6 +1,6 @@
 import React from 'react';
 import { TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
-import { InvItemType } from '../../interfaces/classTypes';
+import { InvItemType } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
 
 const invItemStyle = {

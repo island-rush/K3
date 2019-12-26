@@ -1,4 +1,4 @@
-import { ShopItemType } from '../../react-client/src/interfaces/classTypes';
+import { ShopItemType } from '../../types';
 import pool from '../database';
 
 /**

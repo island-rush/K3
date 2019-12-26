@@ -1,5 +1,5 @@
 import { TYPE_FUEL, TYPE_MOVES } from '../../constants';
-import { InvItemType } from '../../react-client/src/interfaces/classTypes';
+import { InvItemType } from '../../types';
 import pool from '../database';
 import { Piece } from '.';
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { TYPE_NAMES } from '../../../../constants';
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../styleConstants';
-import { PieceType } from '../../interfaces/classTypes';
+import { PieceType } from '../../../../types';
 
 const pieceStyle = {
     backgroundColor: 'grey',

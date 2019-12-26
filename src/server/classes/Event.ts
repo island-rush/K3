@@ -1,6 +1,6 @@
 import { ATTACK_MATRIX } from '../../constants';
 import pool from '../database';
-import { EventType } from '../../react-client/src/interfaces/classTypes';
+import { EventType } from '../../types';
 
 /**
  * Represents event row in eventqueue table in the database.

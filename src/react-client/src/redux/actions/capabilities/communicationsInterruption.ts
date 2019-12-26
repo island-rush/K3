@@ -3,7 +3,7 @@ import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
 import { CommInterruptSelectingAction, EmitType } from '../../../interfaces/interfaces';
 import { COMM_INTERRUPT_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../interfaces/classTypes';
+import { InvItemType } from '../../../../../types';
 
 export const communicationsInterruption = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: any, emit: EmitType) => {

@@ -1,5 +1,4 @@
-import { GameType, ShopItemType, InvItemType, PieceType } from './classTypes';
-import { GameSession } from '../../../types/sessionTypes';
+import { GameSession, GameType, InvItemType, PieceType, ShopItemType } from '../../../types';
 
 export type ShopState = ShopItemType[];
 

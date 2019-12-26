@@ -1,6 +1,6 @@
 //prettier-ignore
 import { AnyAction } from "redux";
-import { PieceType } from "../../interfaces/classTypes";
+import { PieceType } from "../../../../types";
 import { ClearBattleAction, EventBattleAction, FuelResultsAction, GameboardPiecesUpdateAction, GameInitialStateAction, InvItemPlaceAction, NoMoreEventsAction, RaiseMoraleAction, SliceChangeAction, UpdatePiecesCombinedAction } from '../../interfaces/interfaces';
 import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from "../actions/actionTypes";
 import { initialGameboardEmpty } from './initialGameboardEmpty';

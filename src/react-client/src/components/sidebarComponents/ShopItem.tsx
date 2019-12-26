@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShopItemType } from '../../interfaces/classTypes';
+import { ShopItemType } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
 
 const shopItemStyle = {

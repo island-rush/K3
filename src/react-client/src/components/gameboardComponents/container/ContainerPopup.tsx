@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { TRANSPORT_TYPE_ID } from '../../../../../constants';
 import ContainerPiece from './ContainerPiece';
-import { PieceType } from '../../../interfaces/classTypes';
+import { PieceType } from '../../../../../types';
 
 const containerPopupStyle: any = {
     position: 'absolute',
