@@ -5,6 +5,7 @@ export interface PieceType {
     pieceTypeId: number;
     piecePositionId: number;
     pieceContainerId: number;
+    pieceLanded: number;
     pieceVisible: number;
     pieceMoves: number;
     pieceFuel: number;

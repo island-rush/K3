@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS pieces (
     pieceTypeId INT(2) NOT NULL,
     piecePositionId INT(4) NOT NULL,
     pieceContainerId INT(8) NOT NULL,
+    pieceLanded INT(1) NOT NULL DEFAULT 0,
     pieceVisible INT(1) NOT NULL,
     pieceMoves INT(2) NOT NULL,
     pieceFuel INT(2) NOT NULL,
