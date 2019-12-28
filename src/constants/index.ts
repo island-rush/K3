@@ -4,4 +4,4 @@ export * from './distanceMatrix';
 export * from './board';
 export * from './capabilities';
 export * from './visibility';
-export * from './attackMatrix';
+export * from './attack';
