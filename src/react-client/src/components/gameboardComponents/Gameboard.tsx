@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-// prettier-ignore
+//prettier-ignore
 import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from '../../../../constants';
 //prettier-ignore
 import { innerPieceClick, innerTransportPieceClick, newsPopupMinimizeToggle, outerPieceClick, pieceClose, raiseMoraleSelectCommanderType, selectPosition } from "../../redux/actions";
@@ -9,7 +9,7 @@ import SelectCommanderTypePopup from './capabilities/SelectCommanderTypePopup';
 import ContainerPopup from './container/ContainerPopup';
 import NewsPopup from './NewsPopup';
 import RefuelPopup from './refuel/RefuelPopup';
-import AirfieldPopup from './airfield/AirfieldPopup';
+// import AirfieldPopup from './airfield/AirfieldPopup';
 const { HexGrid, Layout, Hexagon, Pattern } = require('react-hexgrid'); //TODO: create type declaration for react-hexgrid
 
 const imageSize = { x: 3.4, y: 2.75 };
@@ -303,7 +303,7 @@ class Gameboard extends Component<Props> {
                     container={container}
                     pieceClose={pieceClose}
                 />
-                <AirfieldPopup />
+                {/* <AirfieldPopup /> */}
             </div>
         );
     }
