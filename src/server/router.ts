@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import path from 'path';
 import { DATABASE_TAG, LOGIN_TAG } from '../constants';
 // prettier-ignore
-import { adminLogin, dbStatus, gameAdd, gameDelete, gameLogin, gameReset, getGameActive, getGames, getNews, insertDatabaseTables, setAdminPassword, setTeamPasswords, toggleGameActive } from './admin';
+import { adminLogin, dbStatus, gameAdd, gameDelete, gameLogin, gameReset, getGameActive, getGames, getNews, insertDatabaseTables, setAdminPassword, setTeamPasswords, toggleGameActive, logout } from './admin';
 
 /**
  * Express Router to handle different routes on the server.
@@ -15,6 +15,11 @@ export const router: Router = Router();
 
 router.get('/', (req: Request, res: Response) => {
     // Being on the homepage(s) ensures a user is logged out / no session
+    if (req.session.ir3) {
+        // log them out
+        logout(req.session.ir3);
+        delete req.session.ir3;
+    }
     delete req.session.ir3; // Game Session
     delete req.session.ir3teacher; // Teacher Session
     delete req.session.ir3coursedirector; // Course Director Session
@@ -22,28 +27,44 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.get('/index.html', (req: Request, res: Response) => {
-    delete req.session.ir3;
+    if (req.session.ir3) {
+        // log them out
+        logout(req.session.ir3);
+        delete req.session.ir3;
+    }
     delete req.session.ir3teacher;
     delete req.session.ir3coursedirector;
     res.sendFile(`${__dirname}/pages/index.html`);
 });
 
 router.get('/troubleshoot.html', (req: Request, res: Response) => {
-    delete req.session.ir3;
+    if (req.session.ir3) {
+        // log them out
+        logout(req.session.ir3);
+        delete req.session.ir3;
+    }
     delete req.session.ir3teacher;
     delete req.session.ir3coursedirector;
     res.sendFile(`${__dirname}/pages/troubleshoot.html`);
 });
 
 router.get('/credits.html', (req: Request, res: Response) => {
-    delete req.session.ir3;
+    if (req.session.ir3) {
+        // log them out
+        logout(req.session.ir3);
+        delete req.session.ir3;
+    }
     delete req.session.ir3teacher;
     delete req.session.ir3coursedirector;
     res.sendFile(`${__dirname}/pages/credits.html`);
 });
 
 router.get('/teacher.html', (req: Request, res: Response) => {
-    delete req.session.ir3;
+    if (req.session.ir3) {
+        // log them out
+        logout(req.session.ir3);
+        delete req.session.ir3;
+    }
     delete req.session.ir3coursedirector;
     if (!req.session.ir3teacher) {
         res.redirect(`/index.html?error=${LOGIN_TAG}`);
@@ -53,7 +74,11 @@ router.get('/teacher.html', (req: Request, res: Response) => {
 });
 
 router.get('/courseDirector.html', (req: Request, res: Response) => {
-    delete req.session.ir3;
+    if (req.session.ir3) {
+        // log them out
+        logout(req.session.ir3);
+        delete req.session.ir3;
+    }
     delete req.session.ir3teacher;
     if (!req.session.ir3coursedirector) {
         res.redirect(`/index.html?error=${LOGIN_TAG}`);

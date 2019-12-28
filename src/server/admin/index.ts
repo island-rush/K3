@@ -13,3 +13,4 @@ export * from './insertDatabaseTables';
 export * from './setAdminPassword';
 export * from './setTeamPasswords';
 export * from './toggleGameActive';
+export * from './logout';
