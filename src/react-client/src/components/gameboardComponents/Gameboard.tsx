@@ -118,7 +118,7 @@ const titleSolver = (position: any, gameInfo: any, positionIndex: number) => {
     const islandNum = FLAG_ISLAND_OWNERSHIP[positionIndex];
     const islandTitle = ALL_ISLAND_NAMES[islandNum];
 
-    return 'Island Flag\n' + islandTitle + '\nPoints: ' + ISLAND_POINTS[islandNum];
+    return `Island Flag\n${islandTitle}\nPoints: ${ISLAND_POINTS[islandNum]}`;
 };
 
 interface Props {
