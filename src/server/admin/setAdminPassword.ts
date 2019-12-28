@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
+import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from '../../constants';
 import { Password } from '../../types';
 import { Game } from '../classes';
-import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from '../pages/errorTypes';
 
 /**
  * Change the admin password for a particular game.

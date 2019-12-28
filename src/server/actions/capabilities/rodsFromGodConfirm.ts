@@ -1,10 +1,9 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { COMBAT_PHASE_ID, RODS_FROM_GOD_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RODS_FROM_GOD_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
 import { RODS_FROM_GOD_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
 import { GameSession, RodsFromGodAction, RodsFromGodRequestAction } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
-import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import { sendUserFeedback } from '../sendUserFeedback';
 
 // TODO: does this affect all pieces? or only ground since that makes sense....(compare to bio weapons)

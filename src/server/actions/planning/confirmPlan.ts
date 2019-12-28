@@ -1,11 +1,10 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { COMBAT_PHASE_ID, CONTAINER_TYPES, distanceMatrix, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { COMBAT_PHASE_ID, CONTAINER_TYPES, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
 import { PLAN_WAS_CONFIRMED } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { ConfirmPlanAction, ConfirmPlanRequestAction, GameSession } from '../../../types';
 import { Game, Piece, Plan } from '../../classes';
-import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import { sendUserFeedback } from '../sendUserFeedback';
 
 /**

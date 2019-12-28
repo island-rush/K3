@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
+import { ACCESS_TAG, BAD_REQUEST_TAG } from '../../constants';
 import { Instructor, Password, Section } from '../../types';
 import { Game } from '../classes';
-import { ACCESS_TAG, BAD_REQUEST_TAG } from '../pages/errorTypes';
 
 /**
  * Add a game from an express route /gameAdd

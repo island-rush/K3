@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
-import { BLUE_TEAM_ID, PURCHASE_PHASE_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
+// prettier-ignore
+import { BAD_REQUEST_TAG, BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
 import { SHOP_REFUND } from '../../../react-client/src/redux/actions/actionTypes';
 import { GameSession, ShopRefundAction, ShopRefundRequestAction } from '../../../types';
 import { Game, ShopItem } from '../../classes';
-import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import { sendUserFeedback } from '../sendUserFeedback';
 
 /**

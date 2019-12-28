@@ -1,8 +1,8 @@
 import { Request, Response, Router } from 'express';
 import path from 'path';
+import { DATABASE_TAG, LOGIN_TAG } from '../constants';
 // prettier-ignore
 import { adminLogin, dbStatus, gameAdd, gameDelete, gameLogin, gameReset, getGameActive, getGames, getNews, insertDatabaseTables, setAdminPassword, setTeamPasswords, toggleGameActive } from './admin';
-import { DATABASE_TAG, LOGIN_TAG } from './pages/errorTypes';
 
 /**
  * Express Router to handle different routes on the server.

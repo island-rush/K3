@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../constants';
+// prettier-ignore
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../constants';
 import { DELETE_PLAN } from '../../../react-client/src/redux/actions/actionTypes';
 import { DeletePlanAction, DeletePlanRequestAction, GameSession } from '../../../types';
 import { Game, Piece } from '../../classes';
-import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from '../../pages/errorTypes';
 import { sendUserFeedback } from '../sendUserFeedback';
 
 /**

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
+import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from '../../constants';
 import { Password, TeacherSession } from '../../types';
 import { Game } from '../classes';
-import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from '../pages/errorTypes';
 
 /**
  * Set each team's password.

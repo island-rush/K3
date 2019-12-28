@@ -5,3 +5,4 @@ export * from './board';
 export * from './capabilities';
 export * from './visibility';
 export * from './attack';
+export * from './errorTypes';

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
+import { ACCESS_TAG } from '../../constants';
 import { TeacherSession } from '../../types';
 import { Game } from '../classes';
-import { ACCESS_TAG } from '../pages/errorTypes';
 
 /**
  * Get array of news data for a particular game.

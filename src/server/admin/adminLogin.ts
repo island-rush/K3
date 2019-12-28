@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
+import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from '../../constants';
 import { Instructor, Password, Section, TeacherSession } from '../../types';
 import { Game } from '../classes';
-import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from '../pages/errorTypes';
 
 /**
  * Verify credentials and redirect to /teacher or /courseDirector.

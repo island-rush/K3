@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
+import { ACCESS_TAG } from '../../constants';
 import { Game } from '../classes';
-import { ACCESS_TAG } from '../pages/errorTypes';
 
 /**
  * Get an array of game data for all of island rush.

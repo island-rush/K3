@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
+import { ACCESS_TAG } from '../../constants';
 import { Game } from '../classes';
-import { ACCESS_TAG } from '../pages/errorTypes';
 
 /**
  * Delete a game from an express route /gameDelete

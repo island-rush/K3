@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import fs from 'fs';
+import { BAD_SESSION } from '../../constants';
 import { pool } from '../database';
-import { BAD_SESSION } from '../pages/errorTypes';
 
 /**
  * Inserts tables into the database that are needed for all game/admin functionality.

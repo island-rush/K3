@@ -1,9 +1,8 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
-import { LOGGED_IN_VALUE } from '../../constants';
+import { ALREADY_IN_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGGED_IN_VALUE, LOGIN_TAG } from '../../constants';
 import { GameSession, Instructor, Section } from '../../types';
 import { Game } from '../classes';
-import { ALREADY_IN_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGIN_TAG } from '../pages/errorTypes';
 
 /**
  * Verify credentials and redirect to /game
