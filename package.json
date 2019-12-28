@@ -6,9 +6,10 @@
     "scripts": {
         "dev": "concurrently \"npm:devBackend\" \"npm:devFrontend\"",
         "lint": "eslint ./src/**/*.ts",
-        "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend",
+        "build": "npm run clearBuild && npm run compileBackend && npm run buildClient && npm run moveFrontend",
         "start": "cross-env NODE_ENV=production node -r dotenv/config ./dist/server.js",
         "dev:debug": "concurrently \"npm:devBackend:debug\" \"npm:devFrontend\"",
+        "clearBuild": "trash ./dist",
         "devBackend": "nodemon -r dotenv/config ./src/server.ts",
         "devFrontend": "cd ./src/react-client && cross-env NODE_OPTIONS=--max_old_space_size=4096 npm start",
         "buildClient": "cd ./src/react-client && npm run build && cd ../..",
