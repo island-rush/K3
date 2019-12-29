@@ -24,7 +24,7 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
         return;
     }
 
-    const { gameActive, gamePhase, game0Status, game1Status } = thisGame;
+    const { gameActive, gamePhase, gameBlueStatus, gameRedStatus } = thisGame;
 
     if (!gameActive) {
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
@@ -42,8 +42,8 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
     }
 
     const otherTeam = gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
-    const thisTeamStatus = gameTeam === BLUE_TEAM_ID ? game0Status : game1Status;
-    const otherTeamStatus = otherTeam === BLUE_TEAM_ID ? game0Status : game1Status;
+    const thisTeamStatus = gameTeam === BLUE_TEAM_ID ? gameBlueStatus : gameRedStatus;
+    const otherTeamStatus = otherTeam === BLUE_TEAM_ID ? gameBlueStatus : gameRedStatus;
 
     if (thisTeamStatus === WAITING_STATUS && otherTeamStatus === NOT_WAITING_STATUS) {
         sendUserFeedback(socket, 'still waiting stupid...');

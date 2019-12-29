@@ -8,7 +8,7 @@ import { Game } from '../classes';
 export const toggleGameActive = async (req: Request, res: Response) => {
     // Verify Session
     if (!req.session.ir3teacher) {
-        res.sendStatus(403); // TODO: redirect here?
+        res.sendStatus(403);
         return;
     }
 

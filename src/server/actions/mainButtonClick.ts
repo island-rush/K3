@@ -19,7 +19,7 @@ export const mainButtonClick = async (socket: Socket) => {
         return;
     }
 
-    const { gameActive, gamePhase, gameSlice, game0Status, game1Status } = thisGame;
+    const { gameActive, gamePhase, gameSlice, gameBlueStatus, gameRedStatus } = thisGame;
 
     if (!gameActive) {
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
@@ -33,8 +33,8 @@ export const mainButtonClick = async (socket: Socket) => {
     }
 
     const otherTeam = gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
-    const thisTeamStatus = gameTeam === BLUE_TEAM_ID ? game0Status : game1Status;
-    const otherTeamStatus = otherTeam === BLUE_TEAM_ID ? game0Status : game1Status;
+    const thisTeamStatus = gameTeam === BLUE_TEAM_ID ? gameBlueStatus : gameRedStatus;
+    const otherTeamStatus = otherTeam === BLUE_TEAM_ID ? gameBlueStatus : gameRedStatus;
 
     if (thisTeamStatus === WAITING_STATUS) {
         // might fail with race condition (they press at the same time...but they just need to keep pressing...)
@@ -82,14 +82,14 @@ export const mainButtonClick = async (socket: Socket) => {
             }
         };
 
-        const combatPhaseAction0 = JSON.parse(JSON.stringify(combatPhaseAction));
-        const combatPhaseAction1 = JSON.parse(JSON.stringify(combatPhaseAction));
-        combatPhaseAction0.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
-        combatPhaseAction1.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
+        const combatPhaseActionBlue = JSON.parse(JSON.stringify(combatPhaseAction));
+        const combatPhaseActionRed = JSON.parse(JSON.stringify(combatPhaseAction));
+        combatPhaseActionBlue.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
+        combatPhaseActionRed.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
 
-        socket.to(`game${gameId}team${BLUE_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, combatPhaseAction0);
-        socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, combatPhaseAction1);
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? combatPhaseAction0 : combatPhaseAction1);
+        socket.to(`game${gameId}team${BLUE_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, combatPhaseActionBlue);
+        socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, combatPhaseActionRed);
+        socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? combatPhaseActionBlue : combatPhaseActionRed);
         return;
     }
 
@@ -117,14 +117,14 @@ export const mainButtonClick = async (socket: Socket) => {
             }
         };
 
-        const sliceChangeAction0 = JSON.parse(JSON.stringify(sliceChangeAction));
-        const sliceChangeAction1 = JSON.parse(JSON.stringify(sliceChangeAction));
-        sliceChangeAction0.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
-        sliceChangeAction1.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
+        const sliceChangeActionBlue = JSON.parse(JSON.stringify(sliceChangeAction));
+        const sliceChangeActionRed = JSON.parse(JSON.stringify(sliceChangeAction));
+        sliceChangeActionBlue.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
+        sliceChangeActionRed.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
 
-        socket.to(`game${gameId}team${BLUE_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, sliceChangeAction0);
-        socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, sliceChangeAction1);
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? sliceChangeAction0 : sliceChangeAction1);
+        socket.to(`game${gameId}team${BLUE_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, sliceChangeActionBlue);
+        socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, sliceChangeActionRed);
+        socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? sliceChangeActionBlue : sliceChangeActionRed);
         return;
     }
 
@@ -141,14 +141,14 @@ export const mainButtonClick = async (socket: Socket) => {
         }
     };
 
-    const newsPhaseAction0 = JSON.parse(JSON.stringify(newsPhaseAction));
-    const newsPhaseAction1 = JSON.parse(JSON.stringify(newsPhaseAction));
-    newsPhaseAction0.payload.gamePoints = thisGame.game0Points;
-    newsPhaseAction1.payload.gamePoints = thisGame.game1Points;
+    const newsPhaseActionBlue = JSON.parse(JSON.stringify(newsPhaseAction));
+    const newsPhaseActionRed = JSON.parse(JSON.stringify(newsPhaseAction));
+    newsPhaseActionBlue.payload.gamePoints = thisGame.game0Points;
+    newsPhaseActionRed.payload.gamePoints = thisGame.game1Points;
 
-    socket.to(`game${gameId}team${BLUE_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseAction0);
-    socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseAction1);
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? newsPhaseAction0 : newsPhaseAction1);
+    socket.to(`game${gameId}team${BLUE_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseActionBlue);
+    socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseActionRed);
+    socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? newsPhaseActionBlue : newsPhaseActionRed);
 };
 
 export default mainButtonClick;

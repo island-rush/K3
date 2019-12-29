@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { COMBAT_PHASE_ID, CONTAINER_TYPES, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { COMBAT_PHASE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
 import { PLAN_WAS_CONFIRMED } from '../../../react-client/src/redux/actions/actionTypes';
 import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { ConfirmPlanAction, ConfirmPlanRequestAction, GameSession } from '../../../types';
@@ -70,54 +70,30 @@ export const confirmPlan = async (socket: Socket, action: ConfirmPlanRequestActi
         return;
     }
 
-    const isContainer = CONTAINER_TYPES.includes(pieceTypeId);
-
     // Check adjacency and other parts of the plan to make sure the whole thing makes sense
-    // TODO: could clean up this code a lot (once planning and containers fully done...)
     let previousPosition = piecePositionId;
     let trueMoveCount = 0;
     for (let x = 0; x < plan.length; x++) {
-        // make sure adjacency between positions in the plan...
-        // other checks...piece type and number of moves?
-
-        const { type, positionId } = plan[x];
+        const { positionId } = plan[x];
 
         const positionTerrain = initialGameboardEmpty[positionId].type;
+
         if (!TYPE_TERRAIN[pieceTypeId].includes(positionTerrain)) {
             sendUserFeedback(socket, "can't go on that terrain with this piece type");
             return;
         }
 
-        // make sure positions are equal for container type
-        // TODO: constants for this, if done this way
-        if (type === 'container') {
-            if (!isContainer) {
-                sendUserFeedback(socket, 'sent a bad plan, container move for non-container piece...');
-                return;
-            }
+        trueMoveCount++;
 
-            if (previousPosition !== positionId) {
-                sendUserFeedback(socket, 'sent a bad plan, container move was not in previous position...');
-                return;
-            }
-        } else if (type === 'move') {
-            trueMoveCount++;
-        }
-
-        // This condition may have to change in the future if parts of the plan
-        // don't actually move the piece
         if (distanceMatrix[previousPosition][positionId] !== 1) {
-            if (type !== 'container') {
-                sendUserFeedback(socket, 'sent a bad plan, positions were not adjacent...');
-                return;
-            }
+            sendUserFeedback(socket, 'sent a bad plan, positions were not adjacent...');
+            return;
         }
 
         previousPosition = positionId;
     }
 
     // Is the plan length less than or equal to the max moves of the piece?
-    // TODO: should use the moves from the database for the piece instead of the type_moves, because could be getting a boost
     if (trueMoveCount > pieceMoves) {
         sendUserFeedback(socket, 'sent a bad plan, piece was moved more than its range...');
         return;
@@ -126,8 +102,8 @@ export const confirmPlan = async (socket: Socket, action: ConfirmPlanRequestActi
     // prepare the bulk insert
     const plansToInsert = [];
     for (let movementOrder = 0; movementOrder < plan.length; movementOrder++) {
-        const { positionId, type } = plan[movementOrder];
-        const specialFlag = type === 'move' ? 0 : 1; // 1 = container, use other numbers for future special flags...
+        const { positionId } = plan[movementOrder];
+        const specialFlag = 0; // 0 = normal movement, use other numbers for future move types...
         plansToInsert.push([pieceGameId, pieceTeamId, pieceId, movementOrder, positionId, specialFlag]);
     }
 

@@ -45,9 +45,9 @@ export class Game implements GameType {
 
     game1Controller4: number;
 
-    game0Status: number;
+    gameBlueStatus: number;
 
-    game1Status: number;
+    gameRedStatus: number;
 
     game0Points: number;
 
@@ -337,12 +337,12 @@ export class Game implements GameType {
      */
     async setStatus(gameTeam: number, newStatus: number) {
         const queryString = 'UPDATE games set ?? = ? WHERE gameId = ?';
-        const inserts = [`game${gameTeam}Status`, newStatus, this.gameId];
+        const inserts = [`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Status`, newStatus, this.gameId];
         await pool.query(queryString, inserts);
         if (gameTeam === BLUE_TEAM_ID) {
-            this.game0Status = newStatus;
+            this.gameBlueStatus = newStatus;
         } else {
-            this.game1Status = newStatus;
+            this.gameRedStatus = newStatus;
         }
     }
 
@@ -545,9 +545,9 @@ export class Game implements GameType {
      */
     getStatus(gameTeam: number) {
         if (gameTeam === BLUE_TEAM_ID) {
-            return this.game0Status;
+            return this.gameBlueStatus;
         }
-        return this.game1Status;
+        return this.gameRedStatus;
     }
 
     /**

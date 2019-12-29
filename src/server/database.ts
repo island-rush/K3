@@ -1,9 +1,9 @@
 import mysql, { Pool, PoolOptions } from 'mysql2/promise';
 
-const host: string = process.env.DB_HOSTNAME;
-const user: string = process.env.DB_USERNAME;
-const password: string = process.env.DB_PASSWORD;
-const database: string = process.env.DB_NAME;
+const host = process.env.DB_HOSTNAME;
+const user = process.env.DB_USERNAME;
+const password = process.env.DB_PASSWORD;
+const database = process.env.DB_NAME;
 
 const databaseConfig: PoolOptions = {
     connectionLimit: 25,

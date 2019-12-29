@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ACCESS_TAG } from '../../constants';
+import { ACCESS_TAG, GAME_DOES_NOT_EXIST } from '../../constants';
 import { TeacherSession } from '../../types';
 import { Game } from '../classes';
 
@@ -15,7 +15,11 @@ export const gameReset = async (req: Request, res: Response) => {
 
     const { gameId }: TeacherSession = req.session.ir3teacher;
 
-    const thisGame = await new Game({ gameId }).init(); // If fails, will get caught by router
+    const thisGame = await new Game({ gameId }).init();
+    if (!thisGame) {
+        res.status(404).redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
+        return;
+    }
 
     await thisGame.reset();
 

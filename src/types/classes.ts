@@ -67,8 +67,8 @@ export interface GameType {
     game1Controller3: number;
     game1Controller4: number;
 
-    game0Status: number;
-    game1Status: number;
+    gameBlueStatus: number;
+    gameRedStatus: number;
 
     game0Points: number;
     game1Points: number;

@@ -102,7 +102,7 @@ export const piecePlace = async (socket: Socket, action: InvItemPlaceRequestActi
 
     const newPiece = await thisInvItem.placeOnBoard(selectedPosition); // should also check that this piece actually got created, could return null (should return null if it failed...TODO: return null if failed...)
 
-    // TODO: Should probably also write down how the state is stored on the frontend eventually, so others know how it works
+    // TODO: should enforce these within a frontend type
     newPiece.pieceContents = { pieces: [] }; // new pieces have nothing in them, and piece contents is required for the frontend...
 
     const serverAction: InvItemPlaceAction = {

@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, SOCKET_SERVER_SENDING_ACTION, WAITING_STATUS } from '../../constants';
+import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, SOCKET_SERVER_SENDING_ACTION, WAITING_STATUS } from '../../constants';
 import { NEW_ROUND, PLACE_PHASE, UPDATE_FLAGS } from '../../react-client/src/redux/actions/actionTypes';
 import { GameSession, NewRoundAction, PlacePhaseAction, UpdateFlagAction } from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
@@ -11,18 +11,18 @@ import giveNextEvent from './giveNextEvent';
  */
 const executeStep = async (socket: Socket, thisGame: Game) => {
     // Grab Session (already verified from last function)
-    const session: GameSession = socket.handshake.session.ir3;
+    const { gameTeam }: GameSession = socket.handshake.session.ir3;
 
     // inserting events here and moving pieces, or changing to new round or something...
     const { gameId, gameRound } = thisGame;
 
     // TODO: rename this to 'hadPlans0' or something more descriptive
-    const currentMovementOrder0 = await Plan.getCurrentMovementOrder(gameId, BLUE_TEAM_ID);
-    const currentMovementOrder1 = await Plan.getCurrentMovementOrder(gameId, RED_TEAM_ID);
+    const currentMovementOrderBlue = await Plan.getCurrentMovementOrder(gameId, BLUE_TEAM_ID);
+    const currentMovementOrderRed = await Plan.getCurrentMovementOrder(gameId, RED_TEAM_ID);
 
     // No More Plans for either team -> end of the round
     // DOESN'T MAKE PLANS FOR PIECES STILL IN THE SAME POSITION...NEED TO HAVE AT LEAST 1 PLAN FOR ANYTHING TO HAPPEN (pieces in same postion would battle (again?) if there was 1 plan elsewhere...)
-    if (currentMovementOrder0 == null && currentMovementOrder1 == null) {
+    if (currentMovementOrderBlue == null && currentMovementOrderRed == null) {
         await thisGame.setSlice(0); // if no more moves, end of slice 1
 
         await Piece.resetMoves(gameId); // TODO: could move this functionality to Game (no need to pass in the gameId)
@@ -34,13 +34,12 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
         await Capability.decreaseCommInterrupt(gameId);
         await Capability.decreaseRaiseMorale(gameId);
 
-        // TODO: could do constant with 'ROUNDS_PER_COMBAT' although getting excessive
-        if (gameRound === 2) {
+        if (gameRound === ROUNDS_PER_COMBAT_PHASE) {
             // Combat -> Place Phase
             await thisGame.setRound(0);
             await thisGame.setPhase(PLACE_PHASE_ID);
 
-            const placePhaseAction0: PlacePhaseAction = {
+            const placePhaseActionBlue: PlacePhaseAction = {
                 type: PLACE_PHASE,
                 payload: {
                     gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID),
@@ -51,7 +50,7 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
                     confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID)
                 }
             };
-            const placePhaseAction1: PlacePhaseAction = {
+            const placePhaseActionRed: PlacePhaseAction = {
                 type: PLACE_PHASE,
                 payload: {
                     gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID),
@@ -63,17 +62,17 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
                 }
             };
 
-            socket.to(`game${gameId}team0`).emit(SOCKET_SERVER_SENDING_ACTION, placePhaseAction0);
-            socket.to(`game${gameId}team1`).emit(SOCKET_SERVER_SENDING_ACTION, placePhaseAction1);
+            socket.to(`game${gameId}team0`).emit(SOCKET_SERVER_SENDING_ACTION, placePhaseActionBlue);
+            socket.to(`game${gameId}team1`).emit(SOCKET_SERVER_SENDING_ACTION, placePhaseActionRed);
 
-            const thisSocketsAction = session.gameTeam === BLUE_TEAM_ID ? placePhaseAction0 : placePhaseAction1;
+            const thisSocketsAction = gameTeam === BLUE_TEAM_ID ? placePhaseActionBlue : placePhaseActionRed;
             socket.emit(SOCKET_SERVER_SENDING_ACTION, thisSocketsAction);
             return;
         }
         // Next Round of Combat
         await thisGame.setRound(gameRound + 1);
 
-        const newRoundAction0: NewRoundAction = {
+        const newRoundActionBlue: NewRoundAction = {
             type: NEW_ROUND,
             payload: {
                 gameRound: thisGame.gameRound,
@@ -85,7 +84,7 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
                 confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID)
             }
         };
-        const newRoundAction1: NewRoundAction = {
+        const newRoundActionRed: NewRoundAction = {
             type: NEW_ROUND,
             payload: {
                 gameRound: thisGame.gameRound,
@@ -98,23 +97,23 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
             }
         };
 
-        socket.to(`game${gameId}team0`).emit(SOCKET_SERVER_SENDING_ACTION, newRoundAction0);
-        socket.to(`game${gameId}team1`).emit(SOCKET_SERVER_SENDING_ACTION, newRoundAction1);
+        socket.to(`game${gameId}team0`).emit(SOCKET_SERVER_SENDING_ACTION, newRoundActionBlue);
+        socket.to(`game${gameId}team1`).emit(SOCKET_SERVER_SENDING_ACTION, newRoundActionRed);
 
-        const thisSocketsAction = session.gameTeam === BLUE_TEAM_ID ? newRoundAction0 : newRoundAction1;
+        const thisSocketsAction = gameTeam === BLUE_TEAM_ID ? newRoundActionBlue : newRoundActionRed;
         socket.emit(SOCKET_SERVER_SENDING_ACTION, thisSocketsAction);
         return;
     }
 
     // One of the teams may be without plans, keep them waiting
-    if (currentMovementOrder0 == null) {
+    if (currentMovementOrderBlue == null) {
         await thisGame.setStatus(BLUE_TEAM_ID, WAITING_STATUS);
     }
-    if (currentMovementOrder1 == null) {
+    if (currentMovementOrderRed == null) {
         await thisGame.setStatus(RED_TEAM_ID, WAITING_STATUS);
     }
 
-    const currentMovementOrder: number = currentMovementOrder0 != null ? currentMovementOrder0 : currentMovementOrder1;
+    const currentMovementOrder: number = currentMovementOrderBlue != null ? currentMovementOrderBlue : currentMovementOrderRed;
 
     // Collision Battle Events
     const allCollisions: any = await Plan.getCollisions(gameId, currentMovementOrder); // each item in collisionBattles has {pieceId0, pieceTypeId0, pieceContainerId0, piecePositionId0, planPositionId0, pieceId1, pieceTypeId1, pieceContainerId1, piecePositionId1, planPositionId1 }
@@ -210,7 +209,7 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
 
     // refueling is team specific (loop through 0 and 1 teamIds)
     // TODO: could refactor this to be cleaner (easier to read)
-    const teamHadPlans = [currentMovementOrder0 == null ? 0 : 1, currentMovementOrder1 == null ? 0 : 1];
+    const teamHadPlans = [currentMovementOrderBlue == null ? 0 : 1, currentMovementOrderRed == null ? 0 : 1];
     for (let thisTeamNum = 0; thisTeamNum < 2; thisTeamNum++) {
         if (teamHadPlans[thisTeamNum]) {
             // refuel events if they had plans for this step, otherwise don't want to refuel stuff for no plans (possibly will do it anyway)

@@ -31,6 +31,7 @@ const piece = (pieceGameId: number, pieceTeamId: number, pieceTypeId: number, pi
  * Inserts a list of pre-defined pieces into a game.
  */
 export const gameInitialPieces = async (gameId: number) => {
+    // TODO: create an excel doc to help facilitate game creation, read it like a csv to generate values (future idea = game creator interface (right click insert piece))
     const firstPieces: number[][] = [
         // typical battle setup
         piece(gameId, BLUE_TEAM_ID, TANK_COMPANY_TYPE_ID, 0),

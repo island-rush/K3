@@ -28,7 +28,6 @@ router.get('/', (req: Request, res: Response) => {
 
 router.get('/index.html', (req: Request, res: Response) => {
     if (req.session.ir3) {
-        // log them out
         logout(req.session.ir3);
         delete req.session.ir3;
     }
@@ -39,7 +38,6 @@ router.get('/index.html', (req: Request, res: Response) => {
 
 router.get('/troubleshoot.html', (req: Request, res: Response) => {
     if (req.session.ir3) {
-        // log them out
         logout(req.session.ir3);
         delete req.session.ir3;
     }
@@ -50,7 +48,6 @@ router.get('/troubleshoot.html', (req: Request, res: Response) => {
 
 router.get('/credits.html', (req: Request, res: Response) => {
     if (req.session.ir3) {
-        // log them out
         logout(req.session.ir3);
         delete req.session.ir3;
     }
@@ -61,7 +58,6 @@ router.get('/credits.html', (req: Request, res: Response) => {
 
 router.get('/teacher.html', (req: Request, res: Response) => {
     if (req.session.ir3) {
-        // log them out
         logout(req.session.ir3);
         delete req.session.ir3;
     }
@@ -75,7 +71,6 @@ router.get('/teacher.html', (req: Request, res: Response) => {
 
 router.get('/courseDirector.html', (req: Request, res: Response) => {
     if (req.session.ir3) {
-        // log them out
         logout(req.session.ir3);
         delete req.session.ir3;
     }
@@ -178,11 +173,19 @@ router.post('/insertDatabaseTables', (req: Request, res: Response) => {
 });
 
 router.get('/getGames', (req: Request, res: Response) => {
-    getGames(req, res); // TODO: figure this out eventually: -> try / catch is within this function, higher level catch didn't catch :(
+    try {
+        getGames(req, res);
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 router.get('/getNews', (req: Request, res: Response) => {
-    getNews(req, res);
+    try {
+        getNews(req, res);
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 router.get('/getGameActive', (req: Request, res: Response) => {

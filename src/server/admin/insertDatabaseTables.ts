@@ -15,8 +15,10 @@ export const insertDatabaseTables = async (req: Request, res: Response) => {
         return;
     }
 
+    // Get the insert sql script
     const queryString = fs.readFileSync('./src/server/sql/tableInsert.sql').toString();
 
+    // Insert the tables
     await pool.query(queryString);
 
     res.redirect('/courseDirector.html?initializeDatabase=success');

@@ -22,8 +22,8 @@ CREATE TABLE IF NOT EXISTS games (
     game1Controller3 INT(1) NOT NULL DEFAULT 0,
     game1Controller4 INT(1) NOT NULL DEFAULT 0,
     
-	game0Status INT(1) NOT NULL DEFAULT 0,  -- 0: still active, 1: waiting for other player
-	game1Status INT(1) NOT NULL DEFAULT 0,
+	gameBlueStatus INT(1) NOT NULL DEFAULT 0,  -- 0: still active, 1: waiting for other player
+	gameRedStatus INT(1) NOT NULL DEFAULT 0,
     
     game0Points INT(5) NOT NULL DEFAULT 5000,
     game1Points INT(5) NOT NULL DEFAULT 5000,

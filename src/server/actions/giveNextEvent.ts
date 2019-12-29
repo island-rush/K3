@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, SOCKET_SERVER_SENDING_ACTION } from '../../constants';
+import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, SOCKET_SERVER_SENDING_ACTION, NOT_WAITING_STATUS } from '../../constants';
 import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from '../../react-client/src/redux/actions/actionTypes';
-import { EventBattleAction, EventRefuelAction, GameSession, GameType, NoMoreEventsAction } from '../../types';
-import { Event, Piece } from '../classes';
+import { EventBattleAction, EventRefuelAction, GameSession, NoMoreEventsAction } from '../../types';
+import { Event, Piece, Game } from '../classes';
 import { sendUserFeedback } from './sendUserFeedback';
 
 /**
@@ -38,6 +38,8 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
     switch (gameEvent.eventTypeId) {
         case COL_BATTLE_EVENT_TYPE:
         case POS_BATTLE_EVENT_TYPE:
+            await options.thisGame.setStatus(gameTeam, NOT_WAITING_STATUS);
+
             const friendlyPiecesList: any = await gameEvent.getTeamItems(gameTeam);
             const enemyPiecesList: any = await gameEvent.getTeamItems(otherTeam);
             const friendlyPieces: any = [];
@@ -114,7 +116,7 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
 };
 
 type GiveNextEventOptions = {
-    thisGame: GameType;
+    thisGame: Game;
     gameTeam: number;
     executingStep?: boolean;
 };
