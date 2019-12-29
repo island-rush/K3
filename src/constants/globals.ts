@@ -30,3 +30,18 @@ export const COL_BATTLE_EVENT_TYPE = 0;
 export const REFUEL_EVENT_TYPE = 2;
 
 export const ROUNDS_PER_COMBAT_PHASE = 2; // 0 indexed
+
+export const TYPE_MAIN = 0;
+export const TYPE_AIR = 1;
+export const TYPE_LAND = 2;
+export const TYPE_SEA = 3;
+export const TYPE_SPECIAL = 4;
+
+export const TYPE_OWNER_NAMES: { [id: number]: string } = {};
+TYPE_OWNER_NAMES[TYPE_MAIN] = 'COCOM';
+TYPE_OWNER_NAMES[TYPE_AIR] = 'JFACC';
+TYPE_OWNER_NAMES[TYPE_LAND] = 'JFLCC';
+TYPE_OWNER_NAMES[TYPE_SEA] = 'JFMCC';
+TYPE_OWNER_NAMES[TYPE_SPECIAL] = 'JFSOCC';
+
+export const ALL_COMMANDER_TYPES = [TYPE_MAIN, TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL];

@@ -16,11 +16,11 @@ CREATE TABLE IF NOT EXISTS games (
     gameBlueController2 INT(1) NOT NULL DEFAULT 0,
     gameBlueController3 INT(1) NOT NULL DEFAULT 0,
     gameBlueController4 INT(1) NOT NULL DEFAULT 0,
-    gameRedController0 INT(1) NOT NULL DEFAULT 0,
-    gameRedController1 INT(1) NOT NULL DEFAULT 0,
-    gameRedController2 INT(1) NOT NULL DEFAULT 0,
-    gameRedController3 INT(1) NOT NULL DEFAULT 0,
-    gameRedController4 INT(1) NOT NULL DEFAULT 0,
+    gameRedController0 INT(1) NOT NULL DEFAULT 0, -- COCOM
+    gameRedController1 INT(1) NOT NULL DEFAULT 0, -- JFACC
+    gameRedController2 INT(1) NOT NULL DEFAULT 0, -- JFLCC
+    gameRedController3 INT(1) NOT NULL DEFAULT 0, -- JFMCC
+    gameRedController4 INT(1) NOT NULL DEFAULT 0, -- JFSOCC
     
 	gameBlueStatus INT(1) NOT NULL DEFAULT 0,  -- 0: still active, 1: waiting for other player
 	gameRedStatus INT(1) NOT NULL DEFAULT 0,
