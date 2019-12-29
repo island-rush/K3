@@ -1,8 +1,7 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN, TYPE_TERRAIN } from '../../../constants';
+import { COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN, TYPE_TERRAIN } from '../../../constants';
 import { INNER_PIECE_CLICK_ACTION } from '../../../react-client/src/redux/actions/actionTypes';
-import { initialGameboardEmpty } from '../../../react-client/src/redux/reducers/initialGameboardEmpty';
 import { ExitContainerAction, ExitContainerRequestAction, GameSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { sendUserFeedback } from '../sendUserFeedback';

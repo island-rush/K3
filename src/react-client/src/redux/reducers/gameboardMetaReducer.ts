@@ -1,11 +1,10 @@
 //TODO: make this file less thiccc, it's getting pretty hefty (maybe use more reducers to keep it clean....)
 import { AnyAction } from 'redux';
-import { ALL_GROUND_TYPES, distanceMatrix, TRANSPORT_TYPE_ID, TYPE_FUEL } from '../../../../constants';
-import { GameboardMetaState, PieceType } from '../../../../types';
-import { AircraftClickAction, BattlePieceSelectAction, BattleResultsAction, BioWeaponsAction, CommInterruptAction, ConfirmPlanAction, DeletePlanAction, EnemyPieceSelectAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, ExitTransportContainerAction, GameInitialStateAction, GoldenEyeAction, HighlightPositionsAction, InsurgencyAction, MenuSelectAction, NewRoundAction, NewsPhaseAction, PieceClickAction, PieceOpenAction, PlacePhaseAction, PlanningSelectAction, PositionSelectAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSensingAction, RodsFromGodAction, SelectingAction, SliceChangeAction, TankerClickAction, TargetPieceClickAction, UndoFuelSelectionAction } from '../../../../types';
+import { ALL_GROUND_TYPES, distanceMatrix, initialGameboardEmpty, TRANSPORT_TYPE_ID, TYPE_FUEL } from '../../../../constants';
+// prettier-ignore
+import { AircraftClickAction, BattlePieceSelectAction, BattleResultsAction, BioWeaponsAction, CommInterruptAction, ConfirmPlanAction, DeletePlanAction, EnemyPieceSelectAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, ExitTransportContainerAction, GameboardMetaState, GameInitialStateAction, GoldenEyeAction, HighlightPositionsAction, InsurgencyAction, MenuSelectAction, NewRoundAction, NewsPhaseAction, PieceClickAction, PieceOpenAction, PieceType, PlacePhaseAction, PlanningSelectAction, PositionSelectAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSensingAction, RodsFromGodAction, SelectingAction, SliceChangeAction, TankerClickAction, TargetPieceClickAction, UndoFuelSelectionAction } from '../../../../types';
 //prettier-ignore
 import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, CLEAR_BATTLE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE } from "../actions/actionTypes";
-import { initialGameboardEmpty } from './initialGameboardEmpty';
 
 const initialGameboardMeta: GameboardMetaState = {
     //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
@@ -70,7 +69,10 @@ function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
             stateDeepCopy.highlightedPositions = (action as HighlightPositionsAction).payload.highlightedPositions;
             break;
         case MENU_SELECT:
-            stateDeepCopy.selectedMenuId = (action as MenuSelectAction).payload.selectedMenuId !== stateDeepCopy.selectedMenuId ? (action as MenuSelectAction).payload.selectedMenuId : 0;
+            stateDeepCopy.selectedMenuId =
+                (action as MenuSelectAction).payload.selectedMenuId !== stateDeepCopy.selectedMenuId
+                    ? (action as MenuSelectAction).payload.selectedMenuId
+                    : 0;
             break;
         case NEW_ROUND:
             stateDeepCopy.confirmedRods = [];
@@ -96,8 +98,14 @@ function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
         case TANKER_CLICK:
             //select if different, unselect if was the same
             let lastSelectedTankerId = stateDeepCopy.refuel.selectedTankerPieceId;
-            stateDeepCopy.refuel.selectedTankerPieceId = (action as TankerClickAction).payload.tankerPiece.pieceId === lastSelectedTankerId ? -1 : (action as TankerClickAction).payload.tankerPiece.pieceId;
-            stateDeepCopy.refuel.selectedTankerPieceIndex = (action as TankerClickAction).payload.tankerPiece.pieceId === lastSelectedTankerId ? -1 : (action as TankerClickAction).payload.tankerPieceIndex;
+            stateDeepCopy.refuel.selectedTankerPieceId =
+                (action as TankerClickAction).payload.tankerPiece.pieceId === lastSelectedTankerId
+                    ? -1
+                    : (action as TankerClickAction).payload.tankerPiece.pieceId;
+            stateDeepCopy.refuel.selectedTankerPieceIndex =
+                (action as TankerClickAction).payload.tankerPiece.pieceId === lastSelectedTankerId
+                    ? -1
+                    : (action as TankerClickAction).payload.tankerPieceIndex;
             break;
         case PIECE_OPEN_ACTION:
             stateDeepCopy.container.active = true;
@@ -114,7 +122,11 @@ function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
                         //TODO: better way of combining arrays (no internet while i'm coding this mid-flight)
                         for (let y = 0; y < (action as PieceOpenAction).payload.gameboard[x].pieces.length; y++) {
                             //TODO: only put pieces here if they are able to get onto transport pieces
-                            if ((action as PieceOpenAction).payload.gameboard[x].pieces[y].pieceId === (action as PieceOpenAction).payload.selectedPiece.pieceId) continue;
+                            if (
+                                (action as PieceOpenAction).payload.gameboard[x].pieces[y].pieceId ===
+                                (action as PieceOpenAction).payload.selectedPiece.pieceId
+                            )
+                                continue;
                             stateDeepCopy.container.outerPieces.push((action as PieceOpenAction).payload.gameboard[x].pieces[y]);
                         }
                     }
@@ -124,9 +136,11 @@ function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
             } else {
                 //other container types only look in their own position (probably...//TODO: write down the rules for this later )
 
-                stateDeepCopy.container.outerPieces = (action as PieceOpenAction).payload.gameboard[selectedPiecePosition].pieces.filter((piece: PieceType, index: number) => {
-                    return piece.pieceId !== (action as PieceOpenAction).payload.selectedPiece.pieceId;
-                });
+                stateDeepCopy.container.outerPieces = (action as PieceOpenAction).payload.gameboard[selectedPiecePosition].pieces.filter(
+                    (piece: PieceType, index: number) => {
+                        return piece.pieceId !== (action as PieceOpenAction).payload.selectedPiece.pieceId;
+                    }
+                );
             }
             break;
         case PIECE_CLOSE_ACTION:
@@ -332,17 +346,25 @@ function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
             //select if different, unselect if was the same
             let lastSelectedBattlePiece = stateDeepCopy.battle.selectedBattlePiece;
             stateDeepCopy.battle.selectedBattlePiece =
-                (action as BattlePieceSelectAction).payload.battlePiece.piece.pieceId === lastSelectedBattlePiece ? -1 : (action as BattlePieceSelectAction).payload.battlePiece.piece.pieceId;
+                (action as BattlePieceSelectAction).payload.battlePiece.piece.pieceId === lastSelectedBattlePiece
+                    ? -1
+                    : (action as BattlePieceSelectAction).payload.battlePiece.piece.pieceId;
             stateDeepCopy.battle.selectedBattlePieceIndex =
-                (action as BattlePieceSelectAction).payload.battlePiece.piece.pieceId === lastSelectedBattlePiece ? -1 : (action as BattlePieceSelectAction).payload.battlePieceIndex;
+                (action as BattlePieceSelectAction).payload.battlePiece.piece.pieceId === lastSelectedBattlePiece
+                    ? -1
+                    : (action as BattlePieceSelectAction).payload.battlePieceIndex;
             break;
         case BATTLEPOPUP_MINIMIZE_TOGGLE:
             stateDeepCopy.battle.isMinimized = !stateDeepCopy.battle.isMinimized;
             break;
         case ENEMY_PIECE_SELECT:
             //need to get the piece that was selected, and put it into the target for the thing
-            stateDeepCopy.battle.friendlyPieces[stateDeepCopy.battle.selectedBattlePieceIndex].targetPiece = (action as EnemyPieceSelectAction).payload.battlePiece.piece;
-            stateDeepCopy.battle.friendlyPieces[stateDeepCopy.battle.selectedBattlePieceIndex].targetPieceIndex = (action as EnemyPieceSelectAction).payload.battlePieceIndex;
+            stateDeepCopy.battle.friendlyPieces[
+                stateDeepCopy.battle.selectedBattlePieceIndex
+            ].targetPiece = (action as EnemyPieceSelectAction).payload.battlePiece.piece;
+            stateDeepCopy.battle.friendlyPieces[
+                stateDeepCopy.battle.selectedBattlePieceIndex
+            ].targetPieceIndex = (action as EnemyPieceSelectAction).payload.battlePieceIndex;
 
             break;
         case TARGET_PIECE_SELECT:

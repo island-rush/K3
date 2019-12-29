@@ -1,4 +1,4 @@
-import { GameboardState } from "../../../../types";
+import { GameboardState } from '../../types';
 
 // TODO: refactor this file into getting 'land' from the ./islands constants file with each island
 // Probably a better, cleaning, more obvious way of doing this (not as 'hard-coded' -> changeable/modular)
