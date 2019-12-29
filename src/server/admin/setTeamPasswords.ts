@@ -17,7 +17,7 @@ export const setTeamPasswords = async (req: Request, res: Response) => {
     }
 
     // Verify Request
-    if (!req.body.game0Password || !req.body.game1Password) {
+    if (!req.body.gameBluePassword || !req.body.gameRedPassword) {
         res.status(403).redirect(`/teacher.html?error=${BAD_REQUEST_TAG}`);
         return;
     }
@@ -31,11 +31,11 @@ export const setTeamPasswords = async (req: Request, res: Response) => {
         return;
     }
 
-    const { game0Password, game1Password }: SetTeamPassRequest = req.body;
-    const game0PasswordHashed = md5(game0Password);
-    const game1PasswordHashed = md5(game1Password);
+    const { gameBluePassword, gameRedPassword }: SetTeamPassRequest = req.body;
+    const gameBluePasswordHashed = md5(gameBluePassword);
+    const gameRedPasswordHashed = md5(gameRedPassword);
 
-    await thisGame.setTeamPasswords(game0PasswordHashed, game1PasswordHashed);
+    await thisGame.setTeamPasswords(gameBluePasswordHashed, gameRedPasswordHashed);
 
     res.redirect('/teacher.html?setTeamPasswords=success');
 };
@@ -44,8 +44,8 @@ export const setTeamPasswords = async (req: Request, res: Response) => {
  * All the values needed for request to set team passwords.
  */
 type SetTeamPassRequest = {
-    game0Password: Password;
-    game1Password: Password;
+    gameBluePassword: Password;
+    gameRedPassword: Password;
 };
 
 export default setTeamPasswords;

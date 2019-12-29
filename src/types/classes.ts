@@ -53,8 +53,8 @@ export interface GameType {
 
     gameActive: number;
 
-    game0Password: string;
-    game1Password: string;
+    gameBluePassword: string;
+    gameRedPassword: string;
 
     game0Controller0: number;
     game0Controller1: number;

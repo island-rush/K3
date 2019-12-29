@@ -8,8 +8,8 @@ CREATE TABLE IF NOT EXISTS games (
     gameAdminPassword VARCHAR(32) NOT NULL, -- MD5 Hash
     gameActive INT(1) NOT NULL DEFAULT 0, -- 0 inactive, 1 active
     
-    game0Password VARCHAR(32) NOT NULL DEFAULT '5f4dcc3b5aa765d61d8327deb882cf99', -- MD5 Hash
-    game1Password VARCHAR(32) NOT NULL DEFAULT '5f4dcc3b5aa765d61d8327deb882cf99',
+    gameBluePassword VARCHAR(32) NOT NULL DEFAULT '5f4dcc3b5aa765d61d8327deb882cf99', -- MD5 Hash
+    gameRedPassword VARCHAR(32) NOT NULL DEFAULT '5f4dcc3b5aa765d61d8327deb882cf99',
     
     game0Controller0 INT(1) NOT NULL DEFAULT 0, -- 0 not logged in, 1 logged in
     game0Controller1 INT(1) NOT NULL DEFAULT 0,

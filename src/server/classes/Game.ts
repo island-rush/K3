@@ -21,9 +21,9 @@ export class Game implements GameType {
 
     gameActive: number;
 
-    game0Password: string;
+    gameBluePassword: string;
 
-    game1Password: string;
+    gameRedPassword: string;
 
     game0Controller0: number;
 
@@ -187,11 +187,11 @@ export class Game implements GameType {
     /**
      * Set team passwords for a specific game.
      */
-    async setTeamPasswords(game0PasswordHash: string, game1PasswordHash: string) {
-        const queryString = 'UPDATE games SET game0Password = ?, game1Password = ? WHERE gameId = ?';
-        const inserts = [game0PasswordHash, game1PasswordHash, this.gameId];
+    async setTeamPasswords(gameBluePasswordHash: string, gameRedPasswordHash: string) {
+        const queryString = 'UPDATE games SET gameBluePassword = ?, gameRedPassword = ? WHERE gameId = ?';
+        const inserts = [gameBluePasswordHash, gameRedPasswordHash, this.gameId];
         await pool.query(queryString, inserts);
-        Object.assign(this, { game0Password: game0PasswordHash, game1Password: game1PasswordHash });
+        Object.assign(this, { gameBluePassword: gameBluePasswordHash, gameRedPassword: gameRedPasswordHash });
     }
 
     /**
@@ -565,9 +565,9 @@ export class Game implements GameType {
      */
     getPasswordHash(gameTeam: number) {
         if (gameTeam === BLUE_TEAM_ID) {
-            return this.game0Password;
+            return this.gameBluePassword;
         }
-        return this.game1Password;
+        return this.gameRedPassword;
     }
 
     /**
