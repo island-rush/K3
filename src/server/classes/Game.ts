@@ -49,9 +49,9 @@ export class Game implements GameType {
 
     gameRedStatus: number;
 
-    game0Points: number;
+    gameBluePoints: number;
 
-    game1Points: number;
+    gameRedPoints: number;
 
     gamePhase: number;
 
@@ -323,12 +323,12 @@ export class Game implements GameType {
      */
     async setPoints(gameTeam: number, newPoints: number) {
         const queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
-        const inserts = [`game${gameTeam}Points`, newPoints, this.gameId];
+        const inserts = [`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Points`, newPoints, this.gameId];
         await pool.query(queryString, inserts);
         if (gameTeam === 0) {
-            this.game0Points = newPoints;
+            this.gameBluePoints = newPoints;
         } else {
-            this.game1Points = newPoints;
+            this.gameRedPoints = newPoints;
         }
     }
 
@@ -500,8 +500,8 @@ export class Game implements GameType {
      */
     async addPoints() {
         // add points based on the island ownerships inside this object (game)
-        let bluePoints = this.game0Points;
-        let redPoints = this.game1Points;
+        let bluePoints = this.gameBluePoints;
+        let redPoints = this.gameRedPoints;
 
         bluePoints += this.flag0 === this.flag1 && this.flag0 === BLUE_TEAM_ID ? ISLAND_POINTS[DRAGON_ISLAND_ID] : 0;
         redPoints += this.flag0 === this.flag1 && this.flag0 === RED_TEAM_ID ? ISLAND_POINTS[DRAGON_ISLAND_ID] : 0;
@@ -555,9 +555,9 @@ export class Game implements GameType {
      */
     getPoints(gameTeam: number) {
         if (gameTeam === BLUE_TEAM_ID) {
-            return this.game0Points;
+            return this.gameBluePoints;
         }
-        return this.game1Points;
+        return this.gameRedPoints;
     }
 
     /**

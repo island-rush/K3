@@ -20,7 +20,7 @@ export const shopRefundRequest = async (socket: Socket, action: ShopRefundReques
         return;
     }
 
-    const { gameActive, gamePhase, game0Points, game1Points } = thisGame;
+    const { gameActive, gamePhase, gameBluePoints, gameRedPoints } = thisGame;
 
     if (!gameActive) {
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
@@ -55,7 +55,7 @@ export const shopRefundRequest = async (socket: Socket, action: ShopRefundReques
     }
 
     const itemCost = TYPE_COSTS[shopItemTypeId];
-    const teamPoints = gameTeam === BLUE_TEAM_ID ? game0Points : game1Points;
+    const teamPoints = gameTeam === BLUE_TEAM_ID ? gameBluePoints : gameRedPoints;
 
     // Refund the shopItem
     const newPoints = teamPoints + itemCost;

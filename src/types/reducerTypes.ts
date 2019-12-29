@@ -15,7 +15,7 @@ export interface GameInfoState {
     gameRound: GameType['gameRound'];
     gameSlice: GameType['gameSlice'];
     gameStatus: GameType['gameBlueStatus'];
-    gamePoints: GameType['game0Points'];
+    gamePoints: GameType['gameBluePoints'];
     flag0: GameType['flag0'];
     flag1: GameType['flag1'];
     flag2: GameType['flag2'];

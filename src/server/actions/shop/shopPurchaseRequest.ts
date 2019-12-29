@@ -27,7 +27,7 @@ export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRe
         return;
     }
 
-    const { gameActive, gamePhase, game0Points, game1Points } = thisGame;
+    const { gameActive, gamePhase, gameBluePoints, gameRedPoints } = thisGame;
 
     if (!gameActive) {
         socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
@@ -46,7 +46,7 @@ export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRe
     }
 
     const shopItemCost = TYPE_COSTS[shopItemTypeId];
-    const teamPoints = gameTeam === BLUE_TEAM_ID ? game0Points : game1Points;
+    const teamPoints = gameTeam === BLUE_TEAM_ID ? gameBluePoints : gameRedPoints;
 
     if (teamPoints < shopItemCost) {
         sendUserFeedback(socket, 'Not enough points to purchase');

@@ -143,8 +143,8 @@ export const mainButtonClick = async (socket: Socket) => {
 
     const newsPhaseActionBlue = JSON.parse(JSON.stringify(newsPhaseAction));
     const newsPhaseActionRed = JSON.parse(JSON.stringify(newsPhaseAction));
-    newsPhaseActionBlue.payload.gamePoints = thisGame.game0Points;
-    newsPhaseActionRed.payload.gamePoints = thisGame.game1Points;
+    newsPhaseActionBlue.payload.gamePoints = thisGame.gameBluePoints;
+    newsPhaseActionRed.payload.gamePoints = thisGame.gameRedPoints;
 
     socket.to(`game${gameId}team${BLUE_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseActionBlue);
     socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseActionRed);

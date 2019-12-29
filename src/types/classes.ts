@@ -70,8 +70,8 @@ export interface GameType {
     gameBlueStatus: number;
     gameRedStatus: number;
 
-    game0Points: number;
-    game1Points: number;
+    gameBluePoints: number;
+    gameRedPoints: number;
 
     gamePhase: number;
     gameRound: number;
