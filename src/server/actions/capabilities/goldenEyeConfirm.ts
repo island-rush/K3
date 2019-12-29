@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { GOLDEN_EYE_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, GOLDEN_EYE_SELECTED, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
 import { GameSession, GoldenEyeAction, GoldenEyeRequestAction } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { sendUserFeedback } from '../sendUserFeedback';

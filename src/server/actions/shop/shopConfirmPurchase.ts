@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { SHOP_TRANSFER } from '../../../react-client/src/redux/actions/actionTypes';
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_TRANSFER, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
 import { GameSession, ShopConfirmPurchaseAction } from '../../../types';
 import { Game, InvItem, ShopItem } from '../../classes';
 import { sendUserFeedback } from '../sendUserFeedback';

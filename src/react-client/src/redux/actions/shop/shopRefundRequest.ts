@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { EmitType, ShopRefundRequestAction } from '../../../../../types';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { SERVER_SHOP_REFUND_REQUEST } from '../actionTypes';
+import { SERVER_SHOP_REFUND_REQUEST } from '../../../../../constants';
 import { ShopItemType } from '../../../../../types';
 
 /**

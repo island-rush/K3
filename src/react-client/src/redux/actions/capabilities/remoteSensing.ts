@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
 import { EmitType, RemoteSenseSelectingAction } from '../../../../../types';
-import { REMOTE_SENSING_SELECTING } from '../actionTypes';
+import { REMOTE_SENSING_SELECTING } from '../../../../../constants';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../../../types';
 

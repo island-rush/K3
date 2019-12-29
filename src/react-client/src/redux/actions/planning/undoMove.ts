@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { EmitType, UndoMoveAction } from '../../../../../types';
-import { UNDO_MOVE } from '../actionTypes';
+import { UNDO_MOVE } from '../../../../../constants';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
 /**

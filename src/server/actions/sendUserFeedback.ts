@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io';
+import { SET_USERFEEDBACK, SOCKET_SERVER_SENDING_ACTION } from '../../constants';
 import { UserfeedbackAction } from '../../types';
-import { SOCKET_SERVER_SENDING_ACTION } from '../../constants';
-import { SET_USERFEEDBACK } from '../../react-client/src/redux/actions/actionTypes';
 
 /**
  * Helper function to reply to user with specific userfeedback.

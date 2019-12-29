@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { EmitType, ExitTransportContainerAction } from '../../../../../types';
-import { INNER_TRANSPORT_PIECE_CLICK_ACTION } from '../actionTypes';
+import { INNER_TRANSPORT_PIECE_CLICK_ACTION } from '../../../../../constants';
 import { PieceType } from '../../../../../types';
 
 /**

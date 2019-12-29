@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, COMM_INTERRUPT_SELECTING } from '../../../../../constants';
 import { CommInterruptSelectingAction, EmitType } from '../../../../../types';
-import { COMM_INTERRUPT_SELECTING } from '../actionTypes';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../../../types';
 

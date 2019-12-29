@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
 import { EmitType, RaiseMoraleSelectingAction } from '../../../../../types';
-import { RAISE_MORALE_SELECTING } from '../actionTypes';
+import { RAISE_MORALE_SELECTING } from '../../../../../constants';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { InvItemType } from '../../../../../types';
 

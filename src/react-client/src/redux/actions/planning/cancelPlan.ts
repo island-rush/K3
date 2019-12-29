@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { EmitType, PreventPlanAction } from '../../../../../types';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { CANCEL_PLAN, SERVER_DELETE_PLAN } from '../actionTypes';
+import { CANCEL_PLAN, SERVER_DELETE_PLAN } from '../../../../../constants';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
 //TODO: rename cancelPlan to deletePlan to match the server side function (possibly match all client/server functions with each other...)

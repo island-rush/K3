@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { EmitType, UndoFuelSelectionAction } from '../../../../../types';
-import { UNDO_FUEL_SELECTION } from '../actionTypes';
+import { UNDO_FUEL_SELECTION } from '../../../../../constants';
 import { PieceType } from '../../../../../types';
 
 /**

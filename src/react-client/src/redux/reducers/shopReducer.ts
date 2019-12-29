@@ -1,7 +1,6 @@
 import { AnyAction } from 'redux';
-import { ShopItemType, ShopState } from '../../../../types';
-import { GameInitialStateAction, ShopPurchaseAction, ShopRefundAction } from '../../../../types';
-import { INITIAL_GAMESTATE, SHOP_CLEAR, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../actions/actionTypes';
+import { INITIAL_GAMESTATE, SHOP_CLEAR, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../../../../constants';
+import { GameInitialStateAction, ShopItemType, ShopPurchaseAction, ShopRefundAction, ShopState } from '../../../../types';
 
 const initialShopState: ShopState = [];
 

@@ -1,8 +1,8 @@
 //TODO: get rid of this function and use pieceClick(-1) or something that could handle it that way
 
 import { Dispatch } from 'redux';
+import { PIECE_CLEAR_SELECTION } from '../../../../constants';
 import { EmitType, PieceClearAction } from '../../../../types';
-import { PIECE_CLEAR_SELECTION } from './actionTypes';
 
 /**
  * Action to de-select all pieces in the zoombox

@@ -2,7 +2,7 @@ import { Dispatch } from 'redux';
 import { ALL_COMMANDER_TYPES } from '../../../../../constants';
 import { EmitType, RaiseMoraleRequestAction } from '../../../../../types';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { SERVER_RAISE_MORALE_CONFIRM } from '../actionTypes';
+import { SERVER_RAISE_MORALE_CONFIRM } from '../../../../../constants';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
 export const raiseMoraleSelectCommanderType = (selectedCommanderType: number) => {

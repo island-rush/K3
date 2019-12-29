@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { EmitType, ExitContainerRequestAction } from '../../../../../types';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { SERVER_INNER_PIECE_CLICK } from '../actionTypes';
+import { SERVER_INNER_PIECE_CLICK } from '../../../../../constants';
 import { PieceType } from '../../../../../types';
 
 /**

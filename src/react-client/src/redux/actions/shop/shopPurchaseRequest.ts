@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { EmitType, ShopPurchaseRequestAction } from '../../../../../types';
 import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { SERVER_SHOP_PURCHASE_REQUEST } from '../actionTypes';
+import { SERVER_SHOP_PURCHASE_REQUEST } from '../../../../../constants';
 
 /**
  * Action to purchase a shop item.

@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { ALL_COMMANDER_TYPES, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RAISE_MORALE_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
-import { RAISE_MORALE_SELECTED } from '../../../react-client/src/redux/actions/actionTypes';
+import { ALL_COMMANDER_TYPES, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RAISE_MORALE_SELECTED, RAISE_MORALE_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
 import { GameSession, RaiseMoraleAction, RaiseMoraleRequestAction } from '../../../types';
 import { Capability, Game, InvItem, Piece } from '../../classes';
 import { sendUserFeedback } from '../sendUserFeedback';

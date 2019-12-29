@@ -1,7 +1,6 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_AIR, TYPE_FUEL } from '../../../constants';
-import { REFUEL_RESULTS } from '../../../react-client/src/redux/actions/actionTypes';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REFUEL_RESULTS, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_AIR, TYPE_FUEL } from '../../../constants';
 import { ConfirmFuelSelectionRequestAction, FuelResultsAction, GameSession } from '../../../types';
 import { Event, Game } from '../../classes';
 import giveNextEvent from '../giveNextEvent';

@@ -1,9 +1,8 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, SOCKET_SERVER_SENDING_ACTION, NOT_WAITING_STATUS } from '../../constants';
-import { EVENT_BATTLE, EVENT_REFUEL, NO_MORE_EVENTS } from '../../react-client/src/redux/actions/actionTypes';
+import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, EVENT_BATTLE, EVENT_REFUEL, NOT_WAITING_STATUS, NO_MORE_EVENTS, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, SOCKET_SERVER_SENDING_ACTION } from '../../constants';
 import { EventBattleAction, EventRefuelAction, GameSession, NoMoreEventsAction } from '../../types';
-import { Event, Piece, Game } from '../classes';
+import { Event, Game, Piece } from '../classes';
 import { sendUserFeedback } from './sendUserFeedback';
 
 /**

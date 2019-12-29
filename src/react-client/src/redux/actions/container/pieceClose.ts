@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { EmitType, PieceCloseAction } from '../../../../../types';
-import { PIECE_CLOSE_ACTION } from '../actionTypes';
+import { PIECE_CLOSE_ACTION } from '../../../../../constants';
 import { PieceType } from '../../../../../types';
 
 /**

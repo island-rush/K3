@@ -1,9 +1,9 @@
 //prettier-ignore
 import { AnyAction } from "redux";
-import { InvItemType, InvState } from "../../../../types";
-import { GameInitialStateAction, InvItemCapabilityAction, InvItemPlaceAction, ShopConfirmPurchaseAction } from '../../../../types';
 //prettier-ignore
-import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SHOP_TRANSFER } from "../actions/actionTypes";
+import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SHOP_TRANSFER } from "../../../../constants";
+// prettier-ignore
+import { GameInitialStateAction, InvItemCapabilityAction, InvItemPlaceAction, InvItemType, InvState, ShopConfirmPurchaseAction } from '../../../../types';
 
 const initialInvState: InvState = [];
 

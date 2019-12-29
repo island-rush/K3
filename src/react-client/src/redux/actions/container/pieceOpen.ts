@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { CONTAINER_TYPES } from '../../../../../constants';
 import { EmitType, PieceOpenAction } from '../../../../../types';
-import { PIECE_OPEN_ACTION } from '../actionTypes';
+import { PIECE_OPEN_ACTION } from '../../../../../constants';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { PieceType } from '../../../../../types';
 
