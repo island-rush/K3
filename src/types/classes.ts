@@ -56,16 +56,16 @@ export interface GameType {
     gameBluePassword: string;
     gameRedPassword: string;
 
-    game0Controller0: number;
-    game0Controller1: number;
-    game0Controller2: number;
-    game0Controller3: number;
-    game0Controller4: number;
-    game1Controller0: number;
-    game1Controller1: number;
-    game1Controller2: number;
-    game1Controller3: number;
-    game1Controller4: number;
+    gameBlueController0: number;
+    gameBlueController1: number;
+    gameBlueController2: number;
+    gameBlueController3: number;
+    gameBlueController4: number;
+    gameRedController0: number;
+    gameRedController1: number;
+    gameRedController2: number;
+    gameRedController3: number;
+    gameRedController4: number;
 
     gameBlueStatus: number;
     gameRedStatus: number;

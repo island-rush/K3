@@ -20,6 +20,7 @@ export const C_130_TYPE_ID = 18;
 export const SOF_TEAM_TYPE_ID = 19;
 export const RADAR_TYPE_ID = 20;
 export const MISSILE_TYPE_ID = 21;
+
 export const ATC_SCRAMBLE_TYPE_ID = 22;
 export const CYBER_DOMINANCE_TYPE_ID = 23;
 export const MISSILE_LAUNCH_DISRUPTION_TYPE_ID = 24;

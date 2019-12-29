@@ -25,25 +25,25 @@ export class Game implements GameType {
 
     gameRedPassword: string;
 
-    game0Controller0: number;
+    gameBlueController0: number;
 
-    game0Controller1: number;
+    gameBlueController1: number;
 
-    game0Controller2: number;
+    gameBlueController2: number;
 
-    game0Controller3: number;
+    gameBlueController3: number;
 
-    game0Controller4: number;
+    gameBlueController4: number;
 
-    game1Controller0: number;
+    gameRedController0: number;
 
-    game1Controller1: number;
+    gameRedController1: number;
 
-    game1Controller2: number;
+    gameRedController2: number;
 
-    game1Controller3: number;
+    gameRedController3: number;
 
-    game1Controller4: number;
+    gameRedController4: number;
 
     gameBlueStatus: number;
 
@@ -126,33 +126,33 @@ export class Game implements GameType {
     getLoggedIn(gameTeam: number, gameController: number): number {
         if (gameTeam === 0) {
             if (gameController === 0) {
-                return this.game0Controller0;
+                return this.gameBlueController0;
             }
             if (gameController === 1) {
-                return this.game0Controller1;
+                return this.gameBlueController1;
             }
             if (gameController === 2) {
-                return this.game0Controller2;
+                return this.gameBlueController2;
             }
             if (gameController === 3) {
-                return this.game0Controller3;
+                return this.gameBlueController3;
             }
 
-            return this.game0Controller4;
+            return this.gameBlueController4;
         }
         if (gameController === 0) {
-            return this.game1Controller0;
+            return this.gameRedController0;
         }
         if (gameController === 1) {
-            return this.game1Controller1;
+            return this.gameRedController1;
         }
         if (gameController === 2) {
-            return this.game1Controller2;
+            return this.gameRedController2;
         }
         if (gameController === 3) {
-            return this.game1Controller3;
+            return this.gameRedController3;
         }
-        return this.game1Controller4;
+        return this.gameRedController4;
     }
 
     /**
@@ -209,21 +209,21 @@ export class Game implements GameType {
      */
     async setGameActive(newValue: number) {
         const queryString =
-            'UPDATE games SET gameActive = ?, game0Controller0 = 0, game0Controller1 = 0, game0Controller2 = 0, game0Controller3 = 0, game0Controller4 = 0, game1Controller0 = 0, game1Controller1 = 0, game1Controller2 = 0, game1Controller3 = 0, game1Controller4 = 0 WHERE gameId = ?';
+            'UPDATE games SET gameActive = ?, gameBlueController0 = 0, gameBlueController1 = 0, gameBlueController2 = 0, gameBlueController3 = 0, gameBlueController4 = 0, gameRedController0 = 0, gameRedController1 = 0, gameRedController2 = 0, gameRedController3 = 0, gameRedController4 = 0 WHERE gameId = ?';
         const inserts = [newValue, this.gameId];
         await pool.query(queryString, inserts);
         const updatedInfo = {
             gameActive: newValue,
-            game0Controller0: 0,
-            game0Controller1: 0,
-            game0Controller2: 0,
-            game0Controller3: 0,
-            game0Controller4: 0,
-            game1Controller0: 0,
-            game1Controller1: 0,
-            game1Controller2: 0,
-            game1Controller3: 0,
-            game1Controller4: 0
+            gameBlueController0: 0,
+            gameBlueController1: 0,
+            gameBlueController2: 0,
+            gameBlueController3: 0,
+            gameBlueController4: 0,
+            gameRedController0: 0,
+            gameRedController1: 0,
+            gameRedController2: 0,
+            gameRedController3: 0,
+            gameRedController4: 0
         };
         Object.assign(this, updatedInfo);
     }
@@ -233,25 +233,25 @@ export class Game implements GameType {
      */
     async setLoggedIn(gameTeam: number, gameController: number, value: number) {
         const queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
-        const inserts = [`game${gameTeam}Controller${gameController}`, value, this.gameId];
+        const inserts = [`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Controller${gameController}`, value, this.gameId];
         await pool.query(queryString, inserts);
         switch (gameTeam) {
             case BLUE_TEAM_ID:
                 switch (gameController) {
                     case 0:
-                        this.game0Controller0 = value;
+                        this.gameBlueController0 = value;
                         break;
                     case 1:
-                        this.game0Controller1 = value;
+                        this.gameBlueController1 = value;
                         break;
                     case 2:
-                        this.game0Controller2 = value;
+                        this.gameBlueController2 = value;
                         break;
                     case 3:
-                        this.game0Controller3 = value;
+                        this.gameBlueController3 = value;
                         break;
                     case 4:
-                        this.game0Controller4 = value;
+                        this.gameBlueController4 = value;
                         break;
                     default:
                         break;
@@ -260,19 +260,19 @@ export class Game implements GameType {
             case RED_TEAM_ID:
                 switch (gameController) {
                     case 0:
-                        this.game1Controller0 = value;
+                        this.gameRedController0 = value;
                         break;
                     case 1:
-                        this.game1Controller1 = value;
+                        this.gameRedController1 = value;
                         break;
                     case 2:
-                        this.game1Controller2 = value;
+                        this.gameRedController2 = value;
                         break;
                     case 3:
-                        this.game1Controller3 = value;
+                        this.gameRedController3 = value;
                         break;
                     case 4:
-                        this.game1Controller4 = value;
+                        this.gameRedController4 = value;
                         break;
                     default:
                 }

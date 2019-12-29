@@ -11,16 +11,16 @@ CREATE TABLE IF NOT EXISTS games (
     gameBluePassword VARCHAR(32) NOT NULL DEFAULT '5f4dcc3b5aa765d61d8327deb882cf99', -- MD5 Hash
     gameRedPassword VARCHAR(32) NOT NULL DEFAULT '5f4dcc3b5aa765d61d8327deb882cf99',
     
-    game0Controller0 INT(1) NOT NULL DEFAULT 0, -- 0 not logged in, 1 logged in
-    game0Controller1 INT(1) NOT NULL DEFAULT 0,
-    game0Controller2 INT(1) NOT NULL DEFAULT 0,
-    game0Controller3 INT(1) NOT NULL DEFAULT 0,
-    game0Controller4 INT(1) NOT NULL DEFAULT 0,
-    game1Controller0 INT(1) NOT NULL DEFAULT 0,
-    game1Controller1 INT(1) NOT NULL DEFAULT 0,
-    game1Controller2 INT(1) NOT NULL DEFAULT 0,
-    game1Controller3 INT(1) NOT NULL DEFAULT 0,
-    game1Controller4 INT(1) NOT NULL DEFAULT 0,
+    gameBlueController0 INT(1) NOT NULL DEFAULT 0, -- 0 not logged in, 1 logged in
+    gameBlueController1 INT(1) NOT NULL DEFAULT 0,
+    gameBlueController2 INT(1) NOT NULL DEFAULT 0,
+    gameBlueController3 INT(1) NOT NULL DEFAULT 0,
+    gameBlueController4 INT(1) NOT NULL DEFAULT 0,
+    gameRedController0 INT(1) NOT NULL DEFAULT 0,
+    gameRedController1 INT(1) NOT NULL DEFAULT 0,
+    gameRedController2 INT(1) NOT NULL DEFAULT 0,
+    gameRedController3 INT(1) NOT NULL DEFAULT 0,
+    gameRedController4 INT(1) NOT NULL DEFAULT 0,
     
 	gameBlueStatus INT(1) NOT NULL DEFAULT 0,  -- 0: still active, 1: waiting for other player
 	gameRedStatus INT(1) NOT NULL DEFAULT 0,
