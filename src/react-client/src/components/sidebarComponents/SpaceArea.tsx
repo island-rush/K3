@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { ANTI_SATELLITE_MISSILES_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID } from '../../../../constants';
 import { InvItemType, InvState } from '../../../../types';
 import { antiSatelliteMissiles, remoteSensing, rodsFromGod } from '../../redux/actions';
-import InvItem from './InvItem';
+import { InvItem } from './InvItem';
 
 const spaceAreaStyle: any = {
     backgroundColor: 'Yellow',

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { GameInfoState } from '../../../../types';
 import { menuSelect } from '../../redux/actions';
-import Gameinfo from './Gameinfo';
+import { Gameinfo } from './Gameinfo';
 import InvMenu from './InvMenu';
 import ShopMenu from './ShopMenu';
 import SpaceArea from './SpaceArea';
@@ -47,7 +48,7 @@ const selectedButtonStyle = {
 };
 
 interface Props {
-    gameInfo: any;
+    gameInfo: GameInfoState;
     selectedMenu: number;
     menuSelect: any;
 }
@@ -122,7 +123,7 @@ class Sidebar extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ gameInfo }: { gameInfo: any }) => ({
+const mapStateToProps = ({ gameInfo }: { gameInfo: GameInfoState }) => ({
     gameInfo
 });
 

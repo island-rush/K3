@@ -4,7 +4,7 @@ import { BattleState } from '../../../../../types';
 //prettier-ignore
 import { battlePieceClick, battlePopupMinimizeToggle, clearOldBattle, confirmBattleSelections, enemyBattlePieceClick, targetPieceClick } from "../../../redux/actions";
 import { BATTLE_POPUP_IMAGES } from '../../styleConstants';
-import BattlePiece from './BattlePiece';
+import { BattlePiece } from './BattlePiece';
 
 const battlePopupStyle: any = {
     position: 'absolute',

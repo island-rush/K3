@@ -35,7 +35,7 @@ interface Props {
     undoFuelSelection: any;
 }
 
-class AircraftPiece extends Component<Props> {
+export class AircraftPiece extends Component<Props> {
     render() {
         const { aircraftPiece, aircraftPieceIndex, aircraftClick, undoFuelSelection } = this.props;
         const { pieceFuel, pieceTypeId } = aircraftPiece;
@@ -81,5 +81,3 @@ class AircraftPiece extends Component<Props> {
         );
     }
 }
-
-export default AircraftPiece;

@@ -1,4 +1,5 @@
 import React from 'react';
+import { NewsState } from '../../../../types';
 import { NEWS_POPUP_IMAGES } from '../styleConstants';
 
 const newsPopupStyle: any = {
@@ -51,11 +52,11 @@ const newsInfoStyle: any = {
 };
 
 interface Props {
-    news: any;
+    news: NewsState;
     newsPopupMinimizeToggle: any;
 }
 
-const NewsAlertPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
+export const NewsPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
     const minimizeClick = (event: any) => {
         event.preventDefault();
         newsPopupMinimizeToggle();
@@ -79,5 +80,3 @@ const NewsAlertPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
         </div>
     );
 };
-
-export default NewsAlertPopup;

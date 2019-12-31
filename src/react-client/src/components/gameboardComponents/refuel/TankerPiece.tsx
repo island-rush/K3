@@ -29,7 +29,7 @@ interface Props {
     tankerClick: any;
 }
 
-class TankerPiece extends Component<Props> {
+export class TankerPiece extends Component<Props> {
     render() {
         const { tankerPiece, tankerPieceIndex, isSelected, tankerClick } = this.props;
 
@@ -60,5 +60,3 @@ class TankerPiece extends Component<Props> {
         );
     }
 }
-
-export default TankerPiece;

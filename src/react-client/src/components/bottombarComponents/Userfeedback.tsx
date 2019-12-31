@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { UserfeedbackState } from '../../../../types';
 
 const userfeedbackStyle: any = {
     background: 'grey',
@@ -10,11 +11,9 @@ const userfeedbackStyle: any = {
 };
 
 interface Props {
-    userFeedback: string;
+    userFeedback: UserfeedbackState;
 }
 
-const Userfeedback: FC<Props> = ({ userFeedback }) => {
+export const Userfeedback: FC<Props> = ({ userFeedback }) => {
     return <div style={userfeedbackStyle}>{userFeedback}</div>;
 };
-
-export default Userfeedback;

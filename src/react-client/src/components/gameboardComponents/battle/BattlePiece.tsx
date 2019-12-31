@@ -58,7 +58,7 @@ interface Props {
     isSelected: boolean;
 }
 
-class BattlePiece extends Component<Props> {
+export class BattlePiece extends Component<Props> {
     render() {
         const { isFriendly, battlePieceClick, targetPieceClick, enemyBattlePieceClick, battlePiece, battlePieceIndex, isSelected } = this.props;
 
@@ -118,5 +118,3 @@ class BattlePiece extends Component<Props> {
         );
     }
 }
-
-export default BattlePiece;

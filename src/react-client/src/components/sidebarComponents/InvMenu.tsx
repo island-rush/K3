@@ -5,7 +5,7 @@ import { ANTI_SATELLITE_MISSILES_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPO
 import { CapabilitiesState, InvItemType, InvState } from '../../../../types';
 //prettier-ignore
 import { airPieceClick, antiSatelliteMissiles, atcScramble, biologicalWeapons, communicationsInterruption, cyberDominance, droneSwarms, goldenEye, insurgency, landPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines, seaPieceClick } from "../../redux/actions";
-import InvItem from './InvItem';
+import { InvItem } from './InvItem';
 
 const inventoryStyle: any = {
     backgroundColor: 'Yellow',

@@ -18,7 +18,7 @@ interface Props {
     shopItem: ShopItemType;
 }
 
-const ShopItem = ({ refund, shopItem }: Props) => {
+export const ShopItem = ({ refund, shopItem }: Props) => {
     const style = {
         ...shopItemStyle,
         ...TYPE_IMAGES[shopItem.shopItemTypeId]
@@ -32,5 +32,3 @@ const ShopItem = ({ refund, shopItem }: Props) => {
 
     return <div style={style} onClick={onClick} />;
 };
-
-export default ShopItem;

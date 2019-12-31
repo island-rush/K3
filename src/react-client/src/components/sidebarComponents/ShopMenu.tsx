@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { LIST_ALL_CAPABILITIES, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../../../constants';
-import { ShopItemType } from '../../../../types';
+import { GameInfoState, ShopItemType, ShopState } from '../../../../types';
 import { shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from '../../redux/actions';
-import PurchaseableItem from './PurchaseableItem';
-import ShopItem from './ShopItem';
+import { PurchaseableItem } from './PurchaseableItem';
+import { ShopItem } from './ShopItem';
 
 const shopStyle: any = {
     backgroundColor: 'Yellow',
@@ -39,7 +39,7 @@ const purchaseableItemsContainerStyle: any = {
 };
 
 interface Props {
-    shopItems: ShopItemType[];
+    shopItems: ShopState;
     selected: boolean;
     purchase: any;
     refund: any;
@@ -114,7 +114,7 @@ class ShopMenu extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ shopItems, gameInfo }: { shopItems: ShopItemType[]; gameInfo: any }) => ({
+const mapStateToProps = ({ shopItems, gameInfo }: { shopItems: ShopState; gameInfo: GameInfoState }) => ({
     shopItems,
     points: gameInfo.gamePoints
 });

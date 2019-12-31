@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { TRANSPORT_TYPE_ID } from '../../../../../constants';
 import { ContainerState, PieceType } from '../../../../../types';
-import ContainerPiece from './ContainerPiece';
+import { ContainerPiece } from './ContainerPiece';
 
 const containerPopupStyle: any = {
     position: 'absolute',
@@ -61,7 +61,7 @@ interface Props {
     innerTransportPieceClick: any;
 }
 
-class ContainerPopup extends Component<Props> {
+export class ContainerPopup extends Component<Props> {
     render() {
         const { container, pieceClose, outerPieceClick, innerPieceClick, innerTransportPieceClick } = this.props;
 
@@ -105,5 +105,3 @@ class ContainerPopup extends Component<Props> {
         );
     }
 }
-
-export default ContainerPopup;

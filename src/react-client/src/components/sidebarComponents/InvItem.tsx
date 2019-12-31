@@ -19,7 +19,7 @@ interface Props {
     invItemClick: any;
 }
 
-const InvItem = ({ invItem, invItemClick }: Props) => {
+export const InvItem = ({ invItem, invItemClick }: Props) => {
     const { invItemTypeId } = invItem;
 
     const name = TYPE_NAMES[invItemTypeId];
@@ -41,5 +41,3 @@ const InvItem = ({ invItem, invItemClick }: Props) => {
 
     return <div style={style} title={title} onClick={onClick} />;
 };
-
-export default InvItem;

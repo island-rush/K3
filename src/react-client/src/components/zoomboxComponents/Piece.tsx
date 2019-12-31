@@ -40,7 +40,7 @@ interface Props {
     pieceOpen: any;
 }
 
-class Piece extends Component<Props> {
+export class Piece extends Component<Props> {
     render() {
         const { piece, topLevel, selected, pieceClick, pieceOpen } = this.props;
 
@@ -58,7 +58,7 @@ class Piece extends Component<Props> {
 
         const title = `${TYPE_NAMES[piece.pieceTypeId]}\nMoves: ${piece.pieceMoves}\nFuel: ${
             piece.pieceFuel !== -1 ? piece.pieceFuel : 'N/A'
-            }${disabledText}`;
+        }${disabledText}`;
 
         const onClick = (event: any) => {
             event.preventDefault();
@@ -75,5 +75,3 @@ class Piece extends Component<Props> {
         return <div style={pieceCombinedStyle} title={title} onClick={onClick} onDoubleClick={onDoubleClick}></div>;
     }
 }
-
-export default Piece;

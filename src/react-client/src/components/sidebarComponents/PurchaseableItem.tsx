@@ -18,7 +18,7 @@ interface Props {
     purchase: any;
 }
 
-const PurchaseableItem = ({ typeId, purchase }: Props) => {
+export const PurchaseableItem = ({ typeId, purchase }: Props) => {
     const style = { ...purchaseableItemStyle, ...TYPE_IMAGES[typeId] };
 
     const name = TYPE_NAMES[typeId];
@@ -36,5 +36,3 @@ const PurchaseableItem = ({ typeId, purchase }: Props) => {
 
     return <div style={style} title={title} onClick={onClick} />;
 };
-
-export default PurchaseableItem;

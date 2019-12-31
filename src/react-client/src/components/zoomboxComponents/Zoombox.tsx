@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ALL_AIRFIELD_LOCATIONS } from '../../../../constants';
-import { PieceType } from '../../../../types';
+import { GameboardMetaState, GameboardState, PieceType } from '../../../../types';
 import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux/actions';
 import { ZOOMBOX_BACKGROUNDS } from '../styleConstants';
-import Piece from './Piece';
+import { Piece } from './Piece';
 
 const zoomboxStyle = {
     position: 'absolute',
@@ -30,8 +30,8 @@ const invisibleStyle = {
 
 interface Props {
     selectedPos: number;
-    selectedPiece: PieceType;
-    gameboard: any;
+    selectedPiece: PieceType | null;
+    gameboard: GameboardState;
     selectPiece: any;
     clearPieceSelection: any;
     pieceOpen: any;
@@ -87,10 +87,10 @@ class Zoombox extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ gameboard, gameboardMeta }: { gameboard: any; gameboardMeta: any }) => ({
+const mapStateToProps = ({ gameboard, gameboardMeta }: { gameboard: GameboardState; gameboardMeta: GameboardMetaState }) => ({
     selectedPos: gameboardMeta.selectedPosition,
     selectedPiece: gameboardMeta.selectedPiece,
-    gameboard: gameboard
+    gameboard
 });
 
 const mapActionsToProps = {

@@ -21,7 +21,7 @@ interface Props {
     clickFunction: any;
 }
 
-function ContainerPiece({ piece, container, clickFunction }: Props) {
+export function ContainerPiece({ piece, container, clickFunction }: Props) {
     return (
         <div
             style={{ ...containerPieceStyle, ...TYPE_IMAGES[piece.pieceTypeId], ...TYPE_TEAM_BORDERS[piece.pieceTeamId] }}
@@ -34,5 +34,3 @@ function ContainerPiece({ piece, container, clickFunction }: Props) {
         />
     );
 }
-
-export default ContainerPiece;

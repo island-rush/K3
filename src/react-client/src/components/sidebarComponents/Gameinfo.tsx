@@ -1,5 +1,6 @@
 import React from 'react';
 import { TYPE_OWNER_NAMES } from '../../../../constants';
+import { GameInfoState } from '../../../../types';
 
 const gameinfoStyle: any = {
     backgroundColor: 'Yellow',
@@ -16,10 +17,10 @@ const invisibleStyle = {
 
 interface Props {
     selected: boolean;
-    gameInfo: any;
+    gameInfo: GameInfoState;
 }
 
-const Gameinfo = ({ selected, gameInfo }: Props) => {
+export const Gameinfo = ({ selected, gameInfo }: Props) => {
     const { gameSection, gameInstructor, gameControllers, gamePhase, gameRound, gameSlice } = gameInfo;
     let gameControllerText = '';
     for (let x = 0; x < gameControllers.length; x++) {
@@ -41,5 +42,3 @@ const Gameinfo = ({ selected, gameInfo }: Props) => {
         </div>
     );
 };
-
-export default Gameinfo;

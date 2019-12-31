@@ -31,7 +31,7 @@ interface Props {
     planning: PlanningState;
 }
 
-const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, planning }: Props) => {
+export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, planning }: Props) => {
     const { raiseMoralePopupActive } = planning;
 
     return (
@@ -80,5 +80,3 @@ const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, planning }: 
         </div>
     );
 };
-
-export default SelectCommanderTypePopup;

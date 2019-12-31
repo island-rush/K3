@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { COMBAT_PHASE_ID, NEWS_PHASE_ID, PLACE_PHASE_ID, PURCHASE_PHASE_ID, SLICE_PLANNING_ID, WAITING_STATUS } from '../../../../constants';
+import { GameInfoState } from '../../../../types';
 
 const mainButtonStyle: any = {
     backgroundColor: 'grey',
@@ -11,10 +12,10 @@ const mainButtonStyle: any = {
 
 interface Props {
     mainButtonClick: any;
-    gameInfo: any;
+    gameInfo: GameInfoState;
 }
 
-class MainButton extends Component<Props> {
+export class MainButton extends Component<Props> {
     render() {
         const { mainButtonClick, gameInfo } = this.props;
         const { gameStatus, gamePhase, gameSlice } = gameInfo;
@@ -60,5 +61,3 @@ class MainButton extends Component<Props> {
         );
     }
 }
-
-export default MainButton;
