@@ -10,10 +10,10 @@ import setUserfeedbackAction from './setUserfeedbackAction';
  */
 export const selectPosition = (selectedPositionId: number) => {
     return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
-        const { gameboardMeta, planning } = getState();
+        const { gameboardMeta, planning, container } = getState();
 
         //selecting the hex to put piece that is inside container
-        if (gameboardMeta.container.isSelectingHex) {
+        if (container.isSelectingHex) {
             //TODO: check that the position selected was valid
             //TODO: check that the position was vaild (on the server side)
 
@@ -21,8 +21,8 @@ export const selectPosition = (selectedPositionId: number) => {
             const thisAction: ExitTransportContainerRequestAction = {
                 type: SERVER_INNER_TRANSPORT_PIECE_CLICK,
                 payload: {
-                    selectedPiece: gameboardMeta.container.innerPieceToDrop,
-                    containerPiece: gameboardMeta.container.containerPiece,
+                    selectedPiece: container.innerPieceToDrop,
+                    containerPiece: container.containerPiece,
                     selectedPositionId
                 }
             };

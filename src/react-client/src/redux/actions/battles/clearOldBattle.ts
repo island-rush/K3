@@ -4,8 +4,7 @@ import { ClearBattleAction, EmitType, FullState } from '../../../../../types';
 
 export const clearOldBattle = () => {
     return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
-        const { gameboardMeta } = getState();
-        const { battle } = gameboardMeta;
+        const { battle } = getState();
 
         const clearBattleAction: ClearBattleAction = {
             type: CLEAR_BATTLE,

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { BattleState } from '../../../../../types';
 //prettier-ignore
 import { battlePieceClick, battlePopupMinimizeToggle, clearOldBattle, confirmBattleSelections, enemyBattlePieceClick, targetPieceClick } from "../../../redux/actions";
 import { BATTLE_POPUP_IMAGES } from '../../styleConstants';
@@ -72,7 +73,7 @@ interface Props {
     enemyBattlePieceClick: any;
     targetPieceClick: any;
     confirmBattleSelections: any;
-    battle: any;
+    battle: BattleState;
     clearOldBattle: any;
     battlePopupMinimizeToggle: any;
 }
@@ -161,8 +162,8 @@ class BattlePopup extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ gameboardMeta }: { gameboardMeta: any }) => ({
-    battle: gameboardMeta.battle
+const mapStateToProps = ({ battle }: { battle: BattleState }) => ({
+    battle
 });
 
 const mapActionsToProps = {

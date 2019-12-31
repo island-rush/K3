@@ -5,7 +5,7 @@ import setUserfeedbackAction from '../setUserfeedbackAction';
 
 export const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
     return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
-        const { gameboardMeta, gameInfo } = getState();
+        const { gameInfo, battle } = getState();
         const { gameStatus } = gameInfo;
 
         if (gameStatus === WAITING_STATUS) {
@@ -13,7 +13,7 @@ export const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number
             return;
         }
 
-        const { selectedBattlePiece, selectedBattlePieceIndex } = gameboardMeta.battle;
+        const { selectedBattlePiece, selectedBattlePieceIndex } = battle;
 
         if (selectedBattlePiece === -1 || selectedBattlePieceIndex === -1) {
             dispatch(setUserfeedbackAction('Must select piece to attack with..'));

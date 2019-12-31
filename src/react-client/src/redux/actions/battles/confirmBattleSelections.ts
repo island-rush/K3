@@ -6,7 +6,7 @@ import setUserfeedbackAction from '../setUserfeedbackAction';
 export const confirmBattleSelections = () => {
     return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         //check the local state before sending to the server
-        const { gameboardMeta, gameInfo } = getState();
+        const { gameInfo, battle } = getState();
         const { gameStatus } = gameInfo;
 
         //TODO: could do loads more checks on current status of gameplay to prevent accidental presses? (but same checks on backend probably)
@@ -16,7 +16,7 @@ export const confirmBattleSelections = () => {
             return;
         }
 
-        const { friendlyPieces } = gameboardMeta.battle;
+        const { friendlyPieces } = battle;
         //need to send to the server what selections were made, for it to handle it...
 
         const clientAction: ConfirmBattleSelectionRequestAction = {

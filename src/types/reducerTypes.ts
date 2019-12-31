@@ -44,22 +44,6 @@ export interface GameboardMetaState {
         newsTitle: string;
         newsInfo: string;
     };
-    battle: {
-        isMinimized: boolean;
-        active: boolean;
-        selectedBattlePiece: any;
-        selectedBattlePieceIndex: number;
-        masterRecord: any;
-        friendlyPieces: any[];
-        enemyPieces: any[];
-    };
-    container: {
-        active: boolean;
-        isSelectingHex: boolean;
-        innerPieceToDrop: any;
-        containerPiece: any;
-        outerPieces: any[];
-    };
 }
 
 export interface CapabilitiesState {

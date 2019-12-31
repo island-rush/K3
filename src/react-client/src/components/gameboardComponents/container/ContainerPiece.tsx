@@ -1,7 +1,7 @@
 import React from 'react';
 import { TYPE_NAMES } from '../../../../../constants';
+import { ContainerState, PieceType } from '../../../../../types';
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../../styleConstants';
-import { PieceType } from '../../../../../types';
 
 const containerPieceStyle: any = {
     backgroundRepeat: 'no-repeat',
@@ -17,7 +17,7 @@ const containerPieceStyle: any = {
 
 interface Props {
     piece: PieceType;
-    container: any;
+    container: ContainerState;
     clickFunction: any;
 }
 
