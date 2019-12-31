@@ -1,17 +1,13 @@
 import { Dispatch } from 'redux';
-import { PLACE_PHASE_ID } from '../../../../../constants';
-import { EmitType, InvItemPlaceRequestAction } from '../../../../../types';
-// TODO: this is only imported to the frontend, export it from frontend file like websocket thing
-import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { SERVER_PIECE_PLACE } from '../../../../../constants';
+import { PLACE_PHASE_ID, SERVER_PIECE_PLACE, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
+import { EmitType, FullState, InvItemPlaceRequestAction, InvItemType } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../../../types';
 
 /**
  * Action to select inv item to place on the board (land item)
  */
 export const landPieceClick = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameboardMeta, gameInfo } = getState();
 
         const { gamePhase } = gameInfo;

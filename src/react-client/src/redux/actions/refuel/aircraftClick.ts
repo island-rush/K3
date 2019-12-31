@@ -1,5 +1,5 @@
 import { Dispatch } from 'redux';
-import { AircraftClickAction, EmitType } from '../../../../../types';
+import { AircraftClickAction, EmitType, FullState } from '../../../../../types';
 import { AIRCRAFT_CLICK } from '../../../../../constants';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 import { PieceType } from '../../../../../types';
@@ -9,11 +9,11 @@ import { PieceType } from '../../../../../types';
  * Action to select aircraft to receive fuel from tanker.
  */
 export const aircraftClick = (aircraftPiece: PieceType, aircraftPieceIndex: number) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameboardMeta } = getState();
         const { selectedTankerPieceId, aircraft } = gameboardMeta.refuel;
 
-        if (parseInt(selectedTankerPieceId) === -1) {
+        if (selectedTankerPieceId === -1) {
             dispatch(setUserfeedbackAction('must select tanker to refuel from...'));
             return;
         }

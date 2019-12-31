@@ -1,12 +1,12 @@
 import { Dispatch } from 'redux';
-import { EmitType, RefuelPopupToggleAction } from '../../../../../types';
 import { REFUELPOPUP_MINIMIZE_TOGGLE } from '../../../../../constants';
+import { EmitType, FullState, RefuelPopupToggleAction } from '../../../../../types';
 
 /**
  * Action to toggle refuel popup minimized.
  */
 export const refuelPopupMinimizeToggle = () => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const refuelPopupMinimizeAction: RefuelPopupToggleAction = {
             type: REFUELPOPUP_MINIMIZE_TOGGLE,
             payload: {}

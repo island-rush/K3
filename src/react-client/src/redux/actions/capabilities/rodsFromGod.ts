@@ -1,12 +1,10 @@
 import { Dispatch } from 'redux';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
-import { EmitType, RodsFromGodSelectingAction } from '../../../../../types';
-import { RODS_FROM_GOD_SELECTING } from '../../../../../constants';
+import { COMBAT_PHASE_ID, RODS_FROM_GOD_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
+import { EmitType, FullState, InvItemType, RodsFromGodSelectingAction } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../../../types';
 
 export const rodsFromGod = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 

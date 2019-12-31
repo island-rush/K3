@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
 import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from '../../../../constants';
-import { CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState } from '../../../../types';
+import { CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, PlanningState } from '../../../../types';
 //prettier-ignore
 import { innerPieceClick, innerTransportPieceClick, newsPopupMinimizeToggle, outerPieceClick, pieceClose, raiseMoraleSelectCommanderType, selectPosition } from "../../redux/actions";
 import BattlePopup from './battle/BattlePopup';
@@ -127,6 +127,7 @@ interface Props {
     gameboard: GameboardState;
     gameboardMeta: GameboardMetaState;
     capabilities: CapabilitiesState;
+    planning: PlanningState;
     selectPosition: any;
     newsPopupMinimizeToggle: any;
     raiseMoraleSelectCommanderType: any;
@@ -142,6 +143,7 @@ class Gameboard extends Component<Props> {
             gameInfo,
             gameboard,
             gameboardMeta,
+            planning,
             capabilities,
             selectPosition,
             newsPopupMinimizeToggle,
@@ -153,9 +155,11 @@ class Gameboard extends Component<Props> {
         } = this.props;
 
         //prettier-ignore
-        const { selectedPosition, news, battle, container, planning, selectedPiece, confirmedPlans, highlightedPositions } = gameboardMeta;
+        const { selectedPosition, news, battle, container, selectedPiece, highlightedPositions } = gameboardMeta;
         //prettier-ignore
         const { confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods} = capabilities;
+
+        const { confirmedPlans } = planning;
 
         let planningPositions: any = []; //all of the positions part of a plan
         let containerPositions: any = []; //specific positions part of a plan of type container
@@ -167,12 +171,12 @@ class Gameboard extends Component<Props> {
         for (let x = 0; x < planning.moves.length; x++) {
             const { type, positionId } = planning.moves[x];
 
-            if (!planningPositions.includes(parseInt(positionId))) {
-                planningPositions.push(parseInt(positionId));
+            if (!planningPositions.includes(positionId)) {
+                planningPositions.push(positionId);
             }
 
-            if (type === 'container' && !containerPositions.includes(parseInt(positionId))) {
-                containerPositions.push(parseInt(positionId));
+            if (type === 'container' && !containerPositions.includes(positionId)) {
+                containerPositions.push(positionId);
             }
         }
 
@@ -181,10 +185,10 @@ class Gameboard extends Component<Props> {
                 for (let z = 0; z < confirmedPlans[selectedPiece.pieceId].length; z++) {
                     const { type, positionId } = confirmedPlans[selectedPiece.pieceId][z];
                     if (type === 'move') {
-                        planningPositions.push(parseInt(positionId));
+                        planningPositions.push(positionId);
                     }
                     if (type === 'container') {
-                        containerPositions.push(parseInt(positionId));
+                        containerPositions.push(positionId);
                     }
                 }
             }
@@ -193,11 +197,11 @@ class Gameboard extends Component<Props> {
         if (battle.active) {
             if (battle.friendlyPieces.length > 0) {
                 let { piecePositionId } = battle.friendlyPieces[0].piece;
-                battlePositions.push(parseInt(piecePositionId));
+                battlePositions.push(piecePositionId);
             }
             if (battle.enemyPieces.length > 0) {
                 let { piecePositionId } = battle.enemyPieces[0].piece;
-                battlePositions.push(parseInt(piecePositionId));
+                battlePositions.push(piecePositionId);
             }
         }
 
@@ -300,7 +304,7 @@ class Gameboard extends Component<Props> {
                 <NewsPopup news={news} newsPopupMinimizeToggle={newsPopupMinimizeToggle} />
                 <BattlePopup />
                 <RefuelPopup />
-                <SelectCommanderTypePopup gameboardMeta={gameboardMeta} raiseMoraleSelectCommanderType={raiseMoraleSelectCommanderType} />
+                <SelectCommanderTypePopup planning={planning} raiseMoraleSelectCommanderType={raiseMoraleSelectCommanderType} />
                 <ContainerPopup
                     innerTransportPieceClick={innerTransportPieceClick}
                     innerPieceClick={innerPieceClick}
@@ -318,17 +322,20 @@ const mapStateToProps = ({
     gameboard,
     gameboardMeta,
     gameInfo,
-    capabilities
+    capabilities,
+    planning
 }: {
     gameboard: GameboardState;
     gameboardMeta: GameboardMetaState;
     gameInfo: GameInfoState;
     capabilities: CapabilitiesState;
+    planning: PlanningState;
 }) => ({
     gameboard,
     gameboardMeta,
     gameInfo,
-    capabilities
+    capabilities,
+    planning
 });
 
 const mapActionsToProps = {

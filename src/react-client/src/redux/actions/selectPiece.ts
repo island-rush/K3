@@ -1,15 +1,15 @@
 import { Dispatch } from 'redux';
 import { PIECE_CLICK } from '../../../../constants';
-import { EmitType, PieceClickAction, PieceType } from '../../../../types';
+import { EmitType, FullState, PieceClickAction, PieceType } from '../../../../types';
 
 /**
  * Change the state based on the piece that the user selected.
  */
 export const selectPiece = (selectedPiece: PieceType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        const { gameboardMeta } = getState();
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+        const { planning } = getState();
 
-        if (!gameboardMeta.planning.active) {
+        if (!planning.active) {
             const clientAction: PieceClickAction = {
                 type: PIECE_CLICK,
                 payload: {

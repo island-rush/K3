@@ -378,7 +378,7 @@ export interface ConfirmPlanRequestAction extends Action {
     type: typeof SERVER_CONFIRM_PLAN;
     payload: {
         pieceId: number;
-        plan: any;
+        plan: { type: string; positionId: number }[];
     };
 }
 
@@ -386,7 +386,7 @@ export interface ConfirmPlanAction extends Action {
     type: typeof PLAN_WAS_CONFIRMED;
     payload: {
         pieceId: number;
-        plan: any;
+        plan: { type: string; positionId: number }[];
     };
 }
 
@@ -405,7 +405,7 @@ export interface GameInitialStateAction extends Action {
         gameboardPieces: GameboardPiecesDataType;
         gameInfo: any;
         gameboardMeta: {
-            confirmedPlans: number[];
+            confirmedPlans: { [pieceId: number]: { type: string; positionId: number }[] };
             confirmedRods: number[];
             confirmedRemoteSense: number[];
             confirmedInsurgency: number[];

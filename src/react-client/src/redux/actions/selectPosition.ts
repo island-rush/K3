@@ -2,15 +2,15 @@ import { Dispatch } from 'redux';
 // prettier-ignore
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SOCKET_CLIENT_SENDING_ACTION, TYPE_TERRAIN } from '../../../../constants';
 //prettier-ignore
-import { EmitType, ExitTransportContainerRequestAction, HighlightPositionsAction, PlanningSelectAction, PositionCapabilityRequestAction, PositionSelectAction } from "../../../../types";
+import { EmitType, ExitTransportContainerRequestAction, FullState, HighlightPositionsAction, PlanningSelectAction, PositionCapabilityRequestAction, PositionSelectAction } from "../../../../types";
 import setUserfeedbackAction from './setUserfeedbackAction';
 
 /**
  * Change the state based on position that was clicked by the user.
  */
 export const selectPosition = (selectedPositionId: number) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        const { gameboardMeta } = getState();
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+        const { gameboardMeta, planning } = getState();
 
         //selecting the hex to put piece that is inside container
         if (gameboardMeta.container.isSelectingHex) {
@@ -32,7 +32,7 @@ export const selectPosition = (selectedPositionId: number) => {
             return;
         }
 
-        if (!gameboardMeta.planning.active) {
+        if (!planning.active) {
             //select anything and highlight, looking at the position
 
             const thisAction: PositionSelectAction = {
@@ -47,15 +47,15 @@ export const selectPosition = (selectedPositionId: number) => {
         }
 
         //is actively planning
-        if (selectedPositionId === -1 && !gameboardMeta.planning.capability) {
+        if (selectedPositionId === -1 && !planning.capability) {
             dispatch(setUserfeedbackAction('Must select a position for the plan...'));
             return;
         }
 
         //Currently for 'rods from god' but will likely be used for other capabilities (non-piece selections on the board (with planning))
-        if (gameboardMeta.planning.capability) {
+        if (planning.capability) {
             //highlight if needed
-            if (gameboardMeta.planning.invItem.invItemTypeId === REMOTE_SENSING_TYPE_ID) {
+            if (planning.invItem && planning.invItem.invItemTypeId === REMOTE_SENSING_TYPE_ID) {
                 let clickedPosition = selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition;
                 let highlightedPositions: number[] = [];
                 for (let x = 0; x < distanceMatrix[clickedPosition].length; x++) {
@@ -74,7 +74,7 @@ export const selectPosition = (selectedPositionId: number) => {
                 dispatch(highlightAction);
             }
 
-            if (gameboardMeta.planning.invItem.invItemTypeId === COMMUNICATIONS_INTERRUPTION_TYPE_ID) {
+            if (planning.invItem && planning.invItem.invItemTypeId === COMMUNICATIONS_INTERRUPTION_TYPE_ID) {
                 let clickedPosition = selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition;
                 let highlightedPositions: number[] = [];
                 for (let x = 0; x < distanceMatrix[clickedPosition].length; x++) {
@@ -91,7 +91,7 @@ export const selectPosition = (selectedPositionId: number) => {
                 dispatch(highlightAction);
             }
 
-            if (gameboardMeta.planning.invItem.invItemTypeId === GOLDEN_EYE_TYPE_ID) {
+            if (planning.invItem && planning.invItem.invItemTypeId === GOLDEN_EYE_TYPE_ID) {
                 let clickedPosition = selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition;
                 let highlightedPositions = [];
                 for (let x = 0; x < distanceMatrix[clickedPosition].length; x++) {
@@ -109,7 +109,7 @@ export const selectPosition = (selectedPositionId: number) => {
             }
 
             // eslint-disable-next-line no-restricted-globals
-            if (confirm('Are you sure you want to use capability on this position?')) {
+            if (planning.invItem && confirm('Are you sure you want to use capability on this position?')) {
                 //TODO: figure out better way of typecasting the 'type' for this action (could be many types)
                 let type:
                     | typeof SERVER_RODS_FROM_GOD_CONFIRM
@@ -118,7 +118,7 @@ export const selectPosition = (selectedPositionId: number) => {
                     | typeof SERVER_BIOLOGICAL_WEAPONS_CONFIRM
                     | typeof SERVER_COMM_INTERRUPT_CONFIRM
                     | typeof SERVER_GOLDEN_EYE_CONFIRM;
-                switch (gameboardMeta.planning.invItem.invItemTypeId) {
+                switch (planning.invItem.invItemTypeId) {
                     case RODS_FROM_GOD_TYPE_ID:
                         type = SERVER_RODS_FROM_GOD_CONFIRM;
                         break;
@@ -156,7 +156,7 @@ export const selectPosition = (selectedPositionId: number) => {
                     type,
                     payload: {
                         selectedPositionId: selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition,
-                        invItem: gameboardMeta.planning.invItem
+                        invItem: planning.invItem
                     }
                 };
 
@@ -177,23 +177,21 @@ export const selectPosition = (selectedPositionId: number) => {
         }
 
         let trueMoveCount = 0;
-        for (var i = 0; i < gameboardMeta.planning.moves.length; i++) {
-            const { type } = gameboardMeta.planning.moves[i];
+        for (var i = 0; i < planning.moves.length; i++) {
+            const { type } = planning.moves[i];
             if (type === 'move') {
                 trueMoveCount++;
             }
         }
 
-        if (trueMoveCount >= gameboardMeta.selectedPiece.pieceMoves) {
+        if (gameboardMeta.selectedPiece && trueMoveCount >= gameboardMeta.selectedPiece.pieceMoves) {
             dispatch(setUserfeedbackAction('Must move piece within range...'));
             return;
         }
 
         //from the selected position or the last move in the plan?
         const lastSelectedPosition =
-            gameboardMeta.planning.moves.length > 0
-                ? gameboardMeta.planning.moves[gameboardMeta.planning.moves.length - 1].positionId
-                : gameboardMeta.selectedPosition;
+            planning.moves.length > 0 ? planning.moves[planning.moves.length - 1].positionId : gameboardMeta.selectedPosition;
 
         if (distanceMatrix[lastSelectedPosition][selectedPositionId] !== 1) {
             dispatch(setUserfeedbackAction('Must select adjacent position...'));
@@ -201,6 +199,7 @@ export const selectPosition = (selectedPositionId: number) => {
         }
 
         //if we are planning (a non-capability), we assume there is a selectedPiece in the meta
+        // @ts-ignore -> TODO: better null checking here instead of assuming it exists
         const { pieceTypeId } = gameboardMeta.selectedPiece;
         const { type } = initialGameboardEmpty[selectedPositionId];
         if (!TYPE_TERRAIN[pieceTypeId].includes(type)) {

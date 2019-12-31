@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux';
 import { CLEAR_BATTLE } from '../../../../../constants';
-import { ClearBattleAction, EmitType } from '../../../../../types';
+import { ClearBattleAction, EmitType, FullState } from '../../../../../types';
 
 export const clearOldBattle = () => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameboardMeta } = getState();
         const { battle } = gameboardMeta;
 

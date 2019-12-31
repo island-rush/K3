@@ -68,14 +68,6 @@ export interface GameboardMetaState {
         containerPiece: any;
         outerPieces: any[];
     };
-    planning: {
-        active: boolean;
-        capability: boolean;
-        raiseMoralePopupActive: boolean;
-        invItem: any;
-        moves: any[];
-    };
-    confirmedPlans: any;
 }
 
 export interface CapabilitiesState {
@@ -92,3 +84,34 @@ export interface CapabilitiesState {
     confirmedCommInterrupt: number[];
     confirmedGoldenEye: number[];
 }
+
+export interface PlanningState {
+    active: boolean;
+    capability: boolean;
+    raiseMoralePopupActive: boolean;
+    invItem: InvItemType | null;
+    moves: { type: string; positionId: number }[];
+    confirmedPlans: { [pieceId: number]: { type: string; positionId: number }[] };
+}
+
+// const rootReducer = combineReducers({
+//     userFeedback,
+//     gameInfo: gameInfoReducer,
+//     shopItems: shopReducer,
+//     invItems: invReducer,
+//     gameboard: gameboardReducer,
+//     gameboardMeta: gameboardMetaReducer,
+//     capabilities: capabilitiesReducer,
+//     planning: planningReducer
+// });
+
+export type FullState = {
+    userFeedback: UserfeedbackState;
+    gameInfo: GameInfoState;
+    shopItems: ShopState;
+    invItems: InvState;
+    gameboard: GameboardState;
+    gameboardMeta: GameboardMetaState;
+    capabilities: CapabilitiesState;
+    planning: PlanningState;
+};

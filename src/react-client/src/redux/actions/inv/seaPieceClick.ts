@@ -1,16 +1,13 @@
 import { Dispatch } from 'redux';
-import { PLACE_PHASE_ID } from '../../../../../constants';
-import { EmitType, InvItemPlaceRequestAction } from '../../../../../types';
-import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { SERVER_PIECE_PLACE } from '../../../../../constants';
+import { PLACE_PHASE_ID, SERVER_PIECE_PLACE, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
+import { EmitType, FullState, InvItemPlaceRequestAction, InvItemType } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../../../types';
 
 /**
  * Click an inv item to put into a sea position.
  */
 export const seaPieceClick = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameboardMeta, gameInfo } = getState();
 
         const { gamePhase } = gameInfo;

@@ -1,12 +1,10 @@
 import { Dispatch } from 'redux';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
-import { EmitType, RemoteSenseSelectingAction } from '../../../../../types';
-import { REMOTE_SENSING_SELECTING } from '../../../../../constants';
+import { COMBAT_PHASE_ID, REMOTE_SENSING_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
+import { EmitType, FullState, InvItemType, RemoteSenseSelectingAction } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../../../types';
 
 export const remoteSensing = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 

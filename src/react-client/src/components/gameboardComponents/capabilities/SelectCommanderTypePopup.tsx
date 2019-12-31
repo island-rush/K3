@@ -1,5 +1,6 @@
 import React from 'react';
 import { TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL } from '../../../../../constants';
+import { PlanningState } from '../../../../../types';
 
 const popupStyle: any = {
     backgroundColor: 'white',
@@ -27,11 +28,11 @@ const invisibleStyle: any = {
 
 interface Props {
     raiseMoraleSelectCommanderType: any;
-    gameboardMeta: any;
+    planning: PlanningState;
 }
 
-const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, gameboardMeta }: Props) => {
-    const { raiseMoralePopupActive } = gameboardMeta.planning;
+const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, planning }: Props) => {
+    const { raiseMoralePopupActive } = planning;
 
     return (
         <div style={raiseMoralePopupActive ? popupStyle : invisibleStyle}>

@@ -1,12 +1,13 @@
 import { Dispatch } from 'redux';
 import { BATTLE_PIECE_SELECT, WAITING_STATUS } from '../../../../../constants';
-import { BattlePieceSelectAction, EmitType } from '../../../../../types';
+import { BattlePieceSelectAction, EmitType, FullState } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
 export const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gameStatus } = gameInfo;
+
         if (gameStatus === WAITING_STATUS) {
             dispatch(setUserfeedbackAction("can't make more selections, status == 1, already submitted probably"));
             return;

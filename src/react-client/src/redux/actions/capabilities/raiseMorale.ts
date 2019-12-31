@@ -1,14 +1,12 @@
 import { Dispatch } from 'redux';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
-import { EmitType, RaiseMoraleSelectingAction } from '../../../../../types';
-import { RAISE_MORALE_SELECTING } from '../../../../../constants';
+import { COMBAT_PHASE_ID, RAISE_MORALE_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
+import { EmitType, FullState, InvItemType, RaiseMoraleSelectingAction } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../../../types';
 
 //TODO: need to get rid of boost = x from the component when the raise morale is expired
 
 export const raiseMorale = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 

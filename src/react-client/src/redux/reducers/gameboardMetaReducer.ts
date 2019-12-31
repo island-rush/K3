@@ -1,9 +1,9 @@
 //TODO: make this file less thiccc, it's getting pretty hefty (maybe use more reducers to keep it clean....)
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { AIRCRAFT_CLICK, ALL_GROUND_TYPES, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, CLEAR_BATTLE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, distanceMatrix, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, TRANSPORT_TYPE_ID, TYPE_FUEL, UNDO_FUEL_SELECTION, UNDO_MOVE } from '../../../../constants';
+import { AIRCRAFT_CLICK, ALL_GROUND_TYPES, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTING, CANCEL_PLAN, CLEAR_BATTLE, COMM_INTERRUPT_SELECTING, DELETE_PLAN, distanceMatrix, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTING, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTING, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, TANKER_CLICK, TARGET_PIECE_SELECT, TRANSPORT_TYPE_ID, TYPE_FUEL, UNDO_FUEL_SELECTION } from '../../../../constants';
 // prettier-ignore
-import { AircraftClickAction, BattlePieceSelectAction, BattleResultsAction, ConfirmPlanAction, DeletePlanAction, EnemyPieceSelectAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, ExitTransportContainerAction, GameboardMetaState, GameInitialStateAction, HighlightPositionsAction, MenuSelectAction, NewsPhaseAction, PieceClickAction, PieceOpenAction, PieceType, PlanningSelectAction, PositionSelectAction, RaiseMoraleSelectingAction, SelectingAction, TankerClickAction, TargetPieceClickAction, UndoFuelSelectionAction } from '../../../../types';
+import { AircraftClickAction, BattlePieceSelectAction, BattleResultsAction, EnemyPieceSelectAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, ExitTransportContainerAction, GameboardMetaState, GameInitialStateAction, HighlightPositionsAction, MenuSelectAction, NewsPhaseAction, PieceClickAction, PieceOpenAction, PieceType, PositionSelectAction, TankerClickAction, TargetPieceClickAction, UndoFuelSelectionAction } from '../../../../types';
 
 const initialGameboardMeta: GameboardMetaState = {
     //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
@@ -40,15 +40,7 @@ const initialGameboardMeta: GameboardMetaState = {
         innerPieceToDrop: null,
         containerPiece: null,
         outerPieces: []
-    },
-    planning: {
-        active: false,
-        capability: false,
-        raiseMoralePopupActive: false,
-        invItem: null,
-        moves: []
-    },
-    confirmedPlans: {}
+    }
 };
 
 export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
@@ -212,23 +204,8 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
             stateCopy.selectedPiece = null;
             return stateCopy;
 
-        case START_PLAN:
-            stateCopy.planning.active = true;
-            return stateCopy;
-
         case RAISE_MORALE_SELECTING:
-            stateCopy.planning.active = true;
-            stateCopy.planning.capability = true;
-            stateCopy.planning.invItem = (action as RaiseMoraleSelectingAction).payload.invItem;
-            stateCopy.planning.raiseMoralePopupActive = true;
             stateCopy.selectedMenuId = 0;
-            return stateCopy;
-
-        case RAISE_MORALE_SELECTED:
-            stateCopy.planning.capability = false;
-            stateCopy.planning.invItem = null;
-            stateCopy.planning.active = false;
-            stateCopy.planning.raiseMoralePopupActive = false;
             return stateCopy;
 
         case INSURGENCY_SELECTING:
@@ -237,77 +214,18 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
         case RODS_FROM_GOD_SELECTING:
         case GOLDEN_EYE_SELECTING:
         case REMOTE_SENSING_SELECTING:
-            stateCopy.planning.active = true;
-            stateCopy.planning.capability = true;
-            stateCopy.planning.invItem = (action as SelectingAction).payload.invItem;
             stateCopy.selectedMenuId = 0;
             return stateCopy;
 
-        case RODS_FROM_GOD_SELECTED:
-            stateCopy.planning.capability = false;
-            stateCopy.planning.invItem = null;
-            stateCopy.planning.active = false;
-            return stateCopy;
-
-        case BIO_WEAPON_SELECTED:
-            stateCopy.planning.capability = false;
-            stateCopy.planning.invItem = null;
-            stateCopy.planning.active = false;
-            return stateCopy;
-
-        case COMM_INTERRUP_SELECTED:
-            stateCopy.planning.capability = false;
-            stateCopy.planning.invItem = null;
-            stateCopy.planning.active = false;
-            return stateCopy;
-
-        case INSURGENCY_SELECTED:
-            stateCopy.planning.capability = false;
-            stateCopy.planning.invItem = null;
-            stateCopy.planning.active = false;
-            return stateCopy;
-
-        case REMOTE_SENSING_SELECTED:
-            stateCopy.planning.capability = false;
-            stateCopy.planning.invItem = null;
-            stateCopy.planning.active = false;
-            return stateCopy;
-
-        case GOLDEN_EYE_SELECTED:
-            stateCopy.planning.capability = false;
-            stateCopy.planning.invItem = null;
-            stateCopy.planning.active = false;
-            return stateCopy;
-
         case CANCEL_PLAN:
-            stateCopy.planning.active = false;
-            stateCopy.planning.capability = false;
-            stateCopy.planning.moves = [];
             stateCopy.selectedPiece = null;
             return stateCopy;
 
-        case UNDO_MOVE:
-            stateCopy.planning.moves.pop();
-            return stateCopy;
-
-        case PLANNING_SELECT:
-            //TODO: move this to userActions to have more checks there within the thunk
-            stateCopy.planning.moves.push({
-                type: 'move',
-                positionId: (action as PlanningSelectAction).payload.selectedPositionId
-            });
-            return stateCopy;
-
         case PLAN_WAS_CONFIRMED:
-            const { pieceId, plan } = (action as ConfirmPlanAction).payload;
-            stateCopy.confirmedPlans[pieceId] = plan;
-            stateCopy.planning.active = false;
-            stateCopy.planning.moves = [];
             stateCopy.selectedPiece = null;
             return stateCopy;
 
         case DELETE_PLAN:
-            delete stateCopy.confirmedPlans[(action as DeletePlanAction).payload.pieceId];
             stateCopy.selectedPiece = null;
             return stateCopy;
 
@@ -329,10 +247,6 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
 
         case NEWSPOPUP_MINIMIZE_TOGGLE:
             stateCopy.news.isMinimized = !stateCopy.news.isMinimized;
-            return stateCopy;
-
-        case SLICE_CHANGE:
-            stateCopy.confirmedPlans = {};
             return stateCopy;
 
         case BATTLE_PIECE_SELECT:

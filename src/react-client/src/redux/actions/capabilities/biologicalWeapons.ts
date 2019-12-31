@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux';
 import { BIO_WEAPON_SELECTING, COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
-import { BioWeaponSelectingAction, EmitType, InvItemType } from '../../../../../types';
+import { BioWeaponSelectingAction, EmitType, FullState, InvItemType } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
 
 export const biologicalWeapons = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 

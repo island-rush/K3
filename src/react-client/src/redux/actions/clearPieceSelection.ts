@@ -2,16 +2,16 @@
 
 import { Dispatch } from 'redux';
 import { PIECE_CLEAR_SELECTION } from '../../../../constants';
-import { EmitType, PieceClearAction } from '../../../../types';
+import { EmitType, FullState, PieceClearAction } from '../../../../types';
 
 /**
  * Action to de-select all pieces in the zoombox
  */
 export const clearPieceSelection = () => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        const { gameboardMeta } = getState();
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+        const { planning } = getState();
 
-        if (!gameboardMeta.planning.active) {
+        if (!planning.active) {
             const pieceClearAction: PieceClearAction = {
                 type: PIECE_CLEAR_SELECTION,
                 payload: {}

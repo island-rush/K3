@@ -1,14 +1,12 @@
 import { Dispatch } from 'redux';
-import { EmitType, ShopRefundRequestAction } from '../../../../../types';
-import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { SERVER_SHOP_REFUND_REQUEST } from '../../../../../constants';
-import { ShopItemType } from '../../../../../types';
+import { SERVER_SHOP_REFUND_REQUEST, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
+import { EmitType, FullState, ShopItemType, ShopRefundRequestAction } from '../../../../../types';
 
 /**
  * Action to refund an item from the shop.
  */
 export const shopRefundRequest = (shopItem: ShopItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const clientAction: ShopRefundRequestAction = {
             type: SERVER_SHOP_REFUND_REQUEST,
             payload: {

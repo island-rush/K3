@@ -1,15 +1,13 @@
 import { Dispatch } from 'redux';
-import { CONTAINER_TYPES } from '../../../../../constants';
-import { EmitType, PieceOpenAction } from '../../../../../types';
-import { PIECE_OPEN_ACTION } from '../../../../../constants';
+import { CONTAINER_TYPES, PIECE_OPEN_ACTION } from '../../../../../constants';
+import { EmitType, FullState, PieceOpenAction, PieceType } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { PieceType } from '../../../../../types';
 
 /**
  * Double Click a container piece to open it.
  */
 export const pieceOpen = (selectedPiece: PieceType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameboard } = getState();
 
         const { pieceTypeId } = selectedPiece;

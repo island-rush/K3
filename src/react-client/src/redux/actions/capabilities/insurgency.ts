@@ -1,12 +1,10 @@
 import { Dispatch } from 'redux';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
-import { EmitType, InsurgencySelectingAction } from '../../../../../types';
-import { INSURGENCY_SELECTING } from '../../../../../constants';
+import { COMBAT_PHASE_ID, INSURGENCY_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
+import { EmitType, FullState, InsurgencySelectingAction, InvItemType } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../../../types';
 
 export const insurgency = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 

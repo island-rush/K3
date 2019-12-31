@@ -1,12 +1,10 @@
 import { Dispatch } from 'redux';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
-import { EmitType, GoldenEyeSelectingAction } from '../../../../../types';
-import { GOLDEN_EYE_SELECTING } from '../../../../../constants';
+import { COMBAT_PHASE_ID, GOLDEN_EYE_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
+import { EmitType, FullState, GoldenEyeSelectingAction, InvItemType } from '../../../../../types';
 import setUserfeedbackAction from '../setUserfeedbackAction';
-import { InvItemType } from '../../../../../types';
 
 export const goldenEye = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 

@@ -1,13 +1,12 @@
 import { Dispatch } from 'redux';
-import { ConfirmFuelSelectionRequestAction, EmitType } from '../../../../../types';
-import { SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { SERVER_CONFIRM_FUEL_SELECTION } from '../../../../../constants';
+import { SERVER_CONFIRM_FUEL_SELECTION, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
+import { ConfirmFuelSelectionRequestAction, EmitType, FullState } from '../../../../../types';
 
 /**
  * Action to confirm all fuel selections from specific tankers to specific aircraft.
  */
 export const confirmFuelSelections = () => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         //check the local state before sending to the server
         // const { gameboardMeta } = getState();
 
