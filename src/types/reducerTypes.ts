@@ -53,14 +53,6 @@ export interface GameboardMetaState {
         friendlyPieces: any[];
         enemyPieces: any[];
     };
-    refuel: {
-        isMinimized: boolean;
-        active: boolean;
-        selectedTankerPieceId: number;
-        selectedTankerPieceIndex: number;
-        tankers: any;
-        aircraft: any;
-    };
     container: {
         active: boolean;
         isSelectingHex: boolean;
@@ -94,17 +86,43 @@ export interface PlanningState {
     confirmedPlans: { [pieceId: number]: { type: string; positionId: number }[] };
 }
 
-// const rootReducer = combineReducers({
-//     userFeedback,
-//     gameInfo: gameInfoReducer,
-//     shopItems: shopReducer,
-//     invItems: invReducer,
-//     gameboard: gameboardReducer,
-//     gameboardMeta: gameboardMetaReducer,
-//     capabilities: capabilitiesReducer,
-//     planning: planningReducer
-// });
+export interface ContainerState {
+    active: boolean;
+    isSelectingHex: boolean;
+    innerPieceToDrop: any;
+    containerPiece: any;
+    outerPieces: any;
+}
 
+export interface BattleState {
+    isMinimized: boolean;
+    active: boolean;
+    selectedBattlePiece: any;
+    selectedBattlePieceIndex: number; // helper to find the piece within the array
+    masterRecord: any;
+    friendlyPieces: any[];
+    enemyPieces: any[];
+}
+
+export interface NewsState {
+    isMinimized: boolean;
+    active: boolean;
+    newsTitle: string;
+    newsInfo: string;
+}
+
+export interface RefuelState {
+    isMinimized: boolean;
+    active: boolean;
+    selectedTankerPieceId: any;
+    selectedTankerPieceIndex: number;
+    tankers: any[];
+    aircraft: any[];
+}
+
+/**
+ * Formatted to copy the root reducer
+ */
 export type FullState = {
     userFeedback: UserfeedbackState;
     gameInfo: GameInfoState;
@@ -114,4 +132,8 @@ export type FullState = {
     gameboardMeta: GameboardMetaState;
     capabilities: CapabilitiesState;
     planning: PlanningState;
+    container: ContainerState;
+    refuel: RefuelState;
+    battle: BattleState;
+    news: NewsState;
 };

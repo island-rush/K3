@@ -1,6 +1,6 @@
 import { applyMiddleware, compose, createStore, Store } from 'redux';
 import thunk, { ThunkMiddleware } from 'redux-thunk';
-import rootReducer from './reducers';
+import { rootReducer } from './reducers';
 import { emit, init } from './websocket';
 
 const setupStore = () => {

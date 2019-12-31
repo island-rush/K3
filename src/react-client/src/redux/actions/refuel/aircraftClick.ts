@@ -10,8 +10,8 @@ import { PieceType } from '../../../../../types';
  */
 export const aircraftClick = (aircraftPiece: PieceType, aircraftPieceIndex: number) => {
     return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
-        const { gameboardMeta } = getState();
-        const { selectedTankerPieceId, aircraft } = gameboardMeta.refuel;
+        const { refuel } = getState();
+        const { selectedTankerPieceId, aircraft } = refuel;
 
         if (selectedTankerPieceId === -1) {
             dispatch(setUserfeedbackAction('must select tanker to refuel from...'));

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { RefuelState } from '../../../../../types';
 import { aircraftClick, confirmFuelSelections, refuelPopupMinimizeToggle, tankerClick, undoFuelSelection } from '../../../redux/actions';
 import { REFUEL_POPUP_IMAGES } from '../../styleConstants';
 import AircraftPiece from './AircraftPiece';
@@ -68,7 +69,7 @@ const invisibleStyle: any = {
 };
 
 interface Props {
-    refuel: any;
+    refuel: RefuelState;
     confirmFuelSelections: any;
     aircraftClick: any;
     tankerClick: any;
@@ -142,8 +143,8 @@ class RefuelPopup extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ gameboardMeta }: { gameboardMeta: any }) => ({
-    refuel: gameboardMeta.refuel
+const mapStateToProps = ({ refuel }: { refuel: RefuelState }) => ({
+    refuel
 });
 
 const mapActionsToProps = {

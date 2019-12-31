@@ -1,9 +1,9 @@
 //TODO: make this file less thiccc, it's getting pretty hefty (maybe use more reducers to keep it clean....)
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { AIRCRAFT_CLICK, ALL_GROUND_TYPES, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTING, CANCEL_PLAN, CLEAR_BATTLE, COMM_INTERRUPT_SELECTING, DELETE_PLAN, distanceMatrix, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTING, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTING, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, TANKER_CLICK, TARGET_PIECE_SELECT, TRANSPORT_TYPE_ID, TYPE_FUEL, UNDO_FUEL_SELECTION } from '../../../../constants';
+import { ALL_GROUND_TYPES, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTING, CANCEL_PLAN, CLEAR_BATTLE, COMM_INTERRUPT_SELECTING, DELETE_PLAN, distanceMatrix, ENEMY_PIECE_SELECT, EVENT_BATTLE, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTING, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, TARGET_PIECE_SELECT, TRANSPORT_TYPE_ID } from '../../../../constants';
 // prettier-ignore
-import { AircraftClickAction, BattlePieceSelectAction, BattleResultsAction, EnemyPieceSelectAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, ExitTransportContainerAction, GameboardMetaState, GameInitialStateAction, HighlightPositionsAction, MenuSelectAction, NewsPhaseAction, PieceClickAction, PieceOpenAction, PieceType, PositionSelectAction, TankerClickAction, TargetPieceClickAction, UndoFuelSelectionAction } from '../../../../types';
+import { BattlePieceSelectAction, BattleResultsAction, EnemyPieceSelectAction, EnterContainerAction, EventBattleAction, ExitContainerAction, ExitTransportContainerAction, GameboardMetaState, GameInitialStateAction, HighlightPositionsAction, MenuSelectAction, NewsPhaseAction, PieceClickAction, PieceOpenAction, PieceType, PositionSelectAction, TargetPieceClickAction } from '../../../../types';
 
 const initialGameboardMeta: GameboardMetaState = {
     //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
@@ -26,14 +26,6 @@ const initialGameboardMeta: GameboardMetaState = {
         friendlyPieces: [],
         enemyPieces: []
     },
-    refuel: {
-        isMinimized: false,
-        active: false,
-        selectedTankerPieceId: -1,
-        selectedTankerPieceIndex: -1,
-        tankers: [],
-        aircraft: []
-    },
     container: {
         active: false,
         isSelectingHex: false,
@@ -49,6 +41,11 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
     let stateCopy: GameboardMetaState = JSON.parse(JSON.stringify(state));
 
     switch (type) {
+        case INITIAL_GAMESTATE:
+            //TODO: refactor to not do this
+            Object.assign(stateCopy, (action as GameInitialStateAction).payload.gameboardMeta);
+            return stateCopy;
+
         case HIGHLIGHT_POSITIONS:
             stateCopy.highlightedPositions = (action as HighlightPositionsAction).payload.highlightedPositions;
             return stateCopy;
@@ -67,19 +64,6 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
 
         case PURCHASE_PHASE:
             stateCopy.news.active = false; //hide the popup
-            return stateCopy;
-
-        case TANKER_CLICK:
-            //select if different, unselect if was the same
-            let lastSelectedTankerId = stateCopy.refuel.selectedTankerPieceId;
-            stateCopy.refuel.selectedTankerPieceId =
-                (action as TankerClickAction).payload.tankerPiece.pieceId === lastSelectedTankerId
-                    ? -1
-                    : (action as TankerClickAction).payload.tankerPiece.pieceId;
-            stateCopy.refuel.selectedTankerPieceIndex =
-                (action as TankerClickAction).payload.tankerPiece.pieceId === lastSelectedTankerId
-                    ? -1
-                    : (action as TankerClickAction).payload.tankerPieceIndex;
             return stateCopy;
 
         case PIECE_OPEN_ACTION:
@@ -156,42 +140,6 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
             stateCopy.container.outerPieces.push((action as ExitContainerAction).payload.selectedPiece);
             return stateCopy;
 
-        case AIRCRAFT_CLICK:
-            //show which tanker is giving the aircraft...
-            let { aircraftPieceIndex, aircraftPiece } = (action as AircraftClickAction).payload;
-            const { selectedTankerPieceId, selectedTankerPieceIndex } = stateCopy.refuel;
-
-            stateCopy.refuel.aircraft[aircraftPieceIndex].tankerPieceId = selectedTankerPieceId;
-            stateCopy.refuel.aircraft[aircraftPieceIndex].tankerPieceIndex = selectedTankerPieceIndex;
-
-            //need how much fuel is getting removed
-            const fuelToRemove = TYPE_FUEL[aircraftPiece.pieceTypeId] - aircraftPiece.pieceFuel;
-
-            if (!stateCopy.refuel.tankers[selectedTankerPieceIndex].removedFuel) {
-                stateCopy.refuel.tankers[selectedTankerPieceIndex].removedFuel = 0;
-            }
-            stateCopy.refuel.tankers[selectedTankerPieceIndex].removedFuel += fuelToRemove;
-
-            return stateCopy;
-
-        case UNDO_FUEL_SELECTION:
-            //TODO: needs some good refactoring
-            // let airPiece = payload.aircraftPiece;
-            let airPieceIndex = (action as UndoFuelSelectionAction).payload.aircraftPieceIndex;
-            let tankerPieceIndex2 = stateCopy.refuel.aircraft[airPieceIndex].tankerPieceIndex;
-
-            let pieceType = stateCopy.refuel.aircraft[airPieceIndex].pieceTypeId;
-            let fuelThatWasGoingToGetAdded = TYPE_FUEL[pieceType] - stateCopy.refuel.aircraft[airPieceIndex].pieceFuel;
-
-            stateCopy.refuel.aircraft[airPieceIndex].tankerPieceId = null;
-            stateCopy.refuel.aircraft[airPieceIndex].tankerPieceIndex = null;
-            stateCopy.refuel.tankers[tankerPieceIndex2].removedFuel -= fuelThatWasGoingToGetAdded;
-            return stateCopy;
-
-        case REFUEL_RESULTS:
-            stateCopy.refuel = initialGameboardMeta.refuel;
-            return stateCopy;
-
         case NEWS_PHASE:
             stateCopy.news = (action as NewsPhaseAction).payload.news;
             return stateCopy;
@@ -227,22 +175,6 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
 
         case DELETE_PLAN:
             stateCopy.selectedPiece = null;
-            return stateCopy;
-
-        case EVENT_REFUEL:
-            stateCopy.refuel.active = true;
-            stateCopy.refuel.tankers = (action as EventRefuelAction).payload.tankers;
-            stateCopy.refuel.aircraft = (action as EventRefuelAction).payload.aircraft;
-            stateCopy.refuel.selectedTankerPieceId = -1;
-            stateCopy.refuel.selectedTankerPieceIndex = -1;
-            return stateCopy;
-
-        case REFUELPOPUP_MINIMIZE_TOGGLE:
-            stateCopy.refuel.isMinimized = !stateCopy.refuel.isMinimized;
-            return stateCopy;
-
-        case INITIAL_GAMESTATE:
-            Object.assign(stateCopy, (action as GameInitialStateAction).payload.gameboardMeta);
             return stateCopy;
 
         case NEWSPOPUP_MINIMIZE_TOGGLE:
@@ -291,10 +223,6 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
             return stateCopy;
 
         case NO_MORE_EVENTS:
-            // stateCopy = initialGameboardMeta; //gets rid of selected position/piece if there was one...
-            // stateCopy.battle = initialGameboardMeta.battle;
-            // stateCopy.refuel = initialGameboardMeta.refuel;  //these don't seem to work
-            // stateCopy.container = initialGameboardMeta.container;
             stateCopy.battle = {
                 isMinimized: false,
                 active: false,
@@ -304,14 +232,7 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
                 friendlyPieces: [],
                 enemyPieces: []
             };
-            stateCopy.refuel = {
-                isMinimized: false,
-                active: false,
-                selectedTankerPieceId: -1,
-                selectedTankerPieceIndex: -1,
-                tankers: [],
-                aircraft: []
-            };
+
             // stateCopy.container = initialGameboardMeta.container;
             return stateCopy;
 
