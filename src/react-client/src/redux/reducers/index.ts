@@ -5,6 +5,7 @@ import gameInfoReducer from './gameInfoReducer';
 import invReducer from './invReducer';
 import shopReducer from './shopReducer';
 import userFeedback from './userFeedback';
+import capabilitiesReducer from './capabilitiesReducer';
 
 const rootReducer = combineReducers({
     userFeedback,
@@ -12,7 +13,8 @@ const rootReducer = combineReducers({
     shopItems: shopReducer,
     invItems: invReducer,
     gameboard: gameboardReducer,
-    gameboardMeta: gameboardMetaReducer
+    gameboardMeta: gameboardMetaReducer,
+    capabilities: capabilitiesReducer
 });
 
 export default rootReducer;

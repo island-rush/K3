@@ -76,11 +76,19 @@ export interface GameboardMetaState {
         moves: any[];
     };
     confirmedPlans: any;
-    confirmedRods: any[];
-    confirmedRemoteSense: any[];
-    confirmedInsurgency: any[];
-    confirmedBioWeapons: any[];
-    confirmedRaiseMorale: any[];
-    confirmedCommInterrupt: any[];
-    confirmedGoldenEye: any[];
+}
+
+export interface CapabilitiesState {
+    confirmedRods: number[];
+    confirmedRemoteSense: number[];
+    confirmedInsurgency: number[];
+    confirmedBioWeapons: number[];
+
+    /**
+     * List of boosts for commander types, listed as commander type numbers
+     * ex: [3, 3, 4] => 2 move boost for type 3 commander, 1 move boost for type 4 commander
+     */
+    confirmedRaiseMorale: number[];
+    confirmedCommInterrupt: number[];
+    confirmedGoldenEye: number[];
 }

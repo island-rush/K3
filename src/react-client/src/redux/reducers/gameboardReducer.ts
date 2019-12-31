@@ -18,7 +18,7 @@ type GameboardPiecesUpdateAction =
     | ExitContainerAction
     | EventRefuelAction;
 
-function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
+export function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: GameboardState = JSON.parse(JSON.stringify(state));

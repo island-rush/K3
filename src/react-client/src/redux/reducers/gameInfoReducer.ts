@@ -29,7 +29,7 @@ const initialGameInfoState: GameInfoState = {
     flag12: -1
 };
 
-function gameInfoReducer(state = initialGameInfoState, action: AnyAction) {
+export function gameInfoReducer(state = initialGameInfoState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: GameInfoState = JSON.parse(JSON.stringify(state));

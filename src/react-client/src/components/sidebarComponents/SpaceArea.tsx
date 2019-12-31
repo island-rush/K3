@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ANTI_SATELLITE_MISSILES_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID } from '../../../../constants';
-import { InvItemType } from '../../../../types';
+import { InvItemType, InvState } from '../../../../types';
 import { antiSatelliteMissiles, remoteSensing, rodsFromGod } from '../../redux/actions';
 import InvItem from './InvItem';
 
@@ -66,7 +66,7 @@ const invisibleStyle = {
 
 interface Props {
     selected: boolean;
-    invItems: InvItemType[];
+    invItems: InvState;
     remoteSensing: any;
     rodsFromGod: any;
     antiSatelliteMissiles: any;
@@ -133,13 +133,11 @@ class SpaceArea extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ invItems, gameboardMeta }: { invItems: InvItemType[]; gameboardMeta: any }) => ({
-    invItems,
-    confirmedRaiseMorale: gameboardMeta.confirmedRaiseMorale
+const mapStateToProps = ({ invItems }: { invItems: InvState }) => ({
+    invItems
 });
 
 const mapActionsToProps = {
-    //TODO: refactor to use names / variables instead of hard coded numbers? (refactor to throw these in an object/array)
     remoteSensing,
     rodsFromGod,
     antiSatelliteMissiles

@@ -5,7 +5,7 @@ import { UserfeedbackAction, UserfeedbackState } from '../../../../types';
 
 const initialUserFeedback: UserfeedbackState = 'Loading...';
 
-function userFeedbackReducer(state = initialUserFeedback, action: AnyAction) {
+export function userFeedbackReducer(state = initialUserFeedback, action: AnyAction) {
     const { type } = action;
 
     switch (type) {

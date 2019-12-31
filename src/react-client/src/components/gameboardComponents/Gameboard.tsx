@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
 import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from '../../../../constants';
+import { CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState } from '../../../../types';
 //prettier-ignore
 import { innerPieceClick, innerTransportPieceClick, newsPopupMinimizeToggle, outerPieceClick, pieceClose, raiseMoraleSelectCommanderType, selectPosition } from "../../redux/actions";
 import BattlePopup from './battle/BattlePopup';
@@ -122,9 +123,10 @@ const titleSolver = (position: any, gameInfo: any, positionIndex: number) => {
 };
 
 interface Props {
-    gameInfo: any;
-    gameboard: any;
-    gameboardMeta: any;
+    gameInfo: GameInfoState;
+    gameboard: GameboardState;
+    gameboardMeta: GameboardMetaState;
+    capabilities: CapabilitiesState;
     selectPosition: any;
     newsPopupMinimizeToggle: any;
     raiseMoraleSelectCommanderType: any;
@@ -140,6 +142,7 @@ class Gameboard extends Component<Props> {
             gameInfo,
             gameboard,
             gameboardMeta,
+            capabilities,
             selectPosition,
             newsPopupMinimizeToggle,
             raiseMoraleSelectCommanderType,
@@ -150,7 +153,9 @@ class Gameboard extends Component<Props> {
         } = this.props;
 
         //prettier-ignore
-        const { confirmedGoldenEye, confirmedCommInterrupt, confirmedBioWeapons, confirmedInsurgency, confirmedRods, confirmedRemoteSense, selectedPosition, news, battle, container, planning, selectedPiece, confirmedPlans, highlightedPositions } = gameboardMeta;
+        const { selectedPosition, news, battle, container, planning, selectedPiece, confirmedPlans, highlightedPositions } = gameboardMeta;
+        //prettier-ignore
+        const { confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods} = capabilities;
 
         let planningPositions: any = []; //all of the positions part of a plan
         let containerPositions: any = []; //specific positions part of a plan of type container
@@ -231,7 +236,7 @@ class Gameboard extends Component<Props> {
                 q={qIndexSolver(parseInt(positionIndex))}
                 r={rIndexSolver(parseInt(positionIndex))}
                 s={-999}
-                fill={patternSolver(gameboard[positionIndex], gameInfo, parseInt(positionIndex))}
+                fill={patternSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex))}
                 //TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
                 onClick={(event: any) => {
                     event.preventDefault();
@@ -241,7 +246,7 @@ class Gameboard extends Component<Props> {
                 //These are found in the Game.css
                 //TODO: highlight according to some priority list
                 className={
-                    parseInt(selectedPosition) === parseInt(positionIndex)
+                    selectedPosition === parseInt(positionIndex)
                         ? 'selectedPos'
                         : containerPositions.includes(parseInt(positionIndex))
                         ? 'containerPos'
@@ -266,11 +271,11 @@ class Gameboard extends Component<Props> {
                         : ''
                 }
                 //TODO: pass down what the highlighting means into the title
-                title={titleSolver(gameboard[positionIndex], gameInfo, parseInt(positionIndex))}
-                topBlue={hasPieceType(gameboard[positionIndex], 'top', 'blue')}
-                bottomBlue={hasPieceType(gameboard[positionIndex], 'bottom', 'blue')}
-                topRed={hasPieceType(gameboard[positionIndex], 'top', 'red')}
-                bottomRed={hasPieceType(gameboard[positionIndex], 'bottom', 'red')}
+                title={titleSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex))}
+                topBlue={hasPieceType(gameboard[parseInt(positionIndex)], 'top', 'blue')}
+                bottomBlue={hasPieceType(gameboard[parseInt(positionIndex)], 'bottom', 'blue')}
+                topRed={hasPieceType(gameboard[parseInt(positionIndex)], 'top', 'red')}
+                bottomRed={hasPieceType(gameboard[parseInt(positionIndex)], 'bottom', 'red')}
             />
         ));
 
@@ -309,10 +314,21 @@ class Gameboard extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ gameboard, gameboardMeta, gameInfo }: { gameboard: any; gameboardMeta: any; gameInfo: any }) => ({
+const mapStateToProps = ({
     gameboard,
     gameboardMeta,
-    gameInfo
+    gameInfo,
+    capabilities
+}: {
+    gameboard: GameboardState;
+    gameboardMeta: GameboardMetaState;
+    gameInfo: GameInfoState;
+    capabilities: CapabilitiesState;
+}) => ({
+    gameboard,
+    gameboardMeta,
+    gameInfo,
+    capabilities
 });
 
 const mapActionsToProps = {

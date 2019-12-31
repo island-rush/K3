@@ -8,7 +8,7 @@ const initialInvState: InvState = [];
 
 type InvItemsPayloadAction = GameInitialStateAction | ShopConfirmPurchaseAction;
 
-function invReducer(state = initialInvState, action: AnyAction) {
+export function invReducer(state = initialInvState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: InvState = JSON.parse(JSON.stringify(state));

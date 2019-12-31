@@ -81,7 +81,7 @@ export interface RemoteSensingAction extends Action {
     type: typeof REMOTE_SENSING_SELECTED;
     payload: {
         invItem: InvItemType;
-        confirmedRemoteSense: any;
+        confirmedRemoteSense: number[];
         gameboardPieces: GameboardPiecesDataType;
     };
 }
@@ -130,7 +130,7 @@ export interface RaiseMoraleAction extends Action {
     type: typeof RAISE_MORALE_SELECTED;
     payload: {
         invItem: InvItemType;
-        confirmedRaiseMorale: any;
+        confirmedRaiseMorale: number[];
         gameboardPieces: GameboardPiecesDataType;
     };
 }
@@ -147,7 +147,7 @@ export interface CommInterruptAction extends Action {
     type: typeof COMM_INTERRUP_SELECTED;
     payload: {
         invItem: InvItemType;
-        confirmedCommInterrupt: any;
+        confirmedCommInterrupt: number[];
     };
 }
 

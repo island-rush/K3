@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
 import { ANTI_SATELLITE_MISSILES_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, CYBER_DOMINANCE_TYPE_ID, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, LIST_ALL_CAPABILITIES, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, RAISE_MORALE_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SOF_TEAM_TYPE_ID, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from "../../../../constants";
-import { InvItemType } from '../../../../types';
+import { CapabilitiesState, InvItemType, InvState } from '../../../../types';
 //prettier-ignore
 import { airPieceClick, antiSatelliteMissiles, atcScramble, biologicalWeapons, communicationsInterruption, cyberDominance, droneSwarms, goldenEye, insurgency, landPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines, seaPieceClick } from "../../redux/actions";
 import InvItem from './InvItem';
@@ -71,9 +71,9 @@ const itemCount = (array: any, value: any) => {
 };
 
 interface Props {
-    confirmedRaiseMorale: any;
+    confirmedRaiseMorale: number[];
     selected: boolean;
-    invItems: InvItemType[];
+    invItems: InvState;
     airPieceClick: any;
     landPieceClick: any;
     seaPieceClick: any;
@@ -188,16 +188,15 @@ class InvMenu extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ invItems, gameboardMeta }: { invItems: InvItemType[]; gameboardMeta: any }) => ({
+const mapStateToProps = ({ invItems, capabilities }: { invItems: InvState; capabilities: CapabilitiesState }) => ({
     invItems,
-    confirmedRaiseMorale: gameboardMeta.confirmedRaiseMorale
+    confirmedRaiseMorale: capabilities.confirmedRaiseMorale
 });
 
 const mapActionsToProps = {
     airPieceClick,
     landPieceClick,
     seaPieceClick,
-    //TODO: refactor to use names / variables instead of hard coded numbers? (refactor to throw these in an object/array)
     atcScramble,
     cyberDominance,
     missileLaunchDisruption,

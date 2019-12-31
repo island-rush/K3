@@ -4,7 +4,7 @@ import { GameInitialStateAction, ShopItemType, ShopPurchaseAction, ShopRefundAct
 
 const initialShopState: ShopState = [];
 
-function shopReducer(state = initialShopState, action: AnyAction) {
+export function shopReducer(state = initialShopState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: ShopState = JSON.parse(JSON.stringify(state));
