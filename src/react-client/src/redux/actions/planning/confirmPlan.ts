@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { SERVER_CONFIRM_PLAN, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
 import { ConfirmPlanRequestAction, EmitType, FullState } from '../../../../../types';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Action to confirm a list of moves as a plan for a piece.
@@ -25,5 +25,3 @@ export const confirmPlan = () => {
         }
     };
 };
-
-export default confirmPlan;

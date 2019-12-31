@@ -16,5 +16,3 @@ export const shopPurchaseRequest = (shopItemTypeId: number) => {
         emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
     };
 };
-
-export default shopPurchaseRequest;

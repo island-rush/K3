@@ -15,5 +15,3 @@ export const newsPopupMinimizeToggle = () => {
         dispatch(newsPopupMinimizeToggleAction);
     };
 };
-
-export default newsPopupMinimizeToggle;

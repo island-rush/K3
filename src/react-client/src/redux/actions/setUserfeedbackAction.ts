@@ -13,5 +13,3 @@ export const setUserfeedbackAction = (userFeedback: string) => {
     };
     return userFeedbackAction;
 };
-
-export default setUserfeedbackAction;

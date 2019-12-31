@@ -20,5 +20,3 @@ export const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceT
         emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
     };
 };
-
-export default innerPieceClick;

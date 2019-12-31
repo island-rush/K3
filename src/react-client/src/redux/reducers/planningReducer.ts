@@ -102,5 +102,3 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
             return state;
     }
 }
-
-export default planningReducer;

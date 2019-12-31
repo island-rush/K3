@@ -23,5 +23,3 @@ export const targetPieceClick = (battlePiece: any, battlePieceIndex: number) => 
         dispatch(targetPieceSelectAction);
     };
 };
-
-export default targetPieceClick;

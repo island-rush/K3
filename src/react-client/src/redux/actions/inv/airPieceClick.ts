@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { PLACE_PHASE_ID, SERVER_PIECE_PLACE, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
 import { EmitType, FullState, InvItemPlaceRequestAction, InvItemType } from '../../../../../types';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Action to put air piece inv item on the board.
@@ -41,5 +41,3 @@ export const airPieceClick = (invItem: InvItemType) => {
         emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
     };
 };
-
-export default airPieceClick;

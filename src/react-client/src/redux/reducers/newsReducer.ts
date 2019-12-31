@@ -36,5 +36,3 @@ export function newsReducer(state = initialNewsState, action: AnyAction) {
             return state;
     }
 }
-
-export default newsReducer;

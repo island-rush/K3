@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, COMM_INTERRUPT_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
 import { CommInterruptSelectingAction, EmitType, FullState, InvItemType } from '../../../../../types';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const communicationsInterruption = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
@@ -31,5 +31,3 @@ export const communicationsInterruption = (invItem: InvItemType) => {
         dispatch(commInterruptSelectingAction);
     };
 };
-
-export default communicationsInterruption;

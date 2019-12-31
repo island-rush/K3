@@ -167,5 +167,3 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
             return state;
     }
 }
-
-export default battleReducer;

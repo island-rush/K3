@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { BATTLE_PIECE_SELECT, WAITING_STATUS } from '../../../../../constants';
 import { BattlePieceSelectAction, EmitType, FullState } from '../../../../../types';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
     return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
@@ -24,5 +24,3 @@ export const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => 
         dispatch(battlePieceSelectAction);
     };
 };
-
-export default battlePieceClick;

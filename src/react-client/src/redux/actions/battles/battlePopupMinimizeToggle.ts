@@ -12,5 +12,3 @@ export const battlePopupMinimizeToggle = () => {
         dispatch(battlePopupToggleAction);
     };
 };
-
-export default battlePopupMinimizeToggle;

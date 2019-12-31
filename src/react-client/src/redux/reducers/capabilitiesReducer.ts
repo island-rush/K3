@@ -87,5 +87,3 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: An
             return state;
     }
 }
-
-export default capabilitiesReducer;

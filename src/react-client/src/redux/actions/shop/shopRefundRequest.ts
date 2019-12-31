@@ -16,5 +16,3 @@ export const shopRefundRequest = (shopItem: ShopItemType) => {
         emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
     };
 };
-
-export default shopRefundRequest;

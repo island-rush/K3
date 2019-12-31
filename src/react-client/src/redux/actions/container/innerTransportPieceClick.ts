@@ -21,5 +21,3 @@ export const innerTransportPieceClick = (selectedPiece: PieceType, containerPiec
         dispatch(clientAction);
     };
 };
-
-export default innerTransportPieceClick;

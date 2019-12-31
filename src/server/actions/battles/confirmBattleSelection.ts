@@ -111,5 +111,3 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
     await giveNextEvent(socket, { thisGame, gameTeam: 0 }); // not putting executingStep in options to let it know not to send pieceMove
     await giveNextEvent(socket, { thisGame, gameTeam: 1 }); // not putting executingStep in options to let it know not to send pieceMove
 };
-
-export default confirmBattleSelection;

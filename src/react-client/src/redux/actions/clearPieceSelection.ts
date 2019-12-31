@@ -21,5 +21,3 @@ export const clearPieceSelection = () => {
         }
     };
 };
-
-export default clearPieceSelection;

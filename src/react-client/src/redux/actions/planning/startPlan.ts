@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, START_PLAN, TYPE_OWNERS } from '../../../../../constants';
 import { EmitType, FullState, StartPlanAction } from '../../../../../types';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 //TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)
 /**
@@ -60,5 +60,3 @@ export const startPlan = () => {
         dispatch(startPlanAction);
     };
 };
-
-export default startPlan;

@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { AircraftClickAction, EmitType, FullState } from '../../../../../types';
 import { AIRCRAFT_CLICK } from '../../../../../constants';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 import { PieceType } from '../../../../../types';
 
 //TODO: could have more checks for current game event / phase / slice / other easy stuff that should be obvious
@@ -37,5 +37,3 @@ export const aircraftClick = (aircraftPiece: PieceType, aircraftPieceIndex: numb
         return;
     };
 };
-
-export default aircraftClick;

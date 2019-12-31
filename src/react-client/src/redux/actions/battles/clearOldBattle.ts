@@ -16,5 +16,3 @@ export const clearOldBattle = () => {
         dispatch(clearBattleAction);
     };
 };
-
-export default clearOldBattle;

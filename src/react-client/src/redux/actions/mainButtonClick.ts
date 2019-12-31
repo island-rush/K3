@@ -14,5 +14,3 @@ export const mainButtonClick = () => {
         emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
     };
 };
-
-export default mainButtonClick;

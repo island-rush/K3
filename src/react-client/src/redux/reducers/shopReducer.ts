@@ -29,5 +29,3 @@ export function shopReducer(state = initialShopState, action: AnyAction) {
             return state;
     }
 }
-
-export default shopReducer;

@@ -20,5 +20,3 @@ export const pieceClose = (selectedPiece: PieceType) => {
         dispatch(clientAction);
     };
 };
-
-export default pieceClose;

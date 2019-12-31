@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { CONTAINER_TYPES, PIECE_OPEN_ACTION } from '../../../../../constants';
 import { EmitType, FullState, PieceOpenAction, PieceType } from '../../../../../types';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Double Click a container piece to open it.
@@ -33,5 +33,3 @@ export const pieceOpen = (selectedPiece: PieceType) => {
         dispatch(clientAction);
     };
 };
-
-export default pieceOpen;

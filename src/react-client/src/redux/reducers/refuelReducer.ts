@@ -100,5 +100,3 @@ export function refuelReducer(state = initialRefuelState, action: AnyAction) {
             return state;
     }
 }
-
-export default refuelReducer;

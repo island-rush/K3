@@ -145,5 +145,3 @@ export function userFeedbackReducer(state = initialUserFeedback, action: AnyActi
             return state;
     }
 }
-
-export default userFeedbackReducer;

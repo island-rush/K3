@@ -15,5 +15,3 @@ export const refuelPopupMinimizeToggle = () => {
         dispatch(refuelPopupMinimizeAction);
     };
 };
-
-export default refuelPopupMinimizeToggle;

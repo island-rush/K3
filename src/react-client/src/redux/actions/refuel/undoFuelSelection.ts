@@ -24,5 +24,3 @@ export const undoFuelSelection = (aircraftPiece: PieceType, aircraftPieceIndex: 
         return;
     };
 };
-
-export default undoFuelSelection;

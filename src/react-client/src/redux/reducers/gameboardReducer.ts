@@ -96,5 +96,3 @@ export function gameboardReducer(state = initialGameboardEmpty, action: AnyActio
             return state;
     }
 }
-
-export default gameboardReducer;

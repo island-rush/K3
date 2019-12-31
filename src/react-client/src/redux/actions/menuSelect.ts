@@ -21,5 +21,3 @@ export const menuSelect = (selectedMenuId: number) => {
         }
     };
 };
-
-export default menuSelect;

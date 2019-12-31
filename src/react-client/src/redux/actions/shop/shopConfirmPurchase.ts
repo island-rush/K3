@@ -14,5 +14,3 @@ export const shopConfirmPurchase = () => {
         emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
     };
 };
-
-export default shopConfirmPurchase;

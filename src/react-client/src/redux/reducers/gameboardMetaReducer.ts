@@ -72,5 +72,3 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
             return state;
     }
 }
-
-export default gameboardMetaReducer;

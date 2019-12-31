@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, INSURGENCY_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
 import { EmitType, FullState, InsurgencySelectingAction, InvItemType } from '../../../../../types';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const insurgency = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
@@ -31,5 +31,3 @@ export const insurgency = (invItem: InvItemType) => {
         dispatch(insurgencySelectingAction);
     };
 };
-
-export default insurgency;

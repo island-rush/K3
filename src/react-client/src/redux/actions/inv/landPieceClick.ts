@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { PLACE_PHASE_ID, SERVER_PIECE_PLACE, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
 import { EmitType, FullState, InvItemPlaceRequestAction, InvItemType } from '../../../../../types';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Action to select inv item to place on the board (land item)
@@ -40,5 +40,3 @@ export const landPieceClick = (invItem: InvItemType) => {
         emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
     };
 };
-
-export default landPieceClick;

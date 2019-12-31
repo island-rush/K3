@@ -96,5 +96,3 @@ export function containerReducer(state = initialContainerState, action: AnyActio
             return state;
     }
 }
-
-export default containerReducer;

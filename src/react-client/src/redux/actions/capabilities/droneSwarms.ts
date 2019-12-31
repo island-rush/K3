@@ -1,11 +1,9 @@
 import { Dispatch } from 'redux';
 import { EmitType, FullState, InvItemType } from '../../../../../types';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const droneSwarms = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
         dispatch(setUserfeedbackAction('droneSwarms'));
     };
 };
-
-export default droneSwarms;

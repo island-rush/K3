@@ -21,5 +21,3 @@ export const tankerClick = (tankerPiece: PieceType, tankerPieceIndex: number) =>
         return;
     };
 };
-
-export default tankerClick;

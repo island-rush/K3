@@ -21,5 +21,3 @@ export const selectPiece = (selectedPiece: PieceType) => {
         }
     };
 };
-
-export default selectPiece;

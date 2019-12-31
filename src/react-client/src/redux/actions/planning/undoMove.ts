@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { UNDO_MOVE } from '../../../../../constants';
 import { EmitType, FullState, UndoMoveAction } from '../../../../../types';
-import setUserfeedbackAction from '../setUserfeedbackAction';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Action to under a move from a plan.
@@ -22,5 +22,3 @@ export const undoMove = () => {
         }
     };
 };
-
-export default undoMove;

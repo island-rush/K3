@@ -102,5 +102,3 @@ export function gameInfoReducer(state = initialGameInfoState, action: AnyAction)
             return state;
     }
 }
-
-export default gameInfoReducer;

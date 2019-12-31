@@ -38,5 +38,3 @@ export function invReducer(state = initialInvState, action: AnyAction) {
             return state;
     }
 }
-
-export default invReducer;
