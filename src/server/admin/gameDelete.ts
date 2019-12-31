@@ -38,5 +38,3 @@ export const gameDelete = async (req: Request, res: Response) => {
 type GameDeleteRequest = {
     gameId: number;
 };
-
-export default gameDelete;

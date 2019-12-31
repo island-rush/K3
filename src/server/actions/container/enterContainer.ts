@@ -204,5 +204,3 @@ export const enterContainer = async (socket: Socket, action: EnterContainerReque
     socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
-
-export default enterContainer;

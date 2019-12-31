@@ -385,5 +385,3 @@ export class Piece implements PieceType {
         await pool.query(testquery, inserts);
     }
 }
-
-export default Piece;

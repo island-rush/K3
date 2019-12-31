@@ -8,7 +8,7 @@ import { sendUserFeedback } from './sendUserFeedback';
 /**
  * Find the next event in the EventQueue and send to this team (through a socket)
  */
-const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
+export const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
     // Grab Session
     const session: GameSession = socket.handshake.session.ir3;
 
@@ -118,5 +118,3 @@ type GiveNextEventOptions = {
     thisGame: Game;
     gameTeam: number;
 };
-
-export default giveNextEvent;

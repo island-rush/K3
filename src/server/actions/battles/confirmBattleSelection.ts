@@ -4,7 +4,7 @@ import { BATTLE_FIGHT_RESULTS, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIS
 // prettier-ignore
 import { BattleResultsAction, ConfirmBattleSelectionRequestAction, GameSession, UpdateFlagAction } from '../../../types';
 import { Event, Game } from '../../classes';
-import giveNextEvent from '../giveNextEvent';
+import { giveNextEvent } from '../giveNextEvent';
 import { sendUserFeedback } from '../sendUserFeedback';
 
 /**

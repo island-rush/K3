@@ -214,5 +214,3 @@ router.post('/gameReset', (req: Request, res: Response) => {
         res.status(500).redirect('/teacher.html?gameReset=failed');
     }
 });
-
-export default router;

@@ -541,5 +541,3 @@ export class Capability {
         await pool.query(queryString);
     }
 }
-
-export default Capability;

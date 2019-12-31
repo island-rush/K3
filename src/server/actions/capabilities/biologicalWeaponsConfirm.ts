@@ -94,5 +94,3 @@ export const biologicalWeaponsConfirm = async (socket: Socket, action: BioWeapon
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
-
-export default biologicalWeaponsConfirm;

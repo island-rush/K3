@@ -24,5 +24,3 @@ export const getGameActive = async (req: Request, res: Response) => {
 
     res.send(JSON.stringify(gameActive));
 };
-
-export default getGameActive;

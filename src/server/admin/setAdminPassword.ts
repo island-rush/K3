@@ -42,5 +42,3 @@ type SetAdminPassRequest = {
     gameId: number;
     adminPassword: Password;
 };
-
-export default setAdminPassword;

@@ -746,5 +746,3 @@ type GameConstructorOptionsWithoutId = {
 };
 
 type GameOptions = GameConstructorOptionsWithId | GameConstructorOptionsWithoutId;
-
-export default Game;

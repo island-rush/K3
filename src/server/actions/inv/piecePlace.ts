@@ -116,5 +116,3 @@ export const piecePlace = async (socket: Socket, action: InvItemPlaceRequestActi
     socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
-
-export default piecePlace;

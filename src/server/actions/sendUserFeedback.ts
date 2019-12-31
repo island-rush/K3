@@ -15,5 +15,3 @@ export const sendUserFeedback = async (socket: Socket, userFeedback: string) => 
 
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
-
-export default sendUserFeedback;

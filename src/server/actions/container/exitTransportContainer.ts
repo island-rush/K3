@@ -86,5 +86,3 @@ export const exitTransportContainer = async (socket: Socket, action: ExitTranspo
     socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
-
-export default exitTransportContainer;

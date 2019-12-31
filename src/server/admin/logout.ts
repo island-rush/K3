@@ -22,5 +22,3 @@ export const logout = async (session: GameSession) => {
 
     return true; // Return type does not matter (fire and forget function)
 };
-
-export default logout;

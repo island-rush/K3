@@ -84,5 +84,3 @@ export class InvItem implements InvItemType {
         return invItems as InvItemType[];
     }
 }
-
-export default InvItem;

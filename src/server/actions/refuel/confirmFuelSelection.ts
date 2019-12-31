@@ -3,7 +3,7 @@ import { Socket } from 'socket.io';
 import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REFUEL_RESULTS, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_AIR, TYPE_FUEL } from '../../../constants';
 import { ConfirmFuelSelectionRequestAction, FuelResultsAction, GameSession } from '../../../types';
 import { Event, Game } from '../../classes';
-import giveNextEvent from '../giveNextEvent';
+import { giveNextEvent } from '../giveNextEvent';
 import { sendUserFeedback } from '../sendUserFeedback';
 
 /**
@@ -118,5 +118,3 @@ export const confirmFuelSelection = async (socket: Socket, action: ConfirmFuelSe
     await thisRefuelEvent.delete();
     await giveNextEvent(socket, { thisGame, gameTeam }); // not putting executingStep in options to let it know not to send pieceMove
 };
-
-export default confirmFuelSelection;

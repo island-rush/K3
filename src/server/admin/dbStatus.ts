@@ -14,5 +14,3 @@ export const dbStatus = async (req: Request, res: Response) => {
 
     conn.release();
 };
-
-export default dbStatus;

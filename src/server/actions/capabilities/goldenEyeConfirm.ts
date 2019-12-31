@@ -94,5 +94,3 @@ export const goldenEyeConfirm = async (socket: Socket, action: GoldenEyeRequestA
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
-
-export default goldenEyeConfirm;

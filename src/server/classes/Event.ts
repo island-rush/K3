@@ -298,5 +298,3 @@ export class Event implements EventType {
         return fightResults;
     }
 }
-
-export default Event;

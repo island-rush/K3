@@ -18,5 +18,3 @@ const databaseConfig: PoolOptions = {
  * Pool of database connections.
  */
 export const pool: Pool = mysql.createPool(databaseConfig);
-
-export default pool;

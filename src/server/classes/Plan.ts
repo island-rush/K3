@@ -114,5 +114,3 @@ export class Plan implements PlanType {
         return confirmedPlans;
     }
 }
-
-export default Plan;

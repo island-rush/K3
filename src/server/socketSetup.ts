@@ -133,5 +133,3 @@ export const socketSetup = async (socket: Socket) => {
         }
     });
 };
-
-export default socketSetup;

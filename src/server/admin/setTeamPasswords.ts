@@ -47,5 +47,3 @@ type SetTeamPassRequest = {
     gameBluePassword: Password;
     gameRedPassword: Password;
 };
-
-export default setTeamPasswords;

@@ -69,5 +69,3 @@ type GameLoginRequest = {
     gameTeamPassword: string;
     gameControllers: number[];
 };
-
-export default gameLogin;

@@ -29,5 +29,3 @@ export const getGames = async (req: Request, res: Response) => {
         ]);
     }
 };
-
-export default getGames;

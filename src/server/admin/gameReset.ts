@@ -25,5 +25,3 @@ export const gameReset = async (req: Request, res: Response) => {
 
     res.redirect('/teacher.html?gameReset=success');
 };
-
-export default gameReset;

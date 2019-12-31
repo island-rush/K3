@@ -108,5 +108,3 @@ type PieceOptions = {
     pieceContainerId?: number;
     pieceVisible?: number;
 };
-
-export default gameInitialPieces;

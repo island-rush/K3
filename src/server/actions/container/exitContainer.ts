@@ -79,5 +79,3 @@ export const exitContainer = async (socket: Socket, action: ExitContainerRequest
     socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
-
-export default exitContainer;

@@ -95,5 +95,3 @@ export const rodsFromGodConfirm = async (socket: Socket, action: RodsFromGodRequ
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
     socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
-
-export default rodsFromGodConfirm;

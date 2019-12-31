@@ -41,5 +41,3 @@ type GameAddRequest = {
     adminInstructor: Instructor;
     adminPassword: Password;
 };
-
-export default gameAdd;

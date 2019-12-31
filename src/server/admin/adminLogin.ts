@@ -57,5 +57,3 @@ type AdminLoginRequest = {
     adminInstructor: Instructor;
     adminPassword: Password;
 };
-
-export default adminLogin;

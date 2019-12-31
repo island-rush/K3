@@ -23,5 +23,3 @@ export const insertDatabaseTables = async (req: Request, res: Response) => {
 
     res.redirect('/courseDirector.html?initializeDatabase=success');
 };
-
-export default insertDatabaseTables;

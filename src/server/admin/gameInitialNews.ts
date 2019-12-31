@@ -112,5 +112,3 @@ type NewsOptions = {
     newsTitle?: string;
     newsInfo?: string;
 };
-
-export default gameInitialNews;

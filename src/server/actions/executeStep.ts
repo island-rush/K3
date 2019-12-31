@@ -3,12 +3,12 @@ import { Socket } from 'socket.io';
 import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, SOCKET_SERVER_SENDING_ACTION, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
 import { GameSession, NewRoundAction, PlacePhaseAction, UpdateFlagAction } from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
-import giveNextEvent from './giveNextEvent';
+import { giveNextEvent } from './giveNextEvent';
 
 /**
  * Move pieces / step through plans
  */
-const executeStep = async (socket: Socket, thisGame: Game) => {
+export const executeStep = async (socket: Socket, thisGame: Game) => {
     // Grab Session (already verified from last function)
     const { gameTeam }: GameSession = socket.handshake.session.ir3;
 
@@ -251,5 +251,3 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
     await giveNextEvent(socket, { thisGame, gameTeam: BLUE_TEAM_ID });
     await giveNextEvent(socket, { thisGame, gameTeam: RED_TEAM_ID });
 };
-
-export default executeStep;

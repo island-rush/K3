@@ -4,7 +4,7 @@ import { BLUE_TEAM_ID, COMBAT_PHASE, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_
 // prettier-ignore
 import { CombatPhaseAction, GameSession, MainButtonClickAction, NewsPhaseAction, PurchasePhaseAction, SliceChangeAction } from '../../types';
 import { Capability, Game, Piece } from '../classes';
-import executeStep from './executeStep';
+import { executeStep } from './executeStep';
 import { sendUserFeedback } from './sendUserFeedback';
 
 export const mainButtonClick = async (socket: Socket) => {
@@ -149,5 +149,3 @@ export const mainButtonClick = async (socket: Socket) => {
     socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseActionRed);
     socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? newsPhaseActionBlue : newsPhaseActionRed);
 };
-
-export default mainButtonClick;

@@ -61,5 +61,3 @@ export const deletePlan = async (socket: Socket, action: DeletePlanRequestAction
     socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction); // TODO: should the other sockets for this team get the update? (in the background?)
     socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
 };
-
-export default deletePlan;
