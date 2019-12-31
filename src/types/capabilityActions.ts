@@ -2,6 +2,7 @@ import { Action } from 'redux';
 // prettier-ignore
 import { BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INSURGENCY_SELECTED, INSURGENCY_SELECTING, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INSURGENCY_CONFIRM, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM } from '../constants';
 import { InvItemType } from './classes';
+import { GameboardPiecesDataType } from './interfaces';
 
 export interface RemoteSenseSelectingAction extends Action {
     type: typeof REMOTE_SENSING_SELECTING;
@@ -81,7 +82,7 @@ export interface RemoteSensingAction extends Action {
     payload: {
         invItem: InvItemType;
         confirmedRemoteSense: any;
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
     };
 }
 
@@ -130,7 +131,7 @@ export interface RaiseMoraleAction extends Action {
     payload: {
         invItem: InvItemType;
         confirmedRaiseMorale: any;
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
     };
 }
 

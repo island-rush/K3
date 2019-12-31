@@ -23,8 +23,8 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
         const noMoreEventsAction: NoMoreEventsAction = {
             type: NO_MORE_EVENTS,
             payload: {
-                gameboardPieces: options.executingStep ? await Piece.getVisiblePieces(gameId, gameTeam) : null,
-                gameStatus: options.executingStep ? 0 : null
+                gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),
+                gameStatus: 0
             }
         };
 
@@ -68,8 +68,8 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
                 payload: {
                     friendlyPieces,
                     enemyPieces,
-                    gameboardPieces: options.executingStep ? await Piece.getVisiblePieces(gameId, gameTeam) : null,
-                    gameStatus: options.executingStep ? 0 : null
+                    gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),
+                    gameStatus: 0
                 }
             };
 
@@ -100,8 +100,8 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
                 payload: {
                     tankers,
                     aircraft,
-                    gameboardPieces: options.executingStep ? await Piece.getVisiblePieces(gameId, gameTeam) : null,
-                    gameStatus: options.executingStep ? 0 : null
+                    gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),
+                    gameStatus: 0
                 }
             };
 
@@ -117,7 +117,6 @@ const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
 type GiveNextEventOptions = {
     thisGame: Game;
     gameTeam: number;
-    executingStep?: boolean;
 };
 
 export default giveNextEvent;

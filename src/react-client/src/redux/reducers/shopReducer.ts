@@ -6,29 +6,28 @@ const initialShopState: ShopState = [];
 
 function shopReducer(state = initialShopState, action: AnyAction) {
     const { type } = action;
+
+    let stateCopy: ShopState = JSON.parse(JSON.stringify(state));
+
     switch (type) {
         case INITIAL_GAMESTATE:
-            state = (action as GameInitialStateAction).payload.shopItems;
-            break;
+            return (action as GameInitialStateAction).payload.shopItems;
+
         case SHOP_PURCHASE:
-            state = state.concat([(action as ShopPurchaseAction).payload.shopItem]); //need to append the payload to the state
-            break;
+            return stateCopy.concat([(action as ShopPurchaseAction).payload.shopItem]);
+
         case SHOP_CLEAR:
-            state = [];
-            break;
+        case SHOP_TRANSFER:
+            return [];
+
         case SHOP_REFUND:
-            state = state.filter((shopItem: ShopItemType) => {
+            return stateCopy.filter((shopItem: ShopItemType) => {
                 return shopItem.shopItemId !== (action as ShopRefundAction).payload.shopItemId;
             });
-            break;
-        case SHOP_TRANSFER:
-            state = [];
-            break;
-        default:
-        //don't change anything...
-    }
 
-    return state;
+        default:
+            return state;
+    }
 }
 
 export default shopReducer;

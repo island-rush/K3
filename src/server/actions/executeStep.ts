@@ -248,8 +248,8 @@ const executeStep = async (socket: Socket, thisGame: Game) => {
     // Note: All non-move (specialflag != 0) plans should result in events (refuel/container)...
     // If there is now an event, send to user instead of PIECES_MOVE
 
-    await giveNextEvent(socket, { thisGame, executingStep: true, gameTeam: BLUE_TEAM_ID });
-    await giveNextEvent(socket, { thisGame, executingStep: true, gameTeam: RED_TEAM_ID });
+    await giveNextEvent(socket, { thisGame, gameTeam: BLUE_TEAM_ID });
+    await giveNextEvent(socket, { thisGame, gameTeam: RED_TEAM_ID });
 };
 
 export default executeStep;

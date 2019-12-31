@@ -1,5 +1,5 @@
 import { Action, AnyAction } from 'redux';
-import { InvItemType, PieceType, ShopItemType } from '.';
+import { InvItemType, PieceType, ShopItemType } from './classes';
 // prettier-ignore
 import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CANCEL_PLAN, CLEAR_BATTLE, COMBAT_PHASE, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, MAIN_BUTTON_CLICK, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PIECE_PLACE, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_MAIN_BUTTON_CLICK, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE, UPDATE_FLAGS } from '../constants';
 
@@ -210,7 +210,7 @@ export interface EnterContainerRequestAction extends Action {
 export interface EnterContainerAction extends Action {
     type: typeof OUTER_PIECE_CLICK_ACTION;
     payload: {
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
         selectedPiece: PieceType;
         containerPiece: PieceType;
     };
@@ -246,7 +246,7 @@ export interface PurchasePhaseAction extends Action {
 export interface CombatPhaseAction extends Action {
     type: typeof COMBAT_PHASE;
     payload: {
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
     };
 }
 
@@ -255,7 +255,7 @@ export interface EventBattleAction extends Action {
     payload: {
         friendlyPieces: any;
         enemyPieces: any;
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
         gameStatus: any;
     };
 }
@@ -265,7 +265,7 @@ export interface EventRefuelAction extends Action {
     payload: {
         tankers: any;
         aircraft: any;
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
         gameStatus: any;
     };
 }
@@ -273,7 +273,7 @@ export interface EventRefuelAction extends Action {
 export interface PlacePhaseAction extends Action {
     type: typeof PLACE_PHASE;
     payload: {
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
         confirmedRemoteSense: any;
         confirmedBioWeapons: any;
         confirmedRaiseMorale: any;
@@ -286,7 +286,7 @@ export interface NewRoundAction extends Action {
     type: typeof NEW_ROUND;
     payload: {
         gameRound: number;
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
         confirmedRemoteSense: any;
         confirmedBioWeapons: any;
         confirmedRaiseMorale: any;
@@ -298,7 +298,7 @@ export interface NewRoundAction extends Action {
 export interface NoMoreEventsAction extends Action {
     type: typeof NO_MORE_EVENTS;
     payload: {
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
         gameStatus: any;
     };
 }
@@ -311,6 +311,8 @@ export interface NewsPhaseAction extends Action {
     };
 }
 
+export type GameboardPiecesDataType = { [positionIndex: number]: PieceType[] };
+
 export interface SliceChangeAction extends Action {
     type: typeof SLICE_CHANGE;
     payload: {
@@ -320,7 +322,7 @@ export interface SliceChangeAction extends Action {
         confirmedCommInterrupt: any;
         confirmedInsurgencyPos: any;
         confirmedInsurgencyPieces: any;
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
     };
 }
 
@@ -335,7 +337,7 @@ export interface ExitTransportContainerAction extends Action {
 export interface ExitContainerAction extends Action {
     type: typeof INNER_PIECE_CLICK_ACTION;
     payload: {
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
         selectedPiece: PieceType;
         containerPiece: PieceType;
     };
@@ -399,7 +401,7 @@ export interface GameInitialStateAction extends Action {
     payload: {
         invItems: InvItemType[];
         shopItems: ShopItemType[];
-        gameboardPieces: any;
+        gameboardPieces: GameboardPiecesDataType;
         gameInfo: any;
         gameboardMeta: any;
     };
@@ -445,6 +447,3 @@ export interface FuelResultsAction extends Action {
         fuelUpdates: any;
     };
 }
-
-export type UpdatePiecesCombinedAction = NewRoundAction | PlacePhaseAction;
-export type GameboardPiecesUpdateAction = CombatPhaseAction | EnterContainerAction | ExitContainerAction | EventRefuelAction;
