@@ -38,12 +38,6 @@ export interface GameboardMetaState {
     highlightedPositions: number[];
     selectedPiece: PieceType | null;
     selectedMenuId: number;
-    news: {
-        isMinimized: boolean;
-        active: boolean;
-        newsTitle: string;
-        newsInfo: string;
-    };
 }
 
 export interface CapabilitiesState {

@@ -607,15 +607,15 @@ export class Game implements GameType {
             flag12: this.flag12
         };
 
-        serverAction.payload.gameboardMeta = {};
-        serverAction.payload.gameboardMeta.confirmedPlans = await Plan.getConfirmedPlans(this.gameId, gameTeam);
-        serverAction.payload.gameboardMeta.confirmedRods = await Capability.getRodsFromGod(this.gameId, gameTeam);
-        serverAction.payload.gameboardMeta.confirmedRemoteSense = await Capability.getRemoteSensing(this.gameId, gameTeam);
-        serverAction.payload.gameboardMeta.confirmedInsurgency = await Capability.getInsurgency(this.gameId, gameTeam);
-        serverAction.payload.gameboardMeta.confirmedBioWeapons = await Capability.getBiologicalWeapons(this.gameId, gameTeam);
-        serverAction.payload.gameboardMeta.confirmedRaiseMorale = await Capability.getRaiseMorale(this.gameId, gameTeam);
-        serverAction.payload.gameboardMeta.confirmedCommInterrupt = await Capability.getCommInterrupt(this.gameId, gameTeam);
-        serverAction.payload.gameboardMeta.confirmedGoldenEye = await Capability.getGoldenEye(this.gameId, gameTeam);
+        serverAction.payload.capabilities = {};
+        serverAction.payload.capabilities.confirmedPlans = await Plan.getConfirmedPlans(this.gameId, gameTeam);
+        serverAction.payload.capabilities.confirmedRods = await Capability.getRodsFromGod(this.gameId, gameTeam);
+        serverAction.payload.capabilities.confirmedRemoteSense = await Capability.getRemoteSensing(this.gameId, gameTeam);
+        serverAction.payload.capabilities.confirmedInsurgency = await Capability.getInsurgency(this.gameId, gameTeam);
+        serverAction.payload.capabilities.confirmedBioWeapons = await Capability.getBiologicalWeapons(this.gameId, gameTeam);
+        serverAction.payload.capabilities.confirmedRaiseMorale = await Capability.getRaiseMorale(this.gameId, gameTeam);
+        serverAction.payload.capabilities.confirmedCommInterrupt = await Capability.getCommInterrupt(this.gameId, gameTeam);
+        serverAction.payload.capabilities.confirmedGoldenEye = await Capability.getGoldenEye(this.gameId, gameTeam);
 
         // Could put news into its own object, but don't really use it much...(TODO: figure out if need to refactor this...)
         if (this.gamePhase === NEWS_PHASE_ID) {
@@ -627,7 +627,7 @@ export class Game implements GameType {
                     ? resultNews[0]
                     : { newsTitle: 'No More News', newsInfo: "Obviously you've been playing this game too long..." };
 
-            serverAction.payload.gameboardMeta.news = {
+            serverAction.payload.news = {
                 active: true,
                 newsTitle,
                 newsInfo
@@ -697,7 +697,7 @@ export class Game implements GameType {
                         }
                     }
 
-                    serverAction.payload.gameboardMeta.battle = {
+                    serverAction.payload.battle = {
                         active: true,
                         friendlyPieces,
                         enemyPieces
@@ -719,7 +719,7 @@ export class Game implements GameType {
                         }
                     }
 
-                    serverAction.payload.gameboardMeta.refuel = {
+                    serverAction.payload.refuel = {
                         active: true,
                         tankers,
                         aircraft,

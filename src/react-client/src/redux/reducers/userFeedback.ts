@@ -9,11 +9,11 @@ export function userFeedbackReducer(state = initialUserFeedback, action: AnyActi
     const { type } = action;
 
     switch (type) {
-        case SET_USERFEEDBACK:
-            return (action as UserfeedbackAction).payload.userFeedback;
-
         case INITIAL_GAMESTATE:
             return 'Welcome to Island Rush!';
+
+        case SET_USERFEEDBACK:
+            return (action as UserfeedbackAction).payload.userFeedback;
 
         case SHOP_REFUND:
             return 'Refunded the purchase!';

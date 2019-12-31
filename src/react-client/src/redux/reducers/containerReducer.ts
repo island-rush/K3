@@ -1,8 +1,8 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { ALL_GROUND_TYPES, distanceMatrix, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, OUTER_PIECE_CLICK_ACTION, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, TRANSPORT_TYPE_ID } from '../../../../constants';
+import { ALL_GROUND_TYPES, distanceMatrix, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, OUTER_PIECE_CLICK_ACTION, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, TRANSPORT_TYPE_ID } from '../../../../constants';
 // prettier-ignore
-import { ContainerState, EnterContainerAction, ExitContainerAction, ExitTransportContainerAction, GameInitialStateAction, PieceOpenAction, PieceType } from '../../../../types';
+import { ContainerState, EnterContainerAction, ExitContainerAction, ExitTransportContainerAction, PieceOpenAction, PieceType } from '../../../../types';
 
 const initialContainerState: ContainerState = {
     active: false,
@@ -18,11 +18,6 @@ export function containerReducer(state = initialContainerState, action: AnyActio
     let stateCopy: ContainerState = JSON.parse(JSON.stringify(state));
 
     switch (type) {
-        case INITIAL_GAMESTATE:
-            //TODO: refactor to not do this
-            Object.assign(stateCopy, (action as GameInitialStateAction).payload.gameboardMeta);
-            return stateCopy;
-
         case PIECE_OPEN_ACTION:
             stateCopy.active = true;
             stateCopy.containerPiece = (action as PieceOpenAction).payload.selectedPiece;

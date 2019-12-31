@@ -404,8 +404,7 @@ export interface GameInitialStateAction extends Action {
         shopItems: ShopState;
         gameboardPieces: GameboardPiecesDataType;
         gameInfo: any;
-        gameboardMeta: {
-            confirmedPlans: { [pieceId: number]: { type: string; positionId: number }[] };
+        capabilities: {
             confirmedRods: number[];
             confirmedRemoteSense: number[];
             confirmedInsurgency: number[];
@@ -413,10 +412,13 @@ export interface GameInitialStateAction extends Action {
             confirmedRaiseMorale: number[];
             confirmedCommInterrupt: number[];
             confirmedGoldenEye: number[];
-            news?: any;
-            battle?: any;
-            refuel?: any;
         };
+        planning: {
+            confirmedPlans: { [pieceId: number]: { type: string; positionId: number }[] };
+        };
+        news?: any;
+        battle?: any;
+        refuel?: any;
     };
 }
 

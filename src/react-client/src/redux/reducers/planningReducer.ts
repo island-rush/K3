@@ -20,8 +20,9 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
 
     switch (type) {
         case INITIAL_GAMESTATE:
-            // TODO: change where this comes from in the initial state action
-            stateCopy.confirmedPlans = (action as GameInitialStateAction).payload.gameboardMeta.confirmedPlans;
+            if ((action as GameInitialStateAction).payload.planning && (action as GameInitialStateAction).payload.planning.confirmedPlans) {
+                stateCopy.confirmedPlans = (action as GameInitialStateAction).payload.planning.confirmedPlans;
+            }
             return stateCopy;
 
         case START_PLAN:

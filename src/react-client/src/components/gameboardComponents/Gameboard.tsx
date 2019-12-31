@@ -2,7 +2,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
 import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from '../../../../constants';
-import { CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, PlanningState, BattleState, ContainerState } from '../../../../types';
+import {
+    BattleState,
+    CapabilitiesState,
+    ContainerState,
+    GameboardMetaState,
+    GameboardState,
+    GameInfoState,
+    NewsState,
+    PlanningState
+} from '../../../../types';
 //prettier-ignore
 import { innerPieceClick, innerTransportPieceClick, newsPopupMinimizeToggle, outerPieceClick, pieceClose, raiseMoraleSelectCommanderType, selectPosition } from "../../redux/actions";
 import BattlePopup from './battle/BattlePopup';
@@ -130,6 +139,7 @@ interface Props {
     planning: PlanningState;
     battle: BattleState;
     container: ContainerState;
+    news: NewsState;
     selectPosition: any;
     newsPopupMinimizeToggle: any;
     raiseMoraleSelectCommanderType: any;
@@ -148,6 +158,7 @@ class Gameboard extends Component<Props> {
             planning,
             battle,
             container,
+            news,
             capabilities,
             selectPosition,
             newsPopupMinimizeToggle,
@@ -159,7 +170,7 @@ class Gameboard extends Component<Props> {
         } = this.props;
 
         //prettier-ignore
-        const { selectedPosition, news, selectedPiece, highlightedPositions } = gameboardMeta;
+        const { selectedPosition, selectedPiece, highlightedPositions } = gameboardMeta;
         //prettier-ignore
         const { confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods} = capabilities;
 
@@ -329,7 +340,8 @@ const mapStateToProps = ({
     capabilities,
     planning,
     battle,
-    container
+    container,
+    news
 }: {
     gameboard: GameboardState;
     gameboardMeta: GameboardMetaState;
@@ -338,6 +350,7 @@ const mapStateToProps = ({
     planning: PlanningState;
     battle: BattleState;
     container: ContainerState;
+    news: NewsState;
 }) => ({
     gameboard,
     gameboardMeta,
@@ -345,7 +358,8 @@ const mapStateToProps = ({
     capabilities,
     planning,
     battle,
-    container
+    container,
+    news
 });
 
 const mapActionsToProps = {

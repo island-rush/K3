@@ -20,8 +20,9 @@ export function refuelReducer(state = initialRefuelState, action: AnyAction) {
 
     switch (type) {
         case INITIAL_GAMESTATE:
-            //TODO: refactor to not do this
-            Object.assign(stateCopy, (action as GameInitialStateAction).payload.gameboardMeta);
+            if ((action as GameInitialStateAction).payload.refuel) {
+                stateCopy = (action as GameInitialStateAction).payload.refuel;
+            }
             return stateCopy;
 
         case TANKER_CLICK:

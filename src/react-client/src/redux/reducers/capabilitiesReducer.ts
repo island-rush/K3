@@ -21,14 +21,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: An
 
     switch (type) {
         case INITIAL_GAMESTATE:
-            // TODO: change where this comes from in the initial state action
-            stateCopy.confirmedRods = (action as GameInitialStateAction).payload.gameboardMeta.confirmedRods;
-            stateCopy.confirmedRemoteSense = (action as GameInitialStateAction).payload.gameboardMeta.confirmedRemoteSense;
-            stateCopy.confirmedInsurgency = (action as GameInitialStateAction).payload.gameboardMeta.confirmedInsurgency;
-            stateCopy.confirmedBioWeapons = (action as GameInitialStateAction).payload.gameboardMeta.confirmedBioWeapons;
-            stateCopy.confirmedRaiseMorale = (action as GameInitialStateAction).payload.gameboardMeta.confirmedRaiseMorale;
-            stateCopy.confirmedCommInterrupt = (action as GameInitialStateAction).payload.gameboardMeta.confirmedCommInterrupt;
-            stateCopy.confirmedGoldenEye = (action as GameInitialStateAction).payload.gameboardMeta.confirmedGoldenEye;
+            Object.assign(stateCopy, (action as GameInitialStateAction).payload.capabilities);
             return stateCopy;
 
         case NEW_ROUND:

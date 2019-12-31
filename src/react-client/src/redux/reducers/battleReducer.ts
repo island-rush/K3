@@ -21,8 +21,9 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
 
     switch (type) {
         case INITIAL_GAMESTATE:
-            //TODO: refactor to not do this
-            Object.assign(stateCopy, (action as GameInitialStateAction).payload.gameboardMeta);
+            if ((action as GameInitialStateAction).payload.battle) {
+                stateCopy = (action as GameInitialStateAction).payload.battle;
+            }
             return stateCopy;
 
         case BATTLE_PIECE_SELECT:
