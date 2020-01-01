@@ -1,8 +1,9 @@
 // prettier-ignore
+import { OkPacket, RowDataPacket } from 'mysql2';
 import { Capability, Event, InvItem, Piece, Plan, ShopItem } from '.';
 // prettier-ignore
 import { AIR_REFUELING_SQUADRON_ID, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, COL_BATTLE_EVENT_TYPE, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, INITIAL_GAMESTATE, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NEWS_PHASE_ID, NOYARC_ISLAND_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../constants';
-import { GameType, NewsState } from '../../types';
+import { GameType, NewsState, PieceType } from '../../types';
 import { gameInitialNews, gameInitialPieces } from '../admin';
 import { pool } from '../database';
 
@@ -169,8 +170,14 @@ export class Game implements GameType {
      */
     static async getGames() {
         const queryString = 'SELECT gameId, gameSection, gameInstructor, gameActive FROM games';
-        const [rows]: any = await pool.query(queryString);
-        return rows;
+        type SubGameType = {
+            gameId: GameType['gameId'];
+            gameSection: GameType['gameSection'];
+            gameInstructor: GameType['gameInstructor'];
+            gameActive: GameType['gameActive'];
+        };
+        const [rows] = await pool.query<RowDataPacket[]>(queryString);
+        return rows as SubGameType[];
     }
 
     /**
@@ -199,8 +206,15 @@ export class Game implements GameType {
     static async getAllNews(gameId: number) {
         const queryString = 'SELECT * FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC';
         const inserts = [gameId];
-        const [rows]: any = await pool.query(queryString, inserts);
-        return rows;
+        type NewsType = {
+            newsId: number;
+            newsGameId: number;
+            newsOrder: number;
+            newsTitle: string;
+            newsInfo: string;
+        };
+        const [rows] = await pool.query<RowDataPacket[]>(queryString, inserts);
+        return rows as NewsType[];
     }
 
     /**
@@ -291,9 +305,14 @@ export class Game implements GameType {
     /**
      * Add a new game to the database.
      */
-    static async add(gameSection: string, gameInstructor: string, gameAdminPasswordHash: string, options: { gameId?: number } = {}) {
-        let queryString;
-        let inserts;
+    static async add(
+        gameSection: GameType['gameSection'],
+        gameInstructor: GameType['gameInstructor'],
+        gameAdminPasswordHash: GameType['gameAdminPassword'],
+        options: { gameId?: GameType['gameId'] } = {}
+    ) {
+        let queryString: string;
+        let inserts: any[];
 
         if (options.gameId) {
             queryString =
@@ -305,7 +324,7 @@ export class Game implements GameType {
             inserts = [gameSection, gameInstructor, gameAdminPasswordHash, gameSection, gameInstructor];
         }
 
-        const [result]: any = await pool.query(queryString, inserts);
+        const [result] = await pool.query<OkPacket>(queryString, inserts);
 
         if (result.affectedRows === 0) return null;
 
@@ -321,6 +340,7 @@ export class Game implements GameType {
      * Set the points for a specific team in this game.
      */
     async setPoints(gameTeam: number, newPoints: number) {
+        // TODO: could have a type alias for gameTeam since we use it a lot? (always ensure it is 'number' -> instead of manually always making it a 'number')
         const queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
         const inserts = [`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Points`, newPoints, this.gameId];
         await pool.query(queryString, inserts);
@@ -383,28 +403,29 @@ export class Game implements GameType {
      * Globally (in this game), calculate who own's which flag based on pieces that exist on those positions.
      */
     async updateFlags() {
-        let didUpdateFlags = false;
         // only certain pieces can capture
         // see if any pieces are currently residing on flags by themselves, and if so, set the island# in the database and update 'this' object correspondingly
         let queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?) AND pieceTypeId in (?)';
-        let inserts = [this.gameId, ALL_FLAG_LOCATIONS, CAPTURE_TYPES];
-        const [results]: any = await pool.query(queryString, inserts);
+        const inserts = [this.gameId, ALL_FLAG_LOCATIONS, CAPTURE_TYPES];
+        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
 
         if (results.length === 0) {
-            return null;
+            return false;
         }
 
         // need to set all positions that have pieces on them (that are different from current values?)
         // update if only 1 team's pieces there, AND if not already the other team? (or update anyway if all 1 team)
 
         // TODO: need major refactoring here, this is quick and dirty (but should work)
-        const eachFlagsTeams: any = [[], [], [], [], [], [], [], [], [], [], [], [], []];
+        const eachFlagsTeams: number[][] = [[], [], [], [], [], [], [], [], [], [], [], [], []];
         for (let x = 0; x < results.length; x++) {
-            const thisPiece = results[x];
+            const thisPiece = (results as PieceType[])[x];
             const { piecePositionId, pieceTeamId } = thisPiece;
             const flagNum = ALL_FLAG_LOCATIONS.indexOf(piecePositionId);
             eachFlagsTeams[flagNum].push(pieceTeamId);
         }
+
+        let didUpdateFlags = false;
 
         for (let y = 0; y < eachFlagsTeams.length; y++) {
             const thisFlagsTeams = eachFlagsTeams[y];
@@ -414,7 +435,7 @@ export class Game implements GameType {
             this.setFlag(y, thisFlagsTeams[0]);
             // sql update
             queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
-            inserts = [`flag${y}`, thisFlagsTeams[0], this.gameId];
+            const inserts = [`flag${y}`, thisFlagsTeams[0], this.gameId];
             await pool.query(queryString, inserts);
             didUpdateFlags = true;
         }
@@ -425,7 +446,7 @@ export class Game implements GameType {
     /**
      * Change flag ownership for a certain team.
      */
-    setFlag(flagNumber: number, flagValue: number) {
+    setFlag(flagNumber: number, flagValue: GameType['flag0']) {
         switch (flagNumber) {
             case 0:
                 this.flag0 = flagValue;
@@ -473,7 +494,7 @@ export class Game implements GameType {
     /**
      * Delete old news, and get next news alert from database.
      */
-    async getNextNews(): Promise<NewsState> {
+    async getNextNews() {
         // Delete the old news
         let queryString = 'DELETE FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
         const inserts = [this.gameId];
@@ -481,10 +502,15 @@ export class Game implements GameType {
 
         // Grab the next news
         queryString = 'SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
-        const [resultNews]: any = await pool.query(queryString, inserts);
+        const [resultNews] = await pool.query<RowDataPacket[]>(queryString, inserts);
+        // TODO: grab this from a full type
+        type SubNewsType = {
+            newsTitle: string;
+            newsInfo: string;
+        };
         const { newsTitle, newsInfo } =
-            resultNews[0] !== undefined
-                ? resultNews[0]
+            (resultNews as SubNewsType[])[0] !== undefined
+                ? (resultNews as SubNewsType[])[0]
                 : { newsTitle: 'No More News', newsInfo: "Obviously you've been playing this game too long..." };
 
         return {
@@ -492,7 +518,7 @@ export class Game implements GameType {
             active: true,
             newsTitle,
             newsInfo
-        };
+        } as NewsState;
     }
 
     /**
@@ -574,6 +600,7 @@ export class Game implements GameType {
      * Generates a Redux Action, contains all current game information / state.
      */
     async initialStateAction(gameTeam: number, gameControllers: any) {
+        // TODO: refactor this
         const serverAction: any = {
             type: INITIAL_GAMESTATE,
             payload: {}
@@ -609,6 +636,7 @@ export class Game implements GameType {
         };
 
         serverAction.payload.capabilities = {};
+        serverAction.payload.planning = {};
         serverAction.payload.planning.confirmedPlans = await Plan.getConfirmedPlans(this.gameId, gameTeam);
         serverAction.payload.capabilities.confirmedRods = await Capability.getRodsFromGod(this.gameId, gameTeam);
         serverAction.payload.capabilities.confirmedRemoteSense = await Capability.getRemoteSensing(this.gameId, gameTeam);

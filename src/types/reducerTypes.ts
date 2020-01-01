@@ -59,13 +59,15 @@ export type CapabilitiesState = {
     confirmedGoldenEye: number[];
 };
 
+export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };
+
 export type PlanningState = {
     active: boolean;
     capability: boolean;
     raiseMoralePopupActive: boolean;
     invItem: InvItemType | null;
     moves: singlePlan[];
-    confirmedPlans: { [pieceId: number]: singlePlan[] };
+    confirmedPlans: ConfirmedPlansType;
 };
 
 export type ContainerState = {

@@ -10,7 +10,7 @@ export type PieceType = {
     pieceMoves: number;
     pieceFuel: number;
 
-    pieceContents?: any;
+    pieceContents?: { pieces: PieceType[] };
 
     /**
      * True = Stuck in place, False = Free to move/make plans

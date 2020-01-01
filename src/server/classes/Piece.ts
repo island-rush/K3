@@ -1,4 +1,6 @@
 // prettier-ignore
+import { RowDataPacket, OkPacket } from 'mysql2/promise';
+// prettier-ignore
 import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
 import { PieceType } from '../../types';
 import { pool } from '../database';
@@ -27,7 +29,7 @@ export class Piece implements PieceType {
 
     pieceFuel: number;
 
-    pieceContents?: any;
+    pieceContents?: { pieces: PieceType[] };
 
     pieceDisabled: boolean;
 
@@ -41,17 +43,18 @@ export class Piece implements PieceType {
     async init() {
         let queryString = 'SELECT * FROM pieces WHERE pieceId = ?';
         let inserts = [this.pieceId];
-        let [rows]: any = await pool.query(queryString, inserts);
+        let [rows] = await pool.query<RowDataPacket[]>(queryString, inserts);
 
         if (rows.length !== 1) {
             return null;
         }
 
-        Object.assign(this, rows[0]);
+        Object.assign(this, (rows as PieceType[])[0]);
 
         queryString = 'SELECT * FROM goldenEyePieces WHERE pieceId = ?';
         inserts = [this.pieceId];
-        [rows] = await pool.query(queryString, inserts);
+        [rows] = await pool.query<RowDataPacket[]>(queryString, inserts);
+
         this.pieceDisabled = rows.length !== 0;
 
         return this;
@@ -83,8 +86,8 @@ export class Piece implements PieceType {
     async getPiecesInside() {
         const queryString = 'SELECT * FROM pieces WHERE pieceContainerId = ?';
         const inserts = [this.pieceId];
-        const [allPieces] = await pool.query(queryString, inserts);
-        return allPieces;
+        const [allPieces] = await pool.query<RowDataPacket[]>(queryString, inserts);
+        return allPieces as PieceType[];
     }
 
     // prettier-ignore
@@ -107,20 +110,27 @@ export class Piece implements PieceType {
         ];
 
         // only need to check distinct pieces, (100 red tanks in same position == 1 red tank in same position)
-        queryString = 'SELECT DISTINCT pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId FROM pieces WHERE pieceGameId = ?';
+        queryString = 'SELECT DISTINCT pieceTeamId, pieceTypeId, piecePositionId FROM pieces WHERE pieceGameId = ?';
         inserts = [gameId];
-        const [pieces]: any = await conn.query(queryString, inserts);
+        const [pieces] = await conn.query<RowDataPacket[]>(queryString, inserts);
+
+        // These are the only values we are getting from the query above
+        type SubPieceType = {
+            pieceTeamId: PieceType['pieceTeamId'],
+            pieceTypeId: PieceType['pieceTypeId'],
+            piecePositionId: PieceType['piecePositionId']
+        };
 
         let otherTeam;
         for (let x = 0; x < pieces.length; x++) {
-            const { pieceTeamId, pieceTypeId, piecePositionId } = pieces[x]; // TODO: pieces inside containers can't see rule?
+            const { pieceTeamId, pieceTypeId, piecePositionId } = (pieces as SubPieceType[])[x]; // TODO: pieces inside containers can't see rule?
 
             for (let type = 0; type < LIST_ALL_PIECES.length; type++) { // check each type
                 const currentPieceType = LIST_ALL_PIECES[type];
                 if (VISIBILITY_MATRIX[pieceTypeId][currentPieceType] !== -1) { // could it ever see this type?
                     for (let position = 0; position < distanceMatrix[piecePositionId].length; position++) { // for all positions
                         if (distanceMatrix[piecePositionId][position] <= VISIBILITY_MATRIX[pieceTypeId][currentPieceType]) { // is this position in range for that type?
-                            otherTeam = parseInt(pieceTeamId) === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
+                            otherTeam = pieceTeamId === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
 
                             if (!posTypesVisible[otherTeam][type].includes(position)) { // add this position if not already added by another piece somewhere else
                                 posTypesVisible[otherTeam][type].push(position);
@@ -134,8 +144,9 @@ export class Piece implements PieceType {
         // also check remote sensing effects
         queryString = 'SELECT * FROM remoteSensing WHERE gameId = ?';
         inserts = [gameId];
-        const [results]: any = await conn.query(queryString, inserts);
+        const [results] = await conn.query<RowDataPacket[]>(queryString, inserts);
 
+        // TODO: RemoteSensingType so we can access the values from the query in a safe way (right now it assumes 'any' for .positionId)
         for (let x = 0; x < results.length; x++) {
             const remoteSenseCenter = results[x].positionId;
             for (let currentPos = 0; currentPos < distanceMatrix[remoteSenseCenter].length; currentPos++) {
@@ -195,9 +206,10 @@ export class Piece implements PieceType {
         // handle if the pieces moved into a bio / nuclear place
         let queryString = 'SELECT * FROM biologicalWeapons WHERE gameId = ? AND activated = 1';
         const moreInserts = [gameId];
-        const [results]: any = await conn.query(queryString, moreInserts);
+        const [results] = await conn.query<RowDataPacket[]>(queryString, moreInserts);
 
-        const listOfPositions = [];
+        // TODO: table / type for bioweapons table to access without positionId assumed any
+        const listOfPositions: number[] = [];
         for (let x = 0; x < results.length; x++) {
             // delete the pieces in these positions
             const thisBioWeapon = results[x];
@@ -223,7 +235,7 @@ export class Piece implements PieceType {
         let queryString =
             'SELECT * FROM pieces WHERE pieceGameId = ? AND (pieceTeamId = ? OR pieceVisible = 1) ORDER BY pieceContainerId, pieceTeamId ASC';
         let inserts = [gameId, gameTeam];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
 
         queryString =
             'SELECT pieceId FROM goldenEyePieces NATURAL JOIN pieces WHERE goldenEyePieces.pieceId = pieces.pieceId AND pieces.pieceGameId = ?';
@@ -235,9 +247,9 @@ export class Piece implements PieceType {
         }
 
         // format for the client state
-        const allPieces: any = {};
+        const allPieces: { [positionIndex: number]: PieceType[] } = {};
         for (let x = 0; x < results.length; x++) {
-            const currentPiece = results[x];
+            const currentPiece = (results as PieceType[])[x];
             if (allPieceIdsStuck.includes(currentPiece.pieceId)) {
                 currentPiece.pieceDisabled = true;
             } else {
@@ -286,10 +298,11 @@ export class Piece implements PieceType {
         const queryString =
             'SELECT tnkr.pieceId as tnkrPieceId, tnkr.pieceTypeId as tnkrPieceTypeId, tnkr.piecePositionId as tnkrPiecePositionId, tnkr.pieceMoves as tnkrPieceMoves, tnkr.pieceFuel as tnkrPieceFuel, arcft.pieceId as arcftPieceId, arcft.pieceTypeId as arcftPieceTypeId, arcft.piecePositionId as arcftPiecePositionId, arcft.pieceMoves as arcftPieceMoves, arcft.pieceFuel as arcftPieceFuel FROM (SELECT * FROM pieces WHERE pieceTypeId = 3 AND pieceGameId = ? AND pieceTeamId = ?) as tnkr JOIN (SELECT * FROM pieces WHERE pieceTypeId in (0, 1, 2, 4, 5, 17, 18) AND pieceGameId = ? AND pieceTeamId = ?) as arcft ON tnkr.piecePositionId = arcft.piecePositionId WHERE arcft.pieceContainerId = -1';
         const inserts = [gameId, gameTeam, gameId, gameTeam];
-        const [results] = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
 
         // TODO: should deal with results here and return with other things, or do entire function in this method... calling the other bulk inserts and stuff available?
-        return results;
+        // TODO: need a type for this
+        return results as any;
     }
 
     /**
@@ -338,7 +351,7 @@ export class Piece implements PieceType {
         const queryString =
             'INSERT INTO pieces (pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
         const inserts = [pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<OkPacket>(queryString, inserts);
         const thisPiece = new Piece(results.insertId);
         Object.assign(thisPiece, {
             pieceGameId,

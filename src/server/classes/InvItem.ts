@@ -1,4 +1,5 @@
-import { Piece } from '.';
+import { RowDataPacket } from 'mysql2/promise';
+import { Piece } from './Piece';
 import { TYPE_FUEL, TYPE_MOVES } from '../../constants';
 import { InvItemType } from '../../types';
 import { pool } from '../database';
@@ -25,12 +26,12 @@ export class InvItem implements InvItemType {
     async init() {
         const queryString = 'SELECT * FROM invItems WHERE invItemId = ?';
         const inserts = [this.invItemId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
 
         if (results.length !== 1) {
             return null;
         }
-        Object.assign(this, results[0]);
+        Object.assign(this, (results as InvItemType[])[0]);
         return this;
     }
 
@@ -80,7 +81,7 @@ export class InvItem implements InvItemType {
     static async all(gameId: number, gameTeam: number) {
         const queryString = 'SELECT * FROM invItems WHERE invItemGameId = ? AND invItemTeamId = ?';
         const inserts = [gameId, gameTeam];
-        const [invItems] = await pool.query(queryString, inserts);
+        const [invItems] = await pool.query<RowDataPacket[]>(queryString, inserts);
         return invItems as InvItemType[];
     }
 }

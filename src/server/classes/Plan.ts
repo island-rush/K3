@@ -1,4 +1,5 @@
-import { PlanType } from '../../types';
+import { RowDataPacket } from 'mysql2/promise';
+import { ConfirmedPlansType, PlanType } from '../../types';
 import { pool } from '../database';
 
 /**
@@ -28,12 +29,12 @@ export class Plan implements PlanType {
     async init() {
         const queryString = 'SELECT * FROM plans WHERE planPieceId = ? AND planMovementOrder = ?';
         const inserts = [this.planPieceId, this.planMovementOrder];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
 
         if (results.length !== 1) {
             return null;
         }
-        Object.assign(this, results[0]);
+        Object.assign(this, (results as PlanType[])[0]);
         return this;
     }
 
@@ -61,8 +62,8 @@ export class Plan implements PlanType {
     static async getCurrentMovementOrder(gameId: number, gameTeam: number) {
         const queryString = 'SELECT planMovementOrder FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planMovementOrder ASC LIMIT 1';
         const inserts = [gameId, gameTeam];
-        const [results]: any = await pool.query(queryString, inserts);
-        return results.length !== 0 ? results[0].planMovementOrder : null;
+        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
+        return results.length !== 0 ? (results as PlanType[])[0].planMovementOrder : null;
     }
 
     /**
@@ -72,8 +73,8 @@ export class Plan implements PlanType {
         const queryString =
             'SELECT * FROM (SELECT pieceId as pieceId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0, piecePositionId as piecePositionId0, planPositionId as planPositionId0 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 0 AND pieceGameId = ? AND planMovementOrder = ?) as a JOIN (SELECT pieceId as pieceId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1, piecePositionId as piecePositionId1, planPositionId as planPositionId1 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 1 AND pieceGameId = ? AND planMovementOrder = ?) as b ON piecePositionId0 = planPositionId1 AND planPositionId0 = piecePositionId1';
         const inserts = [gameId, movementOrder, gameId, movementOrder];
-        const [results] = await pool.query(queryString, inserts);
-        return results;
+        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
+        return results as any;
     }
 
     /**
@@ -83,8 +84,8 @@ export class Plan implements PlanType {
         const queryString =
             'SELECT * FROM (SELECT pieceId as pieceId0, piecePositionId as piecePositionId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 0) as a JOIN (SELECT pieceId as pieceId1, piecePositionId as piecePositionId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 1) as b ON piecePositionId0 = piecePositionId1';
         const inserts = [gameId, gameId];
-        const [results] = await pool.query(queryString, inserts);
-        return results;
+        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
+        return results as any;
     }
 
     /**
@@ -93,12 +94,12 @@ export class Plan implements PlanType {
     static async getConfirmedPlans(gameId: number, gameTeam: number) {
         const queryString = 'SELECT * FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planPieceId, planMovementOrder ASC';
         const inserts = [gameId, gameTeam];
-        const [resultPlans]: any = await pool.query(queryString, inserts);
+        const [resultPlans] = await pool.query<RowDataPacket[]>(queryString, inserts);
 
         // formatting for the client, needs it in this object kinda way
-        const confirmedPlans: any = {};
+        const confirmedPlans: ConfirmedPlansType = {};
         for (let x = 0; x < resultPlans.length; x++) {
-            const { planPieceId, planPositionId, planSpecialFlag } = resultPlans[x];
+            const { planPieceId, planPositionId, planSpecialFlag } = (resultPlans as PlanType[])[x];
             const type = planSpecialFlag === 0 ? 'move' : planSpecialFlag === 1 ? 'container' : 'NULL_SPECIAL';
 
             if (!(planPieceId in confirmedPlans)) {
