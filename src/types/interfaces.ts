@@ -4,14 +4,6 @@ import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATT
 import { InvItemType, PieceType, ShopItemType } from './classes';
 import { GameInfoState, InvState, ShopState } from './reducerTypes';
 
-export type Section = string;
-
-export type GameControllers = number[];
-
-export type Instructor = string;
-
-export type Password = string;
-
 export interface UserfeedbackAction extends Action {
     type: typeof SET_USERFEEDBACK;
     payload: {

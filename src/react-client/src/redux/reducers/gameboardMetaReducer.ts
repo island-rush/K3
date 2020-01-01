@@ -1,9 +1,24 @@
-//TODO: make this file less thiccc, it's getting pretty hefty (maybe use more reducers to keep it clean....)
-import { AnyAction } from 'redux';
 // prettier-ignore
 import { BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, DELETE_PLAN, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INSURGENCY_SELECTING, MENU_SELECT, PIECE_CLEAR_SELECTION, PIECE_CLICK, PLAN_WAS_CONFIRMED, POSITION_SELECT, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING } from '../../../../constants';
 // prettier-ignore
-import { GameboardMetaState, HighlightPositionsAction, MenuSelectAction, PieceClickAction, PositionSelectAction } from '../../../../types';
+import { GameboardMetaState, HighlightPositionsAction, MenuSelectAction, PieceClickAction, PositionSelectAction, PieceClearAction, RaiseMoraleSelectingAction, InsurgencySelectingAction, BioWeaponSelectingAction, CommInterruptSelectingAction, RodsFromGodSelectingAction, GoldenEyeSelectingAction, RemoteSenseSelectingAction, PreventPlanAction, ConfirmPlanAction, DeletePlanAction } from '../../../../types';
+
+type GameboardMetaReducerActions =
+    | HighlightPositionsAction
+    | MenuSelectAction
+    | PositionSelectAction
+    | PieceClickAction
+    | PieceClearAction
+    | RaiseMoraleSelectingAction
+    | InsurgencySelectingAction
+    | BioWeaponSelectingAction
+    | CommInterruptSelectingAction
+    | RodsFromGodSelectingAction
+    | GoldenEyeSelectingAction
+    | RemoteSenseSelectingAction
+    | PreventPlanAction
+    | ConfirmPlanAction
+    | DeletePlanAction;
 
 const initialGameboardMeta: GameboardMetaState = {
     //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
@@ -13,7 +28,7 @@ const initialGameboardMeta: GameboardMetaState = {
     selectedMenuId: 0 //TODO: should probably 0 index this instead of 1 index (make -1 == no menu open)
 };
 
-export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
+export function gameboardMetaReducer(state = initialGameboardMeta, action: GameboardMetaReducerActions) {
     const { type } = action;
 
     let stateCopy: GameboardMetaState = JSON.parse(JSON.stringify(state));

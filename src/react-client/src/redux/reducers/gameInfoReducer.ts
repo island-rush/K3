@@ -1,8 +1,22 @@
-import { AnyAction } from 'redux';
 // prettier-ignore
 import { COMBAT_PHASE, COMBAT_PHASE_ID, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEWS_PHASE, NEWS_PHASE_ID, NEW_ROUND, NOT_WAITING_STATUS, NO_MORE_EVENTS, PLACE_PHASE, PLACE_PHASE_ID, PURCHASE_PHASE, PURCHASE_PHASE_ID, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, UPDATE_FLAGS, WAITING_STATUS } from '../../../../constants';
 // prettier-ignore
-import { EventBattleAction, GameInfoState, GameInitialStateAction, NewRoundAction, NewsPhaseAction, NoMoreEventsAction, ShopPurchaseAction, ShopRefundAction, UpdateFlagAction } from '../../../../types';
+import { CombatPhaseAction, EventBattleAction, GameInfoState, GameInitialStateAction, MainButtonClickAction, NewRoundAction, NewsPhaseAction, NoMoreEventsAction, PlacePhaseAction, PurchasePhaseAction, ShopPurchaseAction, ShopRefundAction, SliceChangeAction, UpdateFlagAction } from '../../../../types';
+
+type GameInfoReducerActions =
+    | GameInitialStateAction
+    | ShopPurchaseAction
+    | NoMoreEventsAction
+    | ShopRefundAction
+    | PurchasePhaseAction
+    | UpdateFlagAction
+    | MainButtonClickAction
+    | CombatPhaseAction
+    | SliceChangeAction
+    | PlacePhaseAction
+    | EventBattleAction
+    | NewRoundAction
+    | NewsPhaseAction;
 
 const initialGameInfoState: GameInfoState = {
     gameSection: 'Loading...',
@@ -29,7 +43,7 @@ const initialGameInfoState: GameInfoState = {
     flag12: -1
 };
 
-export function gameInfoReducer(state = initialGameInfoState, action: AnyAction) {
+export function gameInfoReducer(state = initialGameInfoState, action: GameInfoReducerActions) {
     const { type } = action;
 
     let stateCopy: GameInfoState = JSON.parse(JSON.stringify(state));

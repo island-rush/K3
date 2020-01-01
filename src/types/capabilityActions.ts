@@ -166,27 +166,3 @@ export interface GoldenEyeAction extends Action {
         selectedPositionId: number;
     };
 }
-
-export type PositionCapabilityRequestAction =
-    | RodsFromGodRequestAction
-    | RemoteSensingRequestAction
-    | InsurgencyRequestAction
-    | BioWeaponsRequestAction
-    | CommInterruptRequestAction
-    | GoldenEyeRequestAction;
-
-export type InvItemCapabilityAction =
-    | RodsFromGodAction
-    | RemoteSensingAction
-    | InsurgencyAction
-    | BioWeaponsAction
-    | RaiseMoraleAction
-    | GoldenEyeAction
-    | CommInterruptAction;
-export type SelectingAction =
-    | InsurgencySelectingAction
-    | BioWeaponSelectingAction
-    | CommInterruptSelectingAction
-    | RodsFromGodSelectingAction
-    | GoldenEyeSelectingAction
-    | RemoteSenseSelectingAction;

@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
 import { ACCESS_TAG, BAD_REQUEST_TAG } from '../../constants';
-import { Instructor, Password, Section } from '../../types';
 import { Game } from '../classes';
 
 /**
@@ -37,7 +36,7 @@ export const gameAdd = async (req: Request, res: Response) => {
  * All the values that should be part of gameAdd request.
  */
 type GameAddRequest = {
-    adminSection: Section;
-    adminInstructor: Instructor;
-    adminPassword: Password;
+    adminSection: string;
+    adminInstructor: string;
+    adminPassword: string;
 };

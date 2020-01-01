@@ -1,8 +1,18 @@
-import { AnyAction } from 'redux';
 // prettier-ignore
 import { BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CLEAR_BATTLE, ENEMY_PIECE_SELECT, EVENT_BATTLE, INITIAL_GAMESTATE, NO_MORE_EVENTS, TARGET_PIECE_SELECT } from '../../../../constants';
 // prettier-ignore
-import { BattlePieceSelectAction, BattleResultsAction, BattleState, EnemyPieceSelectAction, EventBattleAction, GameInitialStateAction, TargetPieceClickAction } from '../../../../types';
+import { BattlePieceSelectAction, BattlePopupToggleAction, BattleResultsAction, BattleState, ClearBattleAction, EnemyPieceSelectAction, EventBattleAction, GameInitialStateAction, NoMoreEventsAction, TargetPieceClickAction } from '../../../../types';
+
+type BattleReducerActions =
+    | BattleResultsAction
+    | NoMoreEventsAction
+    | EventBattleAction
+    | TargetPieceClickAction
+    | EnemyPieceSelectAction
+    | GameInitialStateAction
+    | BattlePieceSelectAction
+    | ClearBattleAction
+    | BattlePopupToggleAction;
 
 const initialBattleState: BattleState = {
     isMinimized: false,
@@ -14,7 +24,7 @@ const initialBattleState: BattleState = {
     enemyPieces: []
 };
 
-export function battleReducer(state = initialBattleState, action: AnyAction) {
+export function battleReducer(state = initialBattleState, action: BattleReducerActions) {
     const { type } = action;
 
     let stateCopy: BattleState = JSON.parse(JSON.stringify(state));

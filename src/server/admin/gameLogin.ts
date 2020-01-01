@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
 import { ALREADY_IN_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGGED_IN_VALUE, LOGIN_TAG } from '../../constants';
-import { GameSession, Instructor, Section } from '../../types';
+import { GameSession } from '../../types';
 import { Game } from '../classes';
 
 /**
@@ -63,8 +63,8 @@ export const gameLogin = async (req: Request, res: Response) => {
  * All the values that should be a part of a game login attempt.
  */
 type GameLoginRequest = {
-    gameSection: Section;
-    gameInstructor: Instructor;
+    gameSection: string;
+    gameInstructor: string;
     gameTeam: number;
     gameTeamPassword: string;
     gameControllers: number[];

@@ -1,10 +1,11 @@
-import { AnyAction } from 'redux';
-import { INITIAL_GAMESTATE, SHOP_CLEAR, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../../../../constants';
-import { GameInitialStateAction, ShopItemType, ShopPurchaseAction, ShopRefundAction, ShopState } from '../../../../types';
+import { INITIAL_GAMESTATE, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../../../../constants';
+import { GameInitialStateAction, ShopConfirmPurchaseAction, ShopItemType, ShopPurchaseAction, ShopRefundAction, ShopState } from '../../../../types';
+
+type ShopReducerActions = GameInitialStateAction | ShopPurchaseAction | ShopRefundAction | ShopConfirmPurchaseAction;
 
 const initialShopState: ShopState = [];
 
-export function shopReducer(state = initialShopState, action: AnyAction) {
+export function shopReducer(state = initialShopState, action: ShopReducerActions) {
     const { type } = action;
 
     let stateCopy: ShopState = JSON.parse(JSON.stringify(state));
@@ -16,7 +17,6 @@ export function shopReducer(state = initialShopState, action: AnyAction) {
         case SHOP_PURCHASE:
             return stateCopy.concat([(action as ShopPurchaseAction).payload.shopItem]);
 
-        case SHOP_CLEAR:
         case SHOP_TRANSFER:
             return [];
 

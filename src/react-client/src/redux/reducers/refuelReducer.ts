@@ -1,8 +1,17 @@
-import { AnyAction } from 'redux';
 // prettier-ignore
 import { AIRCRAFT_CLICK, EVENT_REFUEL, INITIAL_GAMESTATE, NO_MORE_EVENTS, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, TANKER_CLICK, TYPE_FUEL, UNDO_FUEL_SELECTION } from '../../../../constants';
 // prettier-ignore
-import { AircraftClickAction, EventRefuelAction, GameInitialStateAction, RefuelState, TankerClickAction, UndoFuelSelectionAction } from '../../../../types';
+import { AircraftClickAction, EventRefuelAction, FuelResultsAction, GameInitialStateAction, NoMoreEventsAction, RefuelPopupToggleAction, RefuelState, TankerClickAction, UndoFuelSelectionAction } from '../../../../types';
+
+type RefuelReducerActions =
+    | GameInitialStateAction
+    | TankerClickAction
+    | AircraftClickAction
+    | UndoFuelSelectionAction
+    | FuelResultsAction
+    | EventRefuelAction
+    | RefuelPopupToggleAction
+    | NoMoreEventsAction;
 
 const initialRefuelState: RefuelState = {
     isMinimized: false,
@@ -13,7 +22,7 @@ const initialRefuelState: RefuelState = {
     aircraft: []
 };
 
-export function refuelReducer(state = initialRefuelState, action: AnyAction) {
+export function refuelReducer(state = initialRefuelState, action: RefuelReducerActions) {
     const { type } = action;
 
     let stateCopy: RefuelState = JSON.parse(JSON.stringify(state));

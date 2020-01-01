@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
 import { BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG } from '../../constants';
-import { Instructor, Password, Section, TeacherSession } from '../../types';
+import { TeacherSession } from '../../types';
 import { Game } from '../classes';
 
 /**
@@ -53,7 +53,7 @@ export const adminLogin = async (req: Request, res: Response) => {
  * All the values that should be part of an admin login attempt.
  */
 type AdminLoginRequest = {
-    adminSection: Section;
-    adminInstructor: Instructor;
-    adminPassword: Password;
+    adminSection: string;
+    adminInstructor: string;
+    adminPassword: string;
 };

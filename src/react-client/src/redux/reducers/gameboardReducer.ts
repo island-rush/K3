@@ -1,9 +1,28 @@
-import { AnyAction } from 'redux';
 // prettier-ignore
 import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from '../../../../constants';
 // prettier-ignore
-import { ClearBattleAction, CombatPhaseAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, FuelResultsAction, GameInitialStateAction, InvItemPlaceAction, NewRoundAction, NoMoreEventsAction, PieceType, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, SliceChangeAction, GameboardState } from '../../../../types';
+import { ClearBattleAction, CombatPhaseAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, InvItemPlaceAction, NewRoundAction, NoMoreEventsAction, PieceType, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, SliceChangeAction } from '../../../../types';
 
+type GameboardReducerActions =
+    | GameInitialStateAction
+    | NewRoundAction
+    | PlacePhaseAction
+    | SliceChangeAction
+    | NoMoreEventsAction
+    | RemoteSensingAction
+    | RaiseMoraleAction
+    | EventBattleAction
+    | CombatPhaseAction
+    | EnterContainerAction
+    | ExitContainerAction
+    | EventRefuelAction
+    | FuelResultsAction
+    | InvItemPlaceAction
+    | ClearBattleAction;
+
+/**
+ * Each of these actions handled in the same way
+ */
 type GameboardPiecesUpdateAction =
     | GameInitialStateAction
     | NewRoundAction
@@ -18,7 +37,7 @@ type GameboardPiecesUpdateAction =
     | ExitContainerAction
     | EventRefuelAction;
 
-export function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
+export function gameboardReducer(state = initialGameboardEmpty, action: GameboardReducerActions) {
     const { type } = action;
 
     let stateCopy: GameboardState = JSON.parse(JSON.stringify(state));

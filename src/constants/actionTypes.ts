@@ -11,7 +11,6 @@ export const NEWS_PHASE = 'NEWS_PHASE';
 export const PURCHASE_PHASE = 'PURCHASE_PHASE';
 export const SHOP_PURCHASE = 'SHOP_PURCHASE';
 export const SHOP_REFUND = 'SHOP_REFUND';
-export const SHOP_CLEAR = 'SHOP_CLEAR';
 export const SHOP_TRANSFER = 'SHOP_TRANSFER';
 export const COMBAT_PHASE = 'COMBAT_PHASE';
 export const NEW_ROUND = 'NEW_ROUND';

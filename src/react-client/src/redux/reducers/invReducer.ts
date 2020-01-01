@@ -1,14 +1,34 @@
-import { AnyAction } from 'redux';
 //prettier-ignore
 import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SHOP_TRANSFER } from "../../../../constants";
 // prettier-ignore
-import { GameInitialStateAction, InvItemCapabilityAction, InvItemPlaceAction, InvItemType, InvState, ShopConfirmPurchaseAction } from '../../../../types';
+import { BioWeaponsAction, CommInterruptAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, InvItemPlaceAction, InvItemType, InvState, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, ShopConfirmPurchaseAction } from '../../../../types';
 
-const initialInvState: InvState = [];
+type InvReducerActions =
+    | GameInitialStateAction
+    | ShopConfirmPurchaseAction
+    | InvItemPlaceAction
+    | RodsFromGodAction
+    | RemoteSensingAction
+    | InsurgencyAction
+    | BioWeaponsAction
+    | RaiseMoraleAction
+    | GoldenEyeAction
+    | CommInterruptAction;
 
 type InvItemsPayloadAction = GameInitialStateAction | ShopConfirmPurchaseAction;
 
-export function invReducer(state = initialInvState, action: AnyAction) {
+type InvItemCapabilityAction =
+    | RodsFromGodAction
+    | RemoteSensingAction
+    | InsurgencyAction
+    | BioWeaponsAction
+    | RaiseMoraleAction
+    | GoldenEyeAction
+    | CommInterruptAction;
+
+const initialInvState: InvState = [];
+
+export function invReducer(state = initialInvState, action: InvReducerActions) {
     const { type } = action;
 
     let stateCopy: InvState = JSON.parse(JSON.stringify(state));
