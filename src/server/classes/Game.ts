@@ -2,7 +2,7 @@
 import { Capability, Event, InvItem, Piece, Plan, ShopItem } from '.';
 // prettier-ignore
 import { AIR_REFUELING_SQUADRON_ID, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, COL_BATTLE_EVENT_TYPE, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, INITIAL_GAMESTATE, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NEWS_PHASE_ID, NOYARC_ISLAND_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../constants';
-import { GameType } from '../../types';
+import { GameType, NewsState } from '../../types';
 import { gameInitialNews, gameInitialPieces } from '../admin';
 import { pool } from '../database';
 
@@ -473,7 +473,7 @@ export class Game implements GameType {
     /**
      * Delete old news, and get next news alert from database.
      */
-    async getNextNews() {
+    async getNextNews(): Promise<NewsState> {
         // Delete the old news
         let queryString = 'DELETE FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
         const inserts = [this.gameId];
@@ -488,6 +488,7 @@ export class Game implements GameType {
                 : { newsTitle: 'No More News', newsInfo: "Obviously you've been playing this game too long..." };
 
         return {
+            isMinimized: false,
             active: true,
             newsTitle,
             newsInfo
@@ -608,7 +609,7 @@ export class Game implements GameType {
         };
 
         serverAction.payload.capabilities = {};
-        serverAction.payload.capabilities.confirmedPlans = await Plan.getConfirmedPlans(this.gameId, gameTeam);
+        serverAction.payload.planning.confirmedPlans = await Plan.getConfirmedPlans(this.gameId, gameTeam);
         serverAction.payload.capabilities.confirmedRods = await Capability.getRodsFromGod(this.gameId, gameTeam);
         serverAction.payload.capabilities.confirmedRemoteSense = await Capability.getRemoteSensing(this.gameId, gameTeam);
         serverAction.payload.capabilities.confirmedInsurgency = await Capability.getInsurgency(this.gameId, gameTeam);

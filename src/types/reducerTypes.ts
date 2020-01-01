@@ -1,4 +1,7 @@
-import { GameSession, GameType, InvItemType, PieceType, ShopItemType } from '.';
+import { AIRFIELD_TYPE, FLAG_TYPE, LAND_TYPE, MISSILE_SILO_TYPE, WATER_TYPE } from '../constants';
+import { GameType, InvItemType, PieceType, ShopItemType } from './classes';
+import { singlePlan } from './interfaces';
+import { GameSession } from './sessionTypes';
 
 export type ShopState = ShopItemType[];
 
@@ -6,7 +9,8 @@ export type InvState = InvItemType[];
 
 export type UserfeedbackState = string;
 
-export type GameboardState = { type: string; pieces: PieceType[] }[];
+type boardType = typeof LAND_TYPE | typeof AIRFIELD_TYPE | typeof WATER_TYPE | typeof FLAG_TYPE | typeof MISSILE_SILO_TYPE;
+export type GameboardState = { type: boardType; pieces: PieceType[] }[];
 
 export type GameInfoState = {
     gameSection: GameType['gameSection'];
@@ -60,8 +64,8 @@ export type PlanningState = {
     capability: boolean;
     raiseMoralePopupActive: boolean;
     invItem: InvItemType | null;
-    moves: { type: string; positionId: number }[];
-    confirmedPlans: { [pieceId: number]: { type: string; positionId: number }[] };
+    moves: singlePlan[];
+    confirmedPlans: { [pieceId: number]: singlePlan[] };
 };
 
 export type ContainerState = {
