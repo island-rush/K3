@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { GameInfoState, UserfeedbackState } from '../../../../types';
-import { mainButtonClick } from '../../redux/actions';
+import { mainButtonClick } from '../../redux';
 import Leftcontrols from './Leftcontrols';
 import { MainButton } from './MainButton';
 import { Userfeedback } from './Userfeedback';

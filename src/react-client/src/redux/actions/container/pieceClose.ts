@@ -1,13 +1,13 @@
 import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
 import { PIECE_CLOSE_ACTION } from '../../../../../constants';
-import { EmitType, PieceCloseAction, PieceType } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { PieceCloseAction, PieceType } from '../../../../../types';
 
 /**
  * Action to close the container popup.
  */
 export const pieceClose = (selectedPiece: PieceType) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         // const { gameboardMeta } = getState();
 
         //probably want ability to close that popup/menu at any point (even if open maliciously)

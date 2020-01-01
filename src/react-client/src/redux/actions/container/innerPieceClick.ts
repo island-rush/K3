@@ -1,13 +1,13 @@
 import { Dispatch } from 'redux';
-import { SERVER_INNER_PIECE_CLICK, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { EmitType, ExitContainerRequestAction, PieceType } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { emit, FullState } from '../../';
+import { SERVER_INNER_PIECE_CLICK } from '../../../../../constants';
+import { ExitContainerRequestAction, PieceType } from '../../../../../types';
 
 /**
  * Move piece from inside container to outside (same position)
  */
 export const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         //TODO: figure out if inner piece click is allowed
 
         const clientAction: ExitContainerRequestAction = {
@@ -18,6 +18,6 @@ export const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceT
             }
         };
 
-        emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
+        sendToServer(clientAction);
     };
 };

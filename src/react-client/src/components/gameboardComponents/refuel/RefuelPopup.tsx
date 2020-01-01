@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { RefuelState } from '../../../../../types';
-import { aircraftClick, confirmFuelSelections, refuelPopupMinimizeToggle, tankerClick, undoFuelSelection } from '../../../redux/actions';
+import { aircraftClick, confirmFuelSelections, refuelPopupMinimizeToggle, tankerClick, undoFuelSelection } from '../../../redux';
 import { REFUEL_POPUP_IMAGES } from '../../styleConstants';
 import { AircraftPiece } from './AircraftPiece';
 import { TankerPiece } from './TankerPiece';

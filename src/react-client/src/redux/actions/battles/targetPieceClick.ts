@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
 import { TARGET_PIECE_SELECT, WAITING_STATUS } from '../../../../../constants';
-import { EmitType, TargetPieceClickAction } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { TargetPieceClickAction } from '../../../../../types';
 
 export const targetPieceClick = (battlePiece: any, battlePieceIndex: number) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         //check the local state before sending to the server
 
         const { gameInfo } = getState();

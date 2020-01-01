@@ -1,11 +1,11 @@
 import { Dispatch } from 'redux';
-import { ALL_COMMANDER_TYPES, SERVER_RAISE_MORALE_CONFIRM, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { EmitType, RaiseMoraleRequestAction } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { emit, FullState } from '../../';
+import { ALL_COMMANDER_TYPES, SERVER_RAISE_MORALE_CONFIRM } from '../../../../../constants';
+import { RaiseMoraleRequestAction } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const raiseMoraleSelectCommanderType = (selectedCommanderType: number) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { planning }: any = getState();
         const { invItem } = planning;
 
@@ -21,7 +21,7 @@ export const raiseMoraleSelectCommanderType = (selectedCommanderType: number) =>
                 selectedCommanderType
             }
         };
-        emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
-        return;
+
+        sendToServer(clientAction);
     };
 };

@@ -1,11 +1,11 @@
 import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
 import { COMBAT_PHASE_ID, COMM_INTERRUPT_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
-import { CommInterruptSelectingAction, EmitType, InvItemType } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { CommInterruptSelectingAction, InvItemType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const communicationsInterruption = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 

@@ -1,16 +1,16 @@
 import { Dispatch } from 'redux';
+import { emit, FullState } from '../';
 // prettier-ignore
-import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SOCKET_CLIENT_SENDING_ACTION, TYPE_TERRAIN } from '../../../../constants';
+import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, TYPE_TERRAIN } from '../../../../constants';
 //prettier-ignore
-import { EmitType, ExitTransportContainerRequestAction, HighlightPositionsAction, PlanningSelectAction, PositionCapabilityRequestAction, PositionSelectAction } from "../../../../types";
-import { FullState } from '../reducers';
+import { ExitTransportContainerRequestAction, HighlightPositionsAction, PlanningSelectAction, PositionCapabilityRequestAction, PositionSelectAction } from "../../../../types";
 import { setUserfeedbackAction } from './setUserfeedbackAction';
 
 /**
  * Change the state based on position that was clicked by the user.
  */
 export const selectPosition = (selectedPositionId: number) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, planning, container } = getState();
 
         //selecting the hex to put piece that is inside container
@@ -28,7 +28,7 @@ export const selectPosition = (selectedPositionId: number) => {
                 }
             };
 
-            emit(SOCKET_CLIENT_SENDING_ACTION, thisAction);
+            sendToServer(thisAction);
 
             return;
         }
@@ -161,7 +161,7 @@ export const selectPosition = (selectedPositionId: number) => {
                     }
                 };
 
-                emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
+                sendToServer(clientAction);
                 return;
             }
 

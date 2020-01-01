@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { GameInfoState } from '../../../../types';
-import { menuSelect } from '../../redux/actions';
+import { menuSelect } from '../../redux';
 import { Gameinfo } from './Gameinfo';
 import InvMenu from './InvMenu';
 import ShopMenu from './ShopMenu';

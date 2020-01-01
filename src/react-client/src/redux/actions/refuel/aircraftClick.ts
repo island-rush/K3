@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
 import { AIRCRAFT_CLICK } from '../../../../../constants';
-import { AircraftClickAction, EmitType, PieceType } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { AircraftClickAction, PieceType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 //TODO: could have more checks for current game event / phase / slice / other easy stuff that should be obvious
@@ -9,7 +9,7 @@ import { setUserfeedbackAction } from '../setUserfeedbackAction';
  * Action to select aircraft to receive fuel from tanker.
  */
 export const aircraftClick = (aircraftPiece: PieceType, aircraftPieceIndex: number) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { refuel } = getState();
         const { selectedTankerPieceId, aircraft } = refuel;
 

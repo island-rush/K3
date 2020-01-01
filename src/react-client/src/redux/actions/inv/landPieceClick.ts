@@ -1,14 +1,14 @@
 import { Dispatch } from 'redux';
-import { PLACE_PHASE_ID, SERVER_PIECE_PLACE, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { EmitType, InvItemPlaceRequestAction, InvItemType } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { emit, FullState } from '../../';
+import { PLACE_PHASE_ID, SERVER_PIECE_PLACE } from '../../../../../constants';
+import { InvItemPlaceRequestAction, InvItemType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Action to select inv item to place on the board (land item)
  */
 export const landPieceClick = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, gameInfo } = getState();
 
         const { gamePhase } = gameInfo;
@@ -38,6 +38,6 @@ export const landPieceClick = (invItem: InvItemType) => {
             }
         };
 
-        emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
+        sendToServer(clientAction);
     };
 };

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { ALL_AIRFIELD_LOCATIONS } from '../../../../constants';
 import { GameboardMetaState, GameboardState, PieceType } from '../../../../types';
-import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux/actions';
+import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux';
 import { ZOOMBOX_BACKGROUNDS } from '../styleConstants';
 import { Piece } from './Piece';
 

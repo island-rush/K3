@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux';
-import { EmitType, InvItemType } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { emit, FullState } from '../../';
+import { InvItemType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const nuclearStrike = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         dispatch(setUserfeedbackAction('nuclearStrike'));
     };
 };

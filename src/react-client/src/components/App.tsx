@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { GameboardMetaState, PlanningState } from '../../../types';
-import { clearPieceSelection, menuSelect, selectPosition } from '../redux/actions';
+import { clearPieceSelection, menuSelect, selectPosition } from '../redux';
 import Bottombar from './bottombarComponents/Bottombar';
 import Gameboard from './gameboardComponents/Gameboard';
 import Sidebar from './sidebarComponents/Sidebar';

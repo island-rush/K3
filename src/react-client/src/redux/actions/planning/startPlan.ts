@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
 import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, START_PLAN, TYPE_OWNERS } from '../../../../../constants';
-import { EmitType, StartPlanAction } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { StartPlanAction } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 //TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)
@@ -9,7 +9,7 @@ import { setUserfeedbackAction } from '../setUserfeedbackAction';
  * Action to set gamestate in a planning state to click positions for a plan for a piece.
  */
 export const startPlan = () => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, gameInfo, planning } = getState();
 
         if (gameboardMeta.selectedPiece == null) {

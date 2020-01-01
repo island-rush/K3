@@ -1,14 +1,14 @@
 import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
 import { UNDO_MOVE } from '../../../../../constants';
-import { EmitType, UndoMoveAction } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { UndoMoveAction } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Action to under a move from a plan.
  */
 export const undoMove = () => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { planning } = getState();
 
         if (planning.active) {

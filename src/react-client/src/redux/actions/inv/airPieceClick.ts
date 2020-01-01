@@ -1,14 +1,14 @@
 import { Dispatch } from 'redux';
-import { PLACE_PHASE_ID, SERVER_PIECE_PLACE, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { EmitType, InvItemPlaceRequestAction, InvItemType } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { emit, FullState } from '../../';
+import { PLACE_PHASE_ID, SERVER_PIECE_PLACE } from '../../../../../constants';
+import { InvItemPlaceRequestAction, InvItemType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Action to put air piece inv item on the board.
  */
 export const airPieceClick = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, gameInfo } = getState();
 
         const { gamePhase } = gameInfo;
@@ -39,6 +39,6 @@ export const airPieceClick = (invItem: InvItemType) => {
             }
         };
 
-        emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
+        sendToServer(clientAction);
     };
 };

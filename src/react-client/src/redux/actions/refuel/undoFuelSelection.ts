@@ -1,13 +1,13 @@
 import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
 import { UNDO_FUEL_SELECTION } from '../../../../../constants';
-import { EmitType, PieceType, UndoFuelSelectionAction } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { PieceType, UndoFuelSelectionAction } from '../../../../../types';
 
 /**
  * Action to undo a fuel selection from tanker to another aircraft piece.
  */
 export const undoFuelSelection = (aircraftPiece: PieceType, aircraftPieceIndex: number) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         // const { gameboardMeta } = getState();
         // const { selectedTankerPieceId } = gameboardMeta.refuel;
 

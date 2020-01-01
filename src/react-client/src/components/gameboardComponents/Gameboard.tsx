@@ -5,7 +5,7 @@ import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BL
 // prettier-ignore
 import { BattleState, CapabilitiesState, ContainerState, GameboardMetaState, GameboardState, GameInfoState, NewsState, PlanningState } from '../../../../types';
 //prettier-ignore
-import { innerPieceClick, innerTransportPieceClick, newsPopupMinimizeToggle, outerPieceClick, pieceClose, raiseMoraleSelectCommanderType, selectPosition } from "../../redux/actions";
+import { innerPieceClick, innerTransportPieceClick, newsPopupMinimizeToggle, outerPieceClick, pieceClose, raiseMoraleSelectCommanderType, selectPosition } from "../../redux";
 import BattlePopup from './battle/BattlePopup';
 import { SelectCommanderTypePopup } from './capabilities/SelectCommanderTypePopup';
 import { ContainerPopup } from './container/ContainerPopup';

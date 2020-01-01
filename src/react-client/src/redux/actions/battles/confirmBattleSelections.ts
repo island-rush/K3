@@ -1,11 +1,11 @@
 import { Dispatch } from 'redux';
-import { SERVER_CONFIRM_BATTLE_SELECTION, SOCKET_CLIENT_SENDING_ACTION, WAITING_STATUS } from '../../../../../constants';
-import { ConfirmBattleSelectionRequestAction, EmitType } from '../../../../../types';
-import { FullState } from '../../reducers';
+import { emit, FullState } from '../../';
+import { SERVER_CONFIRM_BATTLE_SELECTION, WAITING_STATUS } from '../../../../../constants';
+import { ConfirmBattleSelectionRequestAction } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const confirmBattleSelections = () => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         //check the local state before sending to the server
         const { gameInfo, battle } = getState();
         const { gameStatus } = gameInfo;
@@ -27,6 +27,6 @@ export const confirmBattleSelections = () => {
             }
         };
 
-        emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
+        sendToServer(clientAction);
     };
 };

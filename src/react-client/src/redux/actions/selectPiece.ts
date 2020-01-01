@@ -1,13 +1,13 @@
 import { Dispatch } from 'redux';
+import { emit, FullState } from '../';
 import { PIECE_CLICK } from '../../../../constants';
-import { EmitType, PieceClickAction, PieceType } from '../../../../types';
-import { FullState } from '../reducers';
+import { PieceClickAction, PieceType } from '../../../../types';
 
 /**
  * Change the state based on the piece that the user selected.
  */
 export const selectPiece = (selectedPiece: PieceType) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { planning } = getState();
 
         if (!planning.active) {

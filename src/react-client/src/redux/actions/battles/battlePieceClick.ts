@@ -1,11 +1,11 @@
 import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
 import { BATTLE_PIECE_SELECT, WAITING_STATUS } from '../../../../../constants';
-import { BattlePieceSelectAction, EmitType } from '../../../../../types';
+import { BattlePieceSelectAction } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
-import { FullState } from '../../reducers';
 
 export const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
-    return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameInfo } = getState();
         const { gameStatus } = gameInfo;
 

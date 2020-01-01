@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BattleState } from '../../../../../types';
 //prettier-ignore
-import { battlePieceClick, battlePopupMinimizeToggle, clearOldBattle, confirmBattleSelections, enemyBattlePieceClick, targetPieceClick } from "../../../redux/actions";
+import { battlePieceClick, battlePopupMinimizeToggle, clearOldBattle, confirmBattleSelections, enemyBattlePieceClick, targetPieceClick } from "../../../redux";
 import { BATTLE_POPUP_IMAGES } from '../../styleConstants';
 import { BattlePiece } from './BattlePiece';
 

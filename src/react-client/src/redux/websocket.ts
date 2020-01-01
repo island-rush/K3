@@ -1,7 +1,6 @@
 import { AnyAction, Store } from 'redux';
 import io from 'socket.io-client';
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../constants';
-import { EmitType } from '../../../types';
+import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, SOCKET_CLIENT_SENDING_ACTION } from '../../../constants';
 
 const socket: SocketIOClient.Socket = io(window.location.hostname);
 
@@ -19,6 +18,6 @@ export const init = (store: Store) => {
 };
 
 /**
- * Middleware to allow client to send requests to server through web socket.
+ * Middleware to allow client to send requests to server through web socket. Used as 'sendToServer' redux-thunk parameter
  */
-export const emit: EmitType = (requestType: string, action: AnyAction) => socket.emit(requestType, action); //TODO: refactor the emit (client-side), since we always know this is SOCKET_CLIENT_SENDING_ACTION
+export const emit = (action: AnyAction) => socket.emit(SOCKET_CLIENT_SENDING_ACTION, action);
