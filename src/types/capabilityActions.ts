@@ -3,6 +3,7 @@ import { Action } from 'redux';
 import { BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INSURGENCY_SELECTED, INSURGENCY_SELECTING, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INSURGENCY_CONFIRM, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM } from '../constants';
 import { InvItemType } from './classes';
 import { GameboardPiecesDataType } from './interfaces';
+import { CapabilitiesState, GameboardMetaState } from './reducerTypes';
 
 export interface RemoteSenseSelectingAction extends Action {
     type: typeof REMOTE_SENSING_SELECTING;
@@ -56,7 +57,7 @@ export interface RodsFromGodSelectingAction extends Action {
 export interface RodsFromGodRequestAction extends Action {
     type: typeof SERVER_RODS_FROM_GOD_CONFIRM;
     payload: {
-        selectedPositionId: number;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
         invItem: InvItemType;
     };
 }
@@ -65,14 +66,14 @@ export interface RodsFromGodAction extends Action {
     type: typeof RODS_FROM_GOD_SELECTED;
     payload: {
         invItem: InvItemType;
-        selectedPositionId: number;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
     };
 }
 
 export interface RemoteSensingRequestAction extends Action {
     type: typeof SERVER_REMOTE_SENSING_CONFIRM;
     payload: {
-        selectedPositionId: number;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
         invItem: InvItemType;
     };
 }
@@ -81,7 +82,7 @@ export interface RemoteSensingAction extends Action {
     type: typeof REMOTE_SENSING_SELECTED;
     payload: {
         invItem: InvItemType;
-        confirmedRemoteSense: number[];
+        confirmedRemoteSense: CapabilitiesState['confirmedRemoteSense'];
         gameboardPieces: GameboardPiecesDataType;
     };
 }
@@ -89,7 +90,7 @@ export interface RemoteSensingAction extends Action {
 export interface InsurgencyRequestAction extends Action {
     type: typeof SERVER_INSURGENCY_CONFIRM;
     payload: {
-        selectedPositionId: number;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
         invItem: InvItemType;
     };
 }
@@ -98,14 +99,14 @@ export interface InsurgencyAction extends Action {
     type: typeof INSURGENCY_SELECTED;
     payload: {
         invItem: InvItemType;
-        selectedPositionId: number;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
     };
 }
 
 export interface BioWeaponsRequestAction extends Action {
     type: typeof SERVER_BIOLOGICAL_WEAPONS_CONFIRM;
     payload: {
-        selectedPositionId: number;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
         invItem: InvItemType;
     };
 }
@@ -114,7 +115,7 @@ export interface BioWeaponsAction extends Action {
     type: typeof BIO_WEAPON_SELECTED;
     payload: {
         invItem: InvItemType;
-        selectedPositionId: number;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
     };
 }
 
@@ -130,7 +131,7 @@ export interface RaiseMoraleAction extends Action {
     type: typeof RAISE_MORALE_SELECTED;
     payload: {
         invItem: InvItemType;
-        confirmedRaiseMorale: number[];
+        confirmedRaiseMorale: CapabilitiesState['confirmedRaiseMorale'];
         gameboardPieces: GameboardPiecesDataType;
     };
 }
@@ -138,7 +139,7 @@ export interface RaiseMoraleAction extends Action {
 export interface CommInterruptRequestAction extends Action {
     type: typeof SERVER_COMM_INTERRUPT_CONFIRM;
     payload: {
-        selectedPositionId: number;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
         invItem: InvItemType;
     };
 }
@@ -147,14 +148,14 @@ export interface CommInterruptAction extends Action {
     type: typeof COMM_INTERRUP_SELECTED;
     payload: {
         invItem: InvItemType;
-        confirmedCommInterrupt: number[];
+        confirmedCommInterrupt: CapabilitiesState['confirmedCommInterrupt'];
     };
 }
 
 export interface GoldenEyeRequestAction extends Action {
     type: typeof SERVER_GOLDEN_EYE_CONFIRM;
     payload: {
-        selectedPositionId: number;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
         invItem: InvItemType;
     };
 }
@@ -163,6 +164,6 @@ export interface GoldenEyeAction extends Action {
     type: typeof GOLDEN_EYE_SELECTED;
     payload: {
         invItem: InvItemType;
-        selectedPositionId: number;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
     };
 }
