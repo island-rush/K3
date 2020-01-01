@@ -1,8 +1,7 @@
-import { AnyAction } from 'redux';
 // prettier-ignore
 import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, NEW_ROUND, NO_MORE_EVENTS, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SLICE_CHANGE } from '../../../../constants';
 // prettier-ignore
-import { BioWeaponsAction, CapabilitiesState, CommInterruptAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, NewRoundAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SliceChangeAction } from '../../../../types';
+import { BioWeaponsAction, CapabilitiesState, CapabilityReducerActions, CommInterruptAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, NewRoundAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SliceChangeAction } from '../../../../types';
 
 const initialCapabilitiesState: CapabilitiesState = {
     confirmedRods: [],
@@ -14,7 +13,7 @@ const initialCapabilitiesState: CapabilitiesState = {
     confirmedGoldenEye: []
 };
 
-export function capabilitiesReducer(state = initialCapabilitiesState, action: AnyAction) {
+export function capabilitiesReducer(state = initialCapabilitiesState, action: CapabilityReducerActions) {
     const { type } = action;
 
     let stateCopy: CapabilitiesState = JSON.parse(JSON.stringify(state));

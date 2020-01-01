@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { SERVER_OUTER_PIECE_CLICK, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { EmitType, EnterContainerRequestAction, FullState, PieceType } from '../../../../../types';
+import { EmitType, EnterContainerRequestAction, PieceType } from '../../../../../types';
+import { FullState } from '../../reducers';
 
 /**
  * Action to move outside piece to the inside of a container.

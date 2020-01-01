@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { UNDO_MOVE } from '../../../../../constants';
-import { EmitType, FullState, UndoMoveAction } from '../../../../../types';
+import { EmitType, UndoMoveAction } from '../../../../../types';
+import { FullState } from '../../reducers';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**

@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { SERVER_SHOP_CONFIRM_PURCHASE, SOCKET_CLIENT_SENDING_ACTION } from '../../../../../constants';
-import { EmitType, FullState, ShopConfirmPurchaseRequestAction } from '../../../../../types';
+import { EmitType, ShopConfirmPurchaseRequestAction } from '../../../../../types';
+import { FullState } from '../../reducers';
 
 //TODO: more checks on if they can purchase before sending to backend (don't waste network)
 /**

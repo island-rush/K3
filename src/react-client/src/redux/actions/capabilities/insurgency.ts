@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, INSURGENCY_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
-import { EmitType, FullState, InsurgencySelectingAction, InvItemType } from '../../../../../types';
+import { EmitType, InsurgencySelectingAction, InvItemType } from '../../../../../types';
+import { FullState } from '../../reducers';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const insurgency = (invItem: InvItemType) => {

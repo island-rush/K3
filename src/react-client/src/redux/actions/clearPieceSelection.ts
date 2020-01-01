@@ -2,7 +2,8 @@
 
 import { Dispatch } from 'redux';
 import { PIECE_CLEAR_SELECTION } from '../../../../constants';
-import { EmitType, FullState, PieceClearAction } from '../../../../types';
+import { EmitType, PieceClearAction } from '../../../../types';
+import { FullState } from '../reducers';
 
 /**
  * Action to de-select all pieces in the zoombox

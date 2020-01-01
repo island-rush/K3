@@ -1,7 +1,8 @@
 import { Dispatch } from 'redux';
 import { BATTLE_PIECE_SELECT, WAITING_STATUS } from '../../../../../constants';
-import { BattlePieceSelectAction, EmitType, FullState } from '../../../../../types';
+import { BattlePieceSelectAction, EmitType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
+import { FullState } from '../../reducers';
 
 export const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
     return (dispatch: Dispatch, getState: () => FullState, emit: EmitType) => {

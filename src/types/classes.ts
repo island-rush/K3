@@ -1,4 +1,4 @@
-export interface PieceType {
+export type PieceType = {
     pieceId: number;
     pieceGameId: number;
     pieceTeamId: number;
@@ -14,37 +14,34 @@ export interface PieceType {
 
     /**
      * True = Stuck in place, False = Free to move/make plans
-     *
-     * @type {boolean}
-     * @memberof PieceType
      */
     pieceDisabled: boolean;
-}
+};
 
-export interface ShopItemType {
+export type ShopItemType = {
     shopItemId: number;
     shopItemGameId: number;
     shopItemTeamId: number;
     shopItemTypeId: number;
-}
+};
 
-export interface PlanType {
+export type PlanType = {
     planGameId: number;
     planTeamId: number;
     planPieceId: number;
     planMovementOrder: number;
     planPositionId: number;
     planSpecialFlag: number;
-}
+};
 
-export interface InvItemType {
+export type InvItemType = {
     invItemId: number;
     invItemGameId: number;
     invItemTeamId: number;
     invItemTypeId: number;
-}
+};
 
-export interface GameType {
+export type GameType = {
     gameId: number;
     gameSection: string;
     gameInstructor: string;
@@ -90,13 +87,13 @@ export interface GameType {
     flag10: number;
     flag11: number;
     flag12: number;
-}
+};
 
-export interface EventType {
+export type EventType = {
     eventId: number;
     eventGameId: number;
     eventTeamId: number;
     eventTypeId: number;
     eventPosA: number;
     eventPosB: number;
-}
+};

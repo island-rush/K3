@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { NEWSPOPUP_MINIMIZE_TOGGLE } from '../../../../constants';
-import { EmitType, FullState, NewsPopupToggleAction } from '../../../../types';
+import { EmitType, NewsPopupToggleAction } from '../../../../types';
+import { FullState } from '../reducers';
 
 /**
  * Dispatch to state that user toggled minimize for news popup.

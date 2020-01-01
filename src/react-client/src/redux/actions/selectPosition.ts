@@ -2,7 +2,8 @@ import { Dispatch } from 'redux';
 // prettier-ignore
 import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SOCKET_CLIENT_SENDING_ACTION, TYPE_TERRAIN } from '../../../../constants';
 //prettier-ignore
-import { EmitType, ExitTransportContainerRequestAction, FullState, HighlightPositionsAction, PlanningSelectAction, PositionCapabilityRequestAction, PositionSelectAction } from "../../../../types";
+import { EmitType, ExitTransportContainerRequestAction, HighlightPositionsAction, PlanningSelectAction, PositionCapabilityRequestAction, PositionSelectAction } from "../../../../types";
+import { FullState } from '../reducers';
 import { setUserfeedbackAction } from './setUserfeedbackAction';
 
 /**

@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, RAISE_MORALE_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
-import { EmitType, FullState, InvItemType, RaiseMoraleSelectingAction } from '../../../../../types';
+import { EmitType, InvItemType, RaiseMoraleSelectingAction } from '../../../../../types';
+import { FullState } from '../../reducers';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 //TODO: need to get rid of boost = x from the component when the raise morale is expired

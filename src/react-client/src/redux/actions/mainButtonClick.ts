@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { SERVER_MAIN_BUTTON_CLICK, SOCKET_CLIENT_SENDING_ACTION } from '../../../../constants';
-import { EmitType, FullState, MainButtonClickRequestAction } from '../../../../types';
+import { EmitType, MainButtonClickRequestAction } from '../../../../types';
+import { FullState } from '../reducers';
 
 /**
  * Send to server that user clicked main button.

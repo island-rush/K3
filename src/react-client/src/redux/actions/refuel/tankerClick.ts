@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { TANKER_CLICK } from '../../../../../constants';
-import { EmitType, FullState, PieceType, TankerClickAction } from '../../../../../types';
+import { EmitType, PieceType, TankerClickAction } from '../../../../../types';
+import { FullState } from '../../reducers';
 
 /**
  * Action to select tanker to give fuel to other pieces.

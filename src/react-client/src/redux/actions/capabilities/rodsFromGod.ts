@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { COMBAT_PHASE_ID, RODS_FROM_GOD_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
-import { EmitType, FullState, InvItemType, RodsFromGodSelectingAction } from '../../../../../types';
+import { EmitType, InvItemType, RodsFromGodSelectingAction } from '../../../../../types';
+import { FullState } from '../../reducers';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const rodsFromGod = (invItem: InvItemType) => {

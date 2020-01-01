@@ -8,7 +8,7 @@ export type UserfeedbackState = string;
 
 export type GameboardState = { type: string; pieces: PieceType[] }[];
 
-export interface GameInfoState {
+export type GameInfoState = {
     gameSection: GameType['gameSection'];
     gameInstructor: GameType['gameInstructor'];
     gameTeam: GameSession['gameTeam'];
@@ -31,16 +31,16 @@ export interface GameInfoState {
     flag10: GameType['flag10'];
     flag11: GameType['flag11'];
     flag12: GameType['flag12'];
-}
+};
 
-export interface GameboardMetaState {
+export type GameboardMetaState = {
     selectedPosition: number;
     highlightedPositions: number[];
     selectedPiece: PieceType | null;
     selectedMenuId: number;
-}
+};
 
-export interface CapabilitiesState {
+export type CapabilitiesState = {
     confirmedRods: number[];
     confirmedRemoteSense: number[];
     confirmedInsurgency: number[];
@@ -53,26 +53,26 @@ export interface CapabilitiesState {
     confirmedRaiseMorale: number[];
     confirmedCommInterrupt: number[];
     confirmedGoldenEye: number[];
-}
+};
 
-export interface PlanningState {
+export type PlanningState = {
     active: boolean;
     capability: boolean;
     raiseMoralePopupActive: boolean;
     invItem: InvItemType | null;
     moves: { type: string; positionId: number }[];
     confirmedPlans: { [pieceId: number]: { type: string; positionId: number }[] };
-}
+};
 
-export interface ContainerState {
+export type ContainerState = {
     active: boolean;
     isSelectingHex: boolean;
     innerPieceToDrop: any;
     containerPiece: any;
     outerPieces: any;
-}
+};
 
-export interface BattleState {
+export type BattleState = {
     isMinimized: boolean;
     active: boolean;
     selectedBattlePiece: any;
@@ -80,38 +80,20 @@ export interface BattleState {
     masterRecord: any;
     friendlyPieces: any[];
     enemyPieces: any[];
-}
+};
 
-export interface NewsState {
+export type NewsState = {
     isMinimized: boolean;
     active: boolean;
     newsTitle: string;
     newsInfo: string;
-}
+};
 
-export interface RefuelState {
+export type RefuelState = {
     isMinimized: boolean;
     active: boolean;
     selectedTankerPieceId: any;
     selectedTankerPieceIndex: number;
     tankers: any[];
     aircraft: any[];
-}
-
-/**
- * Formatted to copy the root reducer
- */
-export type FullState = {
-    userFeedback: UserfeedbackState;
-    gameInfo: GameInfoState;
-    shopItems: ShopState;
-    invItems: InvState;
-    gameboard: GameboardState;
-    gameboardMeta: GameboardMetaState;
-    capabilities: CapabilitiesState;
-    planning: PlanningState;
-    container: ContainerState;
-    refuel: RefuelState;
-    battle: BattleState;
-    news: NewsState;
 };

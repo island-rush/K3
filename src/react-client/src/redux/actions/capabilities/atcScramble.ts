@@ -1,5 +1,6 @@
 import { Dispatch } from 'redux';
-import { EmitType, FullState, InvItemType } from '../../../../../types';
+import { EmitType, InvItemType } from '../../../../../types';
+import { FullState } from '../../reducers';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const atcScramble = (invItem: InvItemType) => {

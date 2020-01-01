@@ -26,3 +26,5 @@ export const rootReducer = combineReducers({
     battle: battleReducer,
     news: newsReducer
 });
+
+export type FullState = ReturnType<typeof rootReducer>;
