@@ -30,7 +30,7 @@ export const sendToGame = (socket: Socket, action: { type: string; [extraProps: 
 
 export const sendToTeam = (socket: Socket, team: number, action: { type: string; [extraProps: string]: any }) => {
     const { gameId, gameTeam } = socket.handshake.session.ir3 as GameSession;
-    socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, action);
+    socket.to(`game${gameId}team${team}`).emit(SOCKET_SERVER_SENDING_ACTION, action);
     if (gameTeam === team) {
         socket.emit(SOCKET_SERVER_SENDING_ACTION, action);
     }
