@@ -1,17 +1,15 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
 import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, SOCKET_SERVER_SENDING_ACTION, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
-import { GameSession, NewRoundAction, PlacePhaseAction, UpdateFlagAction } from '../../types';
+import { NewRoundAction, PlacePhaseAction, UpdateFlagAction } from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
+import { sendToTeam } from '../helpers';
 import { giveNextEvent } from './giveNextEvent';
 
 /**
  * Move pieces / step through plans
  */
 export const executeStep = async (socket: Socket, thisGame: Game) => {
-    // Grab Session (already verified from last function)
-    const { gameTeam } = socket.handshake.session.ir3 as GameSession;
-
     // inserting events here and moving pieces, or changing to new round or something...
     const { gameId, gameRound } = thisGame;
 
@@ -61,11 +59,8 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
                 }
             };
 
-            socket.to(`game${gameId}team0`).emit(SOCKET_SERVER_SENDING_ACTION, placePhaseActionBlue);
-            socket.to(`game${gameId}team1`).emit(SOCKET_SERVER_SENDING_ACTION, placePhaseActionRed);
-
-            const thisSocketsAction = gameTeam === BLUE_TEAM_ID ? placePhaseActionBlue : placePhaseActionRed;
-            socket.emit(SOCKET_SERVER_SENDING_ACTION, thisSocketsAction);
+            sendToTeam(socket, BLUE_TEAM_ID, placePhaseActionBlue);
+            sendToTeam(socket, RED_TEAM_ID, placePhaseActionRed);
             return;
         }
         // Next Round of Combat
@@ -96,11 +91,8 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
             }
         };
 
-        socket.to(`game${gameId}team0`).emit(SOCKET_SERVER_SENDING_ACTION, newRoundActionBlue);
-        socket.to(`game${gameId}team1`).emit(SOCKET_SERVER_SENDING_ACTION, newRoundActionRed);
-
-        const thisSocketsAction = gameTeam === BLUE_TEAM_ID ? newRoundActionBlue : newRoundActionRed;
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, thisSocketsAction);
+        sendToTeam(socket, BLUE_TEAM_ID, newRoundActionBlue);
+        sendToTeam(socket, RED_TEAM_ID, newRoundActionRed);
         return;
     }
 

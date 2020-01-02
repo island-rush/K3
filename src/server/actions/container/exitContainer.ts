@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN, TYPE_TERRAIN } from '../../../constants';
+import { COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, SLICE_PLANNING_ID, TYPE_MAIN, TYPE_TERRAIN } from '../../../constants';
 import { ExitContainerAction, ExitContainerRequestAction, GameSession } from '../../../types';
 import { Game, Piece } from '../../classes';
-import { sendUserFeedback } from '../sendUserFeedback';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * User request to move piece outside of a container to the same position.
@@ -17,14 +17,14 @@ export const exitContainer = async (socket: Socket, action: ExitContainerRequest
     // Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
@@ -76,6 +76,5 @@ export const exitContainer = async (socket: Socket, action: ExitContainerRequest
     };
 
     // Send the update to the client(s)
-    socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    sendToThisTeam(socket, serverAction);
 };

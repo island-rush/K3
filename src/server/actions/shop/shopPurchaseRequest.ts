@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_PURCHASE, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
+import { BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_PURCHASE, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
 import { GameSession, ShopPurchaseAction, ShopPurchaseRequestAction } from '../../../types';
 import { Game, ShopItem } from '../../classes';
-import { sendUserFeedback } from '../sendUserFeedback';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * Client is requesting to buy something from the shop and place it into their cart. (Insert ShopItem)
@@ -22,14 +22,14 @@ export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRe
     // Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameBluePoints, gameRedPoints } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
@@ -67,6 +67,5 @@ export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRe
     };
 
     // Send update to client(s)
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-    socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    sendToThisTeam(socket, serverAction);
 };

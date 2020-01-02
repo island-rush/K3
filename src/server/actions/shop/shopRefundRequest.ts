@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BAD_REQUEST_TAG, BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_REFUND, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
+import { BAD_REQUEST_TAG, BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_REFUND, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
 import { GameSession, ShopRefundAction, ShopRefundRequestAction } from '../../../types';
 import { Game, ShopItem } from '../../classes';
-import { sendUserFeedback } from '../sendUserFeedback';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * Client is requesting to refund a certain ShopItem in their cart
@@ -15,14 +15,14 @@ export const shopRefundRequest = async (socket: Socket, action: ShopRefundReques
     // Get Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameBluePoints, gameRedPoints } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
@@ -49,7 +49,7 @@ export const shopRefundRequest = async (socket: Socket, action: ShopRefundReques
 
     // Do they own the shop item?
     if (shopItemGameId !== gameId || shopItemTeamId !== gameTeam) {
-        socket.emit(SOCKET_SERVER_REDIRECT, BAD_REQUEST_TAG);
+        redirectClient(socket, BAD_REQUEST_TAG);
         return;
     }
 
@@ -71,6 +71,5 @@ export const shopRefundRequest = async (socket: Socket, action: ShopRefundReques
     };
 
     // Send update to the client(s)
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-    socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    sendToThisTeam(socket, serverAction);
 };

@@ -6,4 +6,4 @@ export * from './planning';
 export * from './refuel';
 export * from './shop';
 export * from './mainButtonClick';
-export * from './sendUserFeedback';
+export * from '../helpers';

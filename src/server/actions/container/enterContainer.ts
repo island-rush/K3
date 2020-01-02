@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { AIRFIELD_TYPE, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, OUTER_PIECE_CLICK_ACTION, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_MAIN } from '../../../constants';
+import { AIRFIELD_TYPE, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, OUTER_PIECE_CLICK_ACTION, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_MAIN } from '../../../constants';
 import { EnterContainerAction, EnterContainerRequestAction, GameSession, PieceType } from '../../../types';
 import { Game, Piece } from '../../classes';
-import { sendUserFeedback } from '../sendUserFeedback';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * User request to put one piece inside of another.
@@ -17,14 +17,14 @@ export const enterContainer = async (socket: Socket, action: EnterContainerReque
     // Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
@@ -52,10 +52,10 @@ export const enterContainer = async (socket: Socket, action: EnterContainerReque
         return;
     }
 
-    const piecesInside: any = await thisContainerPiece.getPiecesInside();
+    const piecesInside: PieceType[] = await thisContainerPiece.getPiecesInside();
 
     const countOf: any = {}; // number of each item type already inside it
-    piecesInside.forEach((piece: PieceType) => {
+    piecesInside.forEach(piece => {
         countOf[piece.pieceTypeId] = (countOf[piece.pieceTypeId] || 0) + 1;
     });
 
@@ -201,6 +201,5 @@ export const enterContainer = async (socket: Socket, action: EnterContainerReque
     };
 
     // Send the update to the client(s)
-    socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    sendToThisTeam(socket, serverAction);
 };

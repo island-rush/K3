@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { ALL_AIRFIELD_LOCATIONS, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, MISSILE_TYPE_ID, PIECE_PLACE, PLACE_PHASE_ID, RADAR_TYPE_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TEAM_MAIN_ISLAND_STARTING_POSITIONS, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { ALL_AIRFIELD_LOCATIONS, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, MISSILE_TYPE_ID, PIECE_PLACE, PLACE_PHASE_ID, RADAR_TYPE_ID, TEAM_MAIN_ISLAND_STARTING_POSITIONS, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
 import { GameSession, InvItemPlaceAction, InvItemPlaceRequestAction } from '../../../types';
 import { Game, InvItem } from '../../classes';
-import { sendUserFeedback } from '../sendUserFeedback';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * User request to move piece from inventory to a position on the board.
@@ -17,14 +17,14 @@ export const piecePlace = async (socket: Socket, action: InvItemPlaceRequestActi
     // Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
@@ -45,7 +45,7 @@ export const piecePlace = async (socket: Socket, action: InvItemPlaceRequestActi
 
     // Do they own this item?
     if (invItemGameId !== gameId || invItemTeamId !== gameTeam) {
-        socket.emit(SOCKET_SERVER_REDIRECT, BAD_REQUEST_TAG);
+        redirectClient(socket, BAD_REQUEST_TAG);
         return;
     }
 
@@ -113,6 +113,5 @@ export const piecePlace = async (socket: Socket, action: InvItemPlaceRequestActi
     };
 
     // Send update to the client(s)
-    socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    sendToThisTeam(socket, serverAction);
 };

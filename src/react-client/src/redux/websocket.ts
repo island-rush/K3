@@ -1,6 +1,7 @@
 import { AnyAction, Store } from 'redux';
 import io from 'socket.io-client';
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, SOCKET_CLIENT_SENDING_ACTION } from '../../../constants';
+import { SOCKET_CLIENT_SENDING_ACTION, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../constants';
+import { ALL_ERROR_TYPES } from '../../../server/';
 
 const socket: SocketIOClient.Socket = io(window.location.hostname);
 
@@ -12,7 +13,7 @@ export const init = (store: Store) => {
         store.dispatch(reduxAction);
     });
 
-    socket.on(SOCKET_SERVER_REDIRECT, (serverError: string) => {
+    socket.on(SOCKET_SERVER_REDIRECT, (serverError: ALL_ERROR_TYPES) => {
         window.location.replace(`//${window.location.hostname}/index.html?error=${serverError}`);
     });
 };

@@ -1,10 +1,10 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REFUEL_RESULTS, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_AIR, TYPE_FUEL } from '../../../constants';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REFUEL_RESULTS, TYPE_AIR, TYPE_FUEL } from '../../../constants';
 import { ConfirmFuelSelectionRequestAction, FuelResultsAction, GameSession } from '../../../types';
 import { Event, Game } from '../../classes';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 import { giveNextEvent } from '../giveNextEvent';
-import { sendUserFeedback } from '../sendUserFeedback';
 
 /**
  * Client Request to transfer fuel from tankers to other aircraft. Finishes a Refuel Event
@@ -16,14 +16,14 @@ export const confirmFuelSelection = async (socket: Socket, action: ConfirmFuelSe
     // Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
@@ -108,8 +108,7 @@ export const confirmFuelSelection = async (socket: Socket, action: ConfirmFuelSe
             };
 
             // sending results and no matter what, going to next event (refuel isn't multiple things, its 1 and done)
-            socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-            socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+            sendToThisTeam(socket, serverAction);
         }
     }
 

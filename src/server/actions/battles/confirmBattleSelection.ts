@@ -1,11 +1,11 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BATTLE_FIGHT_RESULTS, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN, UPDATE_FLAGS, WAITING_STATUS } from '../../../constants';
+import { BATTLE_FIGHT_RESULTS, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, UPDATE_FLAGS, WAITING_STATUS } from '../../../constants';
 // prettier-ignore
 import { BattleResultsAction, ConfirmBattleSelectionRequestAction, GameSession, UpdateFlagAction } from '../../../types';
 import { Event, Game } from '../../classes';
+import { redirectClient, sendToGame, sendUserFeedback } from '../../helpers';
 import { giveNextEvent } from '../giveNextEvent';
-import { sendUserFeedback } from '../sendUserFeedback';
 
 /**
  * User request to confirm their battle selections. (what pieces are attacking what other pieces)
@@ -19,14 +19,14 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
     // Get the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameBlueStatus, gameRedStatus } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
@@ -76,8 +76,7 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
             }
         };
 
-        socket.to(`game${gameId}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+        sendToGame(socket, serverAction);
         return;
     }
 
@@ -104,8 +103,8 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
                 flag12: thisGame.flag12
             }
         };
-        socket.to(`game${gameId}`).emit(SOCKET_SERVER_SENDING_ACTION, updateFlagAction);
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, updateFlagAction);
+
+        sendToGame(socket, updateFlagAction);
     }
 
     await giveNextEvent(socket, { thisGame, gameTeam: 0 }); // not putting executingStep in options to let it know not to send pieceMove

@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { COMBAT_PHASE_ID, DELETE_PLAN, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../constants';
+import { COMBAT_PHASE_ID, DELETE_PLAN, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID } from '../../../constants';
 import { DeletePlanAction, DeletePlanRequestAction, GameSession } from '../../../types';
 import { Game, Piece } from '../../classes';
-import { sendUserFeedback } from '../sendUserFeedback';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * Client request to delete a plan for a piece.
@@ -17,14 +17,14 @@ export const deletePlan = async (socket: Socket, action: DeletePlanRequestAction
     // Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
@@ -58,6 +58,5 @@ export const deletePlan = async (socket: Socket, action: DeletePlanRequestAction
     };
 
     // Send the update to the client(s)
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction); // TODO: should the other sockets for this team get the update? (in the background?)
-    socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    sendToThisTeam(socket, serverAction);
 };

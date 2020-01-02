@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUP_SELECTED, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN } from '../../../constants';
+import { COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUP_SELECTED, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
 import { CommInterruptAction, CommInterruptRequestAction, GameSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
-import { sendUserFeedback } from '../sendUserFeedback';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * User Request to use CommInterrupt capability.
@@ -22,14 +22,14 @@ export const commInterruptConfirm = async (socket: Socket, action: CommInterrupt
     // Get the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
@@ -93,6 +93,5 @@ export const commInterruptConfirm = async (socket: Socket, action: CommInterrupt
     };
 
     // Send the update to the client(s)
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-    socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    sendToThisTeam(socket, serverAction);
 };

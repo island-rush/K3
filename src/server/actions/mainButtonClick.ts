@@ -1,11 +1,11 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BLUE_TEAM_ID, COMBAT_PHASE, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, MAIN_BUTTON_CLICK, NEWS_PHASE, NEWS_PHASE_ID, NOT_WAITING_STATUS, PURCHASE_PHASE, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_CHANGE, SLICE_EXECUTING_ID, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION, TYPE_MAIN, WAITING_STATUS } from '../../constants';
+import { BLUE_TEAM_ID, COMBAT_PHASE, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, MAIN_BUTTON_CLICK, NEWS_PHASE, NEWS_PHASE_ID, NOT_WAITING_STATUS, PURCHASE_PHASE, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_CHANGE, SLICE_EXECUTING_ID, TYPE_MAIN, WAITING_STATUS } from '../../constants';
 // prettier-ignore
 import { CombatPhaseAction, GameSession, MainButtonClickAction, NewsPhaseAction, PurchasePhaseAction, SliceChangeAction } from '../../types';
 import { Capability, Game, Piece } from '../classes';
+import { redirectClient, sendToClient, sendToGame, sendToTeam, sendUserFeedback } from '../helpers';
 import { executeStep } from './executeStep';
-import { sendUserFeedback } from './sendUserFeedback';
 
 export const mainButtonClick = async (socket: Socket) => {
     // Grab Session
@@ -14,14 +14,14 @@ export const mainButtonClick = async (socket: Socket) => {
     // Get Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameSlice, gameBlueStatus, gameRedStatus } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
@@ -47,7 +47,7 @@ export const mainButtonClick = async (socket: Socket) => {
         const serverAction: MainButtonClickAction = {
             type: MAIN_BUTTON_CLICK
         };
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+        sendToClient(socket, serverAction);
         return;
     }
 
@@ -63,8 +63,7 @@ export const mainButtonClick = async (socket: Socket) => {
         };
 
         // Same update to all client(s)
-        socket.to(`game${gameId}`).emit(SOCKET_SERVER_SENDING_ACTION, purchasePhaseAction);
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, purchasePhaseAction);
+        sendToGame(socket, purchasePhaseAction);
         return;
     }
 
@@ -86,9 +85,8 @@ export const mainButtonClick = async (socket: Socket) => {
         combatPhaseActionBlue.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
         combatPhaseActionRed.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
 
-        socket.to(`game${gameId}team${BLUE_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, combatPhaseActionBlue);
-        socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, combatPhaseActionRed);
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? combatPhaseActionBlue : combatPhaseActionRed);
+        sendToTeam(socket, BLUE_TEAM_ID, combatPhaseActionBlue);
+        sendToTeam(socket, RED_TEAM_ID, combatPhaseActionRed);
         return;
     }
 
@@ -121,9 +119,8 @@ export const mainButtonClick = async (socket: Socket) => {
         sliceChangeActionBlue.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID);
         sliceChangeActionRed.payload.gameboardPieces = await Piece.getVisiblePieces(gameId, RED_TEAM_ID);
 
-        socket.to(`game${gameId}team${BLUE_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, sliceChangeActionBlue);
-        socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, sliceChangeActionRed);
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? sliceChangeActionBlue : sliceChangeActionRed);
+        sendToTeam(socket, BLUE_TEAM_ID, sliceChangeActionBlue);
+        sendToTeam(socket, RED_TEAM_ID, sliceChangeActionRed);
         return;
     }
 
@@ -145,7 +142,6 @@ export const mainButtonClick = async (socket: Socket) => {
     newsPhaseActionBlue.payload.gamePoints = thisGame.gameBluePoints;
     newsPhaseActionRed.payload.gamePoints = thisGame.gameRedPoints;
 
-    socket.to(`game${gameId}team${BLUE_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseActionBlue);
-    socket.to(`game${gameId}team${RED_TEAM_ID}`).emit(SOCKET_SERVER_SENDING_ACTION, newsPhaseActionRed);
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, gameTeam === BLUE_TEAM_ID ? newsPhaseActionBlue : newsPhaseActionRed);
+    sendToTeam(socket, BLUE_TEAM_ID, newsPhaseActionBlue);
+    sendToTeam(socket, RED_TEAM_ID, newsPhaseActionRed);
 };
