@@ -9,7 +9,7 @@ import { sendUserFeedback } from './sendUserFeedback';
 
 export const mainButtonClick = async (socket: Socket) => {
     // Grab Session
-    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     // Get Game
     const thisGame = await new Game({ gameId }).init();

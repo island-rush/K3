@@ -10,7 +10,7 @@ import { sendUserFeedback } from '../sendUserFeedback';
  */
 export const exitContainer = async (socket: Socket, action: ExitContainerRequestAction) => {
     // Grab the Session
-    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     const { selectedPiece, containerPiece } = action.payload;
 

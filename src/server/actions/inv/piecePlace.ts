@@ -10,7 +10,7 @@ import { sendUserFeedback } from '../sendUserFeedback';
  */
 export const piecePlace = async (socket: Socket, action: InvItemPlaceRequestAction) => {
     // Grab the Session
-    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     const { invItemId, selectedPosition } = action.payload;
 

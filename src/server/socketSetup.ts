@@ -17,7 +17,7 @@ export const socketSetup = async (socket: Socket) => {
     }
 
     // Extract information from session
-    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     // Get the game
     const thisGame = await new Game({ gameId }).init();

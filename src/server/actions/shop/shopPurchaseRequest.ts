@@ -10,7 +10,7 @@ import { sendUserFeedback } from '../sendUserFeedback';
  */
 export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRequestAction) => {
     // Grab the session
-    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     if (action.payload == null || action.payload.shopItemTypeId == null) {
         sendUserFeedback(socket, 'Server Error: Malformed Payload (missing shopItemTypeId)');

@@ -10,7 +10,7 @@ import { sendUserFeedback } from '../sendUserFeedback';
  */
 export const deletePlan = async (socket: Socket, action: DeletePlanRequestAction) => {
     // Grab the Session
-    const { gameId, gameTeam }: GameSession = socket.handshake.session.ir3;
+    const { gameId, gameTeam } = socket.handshake.session.ir3 as GameSession;
 
     const { pieceId } = action.payload;
 

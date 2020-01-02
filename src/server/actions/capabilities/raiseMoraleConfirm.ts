@@ -10,7 +10,7 @@ import { sendUserFeedback } from '../sendUserFeedback';
  */
 export const raiseMoraleConfirm = async (socket: Socket, action: RaiseMoraleRequestAction) => {
     // Grab Session
-    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     if (action.payload == null || action.payload.selectedCommanderType == null) {
         sendUserFeedback(socket, 'Server Error: Malformed Payload (missing selectedCommanderType)');

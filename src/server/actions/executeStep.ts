@@ -10,7 +10,7 @@ import { giveNextEvent } from './giveNextEvent';
  */
 export const executeStep = async (socket: Socket, thisGame: Game) => {
     // Grab Session (already verified from last function)
-    const { gameTeam }: GameSession = socket.handshake.session.ir3;
+    const { gameTeam } = socket.handshake.session.ir3 as GameSession;
 
     // inserting events here and moving pieces, or changing to new round or something...
     const { gameId, gameRound } = thisGame;

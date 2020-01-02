@@ -10,7 +10,7 @@ import { sendUserFeedback } from './sendUserFeedback';
  */
 export const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
     // Grab Session
-    const session: GameSession = socket.handshake.session.ir3;
+    const session = socket.handshake.session.ir3 as GameSession;
 
     // prettier-ignore
     const { thisGame: { gameId }, gameTeam } = options;

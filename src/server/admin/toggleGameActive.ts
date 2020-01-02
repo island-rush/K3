@@ -12,7 +12,7 @@ export const toggleGameActive = async (req: Request, res: Response) => {
         return;
     }
 
-    const { gameId }: TeacherSession = req.session.ir3teacher;
+    const { gameId } = req.session.ir3teacher as TeacherSession;
 
     const thisGame = await new Game({ gameId }).init();
 
