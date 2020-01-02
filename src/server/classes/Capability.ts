@@ -1,5 +1,17 @@
 // prettier-ignore
+import { RowDataPacket } from 'mysql2/promise';
+// prettier-ignore
 import { ACTIVATED, BIO_WEAPONS_ROUNDS, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, RAISE_MORALE_ROUNDS, RED_TEAM_ID, REMOTE_SENSING_ROUNDS, TYPE_AIR, TYPE_AIR_PIECES, TYPE_GROUND_PIECES, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../constants';
+import {
+    BiologicalWeaponsType,
+    InsurgencyType,
+    PieceType,
+    RemoteSensingType,
+    RodsFromGodType,
+    RaiseMoraleType,
+    CommInterruptType,
+    GoldenEyeType
+} from '../../types';
 import { pool } from '../database';
 
 /**
@@ -10,7 +22,7 @@ export class Capability {
         // TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
         let queryString = 'SELECT * FROM rodsFromGod WHERE gameId = ? AND teamId = ? AND positionId = ?';
         const inserts = [gameId, gameTeam, selectedPositionId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & RodsFromGodType[]>(queryString, inserts);
 
         // prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -25,7 +37,7 @@ export class Capability {
     static async getRodsFromGod(gameId: number, gameTeam: number) {
         const queryString = 'SELECT * FROM rodsFromGod WHERE gameId = ? AND teamId = ?';
         const inserts = [gameId, gameTeam];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & RodsFromGodType[]>(queryString, inserts);
 
         const listOfPositions = [];
         for (let x = 0; x < results.length; x++) {
@@ -38,7 +50,7 @@ export class Capability {
     static async useRodsFromGod(gameId: number) {
         let queryString = 'SELECT * FROM rodsFromGod WHERE gameId = ?';
         let inserts = [gameId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & RodsFromGodType[]>(queryString, inserts);
 
         if (results.length === 0) {
             return [];
@@ -68,7 +80,7 @@ export class Capability {
         // TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
         let queryString = 'SELECT * FROM insurgency WHERE gameId = ? AND teamId = ? AND positionId = ?';
         const inserts = [gameId, gameTeam, selectedPositionId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & InsurgencyType[]>(queryString, inserts);
 
         // prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -83,7 +95,7 @@ export class Capability {
     static async getInsurgency(gameId: number, gameTeam: number) {
         const queryString = 'SELECT * FROM insurgency WHERE gameId = ? AND teamId = ?';
         const inserts = [gameId, gameTeam];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & InsurgencyType[]>(queryString, inserts);
 
         const listOfPositions = [];
         for (let x = 0; x < results.length; x++) {
@@ -96,7 +108,7 @@ export class Capability {
     static async useInsurgency(gameId: number) {
         let queryString = 'SELECT * FROM insurgency WHERE gameId = ?';
         let inserts = [gameId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & InsurgencyType[]>(queryString, inserts);
 
         // TODO: make this more efficient using bulk selects/updates/deletes
 
@@ -116,7 +128,7 @@ export class Capability {
 
             queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ?';
             inserts = [gameId, otherTeam, positionId];
-            const [pieceResults]: any = await pool.query(queryString, inserts);
+            const [pieceResults] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts);
 
             // for each piece
             for (let y = 0; y < pieceResults.length; y++) {
@@ -148,7 +160,7 @@ export class Capability {
     static async remoteSensingInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
         let queryString = 'SELECT * FROM remoteSensing WHERE gameId = ? AND teamId = ? AND positionId = ?';
         let inserts = [gameId, gameTeam, selectedPositionId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & RemoteSensingType[]>(queryString, inserts);
 
         // prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -164,7 +176,7 @@ export class Capability {
     static async getRemoteSensing(gameId: number, gameTeam: number) {
         const queryString = 'SELECT * FROM remoteSensing WHERE gameId = ? AND teamId = ?';
         const inserts = [gameId, gameTeam];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & RemoteSensingType[]>(queryString, inserts);
 
         const listOfPositions = [];
         for (let x = 0; x < results.length; x++) {
@@ -188,7 +200,7 @@ export class Capability {
         // TODO: Humanitarian assistance is restricted for the duration of this effect.
         let queryString = 'SELECT * FROM biologicalWeapons WHERE gameId = ? AND teamId = ? AND positionId = ?';
         let inserts = [gameId, gameTeam, selectedPositionId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & BiologicalWeaponsType[]>(queryString, inserts);
 
         // prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -209,7 +221,7 @@ export class Capability {
 
         const queryString = 'SELECT * FROM biologicalWeapons WHERE gameId = ? AND (activated = ? OR teamId = ?)';
         const inserts = [gameId, ACTIVATED, gameTeam];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & BiologicalWeaponsType[]>(queryString, inserts);
 
         const listOfPositions = [];
         for (let x = 0; x < results.length; x++) {
@@ -226,7 +238,7 @@ export class Capability {
 
         queryString = 'SELECT * FROM biologicalWeapons WHERE gameId = ?'; // all should be activated, no need to specify
         inserts = [gameId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & BiologicalWeaponsType[]>(queryString, inserts);
 
         if (results.length === 0) {
             return [];
@@ -261,7 +273,7 @@ export class Capability {
     static async insertRaiseMorale(gameId: number, gameTeam: number, selectedCommanderType: number) {
         let queryString = 'SELECT * FROM raiseMorale WHERE gameId = ? AND teamId = ? AND commanderType = ?';
         let inserts = [gameId, gameTeam, selectedCommanderType];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & RaiseMoraleType[]>(queryString, inserts);
 
         // prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -290,7 +302,7 @@ export class Capability {
         await conn.query(queryString, inserts);
 
         queryString = 'SELECT * from raiseMorale WHERE gameId = ?';
-        const [results]: any = await conn.query(queryString, inserts);
+        const [results] = await conn.query<RowDataPacket[] & RaiseMoraleType[]>(queryString, inserts);
 
         // TODO: probably cleaner way of putting this (more explicit with constants...)
         const updateArrays: any = [
@@ -338,7 +350,7 @@ export class Capability {
         // TODO: handle more than 1 raise morale for double boosting (how would this look like when letting client know (object? / array?))
         const queryString = 'SELECT * FROM raiseMorale WHERE gameId = ?';
         const inserts = [gameId, gameTeam];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & RaiseMoraleType[]>(queryString, inserts);
 
         const listOfCommandersBoosted = [];
         for (let x = 0; x < results.length; x++) {
@@ -351,7 +363,7 @@ export class Capability {
     static async insertCommInterrupt(gameId: number, gameTeam: number, selectedPositionId: number) {
         let queryString = 'SELECT * FROM commInterrupt WHERE gameId = ? AND teamId = ? AND positionId = ?';
         let inserts = [gameId, gameTeam, selectedPositionId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & CommInterruptType[]>(queryString, inserts);
 
         // prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -367,7 +379,7 @@ export class Capability {
     static async getCommInterrupt(gameId: number, gameTeam: number) {
         const queryString = 'SELECT * FROM commInterrupt WHERE gameId = ? AND (activated = ? OR teamId = ?)';
         const inserts = [gameId, ACTIVATED, gameTeam];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & CommInterruptType[]>(queryString, inserts);
 
         const listOfCommInterrupt = [];
         for (let x = 0; x < results.length; x++) {
@@ -385,7 +397,7 @@ export class Capability {
 
         queryString = 'SELECT * FROM commInterrupt WHERE gameId = ?'; // all should be activated, no need to specify
         inserts = [gameId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & CommInterruptType[]>(queryString, inserts);
 
         if (results.length === 0) {
             return [];
@@ -406,7 +418,7 @@ export class Capability {
             masterListOfAllPositions.push(positionId);
         }
 
-        const positionsInTheseRanges0: any = [];
+        const positionsInTheseRanges0: number[] = [];
         for (let y = 0; y < fullListOfPositions0.length; y++) {
             const currentCenterPosition = fullListOfPositions0[y];
             for (let z = 0; z < distanceMatrix[currentCenterPosition].length; z++) {
@@ -415,7 +427,7 @@ export class Capability {
                 }
             }
         }
-        const positionsInTheseRanges1: any = [];
+        const positionsInTheseRanges1: number[] = [];
         for (let y = 0; y < fullListOfPositions1.length; y++) {
             const currentCenterPosition = fullListOfPositions1[y];
             for (let z = 0; z < distanceMatrix[currentCenterPosition].length; z++) {
@@ -428,11 +440,11 @@ export class Capability {
         queryString =
             'DELETE FROM plans WHERE planPieceId IN (SELECT pieceId FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId in (?))';
         if (positionsInTheseRanges0.length > 0) {
-            inserts = [gameId, 0, positionsInTheseRanges0];
+            const inserts = [gameId, 0, positionsInTheseRanges0];
             await pool.query(queryString, inserts);
         }
         if (positionsInTheseRanges1.length > 0) {
-            inserts = [gameId, 1, positionsInTheseRanges1];
+            const inserts = [gameId, 1, positionsInTheseRanges1];
             await pool.query(queryString, inserts);
         }
 
@@ -451,7 +463,7 @@ export class Capability {
     static async getGoldenEye(gameId: any, gameTeam: any) {
         const queryString = 'SELECT * FROM goldenEye WHERE gameId = ? AND (activated = ? OR teamId = ?)';
         const inserts = [gameId, ACTIVATED, gameTeam];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
 
         const listOfGoldenEye = [];
         for (let x = 0; x < results.length; x++) {
@@ -464,7 +476,7 @@ export class Capability {
     static async insertGoldenEye(gameId: number, gameTeam: number, selectedPositionId: number) {
         let queryString = 'SELECT * FROM goldenEye WHERE gameId = ? AND teamId = ? AND positionId = ?';
         let inserts = [gameId, gameTeam, selectedPositionId];
-        const [results]: any = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
 
         // prevent duplicate entries if possible
         if (results.length !== 0) {
@@ -485,7 +497,7 @@ export class Capability {
 
         queryString = 'SELECT * FROM goldenEye WHERE gameId = ?';
         inserts = [gameId];
-        const [allGoldenEye]: any = await pool.query(queryString, inserts);
+        const [allGoldenEye] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
 
         if (allGoldenEye.length === 0) {
             return [];
@@ -518,7 +530,7 @@ export class Capability {
                 // insert ground pieces into goldenEyePieces
                 queryString =
                     'INSERT INTO goldenEyePieces SELECT ?, pieceId FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND pieceTypeId in (?) AND piecePositionId in (?)';
-                inserts = [goldenEyeId, gameId, otherTeam, TYPE_GROUND_PIECES, allEffectedPositions];
+                const inserts = [goldenEyeId, gameId, otherTeam, TYPE_GROUND_PIECES, allEffectedPositions];
                 await pool.query(queryString, inserts);
             }
         }

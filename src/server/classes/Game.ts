@@ -1,5 +1,5 @@
 // prettier-ignore
-import { OkPacket, RowDataPacket } from 'mysql2';
+import { OkPacket, RowDataPacket } from 'mysql2/promise';
 import { Capability, Event, InvItem, Piece, Plan, ShopItem } from '.';
 // prettier-ignore
 import { AIR_REFUELING_SQUADRON_ID, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, COL_BATTLE_EVENT_TYPE, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, INITIAL_GAMESTATE, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NEWS_PHASE_ID, NOYARC_ISLAND_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../constants';
@@ -100,7 +100,7 @@ export class Game implements GameType {
      */
     async init() {
         let queryString: string;
-        let inserts: any[];
+        let inserts: [GameType['gameId']] | [GameType['gameSection'], GameType['gameInstructor']];
 
         if (this.gameId) {
             queryString = 'SELECT * FROM games WHERE gameId = ?';
@@ -110,7 +110,7 @@ export class Game implements GameType {
             inserts = [this.gameSection, this.gameInstructor];
         }
 
-        const [rows]: any = await pool.query(queryString, inserts);
+        const [rows] = await pool.query<RowDataPacket[] & GameType[]>(queryString, inserts);
 
         if (rows.length !== 1) {
             return null;
@@ -176,8 +176,8 @@ export class Game implements GameType {
             gameInstructor: GameType['gameInstructor'];
             gameActive: GameType['gameActive'];
         };
-        const [rows] = await pool.query<RowDataPacket[]>(queryString);
-        return rows as SubGameType[];
+        const [rows] = await pool.query<RowDataPacket[] & SubGameType[]>(queryString);
+        return rows;
     }
 
     /**
@@ -213,8 +213,8 @@ export class Game implements GameType {
             newsTitle: string;
             newsInfo: string;
         };
-        const [rows] = await pool.query<RowDataPacket[]>(queryString, inserts);
-        return rows as NewsType[];
+        const [rows] = await pool.query<RowDataPacket[] & NewsType[]>(queryString, inserts);
+        return rows;
     }
 
     /**
@@ -312,7 +312,22 @@ export class Game implements GameType {
         options: { gameId?: GameType['gameId'] } = {}
     ) {
         let queryString: string;
-        let inserts: any[];
+        let inserts:
+            | [
+                  GameType['gameId'],
+                  GameType['gameSection'],
+                  GameType['gameInstructor'],
+                  GameType['gameAdminPassword'],
+                  GameType['gameSection'],
+                  GameType['gameInstructor']
+              ]
+            | [
+                  GameType['gameSection'],
+                  GameType['gameInstructor'],
+                  GameType['gameAdminPassword'],
+                  GameType['gameSection'],
+                  GameType['gameInstructor']
+              ];
 
         if (options.gameId) {
             queryString =
@@ -407,7 +422,7 @@ export class Game implements GameType {
         // see if any pieces are currently residing on flags by themselves, and if so, set the island# in the database and update 'this' object correspondingly
         let queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?) AND pieceTypeId in (?)';
         const inserts = [this.gameId, ALL_FLAG_LOCATIONS, CAPTURE_TYPES];
-        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts);
 
         if (results.length === 0) {
             return false;
@@ -419,7 +434,7 @@ export class Game implements GameType {
         // TODO: need major refactoring here, this is quick and dirty (but should work)
         const eachFlagsTeams: number[][] = [[], [], [], [], [], [], [], [], [], [], [], [], []];
         for (let x = 0; x < results.length; x++) {
-            const thisPiece = (results as PieceType[])[x];
+            const thisPiece = results[x];
             const { piecePositionId, pieceTeamId } = thisPiece;
             const flagNum = ALL_FLAG_LOCATIONS.indexOf(piecePositionId);
             eachFlagsTeams[flagNum].push(pieceTeamId);
@@ -500,17 +515,18 @@ export class Game implements GameType {
         const inserts = [this.gameId];
         await pool.query(queryString, inserts);
 
-        // Grab the next news
-        queryString = 'SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
-        const [resultNews] = await pool.query<RowDataPacket[]>(queryString, inserts);
-        // TODO: grab this from a full type
         type SubNewsType = {
             newsTitle: string;
             newsInfo: string;
         };
+
+        // Grab the next news
+        queryString = 'SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
+        const [resultNews] = await pool.query<RowDataPacket[] & SubNewsType[]>(queryString, inserts);
+
         const { newsTitle, newsInfo } =
-            (resultNews as SubNewsType[])[0] !== undefined
-                ? (resultNews as SubNewsType[])[0]
+            resultNews[0] !== undefined
+                ? resultNews[0]
                 : { newsTitle: 'No More News', newsInfo: "Obviously you've been playing this game too long..." };
 
         return {
@@ -650,7 +666,13 @@ export class Game implements GameType {
         if (this.gamePhase === NEWS_PHASE_ID) {
             const queryString = 'SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
             const inserts = [this.gameId];
-            const [resultNews]: any = await pool.query(queryString, inserts);
+            // TODO: this is redeclared somewhere else
+            type SubNewsType = {
+                newsTitle: NewsState['newsTitle'];
+                newsInfo: NewsState['newsInfo'];
+            };
+            const [resultNews] = await pool.query<RowDataPacket[] & SubNewsType[]>(queryString, inserts);
+
             const { newsTitle, newsInfo } =
                 resultNews[0] !== undefined
                     ? resultNews[0]

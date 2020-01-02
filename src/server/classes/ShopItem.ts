@@ -24,12 +24,12 @@ export class ShopItem implements ShopItemType {
     async init() {
         const queryString = 'SELECT * FROM shopItems WHERE shopItemId = ?';
         const inserts = [this.shopItemId];
-        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & ShopItemType[]>(queryString, inserts);
 
         if (results.length !== 1) {
             return null;
         }
-        Object.assign(this, (results as ShopItemType[])[0]);
+        Object.assign(this, results[0]);
         return this;
     }
 
@@ -68,7 +68,7 @@ export class ShopItem implements ShopItemType {
     static async all(gameId: number, gameTeam: number): Promise<ShopItemType[]> {
         const queryString = 'SELECT * FROM shopItems WHERE shopItemGameId = ? AND shopItemTeamId = ?';
         const inserts = [gameId, gameTeam];
-        const [shopItems] = await pool.query<RowDataPacket[]>(queryString, inserts);
-        return shopItems as ShopItemType[];
+        const [shopItems] = await pool.query<RowDataPacket[] & ShopItemType[]>(queryString, inserts);
+        return shopItems;
     }
 }

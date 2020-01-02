@@ -26,12 +26,12 @@ export class InvItem implements InvItemType {
     async init() {
         const queryString = 'SELECT * FROM invItems WHERE invItemId = ?';
         const inserts = [this.invItemId];
-        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & InvItemType[]>(queryString, inserts);
 
         if (results.length !== 1) {
             return null;
         }
-        Object.assign(this, (results as InvItemType[])[0]);
+        Object.assign(this, results[0]);
         return this;
     }
 
@@ -81,7 +81,7 @@ export class InvItem implements InvItemType {
     static async all(gameId: number, gameTeam: number) {
         const queryString = 'SELECT * FROM invItems WHERE invItemGameId = ? AND invItemTeamId = ?';
         const inserts = [gameId, gameTeam];
-        const [invItems] = await pool.query<RowDataPacket[]>(queryString, inserts);
-        return invItems as InvItemType[];
+        const [invItems] = await pool.query<RowDataPacket[] & InvItemType[]>(queryString, inserts);
+        return invItems;
     }
 }
