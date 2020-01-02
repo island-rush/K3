@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { ATTACK_MATRIX } from '../../constants';
-import { EventItemType, EventQueueType } from '../../types';
+import { EventItemType, EventQueueType, PieceType } from '../../types';
 import { pool } from '../database';
 
 /**
@@ -83,10 +83,10 @@ export class Event implements EventQueueType {
     /**
      * Get pieces for a refuel event. (same as getItems)
      */
-    async getRefuelItems() {
+    async getRefuelItems(): Promise<EventItemType[] & PieceType[]> {
         const queryString = 'SELECT * FROM eventItems NATURAL JOIN pieces WHERE eventId = ? AND pieceId = eventPieceId';
         const inserts = [this.eventId];
-        const [eventRefuelItems] = await pool.query<RowDataPacket[] & EventItemType[]>(queryString, inserts);
+        const [eventRefuelItems] = await pool.query<RowDataPacket[] & EventItemType[] & PieceType[]>(queryString, inserts);
         return eventRefuelItems;
     }
 
@@ -182,7 +182,14 @@ export class Event implements EventQueueType {
     /**
      * Update piece fuels from fuelUpdates list. (bulk query with temp table)
      */
-    async bulkUpdatePieceFuels(fuelUpdates: any, gameTeam: number) {
+    async bulkUpdatePieceFuels(
+        fuelUpdates: {
+            pieceId: PieceType['pieceId'];
+            piecePositionId: PieceType['piecePositionId'];
+            newFuel: number;
+        }[],
+        gameTeam: number
+    ) {
         if (fuelUpdates.length === 0) {
             return;
         }

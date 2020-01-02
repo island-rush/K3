@@ -32,7 +32,9 @@ export function battleReducer(state = initialBattleState, action: BattleReducerA
     switch (type) {
         case INITIAL_GAMESTATE:
             if ((action as GameInitialStateAction).payload.battle) {
-                stateCopy = (action as GameInitialStateAction).payload.battle;
+                stateCopy.friendlyPieces = (action as GameInitialStateAction).payload.battle!.friendlyPieces;
+                stateCopy.enemyPieces = (action as GameInitialStateAction).payload.battle!.enemyPieces;
+                stateCopy.active = true;
             }
             return stateCopy;
 

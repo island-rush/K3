@@ -3,7 +3,7 @@ import { Socket } from 'socket.io';
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, EVENT_BATTLE, EVENT_REFUEL, NOT_WAITING_STATUS, NO_MORE_EVENTS, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE } from '../../constants';
 import { EventBattleAction, EventRefuelAction, NoMoreEventsAction } from '../../types';
 import { Event, Game, Piece } from '../classes';
-import { sendToThisTeam, sendUserFeedback } from '../helpers';
+import { sendToTeam, sendUserFeedback } from '../helpers';
 
 /**
  * Find the next event in the EventQueue and send to this team (through a socket)
@@ -25,7 +25,7 @@ export const giveNextEvent = async (socket: Socket, options: GiveNextEventOption
             }
         };
 
-        sendToThisTeam(socket, noMoreEventsAction);
+        sendToTeam(socket, gameTeam, noMoreEventsAction);
         return;
     }
 
@@ -68,7 +68,7 @@ export const giveNextEvent = async (socket: Socket, options: GiveNextEventOption
                 }
             };
 
-            sendToThisTeam(socket, eventBattleAction);
+            sendToTeam(socket, gameTeam, eventBattleAction);
             return;
         case REFUEL_EVENT_TYPE:
             // get the pieces from the event, put them into payload (pre-format based on state?)
@@ -98,7 +98,7 @@ export const giveNextEvent = async (socket: Socket, options: GiveNextEventOption
                 }
             };
 
-            sendToThisTeam(socket, eventRefuelAction);
+            sendToTeam(socket, gameTeam, eventRefuelAction);
             return;
         default:
             sendUserFeedback(socket, 'Server Error, unknown event type...');

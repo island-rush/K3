@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
 import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REFUEL_RESULTS, TYPE_AIR, TYPE_FUEL } from '../../../constants';
-import { ConfirmFuelSelectionRequestAction, FuelResultsAction, GameSession } from '../../../types';
+import { ConfirmFuelSelectionRequestAction, FuelResultsAction, GameSession, PieceType } from '../../../types';
 import { Event, Game } from '../../classes';
 import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 import { giveNextEvent } from '../giveNextEvent';
@@ -64,7 +64,11 @@ export const confirmFuelSelection = async (socket: Socket, action: ConfirmFuelSe
 
     // TODO: ideally would re-grab all the values from the database (like to check types and things...and pieceFuel)
 
-    const fuelSelections = [];
+    const fuelSelections: {
+        pieceId: PieceType['pieceId'];
+        piecePositionId: PieceType['piecePositionId'];
+        newFuel: number;
+    }[] = [];
     for (let x = 0; x < aircraft.length; x++) {
         // add a thing to fuelSelections (pieceInfo, as well as newFuel?)
         const thisAircraft = aircraft[x];

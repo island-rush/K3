@@ -4,7 +4,7 @@ import { gameboardReducer } from './gameboardReducer';
 import { gameInfoReducer } from './gameInfoReducer';
 import { invReducer } from './invReducer';
 import { shopReducer } from './shopReducer';
-import { userFeedbackReducer } from './userFeedback';
+import { userFeedbackReducer } from './userFeedbackReducer';
 import { capabilitiesReducer } from './capabilitiesReducer';
 import { planningReducer } from './planningReducer';
 import { containerReducer } from './containerReducer';

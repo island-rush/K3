@@ -3,7 +3,7 @@ import { OkPacket, RowDataPacket } from 'mysql2/promise';
 import { Capability, Event, InvItem, Piece, Plan, ShopItem } from '.';
 // prettier-ignore
 import { AIR_REFUELING_SQUADRON_ID, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, COL_BATTLE_EVENT_TYPE, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, INITIAL_GAMESTATE, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NEWS_PHASE_ID, NOYARC_ISLAND_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../constants';
-import { GameType, NewsState, PieceType } from '../../types';
+import { GameType, NewsState, PieceType, GameInitialStateAction, NewsType, EventItemType, RefuelState } from '../../types';
 import { gameInitialNews, gameInitialPieces } from '../admin';
 import { pool } from '../database';
 
@@ -616,72 +616,59 @@ export class Game implements GameType {
      * Generates a Redux Action, contains all current game information / state.
      */
     async initialStateAction(gameTeam: number, gameControllers: any) {
-        // TODO: refactor this
-        const serverAction: any = {
+        const serverAction: GameInitialStateAction = {
             type: INITIAL_GAMESTATE,
-            payload: {}
+            payload: {
+                gameboardPieces: await Piece.getVisiblePieces(this.gameId, gameTeam),
+                invItems: await InvItem.all(this.gameId, gameTeam),
+                shopItems: await ShopItem.all(this.gameId, gameTeam),
+                planning: {
+                    confirmedPlans: await Plan.getConfirmedPlans(this.gameId, gameTeam)
+                },
+                capabilities: {
+                    confirmedRods: await Capability.getRodsFromGod(this.gameId, gameTeam),
+                    confirmedRemoteSense: await Capability.getRemoteSensing(this.gameId, gameTeam),
+                    confirmedInsurgency: await Capability.getInsurgency(this.gameId, gameTeam),
+                    confirmedBioWeapons: await Capability.getBiologicalWeapons(this.gameId, gameTeam),
+                    confirmedRaiseMorale: await Capability.getRaiseMorale(this.gameId, gameTeam),
+                    confirmedCommInterrupt: await Capability.getCommInterrupt(this.gameId, gameTeam),
+                    confirmedGoldenEye: await Capability.getGoldenEye(this.gameId, gameTeam)
+                },
+                gameInfo: {
+                    gameSection: this.gameSection,
+                    gameInstructor: this.gameInstructor,
+                    gameTeam,
+                    gameControllers,
+                    gamePhase: this.gamePhase,
+                    gameRound: this.gameRound,
+                    gameSlice: this.gameSlice,
+                    gameStatus: this.getStatus(gameTeam),
+                    gamePoints: this.getPoints(gameTeam),
+                    flag0: this.flag0,
+                    flag1: this.flag1,
+                    flag2: this.flag2,
+                    flag3: this.flag3,
+                    flag4: this.flag4,
+                    flag5: this.flag5,
+                    flag6: this.flag6,
+                    flag7: this.flag7,
+                    flag8: this.flag8,
+                    flag9: this.flag9,
+                    flag10: this.flag10,
+                    flag11: this.flag11,
+                    flag12: this.flag12
+                }
+            }
         };
 
-        serverAction.payload.invItems = await InvItem.all(this.gameId, gameTeam);
-        serverAction.payload.shopItems = await ShopItem.all(this.gameId, gameTeam);
-        serverAction.payload.gameboardPieces = await Piece.getVisiblePieces(this.gameId, gameTeam);
-
-        serverAction.payload.gameInfo = {
-            gameSection: this.gameSection,
-            gameInstructor: this.gameInstructor,
-            gameTeam,
-            gameControllers,
-            gamePhase: this.gamePhase,
-            gameRound: this.gameRound,
-            gameSlice: this.gameSlice,
-            gameStatus: this.getStatus(gameTeam),
-            gamePoints: this.getPoints(gameTeam),
-            flag0: this.flag0,
-            flag1: this.flag1,
-            flag2: this.flag2,
-            flag3: this.flag3,
-            flag4: this.flag4,
-            flag5: this.flag5,
-            flag6: this.flag6,
-            flag7: this.flag7,
-            flag8: this.flag8,
-            flag9: this.flag9,
-            flag10: this.flag10,
-            flag11: this.flag11,
-            flag12: this.flag12
-        };
-
-        serverAction.payload.capabilities = {};
-        serverAction.payload.planning = {};
-        serverAction.payload.planning.confirmedPlans = await Plan.getConfirmedPlans(this.gameId, gameTeam);
-        serverAction.payload.capabilities.confirmedRods = await Capability.getRodsFromGod(this.gameId, gameTeam);
-        serverAction.payload.capabilities.confirmedRemoteSense = await Capability.getRemoteSensing(this.gameId, gameTeam);
-        serverAction.payload.capabilities.confirmedInsurgency = await Capability.getInsurgency(this.gameId, gameTeam);
-        serverAction.payload.capabilities.confirmedBioWeapons = await Capability.getBiologicalWeapons(this.gameId, gameTeam);
-        serverAction.payload.capabilities.confirmedRaiseMorale = await Capability.getRaiseMorale(this.gameId, gameTeam);
-        serverAction.payload.capabilities.confirmedCommInterrupt = await Capability.getCommInterrupt(this.gameId, gameTeam);
-        serverAction.payload.capabilities.confirmedGoldenEye = await Capability.getGoldenEye(this.gameId, gameTeam);
-
-        // Could put news into its own object, but don't really use it much...(TODO: figure out if need to refactor this...)
         if (this.gamePhase === NEWS_PHASE_ID) {
-            const queryString = 'SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
+            const queryString = 'SELECT * FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
             const inserts = [this.gameId];
-            // TODO: this is redeclared somewhere else
-            type SubNewsType = {
-                newsTitle: NewsState['newsTitle'];
-                newsInfo: NewsState['newsInfo'];
-            };
-            const [resultNews] = await pool.query<RowDataPacket[] & SubNewsType[]>(queryString, inserts);
-
-            const { newsTitle, newsInfo } =
-                resultNews[0] !== undefined
-                    ? resultNews[0]
-                    : { newsTitle: 'No More News', newsInfo: "Obviously you've been playing this game too long..." };
+            const [resultNews] = await pool.query<RowDataPacket[] & NewsType[]>(queryString, inserts);
 
             serverAction.payload.news = {
-                active: true,
-                newsTitle,
-                newsInfo
+                newsTitle: resultNews[0] !== undefined ? resultNews[0].newsTitle : 'No More News',
+                newsInfo: resultNews[0] !== undefined ? resultNews[0].newsInfo : 'Click to continue'
             };
         }
 
@@ -749,16 +736,15 @@ export class Game implements GameType {
                     }
 
                     serverAction.payload.battle = {
-                        active: true,
                         friendlyPieces,
                         enemyPieces
                     };
                     break;
                 case REFUEL_EVENT_TYPE:
                     // need to get tankers and aircraft and put that into the payload...
-                    const tankers = [];
-                    const aircraft = [];
-                    const allRefuelItems: any = await currentEvent.getRefuelItems();
+                    const tankers: RefuelState['tankers'] = [];
+                    const aircraft: RefuelState['aircraft'] = [];
+                    const allRefuelItems = await currentEvent.getRefuelItems();
 
                     for (let x = 0; x < allRefuelItems.length; x++) {
                         const thisRefuelItem = allRefuelItems[x];
@@ -771,11 +757,8 @@ export class Game implements GameType {
                     }
 
                     serverAction.payload.refuel = {
-                        active: true,
                         tankers,
-                        aircraft,
-                        selectedTankerPieceId: -1,
-                        selectedTankerPieceIndex: -1
+                        aircraft
                     };
                     break;
                 default:

@@ -1,5 +1,5 @@
 import { AIRFIELD_TYPE, FLAG_TYPE, LAND_TYPE, MISSILE_SILO_TYPE, WATER_TYPE } from '../constants';
-import { GameType, InvItemType, PieceType, ShopItemType } from './databaseTables';
+import { GameType, InvItemType, PieceType, ShopItemType, NewsType, EventItemType } from './databaseTables';
 import { singlePlan } from './actionTypes';
 import { GameSession } from './sessionTypes';
 
@@ -91,8 +91,8 @@ export type BattleState = {
 export type NewsState = {
     isMinimized: boolean;
     active: boolean;
-    newsTitle: string;
-    newsInfo: string;
+    newsTitle: NewsType['newsTitle'];
+    newsInfo: NewsType['newsInfo'];
 };
 
 export type RefuelState = {
@@ -100,6 +100,13 @@ export type RefuelState = {
     active: boolean;
     selectedTankerPieceId: any;
     selectedTankerPieceIndex: number;
-    tankers: any[];
-    aircraft: any[];
+    tankers: (EventItemType &
+        PieceType & {
+            removedFuel?: number;
+        })[]; // Client is adding some stuff (fuel selections)
+    aircraft: (EventItemType &
+        PieceType & {
+            tankerPieceId?: number;
+            tankerPieceIndex?: number;
+        })[];
 };

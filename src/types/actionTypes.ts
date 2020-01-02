@@ -2,12 +2,12 @@
 import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CANCEL_PLAN, CLEAR_BATTLE, COMBAT_PHASE, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, MAIN_BUTTON_CLICK, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PIECE_PLACE, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_MAIN_BUTTON_CLICK, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE, UPDATE_FLAGS } from '../constants';
 import { InvItemType, PieceType, ShopItemType } from './databaseTables';
 // prettier-ignore
-import { BattleState, CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, InvState, NewsState, PlanningState, RefuelState, ShopState } from './reducerTypes';
+import { BattleState, CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, InvState, NewsState, PlanningState, RefuelState, ShopState, UserfeedbackState } from './reducerTypes';
 
 export type UserfeedbackAction = {
     type: typeof SET_USERFEEDBACK;
     payload: {
-        userFeedback: string;
+        userFeedback: UserfeedbackState;
     };
 };
 
@@ -146,7 +146,7 @@ export type ShopPurchaseAction = {
     type: typeof SHOP_PURCHASE;
     payload: {
         shopItem: ShopItemType;
-        points: number;
+        points: GameInfoState['gamePoints'];
     };
 };
 
@@ -154,7 +154,7 @@ export type ShopRefundAction = {
     type: typeof SHOP_REFUND;
     payload: {
         shopItemId: ShopItemType['shopItemId'];
-        pointsAdded: number;
+        pointsAdded: GameInfoState['gamePoints'];
     };
 };
 export type ShopRefundRequestAction = {
@@ -402,9 +402,18 @@ export type GameInitialStateAction = {
             confirmedPlans: PlanningState['confirmedPlans'];
         };
         // TODO: fix these to not be 'any'
-        news?: any;
-        battle?: any;
-        refuel?: any;
+        news?: {
+            newsTitle: NewsState['newsTitle'];
+            newsInfo: NewsState['newsInfo'];
+        };
+        battle?: {
+            friendlyPieces: any;
+            enemyPieces: any;
+        };
+        refuel?: {
+            tankers: RefuelState['tankers'];
+            aircraft: RefuelState['aircraft'];
+        };
     };
 };
 
@@ -445,6 +454,10 @@ export type ConfirmFuelSelectionRequestAction = {
 export type FuelResultsAction = {
     type: typeof REFUEL_RESULTS;
     payload: {
-        fuelUpdates: any;
+        fuelUpdates: {
+            pieceId: PieceType['pieceId'];
+            piecePositionId: PieceType['piecePositionId'];
+            newFuel: number;
+        }[];
     };
 };

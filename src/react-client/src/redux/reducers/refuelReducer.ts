@@ -30,7 +30,9 @@ export function refuelReducer(state = initialRefuelState, action: RefuelReducerA
     switch (type) {
         case INITIAL_GAMESTATE:
             if ((action as GameInitialStateAction).payload.refuel) {
-                stateCopy = (action as GameInitialStateAction).payload.refuel;
+                stateCopy.aircraft = (action as GameInitialStateAction).payload.refuel!.aircraft;
+                stateCopy.tankers = (action as GameInitialStateAction).payload.refuel!.tankers;
+                stateCopy.active = true;
             }
             return stateCopy;
 
@@ -61,7 +63,7 @@ export function refuelReducer(state = initialRefuelState, action: RefuelReducerA
             if (!stateCopy.tankers[selectedTankerPieceIndex].removedFuel) {
                 stateCopy.tankers[selectedTankerPieceIndex].removedFuel = 0;
             }
-            stateCopy.tankers[selectedTankerPieceIndex].removedFuel += fuelToRemove;
+            stateCopy.tankers[selectedTankerPieceIndex].removedFuel! += fuelToRemove;
 
             return stateCopy;
 
@@ -74,9 +76,10 @@ export function refuelReducer(state = initialRefuelState, action: RefuelReducerA
             let pieceType = stateCopy.aircraft[airPieceIndex].pieceTypeId;
             let fuelThatWasGoingToGetAdded = TYPE_FUEL[pieceType] - stateCopy.aircraft[airPieceIndex].pieceFuel;
 
-            stateCopy.aircraft[airPieceIndex].tankerPieceId = null;
-            stateCopy.aircraft[airPieceIndex].tankerPieceIndex = null;
-            stateCopy.tankers[tankerPieceIndex2].removedFuel -= fuelThatWasGoingToGetAdded;
+            // TODO: don't assume these exist (tankerPieceIndex2!***)
+            delete stateCopy.aircraft[airPieceIndex].tankerPieceId;
+            delete stateCopy.aircraft[airPieceIndex].tankerPieceIndex;
+            stateCopy.tankers[tankerPieceIndex2!].removedFuel! -= fuelThatWasGoingToGetAdded;
             return stateCopy;
 
         case REFUEL_RESULTS:

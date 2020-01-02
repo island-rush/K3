@@ -18,7 +18,10 @@ export function newsReducer(state = initialNewsState, action: NewsReducerActions
     switch (type) {
         case INITIAL_GAMESTATE:
             if ((action as GameInitialStateAction).payload.news) {
-                stateCopy = (action as GameInitialStateAction).payload.news;
+                stateCopy.newsTitle = (action as GameInitialStateAction).payload.news!.newsTitle;
+                stateCopy.newsInfo = (action as GameInitialStateAction).payload.news!.newsInfo;
+                stateCopy.active = true;
+                stateCopy.isMinimized = false;
             }
             return stateCopy;
 
