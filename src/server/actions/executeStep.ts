@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, SOCKET_SERVER_SENDING_ACTION, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
+import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
 import { NewRoundAction, PlacePhaseAction, UpdateFlagAction } from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
-import { sendToTeam } from '../helpers';
+import { sendToGame, sendToTeam } from '../helpers';
 import { giveNextEvent } from './giveNextEvent';
 
 /**
@@ -162,8 +162,7 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
         };
 
         // Send all flag updates to every team
-        socket.to(`game${gameId}`).emit(SOCKET_SERVER_SENDING_ACTION, updateFlagAction);
-        socket.emit(SOCKET_SERVER_SENDING_ACTION, updateFlagAction);
+        sendToGame(socket, updateFlagAction);
     }
 
     // Position Battle Events

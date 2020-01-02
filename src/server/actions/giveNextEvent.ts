@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, EVENT_BATTLE, EVENT_REFUEL, NOT_WAITING_STATUS, NO_MORE_EVENTS, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, SOCKET_SERVER_SENDING_ACTION } from '../../constants';
-import { EventBattleAction, EventRefuelAction, GameSession, NoMoreEventsAction } from '../../types';
+import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, EVENT_BATTLE, EVENT_REFUEL, NOT_WAITING_STATUS, NO_MORE_EVENTS, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE } from '../../constants';
+import { EventBattleAction, EventRefuelAction, NoMoreEventsAction } from '../../types';
 import { Event, Game, Piece } from '../classes';
 import { sendToThisTeam, sendUserFeedback } from '../helpers';
 
@@ -9,9 +9,6 @@ import { sendToThisTeam, sendUserFeedback } from '../helpers';
  * Find the next event in the EventQueue and send to this team (through a socket)
  */
 export const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
-    // Grab Session
-    const session = socket.handshake.session.ir3 as GameSession;
-
     // prettier-ignore
     const { thisGame: { gameId }, gameTeam } = options;
 
@@ -28,9 +25,7 @@ export const giveNextEvent = async (socket: Socket, options: GiveNextEventOption
             }
         };
 
-        socket.to(`game${gameId}team${gameTeam}`).emit(SOCKET_SERVER_SENDING_ACTION, noMoreEventsAction);
-        if (session.gameTeam === gameTeam) socket.emit(SOCKET_SERVER_SENDING_ACTION, noMoreEventsAction);
-
+        sendToThisTeam(socket, noMoreEventsAction);
         return;
     }
 
