@@ -1,5 +1,3 @@
-// TODO: rename file to databaseTables or something (more than just classes)
-
 export type GameType = {
     gameId: number;
     gameSection: string;
@@ -74,6 +72,9 @@ export type PieceType = {
     pieceMoves: number;
     pieceFuel: number;
 
+    /**
+     * This not directly stored in database, but contains child pieces
+     */
     pieceContents?: { pieces: PieceType[] };
 
     /**

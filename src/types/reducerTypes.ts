@@ -1,6 +1,6 @@
 import { AIRFIELD_TYPE, FLAG_TYPE, LAND_TYPE, MISSILE_SILO_TYPE, WATER_TYPE } from '../constants';
-import { GameType, InvItemType, PieceType, ShopItemType } from './classes';
-import { singlePlan } from './interfaces';
+import { GameType, InvItemType, PieceType, ShopItemType } from './databaseTables';
+import { singlePlan } from './actionTypes';
 import { GameSession } from './sessionTypes';
 
 export type ShopState = ShopItemType[];
@@ -9,8 +9,8 @@ export type InvState = InvItemType[];
 
 export type UserfeedbackState = string;
 
-type boardType = typeof LAND_TYPE | typeof AIRFIELD_TYPE | typeof WATER_TYPE | typeof FLAG_TYPE | typeof MISSILE_SILO_TYPE;
-export type GameboardState = { type: boardType; pieces: PieceType[] }[];
+type positionType = typeof LAND_TYPE | typeof AIRFIELD_TYPE | typeof WATER_TYPE | typeof FLAG_TYPE | typeof MISSILE_SILO_TYPE;
+export type GameboardState = { type: positionType; pieces: PieceType[] }[];
 
 export type GameInfoState = {
     gameSection: GameType['gameSection'];

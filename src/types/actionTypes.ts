@@ -1,248 +1,247 @@
-import { Action } from 'redux';
 // prettier-ignore
 import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CANCEL_PLAN, CLEAR_BATTLE, COMBAT_PHASE, DELETE_PLAN, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, MAIN_BUTTON_CLICK, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PIECE_PLACE, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_MAIN_BUTTON_CLICK, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE, UPDATE_FLAGS } from '../constants';
-import { InvItemType, PieceType, ShopItemType } from './classes';
+import { InvItemType, PieceType, ShopItemType } from './databaseTables';
 // prettier-ignore
 import { BattleState, CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, InvState, NewsState, PlanningState, RefuelState, ShopState } from './reducerTypes';
 
-export interface UserfeedbackAction extends Action {
+export type UserfeedbackAction = {
     type: typeof SET_USERFEEDBACK;
     payload: {
         userFeedback: string;
     };
-}
+};
 
-export interface PositionSelectAction extends Action {
+export type PositionSelectAction = {
     type: typeof POSITION_SELECT;
     payload: {
         selectedPositionId: GameboardMetaState['selectedPosition'];
     };
-}
+};
 
-export interface HighlightPositionsAction extends Action {
+export type HighlightPositionsAction = {
     type: typeof HIGHLIGHT_POSITIONS;
     payload: {
         highlightedPositions: GameboardMetaState['highlightedPositions'];
     };
-}
+};
 
-export interface PlanningSelectAction extends Action {
+export type PlanningSelectAction = {
     type: typeof PLANNING_SELECT;
     payload: {
         selectedPositionId: GameboardMetaState['selectedPosition'];
     };
-}
+};
 
-export interface PieceClickAction extends Action {
+export type PieceClickAction = {
     type: typeof PIECE_CLICK;
     payload: {
         selectedPiece: PieceType;
     };
-}
+};
 
-export interface PieceClearAction extends Action {
+export type PieceClearAction = {
     type: typeof PIECE_CLEAR_SELECTION;
     payload: {};
-}
+};
 
-export interface RefuelPopupToggleAction extends Action {
+export type RefuelPopupToggleAction = {
     type: typeof REFUELPOPUP_MINIMIZE_TOGGLE;
     payload: {};
-}
+};
 
-export interface UndoMoveAction extends Action {
+export type UndoMoveAction = {
     type: typeof UNDO_MOVE;
     payload: {};
-}
+};
 
-export interface PreventPlanAction extends Action {
+export type PreventPlanAction = {
     type: typeof CANCEL_PLAN;
     payload: {};
-}
+};
 
-export interface BattlePopupToggleAction extends Action {
+export type BattlePopupToggleAction = {
     type: typeof BATTLEPOPUP_MINIMIZE_TOGGLE;
     payload: {};
-}
+};
 
-export interface BattlePieceSelectAction extends Action {
+export type BattlePieceSelectAction = {
     type: typeof BATTLE_PIECE_SELECT;
     payload: {
         battlePiece: any;
         battlePieceIndex: number;
     };
-}
+};
 
-export interface ClearBattleAction extends Action {
+export type ClearBattleAction = {
     type: typeof CLEAR_BATTLE;
     payload: {
         battle: BattleState;
     };
-}
+};
 
-export interface EnemyPieceSelectAction extends Action {
+export type EnemyPieceSelectAction = {
     type: typeof ENEMY_PIECE_SELECT;
     payload: {
         battlePiece: any;
         battlePieceIndex: number;
     };
-}
+};
 
-export interface TargetPieceClickAction extends Action {
+export type TargetPieceClickAction = {
     type: typeof TARGET_PIECE_SELECT;
     payload: {
         battlePiece: any;
         battlePieceIndex: number;
     };
-}
+};
 
-export interface StartPlanAction extends Action {
+export type StartPlanAction = {
     type: typeof START_PLAN;
     payload: {};
-}
+};
 
-export interface AircraftClickAction extends Action {
+export type AircraftClickAction = {
     type: typeof AIRCRAFT_CLICK;
     payload: {
         aircraftPiece: any;
         aircraftPieceIndex: number;
     };
-}
+};
 
-export interface TankerClickAction extends Action {
+export type TankerClickAction = {
     type: typeof TANKER_CLICK;
     payload: {
         tankerPiece: any;
         tankerPieceIndex: number;
     };
-}
+};
 
-export interface UndoFuelSelectionAction extends Action {
+export type UndoFuelSelectionAction = {
     type: typeof UNDO_FUEL_SELECTION;
     payload: {
         aircraftPiece: any;
         aircraftPieceIndex: number;
     };
-}
+};
 
-export interface MenuSelectAction extends Action {
+export type MenuSelectAction = {
     type: typeof MENU_SELECT;
     payload: {
         selectedMenuId: GameboardMetaState['selectedMenuId'];
     };
-}
+};
 
-export interface NewsPopupToggleAction extends Action {
+export type NewsPopupToggleAction = {
     type: typeof NEWSPOPUP_MINIMIZE_TOGGLE;
     payload: {};
-}
+};
 
-export interface ShopPurchaseRequestAction extends Action {
+export type ShopPurchaseRequestAction = {
     type: typeof SERVER_SHOP_PURCHASE_REQUEST;
     payload: {
         shopItemTypeId: ShopItemType['shopItemTypeId'];
     };
-}
-export interface ShopPurchaseAction extends Action {
+};
+export type ShopPurchaseAction = {
     type: typeof SHOP_PURCHASE;
     payload: {
         shopItem: ShopItemType;
         points: number;
     };
-}
+};
 
-export interface ShopRefundAction extends Action {
+export type ShopRefundAction = {
     type: typeof SHOP_REFUND;
     payload: {
         shopItemId: ShopItemType['shopItemId'];
         pointsAdded: number;
     };
-}
-export interface ShopRefundRequestAction extends Action {
+};
+export type ShopRefundRequestAction = {
     type: typeof SERVER_SHOP_REFUND_REQUEST;
     payload: {
         shopItem: ShopItemType;
     };
-}
+};
 
-export interface ShopConfirmPurchaseRequestAction extends Action {
+export type ShopConfirmPurchaseRequestAction = {
     type: typeof SERVER_SHOP_CONFIRM_PURCHASE;
-}
-export interface ShopConfirmPurchaseAction extends Action {
+};
+export type ShopConfirmPurchaseAction = {
     type: typeof SHOP_TRANSFER;
     payload: {
         invItems: InvState;
     };
-}
+};
 
-export interface InvItemPlaceRequestAction extends Action {
+export type InvItemPlaceRequestAction = {
     type: typeof SERVER_PIECE_PLACE;
     payload: {
         invItemId: InvItemType['invItemId'];
         selectedPosition: number;
     };
-}
-export interface InvItemPlaceAction extends Action {
+};
+export type InvItemPlaceAction = {
     type: typeof PIECE_PLACE;
     payload: {
         invItemId: InvItemType['invItemId'];
         positionId: number;
         newPiece: PieceType;
     };
-}
+};
 
-export interface EnterContainerRequestAction extends Action {
+export type EnterContainerRequestAction = {
     type: typeof SERVER_OUTER_PIECE_CLICK;
     payload: {
         selectedPiece: PieceType;
         containerPiece: PieceType;
     };
-}
+};
 
-export interface EnterContainerAction extends Action {
+export type EnterContainerAction = {
     type: typeof OUTER_PIECE_CLICK_ACTION;
     payload: {
         gameboardPieces: GameboardPiecesDataType;
         selectedPiece: PieceType;
         containerPiece: PieceType;
     };
-}
+};
 
-export interface ExitContainerRequestAction extends Action {
+export type ExitContainerRequestAction = {
     type: typeof SERVER_INNER_PIECE_CLICK;
     payload: {
         selectedPiece: PieceType;
         containerPiece: PieceType;
     };
-}
+};
 
-export interface PieceCloseAction extends Action {
+export type PieceCloseAction = {
     type: typeof PIECE_CLOSE_ACTION;
     payload: {
         selectedPiece: PieceType;
     };
-}
+};
 
-export interface PieceOpenAction extends Action {
+export type PieceOpenAction = {
     type: typeof PIECE_OPEN_ACTION;
     payload: {
         selectedPiece: PieceType;
         gameboard: GameboardState;
     };
-}
+};
 
-export interface PurchasePhaseAction extends Action {
+export type PurchasePhaseAction = {
     type: typeof PURCHASE_PHASE;
-}
+};
 
-export interface CombatPhaseAction extends Action {
+export type CombatPhaseAction = {
     type: typeof COMBAT_PHASE;
     payload: {
         gameboardPieces: GameboardPiecesDataType;
     };
-}
+};
 
-export interface EventBattleAction extends Action {
+export type EventBattleAction = {
     type: typeof EVENT_BATTLE;
     payload: {
         friendlyPieces: BattleState['friendlyPieces'];
@@ -250,9 +249,9 @@ export interface EventBattleAction extends Action {
         gameboardPieces: GameboardPiecesDataType;
         gameStatus: GameInfoState['gameStatus'];
     };
-}
+};
 
-export interface EventRefuelAction extends Action {
+export type EventRefuelAction = {
     type: typeof EVENT_REFUEL;
     payload: {
         tankers: RefuelState['tankers'];
@@ -260,9 +259,9 @@ export interface EventRefuelAction extends Action {
         gameboardPieces: GameboardPiecesDataType;
         gameStatus: GameInfoState['gameStatus'];
     };
-}
+};
 
-export interface PlacePhaseAction extends Action {
+export type PlacePhaseAction = {
     type: typeof PLACE_PHASE;
     payload: {
         gameboardPieces: GameboardPiecesDataType;
@@ -272,9 +271,9 @@ export interface PlacePhaseAction extends Action {
         confirmedCommInterrupt: CapabilitiesState['confirmedCommInterrupt'];
         confirmedGoldenEye: CapabilitiesState['confirmedGoldenEye'];
     };
-}
+};
 
-export interface NewRoundAction extends Action {
+export type NewRoundAction = {
     type: typeof NEW_ROUND;
     payload: {
         gameRound: GameInfoState['gameRound'];
@@ -285,27 +284,27 @@ export interface NewRoundAction extends Action {
         confirmedCommInterrupt: CapabilitiesState['confirmedCommInterrupt'];
         confirmedGoldenEye: CapabilitiesState['confirmedGoldenEye'];
     };
-}
+};
 
-export interface NoMoreEventsAction extends Action {
+export type NoMoreEventsAction = {
     type: typeof NO_MORE_EVENTS;
     payload: {
         gameboardPieces: GameboardPiecesDataType;
         gameStatus: GameInfoState['gameStatus'];
     };
-}
+};
 
-export interface NewsPhaseAction extends Action {
+export type NewsPhaseAction = {
     type: typeof NEWS_PHASE;
     payload: {
         news: NewsState;
         gamePoints: GameInfoState['gamePoints'];
     };
-}
+};
 
 export type GameboardPiecesDataType = { [positionIndex: number]: PieceType[] };
 
-export interface SliceChangeAction extends Action {
+export type SliceChangeAction = {
     type: typeof SLICE_CHANGE;
     payload: {
         confirmedRods: CapabilitiesState['confirmedRods'];
@@ -316,82 +315,82 @@ export interface SliceChangeAction extends Action {
         confirmedInsurgencyPieces: any;
         gameboardPieces: GameboardPiecesDataType;
     };
-}
+};
 
-export interface ExitTransportContainerAction extends Action {
+export type ExitTransportContainerAction = {
     type: typeof INNER_TRANSPORT_PIECE_CLICK_ACTION;
     payload: {
         selectedPiece: PieceType;
         containerPiece: PieceType;
     };
-}
+};
 
-export interface ExitContainerAction extends Action {
+export type ExitContainerAction = {
     type: typeof INNER_PIECE_CLICK_ACTION;
     payload: {
         gameboardPieces: GameboardPiecesDataType;
         selectedPiece: PieceType;
         containerPiece: PieceType;
     };
-}
+};
 
-export interface ExitTransportContainerRequestAction extends Action {
+export type ExitTransportContainerRequestAction = {
     type: typeof SERVER_INNER_TRANSPORT_PIECE_CLICK;
     payload: {
         selectedPiece: PieceType;
         containerPiece: PieceType;
         selectedPositionId: GameboardMetaState['selectedPosition'];
     };
-}
+};
 
-export interface MainButtonClickRequestAction extends Action {
+export type MainButtonClickRequestAction = {
     type: typeof SERVER_MAIN_BUTTON_CLICK;
-}
-export interface MainButtonClickAction extends Action {
+};
+export type MainButtonClickAction = {
     type: typeof MAIN_BUTTON_CLICK;
-}
+};
 
-export interface DeletePlanRequestAction extends Action {
+export type DeletePlanRequestAction = {
     type: typeof SERVER_DELETE_PLAN;
     payload: {
         pieceId: PieceType['pieceId'];
     };
-}
+};
 
-export interface DeletePlanAction extends Action {
+export type DeletePlanAction = {
     type: typeof DELETE_PLAN;
     payload: {
         pieceId: PieceType['pieceId'];
     };
-}
+};
 
-export interface ConfirmPlanRequestAction extends Action {
+export type ConfirmPlanRequestAction = {
     type: typeof SERVER_CONFIRM_PLAN;
     payload: {
         pieceId: PieceType['pieceId'];
         plan: singlePlan[];
     };
-}
+};
 
 // TODO: what are the different move types (right now only 'move' -> could remove this entirely but was preparing for different moves)
 export type singlePlan = { type: string; positionId: number };
 
-export interface ConfirmPlanAction extends Action {
+export type ConfirmPlanAction = {
     type: typeof PLAN_WAS_CONFIRMED;
     payload: {
         pieceId: PieceType['pieceId'];
         plan: singlePlan[];
     };
-}
+};
 
-export interface ConfirmBattleSelectionRequestAction extends Action {
+export type ConfirmBattleSelectionRequestAction = {
     type: typeof SERVER_CONFIRM_BATTLE_SELECTION;
     payload: {
         friendlyPieces: any;
     };
-}
+};
 
-export interface GameInitialStateAction extends Action {
+export type GameInitialStateAction = {
     type: typeof INITIAL_GAMESTATE;
     payload: {
         invItems: InvState;
@@ -407,9 +406,9 @@ export interface GameInitialStateAction extends Action {
         battle?: any;
         refuel?: any;
     };
-}
+};
 
-export interface UpdateFlagAction extends Action {
+export type UpdateFlagAction = {
     type: typeof UPDATE_FLAGS;
     payload: {
         flag0: GameInfoState['flag0'];
@@ -426,26 +425,26 @@ export interface UpdateFlagAction extends Action {
         flag11: GameInfoState['flag11'];
         flag12: GameInfoState['flag12'];
     };
-}
+};
 
-export interface BattleResultsAction extends Action {
+export type BattleResultsAction = {
     type: typeof BATTLE_FIGHT_RESULTS;
     payload: {
         masterRecord: BattleState['masterRecord'];
     };
-}
+};
 
-export interface ConfirmFuelSelectionRequestAction extends Action {
+export type ConfirmFuelSelectionRequestAction = {
     type: typeof SERVER_CONFIRM_FUEL_SELECTION;
     payload: {
         aircraft: RefuelState['aircraft'];
         tankers: RefuelState['tankers'];
     };
-}
+};
 
-export interface FuelResultsAction extends Action {
+export type FuelResultsAction = {
     type: typeof REFUEL_RESULTS;
     payload: {
         fuelUpdates: any;
     };
-}
+};
