@@ -101,7 +101,7 @@ export function gameboardReducer(state = initialGameboardEmpty, action: Gameboar
 
                     //don't know if was enemy or friendly (wasn't in the masterRecord (could change this to be more efficient...))
                     let battlePieceToRemove = potentialPieceToRemove1 || potentialPieceToRemove2;
-                    let { pieceId, piecePositionId } = battlePieceToRemove.piece;
+                    let { pieceId, piecePositionId } = battlePieceToRemove!.piece; // TODO: don't do exclamation mark // TODO: enemyPieces .piece isn't a PieceType (should be)
 
                     stateCopy[piecePositionId].pieces = stateCopy[piecePositionId].pieces.filter((piece: PieceType) => {
                         return piece.pieceId !== pieceId;

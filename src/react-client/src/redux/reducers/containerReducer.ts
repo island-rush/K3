@@ -76,7 +76,8 @@ export function containerReducer(state = initialContainerState, action: Containe
             stateCopy.outerPieces = stateCopy.outerPieces.filter((piece: PieceType, index: number) => {
                 return piece.pieceId !== (action as EnterContainerAction).payload.selectedPiece.pieceId;
             });
-            stateCopy.containerPiece.pieceContents.pieces.push((action as EnterContainerAction).payload.selectedPiece);
+            // TODO: don't assume that these exist
+            stateCopy.containerPiece!.pieceContents!.pieces.push((action as EnterContainerAction).payload.selectedPiece);
             return stateCopy;
 
         case INNER_PIECE_CLICK_ACTION:
@@ -85,7 +86,8 @@ export function containerReducer(state = initialContainerState, action: Containe
             //add to the outer pieces
             stateCopy.isSelectingHex = false;
             stateCopy.innerPieceToDrop = null;
-            stateCopy.containerPiece.pieceContents.pieces = stateCopy.containerPiece.pieceContents.pieces.filter(
+            // TODO: don't assume that these things exist
+            stateCopy.containerPiece!.pieceContents!.pieces = stateCopy.containerPiece!.pieceContents!.pieces.filter(
                 (piece: PieceType, index: number) => {
                     return piece.pieceId !== (action as ExitContainerAction).payload.selectedPiece.pieceId;
                 }

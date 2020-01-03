@@ -73,9 +73,9 @@ export type PlanningState = {
 export type ContainerState = {
     active: boolean;
     isSelectingHex: boolean;
-    innerPieceToDrop: any;
-    containerPiece: any;
-    outerPieces: any;
+    innerPieceToDrop: PieceType | null;
+    containerPiece: PieceType | null;
+    outerPieces: PieceType[];
 };
 
 export type BattleState = {
@@ -83,9 +83,26 @@ export type BattleState = {
     active: boolean;
     selectedBattlePiece: any;
     selectedBattlePieceIndex: number; // helper to find the piece within the array
-    masterRecord: any;
-    friendlyPieces: any[];
-    enemyPieces: any[];
+    masterRecord: any | null;
+    friendlyPieces: {
+        // TODO: refactor this without question marks
+        piece: PieceType;
+        targetPiece: PieceType | null;
+        targetPieceIndex?: number;
+        diceRoll?: any;
+        win?: any;
+        diceRoll1?: any;
+        diceRoll2?: any;
+    }[];
+    enemyPieces: {
+        targetPiece: any | null;
+        targetPieceIndex: number;
+        piece: any;
+        diceRoll?: any;
+        win?: any;
+        diceRoll1?: any;
+        diceRoll2?: any;
+    }[];
 };
 
 export type NewsState = {
@@ -98,7 +115,7 @@ export type NewsState = {
 export type RefuelState = {
     isMinimized: boolean;
     active: boolean;
-    selectedTankerPieceId: any;
+    selectedTankerPieceId: number;
     selectedTankerPieceIndex: number;
     tankers: (EventItemType &
         PieceType & {

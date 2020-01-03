@@ -71,7 +71,7 @@ export class ContainerPopup extends Component<Props> {
         ));
 
         const innerPieces =
-            container.containerPiece === null
+            container.containerPiece == null || container.containerPiece.pieceContents == null
                 ? null
                 : container.containerPiece.pieceContents.pieces.map((piece: PieceType, index: number) => (
                       <ContainerPiece
@@ -79,7 +79,8 @@ export class ContainerPopup extends Component<Props> {
                           piece={piece}
                           container={container}
                           //could need extra stuff for tanks in transport (need extra step to select the hex to go in)
-                          clickFunction={container.containerPiece.pieceTypeId === TRANSPORT_TYPE_ID ? innerTransportPieceClick : innerPieceClick}
+                          // TODO: try not to use these exclamations when possible (should properly check for nulls/undefineds)
+                          clickFunction={container.containerPiece!.pieceTypeId === TRANSPORT_TYPE_ID ? innerTransportPieceClick : innerPieceClick}
                       />
                   ));
 

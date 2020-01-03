@@ -407,8 +407,8 @@ export type GameInitialStateAction = {
             newsInfo: NewsState['newsInfo'];
         };
         battle?: {
-            friendlyPieces: any;
-            enemyPieces: any;
+            friendlyPieces: BattleState['friendlyPieces'];
+            enemyPieces: BattleState['enemyPieces'];
         };
         refuel?: {
             tankers: RefuelState['tankers'];

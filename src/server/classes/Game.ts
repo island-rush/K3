@@ -3,7 +3,7 @@ import { OkPacket, RowDataPacket } from 'mysql2/promise';
 import { Capability, Event, InvItem, Piece, Plan, ShopItem } from '.';
 // prettier-ignore
 import { AIR_REFUELING_SQUADRON_ID, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, COL_BATTLE_EVENT_TYPE, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, INITIAL_GAMESTATE, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NEWS_PHASE_ID, NOYARC_ISLAND_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../constants';
-import { GameType, NewsState, PieceType, GameInitialStateAction, NewsType, EventItemType, RefuelState } from '../../types';
+import { GameInitialStateAction, GameType, NewsState, NewsType, PieceType, RefuelState, BattleState } from '../../types';
 import { gameInitialNews, gameInitialPieces } from '../admin';
 import { pool } from '../database';
 
@@ -684,13 +684,18 @@ export class Game implements GameType {
                 case COL_BATTLE_EVENT_TYPE:
                     const friendlyPiecesList: any = await currentEvent.getTeamItems(gameTeam === BLUE_TEAM_ID ? BLUE_TEAM_ID : RED_TEAM_ID);
                     const enemyPiecesList: any = await currentEvent.getTeamItems(gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID);
-                    const friendlyPieces: any = [];
-                    const enemyPieces = [];
+                    const friendlyPieces: { piece: PieceType; targetPiece: PieceType; targetPieceIndex?: number }[] = [];
+                    const enemyPieces: {
+                        targetPiece: any | null;
+                        targetPieceIndex: number;
+                        piece: any;
+                    }[] = [];
 
                     // formatting for the frontend
                     for (let x = 0; x < friendlyPiecesList.length; x++) {
                         // need to transform pieces and stuff...
-                        const thisFriendlyPiece = {
+                        const thisFriendlyPiece: BattleState['friendlyPieces'][0] = {
+                            // TODO: is this type annotation correct for 'index of this array type'?
                             piece: {
                                 pieceId: friendlyPiecesList[x].pieceId,
                                 pieceGameId: friendlyPiecesList[x].pieceGameId,
@@ -699,7 +704,9 @@ export class Game implements GameType {
                                 piecePositionId: friendlyPiecesList[x].piecePositionId,
                                 pieceVisible: friendlyPiecesList[x].pieceVisible,
                                 pieceMoves: friendlyPiecesList[x].pieceMoves,
-                                pieceFuel: friendlyPiecesList[x].pieceFuel
+                                pieceFuel: friendlyPiecesList[x].pieceFuel,
+                                pieceContainerId: -1, // TODO: don't force these values to fit type, actually get them and put them here
+                                pieceLanded: -1
                             },
                             targetPiece:
                                 friendlyPiecesList[x].tpieceId == null
@@ -712,18 +719,19 @@ export class Game implements GameType {
                                           piecePositionId: friendlyPiecesList[x].tpiecePositionId,
                                           pieceVisible: friendlyPiecesList[x].tpieceVisible,
                                           pieceMoves: friendlyPiecesList[x].tpieceMoves,
-                                          pieceFuel: friendlyPiecesList[x].tpieceFuel
+                                          pieceFuel: friendlyPiecesList[x].tpieceFuel,
+                                          pieceContainerId: -1, // TODO: don't force these (same as above)
+                                          pieceLanded: -1
                                       }
                         };
                         friendlyPieces.push(thisFriendlyPiece);
                     }
                     for (let y = 0; y < enemyPiecesList.length; y++) {
-                        const thisEnemyPiece: any = {
+                        enemyPieces.push({
                             targetPiece: null,
-                            targetPieceIndex: -1
-                        };
-                        thisEnemyPiece.piece = enemyPiecesList[y];
-                        enemyPieces.push(thisEnemyPiece);
+                            targetPieceIndex: -1,
+                            piece: enemyPiecesList[y]
+                        });
                     }
 
                     // now need to get the targetPieceIndex from the thing....if needed....

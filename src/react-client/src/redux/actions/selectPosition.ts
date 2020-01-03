@@ -31,7 +31,8 @@ export const selectPosition = (selectedPositionId: number) => {
                 type: SERVER_INNER_TRANSPORT_PIECE_CLICK,
                 payload: {
                     selectedPiece: container.innerPieceToDrop,
-                    containerPiece: container.containerPiece,
+                    // TODO: don't assume this exists
+                    containerPiece: container.containerPiece!,
                     selectedPositionId
                 }
             };

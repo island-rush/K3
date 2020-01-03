@@ -54,7 +54,7 @@ export const enterContainer = async (socket: Socket, action: EnterContainerReque
 
     const piecesInside: PieceType[] = await thisContainerPiece.getPiecesInside();
 
-    const countOf: any = {}; // number of each item type already inside it
+    const countOf: { [pieceTypeId: number]: number } = {}; // number of each item type already inside it
     piecesInside.forEach(piece => {
         countOf[piece.pieceTypeId] = (countOf[piece.pieceTypeId] || 0) + 1;
     });
