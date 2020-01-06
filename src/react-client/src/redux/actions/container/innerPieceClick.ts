@@ -1,13 +1,13 @@
-import { Dispatch } from "redux";
-import { EmitType, ExitContainerRequestAction, PieceType } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_INNER_PIECE_CLICK } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { SERVER_INNER_PIECE_CLICK } from '../../../../../constants';
+import { ExitContainerRequestAction, PieceType } from '../../../../../types';
 
 /**
  * Move piece from inside container to outside (same position)
  */
-const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+export const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         //TODO: figure out if inner piece click is allowed
 
         const clientAction: ExitContainerRequestAction = {
@@ -18,15 +18,6 @@ const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) =>
             }
         };
 
-        emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
-
-        // dispatch({
-        //     type: INNER_PIECE_CLICK_ACTION,
-        //     payload: {
-        //         selectedPiece
-        //     }
-        // });
+        sendToServer(clientAction);
     };
 };
-
-export default innerPieceClick;

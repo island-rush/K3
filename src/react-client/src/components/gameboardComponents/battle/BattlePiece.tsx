@@ -1,51 +1,51 @@
-import React, { Component } from "react";
-import { TYPE_NAMES } from "../../../constants/gameConstants";
-import { ARROW_IMAGE, DICE_IMAGES, TYPE_IMAGES } from "../../styleConstants";
+import React, { Component } from 'react';
+import { TYPE_NAMES } from '../../../../../constants';
+import { ARROW_IMAGE, DICE_IMAGES, TYPE_IMAGES } from '../../styleConstants';
 
 const battlePieceStyle: any = {
-    backgroundColor: "white",
-    height: "15%",
-    width: "96%",
-    margin: "1%",
-    padding: "1%",
-    borderRadius: "2%"
+    backgroundColor: 'white',
+    height: '15%',
+    width: '96%',
+    margin: '1%',
+    padding: '1%',
+    borderRadius: '2%'
 };
 
 //TODO: could probably refactor how this is called to a cleaner way...
 const battlePieceWonStyle: any = [
     {},
     {
-        border: "2px solid red"
+        border: '2px solid red'
     }
 ];
 
 const boxStyle: any = {
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "90% 90%",
-    backgroundPosition: "center",
-    border: "2px solid black",
-    height: "92%",
-    width: "23%",
-    float: "left",
-    margin: ".5%",
-    position: "relative"
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '90% 90%',
+    backgroundPosition: 'center',
+    border: '2px solid black',
+    height: '92%',
+    width: '23%',
+    float: 'left',
+    margin: '.5%',
+    position: 'relative'
 };
 
 const diceBoxStyle: any = {
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "90% 90%",
-    backgroundPosition: "center",
-    border: "2px solid black",
-    height: "40%",
-    width: "15%",
-    float: "left",
-    margin: ".5%",
-    position: "relative"
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '90% 90%',
+    backgroundPosition: 'center',
+    border: '2px solid black',
+    height: '40%',
+    width: '15%',
+    float: 'left',
+    margin: '.5%',
+    position: 'relative'
 };
 
 const selected: any = [
-    { border: "2px solid red" }, //selected
-    { border: "2px solid black" } //not selected
+    { border: '2px solid red' }, //selected
+    { border: '2px solid black' } //not selected
 ];
 
 interface Props {
@@ -58,7 +58,7 @@ interface Props {
     isSelected: boolean;
 }
 
-class BattlePiece extends Component<Props> {
+export class BattlePiece extends Component<Props> {
     render() {
         const { isFriendly, battlePieceClick, targetPieceClick, enemyBattlePieceClick, battlePiece, battlePieceIndex, isSelected } = this.props;
 
@@ -80,7 +80,7 @@ class BattlePiece extends Component<Props> {
             </div>
         );
 
-        const arrowBox = battlePiece.targetPiece == null ? null : <div title={"Attacking"} style={{ ...boxStyle, ...ARROW_IMAGE }} />;
+        const arrowBox = battlePiece.targetPiece == null ? null : <div title={'Attacking'} style={{ ...boxStyle, ...ARROW_IMAGE }} />;
 
         const targetBox =
             battlePiece.targetPiece == null ? null : (
@@ -118,5 +118,3 @@ class BattlePiece extends Component<Props> {
         );
     }
 }
-
-export default BattlePiece;

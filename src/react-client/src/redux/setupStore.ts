@@ -1,12 +1,12 @@
-import { applyMiddleware, compose, createStore, Store } from "redux";
-import thunk, { ThunkMiddleware } from "redux-thunk";
-import rootReducer from "./reducers";
-import { emit, init } from "./websocket";
+import { applyMiddleware, compose, createStore, Store } from 'redux';
+import thunk from 'redux-thunk';
+import { rootReducer } from './reducers';
+import { emit, init } from './websocket';
 
-const setupStore = () => {
+export const setupStore = () => {
     const initialState = {};
 
-    const middleware: ThunkMiddleware[] = [thunk.withExtraArgument(emit)];
+    const middleware = [thunk.withExtraArgument(emit)];
 
     const store: Store = createStore(
         rootReducer,
@@ -21,5 +21,3 @@ const setupStore = () => {
 
     return store;
 };
-
-export default setupStore;

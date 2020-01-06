@@ -1,34 +1,35 @@
-import { Dispatch } from "redux";
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
-import { EmitType, InvItemType } from "../../../constants/interfaces";
-import { RODS_FROM_GOD_SELECTING } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { COMBAT_PHASE_ID, RODS_FROM_GOD_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
+import { InvItemType, RodsFromGodSelectingAction } from '../../../../../types';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
-const rodsFromGod = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+export const rodsFromGod = (invItem: InvItemType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
-            dispatch(setUserfeedbackAction("wrong phase for rods from god dude."));
+            dispatch(setUserfeedbackAction('wrong phase for rods from god dude.'));
             return;
         }
 
         if (gameSlice !== SLICE_PLANNING_ID) {
-            dispatch(setUserfeedbackAction("must be in planning to use rods from god."));
+            dispatch(setUserfeedbackAction('must be in planning to use rods from god.'));
             return;
         }
 
         //other checks that the player is allowed to select rods from god (do they have it? / game effects...)
 
         //dispatch that the player is currently selecting which position to select
-        dispatch({
+
+        const rodsFromGodSelectingAction: RodsFromGodSelectingAction = {
             type: RODS_FROM_GOD_SELECTING,
             payload: {
                 invItem
             }
-        });
+        };
+
+        dispatch(rodsFromGodSelectingAction);
     };
 };
-
-export default rodsFromGod;

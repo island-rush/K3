@@ -1,28 +1,27 @@
-import { Dispatch } from "redux";
-import { PLACE_PHASE_ID } from "../../../constants/gameConstants";
-import { EmitType, InvItemPlaceRequestAction, InvItemType } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_PIECE_PLACE } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { PLACE_PHASE_ID, SERVER_PIECE_PLACE } from '../../../../../constants';
+import { InvItemPlaceRequestAction, InvItemType } from '../../../../../types';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Click an inv item to put into a sea position.
  */
-const seaPieceClick = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+export const seaPieceClick = (invItem: InvItemType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, gameInfo } = getState();
 
         const { gamePhase } = gameInfo;
 
         if (gamePhase !== PLACE_PHASE_ID) {
-            dispatch(setUserfeedbackAction("wrong phase to place sea inv item."));
+            dispatch(setUserfeedbackAction('wrong phase to place sea inv item.'));
             return;
         }
 
         const { selectedPosition } = gameboardMeta;
 
         if (selectedPosition === -1) {
-            dispatch(setUserfeedbackAction("Must select a position before using an inv item..."));
+            dispatch(setUserfeedbackAction('Must select a position before using an inv item...'));
             return;
         }
 
@@ -39,8 +38,6 @@ const seaPieceClick = (invItem: InvItemType) => {
             }
         };
 
-        emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
+        sendToServer(clientAction);
     };
 };
-
-export default seaPieceClick;

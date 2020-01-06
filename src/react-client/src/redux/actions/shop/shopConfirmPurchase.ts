@@ -1,19 +1,18 @@
-import { Dispatch } from "redux";
-import { EmitType, ShopConfirmPurchaseRequestAction } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_SHOP_CONFIRM_PURCHASE } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { SERVER_SHOP_CONFIRM_PURCHASE } from '../../../../../constants';
+import { ShopConfirmPurchaseRequestAction } from '../../../../../types';
 
 //TODO: more checks on if they can purchase before sending to backend (don't waste network)
 /**
  * Action to confirm all purchases in the cart.
  */
-const shopConfirmPurchase = () => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+export const shopConfirmPurchase = () => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const clientAction: ShopConfirmPurchaseRequestAction = {
             type: SERVER_SHOP_CONFIRM_PURCHASE
         };
-        emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
+
+        sendToServer(clientAction);
     };
 };
-
-export default shopConfirmPurchase;

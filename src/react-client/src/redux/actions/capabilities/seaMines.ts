@@ -1,11 +1,10 @@
-import { Dispatch } from "redux";
-import { EmitType, InvItemType } from "../../../constants/interfaces";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { InvItemType } from '../../../../../types';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
-const seaMines = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        dispatch(setUserfeedbackAction("seaMines"));
+export const seaMines = (invItem: InvItemType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
+        dispatch(setUserfeedbackAction('seaMines'));
     };
 };
-
-export default seaMines;

@@ -1,19 +1,19 @@
-import { Dispatch } from "redux";
-import { EmitType } from "../../../constants/interfaces";
-import { CLEAR_BATTLE } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { CLEAR_BATTLE } from '../../../../../constants';
+import { ClearBattleAction } from '../../../../../types';
 
-const clearOldBattle = () => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        const { gameboardMeta } = getState();
-        const { battle } = gameboardMeta;
+export const clearOldBattle = () => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
+        const { battle } = getState();
 
-        dispatch({
+        const clearBattleAction: ClearBattleAction = {
             type: CLEAR_BATTLE,
             payload: {
                 battle
             }
-        });
+        };
+
+        dispatch(clearBattleAction);
     };
 };
-
-export default clearOldBattle;

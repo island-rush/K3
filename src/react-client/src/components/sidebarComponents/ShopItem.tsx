@@ -1,16 +1,16 @@
-import React from "react";
-import { TYPE_IMAGES } from "../styleConstants";
-import { ShopItemType } from "../../constants/interfaces";
+import React from 'react';
+import { ShopItemType } from '../../../../types';
+import { TYPE_IMAGES } from '../styleConstants';
 
 const shopItemStyle = {
-    backgroundColor: "green",
-    position: "relative",
-    width: "23%",
-    paddingTop: "23%",
-    margin: "1%",
-    float: "left",
-    backgroundSize: "100% 100%",
-    backgroundRepeat: "no-repeat"
+    backgroundColor: 'green',
+    position: 'relative',
+    width: '23%',
+    paddingTop: '23%',
+    margin: '1%',
+    float: 'left',
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat'
 };
 
 interface Props {
@@ -18,7 +18,7 @@ interface Props {
     shopItem: ShopItemType;
 }
 
-const ShopItem = ({ refund, shopItem }: Props) => {
+export const ShopItem = ({ refund, shopItem }: Props) => {
     const style = {
         ...shopItemStyle,
         ...TYPE_IMAGES[shopItem.shopItemTypeId]
@@ -32,5 +32,3 @@ const ShopItem = ({ refund, shopItem }: Props) => {
 
     return <div style={style} onClick={onClick} />;
 };
-
-export default ShopItem;

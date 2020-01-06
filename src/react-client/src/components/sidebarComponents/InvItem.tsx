@@ -1,17 +1,17 @@
-import React from "react";
-import { TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from "../../constants/gameConstants";
-import { TYPE_IMAGES } from "../styleConstants";
-import { InvItemType } from "../../constants/interfaces";
+import React from 'react';
+import { TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
+import { InvItemType } from '../../../../types';
+import { TYPE_IMAGES } from '../styleConstants';
 
 const invItemStyle = {
-    position: "relative",
-    backgroundColor: "blue",
-    width: "20%",
-    paddingTop: "20%",
-    margin: "1%",
-    float: "left",
-    backgroundSize: "100% 100%",
-    backgroundRepeat: "no-repeat"
+    position: 'relative',
+    backgroundColor: 'blue',
+    width: '20%',
+    paddingTop: '20%',
+    margin: '1%',
+    float: 'left',
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat'
 };
 
 interface Props {
@@ -19,7 +19,7 @@ interface Props {
     invItemClick: any;
 }
 
-const InvItem = ({ invItem, invItemClick }: Props) => {
+export const InvItem = ({ invItem, invItemClick }: Props) => {
     const { invItemTypeId } = invItem;
 
     const name = TYPE_NAMES[invItemTypeId];
@@ -31,7 +31,7 @@ const InvItem = ({ invItem, invItemClick }: Props) => {
         ...TYPE_IMAGES[invItemTypeId]
     };
 
-    const title = `${name}\nMoves: ${moves !== undefined ? moves : "N/A"}\nFuel: ${fuel !== undefined && fuel !== -1 ? fuel : "N/A"}`;
+    const title = `${name}\nMoves: ${moves !== undefined ? moves : 'N/A'}\nFuel: ${fuel !== undefined && fuel !== -1 ? fuel : 'N/A'}`;
 
     const onClick = (event: any) => {
         event.preventDefault();
@@ -41,5 +41,3 @@ const InvItem = ({ invItem, invItemClick }: Props) => {
 
     return <div style={style} title={title} onClick={onClick} />;
 };
-
-export default InvItem;

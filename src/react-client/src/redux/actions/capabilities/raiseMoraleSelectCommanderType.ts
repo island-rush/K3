@@ -1,30 +1,27 @@
-import { AnyAction, Dispatch } from "redux";
-import { ALL_COMMANDER_TYPES } from "../../../constants/gameConstants";
-import { EmitType } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_RAISE_MORALE_CONFIRM } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { ALL_COMMANDER_TYPES, SERVER_RAISE_MORALE_CONFIRM } from '../../../../../constants';
+import { RaiseMoraleRequestAction } from '../../../../../types';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
-const raiseMoraleSelectCommanderType = (selectedCommanderType: number) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        const { gameboardMeta } = getState();
-        const { invItem } = gameboardMeta.planning;
+export const raiseMoraleSelectCommanderType = (selectedCommanderType: number) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
+        const { planning }: any = getState();
+        const { invItem } = planning;
 
         if (!ALL_COMMANDER_TYPES.includes(selectedCommanderType)) {
             dispatch(setUserfeedbackAction("didn't select valid commander type"));
             return;
         }
 
-        const clientAction: AnyAction = {
+        const clientAction: RaiseMoraleRequestAction = {
             type: SERVER_RAISE_MORALE_CONFIRM,
             payload: {
                 invItem,
                 selectedCommanderType
             }
         };
-        emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
-        return;
+
+        sendToServer(clientAction);
     };
 };
-
-export default raiseMoraleSelectCommanderType;

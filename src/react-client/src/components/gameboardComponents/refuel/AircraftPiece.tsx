@@ -1,31 +1,31 @@
-import React, { Component } from "react";
-import { AIR_REFUELING_SQUADRON_ID, TYPE_FUEL } from "../../../constants/gameConstants";
-import { TYPE_IMAGES } from "../../styleConstants";
+import React, { Component } from 'react';
+import { AIR_REFUELING_SQUADRON_ID, TYPE_FUEL } from '../../../../../constants';
+import { TYPE_IMAGES } from '../../styleConstants';
 
 const aircraftPieceStyle: any = {
-    backgroundColor: "white",
-    height: "15%",
-    width: "96%",
-    margin: "1%",
-    padding: "1%",
-    borderRadius: "2%"
+    backgroundColor: 'white',
+    height: '15%',
+    width: '96%',
+    margin: '1%',
+    padding: '1%',
+    borderRadius: '2%'
 };
 
 const boxStyle: any = {
-    backgroundRepeat: "no-repeat",
-    backgroundSize: "90% 90%",
-    backgroundPosition: "center",
-    border: "2px solid black",
-    height: "92%",
-    width: "23%",
-    float: "left",
-    margin: ".5%",
-    position: "relative"
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '90% 90%',
+    backgroundPosition: 'center',
+    border: '2px solid black',
+    height: '92%',
+    width: '23%',
+    float: 'left',
+    margin: '.5%',
+    position: 'relative'
 };
 
 const textDivStyle: any = {
-    position: "relative",
-    float: "left"
+    position: 'relative',
+    float: 'left'
 };
 
 interface Props {
@@ -35,7 +35,7 @@ interface Props {
     undoFuelSelection: any;
 }
 
-class AircraftPiece extends Component<Props> {
+export class AircraftPiece extends Component<Props> {
     render() {
         const { aircraftPiece, aircraftPieceIndex, aircraftClick, undoFuelSelection } = this.props;
         const { pieceFuel, pieceTypeId } = aircraftPiece;
@@ -81,5 +81,3 @@ class AircraftPiece extends Component<Props> {
         );
     }
 }
-
-export default AircraftPiece;

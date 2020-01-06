@@ -1,11 +1,26 @@
-//prettier-ignore
-import { COMBAT_PHASE_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PLACE_PHASE_ID, PURCHASE_PHASE_ID, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, WAITING_STATUS } from "../../constants/gameConstants";
-//prettier-ignore
-import { COMBAT_PHASE, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, PIECES_MOVE, PLACE_PHASE, PURCHASE_PHASE, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, UPDATE_FLAGS } from "../actions/actionTypes";
+// prettier-ignore
+import { COMBAT_PHASE, COMBAT_PHASE_ID, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEWS_PHASE, NEWS_PHASE_ID, NEW_ROUND, NOT_WAITING_STATUS, NO_MORE_EVENTS, PLACE_PHASE, PLACE_PHASE_ID, PURCHASE_PHASE, PURCHASE_PHASE_ID, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, UPDATE_FLAGS, WAITING_STATUS } from '../../../../constants';
+// prettier-ignore
+import { CombatPhaseAction, EventBattleAction, GameInfoState, GameInitialStateAction, MainButtonClickAction, NewRoundAction, NewsPhaseAction, NoMoreEventsAction, PlacePhaseAction, PurchasePhaseAction, ShopPurchaseAction, ShopRefundAction, SliceChangeAction, UpdateFlagAction } from '../../../../types';
 
-const initialGameInfoState = {
-    gameSection: "Loading...",
-    gameInstructor: "Loading...",
+type GameInfoReducerActions =
+    | GameInitialStateAction
+    | ShopPurchaseAction
+    | NoMoreEventsAction
+    | ShopRefundAction
+    | PurchasePhaseAction
+    | UpdateFlagAction
+    | MainButtonClickAction
+    | CombatPhaseAction
+    | SliceChangeAction
+    | PlacePhaseAction
+    | EventBattleAction
+    | NewRoundAction
+    | NewsPhaseAction;
+
+const initialGameInfoState: GameInfoState = {
+    gameSection: 'Loading...',
+    gameInstructor: 'Loading...',
     gameTeam: -1,
     gameControllers: [],
     gamePhase: -1,
@@ -28,66 +43,76 @@ const initialGameInfoState = {
     flag12: -1
 };
 
-function gameInfoReducer(state = initialGameInfoState, { type, payload }: { type: string; payload: any }) {
-    //TODO: figure out if deep copy works, or if regular works (stick to a standard...)
-    let stateDeepCopy = JSON.parse(JSON.stringify(state));
+export function gameInfoReducer(state = initialGameInfoState, action: GameInfoReducerActions) {
+    const { type } = action;
+
+    let stateCopy: GameInfoState = JSON.parse(JSON.stringify(state));
+
     switch (type) {
         case INITIAL_GAMESTATE:
-            return payload.gameInfo;
+            return (action as GameInitialStateAction).payload.gameInfo;
+
         case SHOP_PURCHASE:
-            state.gamePoints = payload.points;
-            return state;
+            stateCopy.gamePoints = (action as ShopPurchaseAction).payload.points;
+            return stateCopy;
+
         case NO_MORE_EVENTS:
-            state.gameStatus = payload.gameStatus;
-            return state;
+            stateCopy.gameStatus = (action as NoMoreEventsAction).payload.gameStatus;
+            return stateCopy;
+
         case SHOP_REFUND:
-            state.gamePoints += payload.pointsAdded;
-            return state;
+            stateCopy.gamePoints += (action as ShopRefundAction).payload.pointsAdded;
+            return stateCopy;
+
         case PURCHASE_PHASE:
-            stateDeepCopy.gamePhase = PURCHASE_PHASE_ID;
-            stateDeepCopy.gameStatus = NOT_WAITING_STATUS;
-            return stateDeepCopy;
+            stateCopy.gamePhase = PURCHASE_PHASE_ID;
+            stateCopy.gameStatus = NOT_WAITING_STATUS;
+            return stateCopy;
+
         case UPDATE_FLAGS:
-            Object.assign(stateDeepCopy, payload);
-            return stateDeepCopy;
+            Object.assign(stateCopy, (action as UpdateFlagAction).payload);
+            return stateCopy;
+
         case MAIN_BUTTON_CLICK:
-            stateDeepCopy.gameStatus = WAITING_STATUS;
-            return stateDeepCopy;
+            stateCopy.gameStatus = WAITING_STATUS;
+            return stateCopy;
+
         case COMBAT_PHASE:
-            stateDeepCopy.gameStatus = NOT_WAITING_STATUS;
-            stateDeepCopy.gamePhase = COMBAT_PHASE_ID;
-            return stateDeepCopy;
+            stateCopy.gameStatus = NOT_WAITING_STATUS;
+            stateCopy.gamePhase = COMBAT_PHASE_ID;
+            return stateCopy;
+
         case SLICE_CHANGE:
-            stateDeepCopy.gameStatus = NOT_WAITING_STATUS;
-            stateDeepCopy.gameSlice = SLICE_EXECUTING_ID;
-            return stateDeepCopy;
+            stateCopy.gameStatus = NOT_WAITING_STATUS;
+            stateCopy.gameSlice = SLICE_EXECUTING_ID;
+            return stateCopy;
+
         case PLACE_PHASE:
-            stateDeepCopy.gamePhase = PLACE_PHASE_ID;
-            stateDeepCopy.gameStatus = NOT_WAITING_STATUS;
-            return stateDeepCopy;
-        case PIECES_MOVE:
-            stateDeepCopy.gameStatus = payload.gameStatus;
-            return stateDeepCopy;
+            stateCopy.gamePhase = PLACE_PHASE_ID;
+            stateCopy.gameStatus = NOT_WAITING_STATUS;
+            return stateCopy;
+
         case EVENT_BATTLE:
-            if (payload.gameStatus !== null) {
-                stateDeepCopy.gameStatus = payload.gameStatus;
+            if ((action as EventBattleAction).payload.gameStatus !== null) {
+                stateCopy.gameStatus = (action as EventBattleAction).payload.gameStatus;
             }
-            return stateDeepCopy;
+            return stateCopy;
+
         case NEW_ROUND:
-            stateDeepCopy.gameRound = payload.gameRound;
-            stateDeepCopy.gameStatus = NOT_WAITING_STATUS;
-            stateDeepCopy.gameSlice = SLICE_PLANNING_ID;
-            return stateDeepCopy;
+            stateCopy.gameRound = (action as NewRoundAction).payload.gameRound;
+            stateCopy.gameStatus = NOT_WAITING_STATUS;
+            stateCopy.gameSlice = SLICE_PLANNING_ID;
+            return stateCopy;
+
         case NEWS_PHASE:
-            stateDeepCopy.gamePhase = NEWS_PHASE_ID;
-            stateDeepCopy.gameStatus = NOT_WAITING_STATUS;
-            stateDeepCopy.gameRound = 0;
-            stateDeepCopy.gameSlice = SLICE_PLANNING_ID;
-            stateDeepCopy.gamePoints = payload.gamePoints;
-            return stateDeepCopy;
+            stateCopy.gamePhase = NEWS_PHASE_ID;
+            stateCopy.gameStatus = NOT_WAITING_STATUS;
+            stateCopy.gameRound = 0;
+            stateCopy.gameSlice = SLICE_PLANNING_ID;
+            stateCopy.gamePoints = (action as NewsPhaseAction).payload.gamePoints;
+            return stateCopy;
+
         default:
             return state;
     }
 }
-
-export default gameInfoReducer;

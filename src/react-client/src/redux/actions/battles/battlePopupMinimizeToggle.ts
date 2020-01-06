@@ -1,14 +1,15 @@
-import { Dispatch } from "redux";
-import { EmitType } from "../../../constants/interfaces";
-import { BATTLEPOPUP_MINIMIZE_TOGGLE } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { BATTLEPOPUP_MINIMIZE_TOGGLE } from '../../../../../constants';
+import { BattlePopupToggleAction } from '../../../../../types';
 
-const battlePopupMinimizeToggle = () => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        dispatch({
+export const battlePopupMinimizeToggle = () => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
+        const battlePopupToggleAction: BattlePopupToggleAction = {
             type: BATTLEPOPUP_MINIMIZE_TOGGLE,
             payload: {}
-        });
+        };
+
+        dispatch(battlePopupToggleAction);
     };
 };
-
-export default battlePopupMinimizeToggle;

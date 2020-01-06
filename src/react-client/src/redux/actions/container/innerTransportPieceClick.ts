@@ -1,16 +1,17 @@
-import { AnyAction, Dispatch } from "redux";
-import { EmitType, PieceType } from "../../../constants/interfaces";
-import { INNER_TRANSPORT_PIECE_CLICK_ACTION } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { INNER_TRANSPORT_PIECE_CLICK_ACTION } from '../../../../../constants';
+import { ExitTransportContainerAction, PieceType } from '../../../../../types';
 
 /**
  * Move a piece from inside a transport to outside (adjacent land)
  */
-const innerTransportPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+export const innerTransportPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         //TODO: figure out if inner piece click is allowed
         //TODO: could probably see if there is even land next to where this piece is (don't allow if in the open ocean?)
 
-        const clientAction: AnyAction = {
+        const clientAction: ExitTransportContainerAction = {
             type: INNER_TRANSPORT_PIECE_CLICK_ACTION,
             payload: {
                 selectedPiece,
@@ -21,5 +22,3 @@ const innerTransportPieceClick = (selectedPiece: PieceType, containerPiece: Piec
         dispatch(clientAction);
     };
 };
-
-export default innerTransportPieceClick;

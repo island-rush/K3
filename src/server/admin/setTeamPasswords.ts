@@ -1,51 +1,49 @@
-import { Request, Response } from "express";
-import md5 from "md5";
-import { Password, TeacherSession } from "../../react-client/src/constants/interfaces";
-import { Game } from "../classes";
-import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from "../pages/errorTypes";
+import { Request, Response } from 'express';
+import md5 from 'md5';
+import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from '../../constants';
+import { TeacherSession } from '../../types';
+import { Game } from '../classes';
 
 /**
  * Set each team's password.
  *
  * These passwords are used to log into the game.
  */
-const setTeamPasswords = async (req: Request, res: Response) => {
-    //Verify Session
+export const setTeamPasswords = async (req: Request, res: Response) => {
+    // Verify Session
     if (!req.session.ir3teacher) {
         res.status(403).redirect(`/index.html?error=${ACCESS_TAG}`);
         return;
     }
 
-    //Verify Request
-    if (!req.body.game0Password || !req.body.game1Password) {
+    // Verify Request
+    if (!req.body.gameBluePassword || !req.body.gameRedPassword) {
         res.status(403).redirect(`/teacher.html?error=${BAD_REQUEST_TAG}`);
         return;
     }
 
-    const { gameId }: TeacherSession = req.session.ir3teacher;
+    const { gameId } = req.session.ir3teacher as TeacherSession;
 
-    //Get game info
+    // Get game info
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
         res.status(400).redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
         return;
     }
 
-    const { game0Password, game1Password }: SetTeamPassRequest = req.body;
-    const game0PasswordHashed = md5(game0Password);
-    const game1PasswordHashed = md5(game1Password);
+    const { gameBluePassword, gameRedPassword }: SetTeamPassRequest = req.body;
+    const gameBluePasswordHashed = md5(gameBluePassword);
+    const gameRedPasswordHashed = md5(gameRedPassword);
 
-    await thisGame.setTeamPasswords(game0PasswordHashed, game1PasswordHashed);
+    await thisGame.setTeamPasswords(gameBluePasswordHashed, gameRedPasswordHashed);
 
-    res.redirect("/teacher.html?setTeamPasswords=success");
+    res.redirect('/teacher.html?setTeamPasswords=success');
 };
 
 /**
  * All the values needed for request to set team passwords.
  */
 type SetTeamPassRequest = {
-    game0Password: Password;
-    game1Password: Password;
+    gameBluePassword: string;
+    gameRedPassword: string;
 };
-
-export default setTeamPasswords;

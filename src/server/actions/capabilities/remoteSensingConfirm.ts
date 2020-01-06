@@ -1,84 +1,82 @@
-import { Socket } from "socket.io";
-import { COMBAT_PHASE_ID, REMOTE_SENSING_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, RemoteSensingAction, RemoteSensingRequestAction } from "../../../react-client/src/constants/interfaces";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
-import { REMOTE_SENSING_SELECTED } from "../../../react-client/src/redux/actions/actionTypes";
-import { Capability, Game, InvItem, Piece } from "../../classes";
-import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import sendUserFeedback from "../sendUserFeedback";
+import { Socket } from 'socket.io';
+// prettier-ignore
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REMOTE_SENSING_SELECTED, REMOTE_SENSING_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { GameSession, RemoteSensingAction, RemoteSensingRequestAction } from '../../../types';
+import { Capability, Game, InvItem, Piece } from '../../classes';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * User request to use remote sensing capability on a position.
  */
-const remoteSensingConfirm = async (socket: Socket, action: RemoteSensingRequestAction) => {
-    //Grab the Session
-    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+export const remoteSensingConfirm = async (socket: Socket, action: RemoteSensingRequestAction) => {
+    // Grab the Session
+    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     if (action.payload == null || action.payload.selectedPositionId == null) {
-        sendUserFeedback(socket, "Server Error: Malformed Payload (missing selectedPositionId)");
+        sendUserFeedback(socket, 'Server Error: Malformed Payload (missing selectedPositionId)');
         return;
     }
 
     const { selectedPositionId, invItem } = action.payload;
 
-    //Grab the Game
+    // Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
-    const { gameActive, gamePhase, gameSlice, game0Points, game1Points } = thisGame;
+    const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
-    //gamePhase 2 is only phase for remote sensing
-    if (gamePhase != COMBAT_PHASE_ID) {
-        sendUserFeedback(socket, "Not the right phase...");
+    // gamePhase 2 is only phase for remote sensing
+    if (gamePhase !== COMBAT_PHASE_ID) {
+        sendUserFeedback(socket, 'Not the right phase...');
         return;
     }
 
-    //gameSlice 0 is only slice for remote sensing
-    if (gameSlice != SLICE_PLANNING_ID) {
-        sendUserFeedback(socket, "Not the right slice (must be planning)...");
+    // gameSlice 0 is only slice for remote sensing
+    if (gameSlice !== SLICE_PLANNING_ID) {
+        sendUserFeedback(socket, 'Not the right slice (must be planning)...');
         return;
     }
 
-    //Only the main controller (0) can use remote sensing
+    // Only the main controller (0) can use remote sensing
     if (!gameControllers.includes(TYPE_MAIN)) {
-        sendUserFeedback(socket, "Not the main controller (0)...");
+        sendUserFeedback(socket, 'Not the main controller (0)...');
         return;
     }
 
     const { invItemId } = invItem;
 
-    //Does the invItem exist for it?
+    // Does the invItem exist for it?
     const thisInvItem = await new InvItem(invItemId).init();
     if (!thisInvItem) {
-        sendUserFeedback(socket, "Did not have the invItem to complete this request.");
+        sendUserFeedback(socket, 'Did not have the invItem to complete this request.');
         return;
     }
 
-    //verify correct type of inv item
+    // verify correct type of inv item
     const { invItemTypeId } = thisInvItem;
-    if (invItemTypeId != REMOTE_SENSING_TYPE_ID) {
-        sendUserFeedback(socket, "Inv Item was not a remote sensing type.");
+    if (invItemTypeId !== REMOTE_SENSING_TYPE_ID) {
+        sendUserFeedback(socket, 'Inv Item was not a remote sensing type.');
         return;
     }
 
-    //does the position make sense?
+    // does the position make sense?
     if (selectedPositionId < 0) {
-        sendUserFeedback(socket, "got a negative position for remote sensing.");
+        sendUserFeedback(socket, 'got a negative position for remote sensing.');
         return;
     }
 
-    //insert the 'plan' for remote sensing into the db for later use
+    // insert the 'plan' for remote sensing into the db for later use
 
     if (!(await Capability.remoteSensingInsert(gameId, gameTeam, selectedPositionId))) {
-        sendUserFeedback(socket, "db failed to insert remote sensing, likely already an entry for that position.");
+        sendUserFeedback(socket, 'db failed to insert remote sensing, likely already an entry for that position.');
         return;
     }
 
@@ -98,9 +96,6 @@ const remoteSensingConfirm = async (socket: Socket, action: RemoteSensingRequest
         }
     };
 
-    //Send the update to the client(s)
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-    socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    // Send the update to the client(s)
+    sendToThisTeam(socket, serverAction);
 };
-
-export default remoteSensingConfirm;

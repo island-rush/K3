@@ -1,34 +1,34 @@
-import { Dispatch } from "redux";
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../constants/gameConstants";
-import { EmitType, InvItemType } from "../../../constants/interfaces";
-import { COMM_INTERRUPT_SELECTING } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { COMBAT_PHASE_ID, COMM_INTERRUPT_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
+import { CommInterruptSelectingAction, InvItemType } from '../../../../../types';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
-const communicationsInterruption = (invItem: InvItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+export const communicationsInterruption = (invItem: InvItemType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameInfo } = getState();
         const { gamePhase, gameSlice } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
-            dispatch(setUserfeedbackAction("wrong phase for comm interrupt dude."));
+            dispatch(setUserfeedbackAction('wrong phase for comm interrupt dude.'));
             return;
         }
 
         if (gameSlice !== SLICE_PLANNING_ID) {
-            dispatch(setUserfeedbackAction("must be in planning to use comm interrupt."));
+            dispatch(setUserfeedbackAction('must be in planning to use comm interrupt.'));
             return;
         }
 
         //other checks that the player is allowed to select comm interrupt (do they have it? / game effects...)
 
         //dispatch that the player is currently selecting which position to select
-        dispatch({
+        const commInterruptSelectingAction: CommInterruptSelectingAction = {
             type: COMM_INTERRUPT_SELECTING,
             payload: {
                 invItem
             }
-        });
+        };
+
+        dispatch(commInterruptSelectingAction);
     };
 };
-
-export default communicationsInterruption;

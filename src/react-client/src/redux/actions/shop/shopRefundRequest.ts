@@ -1,21 +1,20 @@
-import { Dispatch } from "redux";
-import { EmitType, ShopItemType, ShopRefundRequestAction } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_SHOP_REFUND_REQUEST } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { SERVER_SHOP_REFUND_REQUEST } from '../../../../../constants';
+import { ShopItemType, ShopRefundRequestAction } from '../../../../../types';
 
 /**
  * Action to refund an item from the shop.
  */
-const shopRefundRequest = (shopItem: ShopItemType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+export const shopRefundRequest = (shopItem: ShopItemType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const clientAction: ShopRefundRequestAction = {
             type: SERVER_SHOP_REFUND_REQUEST,
             payload: {
                 shopItem
             }
         };
-        emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
+
+        sendToServer(clientAction);
     };
 };
-
-export default shopRefundRequest;

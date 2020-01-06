@@ -64,7 +64,7 @@
             }
             .slider:before {
                 position: absolute;
-                content: "";
+                content: '';
                 height: 26px;
                 width: 26px;
                 left: 4px;
@@ -144,11 +144,11 @@
                 </tr>
                 <tr>
                     <td>
-                        <input name="game0Password" type="text" id="game0Password" required placeholder="Team1 Password #" />
+                        <input name="gameBluePassword" type="text" id="gameBluePassword" required placeholder="Team1 Password #" />
                     </td>
 
                     <td>
-                        <input name="game1Password" type="text" id="game1Password" required placeholder="Team2 Password #" />
+                        <input name="gameRedPassword" type="text" id="gameRedPassword" required placeholder="Team2 Password #" />
                     </td>
 
                     <td colspan="2">
@@ -177,8 +177,8 @@
 
         <script>
             function gameReset() {
-                if (confirm("ARE YOU SURE YOU WANT TO RESET THIS GAME?")) {
-                    return confirm("ARE YOU EXTRA SURE? THIS WILL DELETE ALL DATA FOR THIS GAME...");
+                if (confirm('ARE YOU SURE YOU WANT TO RESET THIS GAME?')) {
+                    return confirm('ARE YOU EXTRA SURE? THIS WILL DELETE ALL DATA FOR THIS GAME...');
                 }
                 return false;
             }
@@ -187,18 +187,18 @@
             getGameActive.onreadystatechange = function() {
                 if (this.readyState == 4) {
                     if (this.response == 1) {
-                        document.getElementById("activeToggle").checked = true;
+                        document.getElementById('activeToggle').checked = true;
                     }
                 }
             };
-            getGameActive.open("GET", "/getGameActive", true);
+            getGameActive.open('GET', '/getGameActive', true);
             getGameActive.send();
 
             let getNewsTable = new XMLHttpRequest();
             getNewsTable.onreadystatechange = function() {
                 if (this.readyState == 4) {
                     const news = JSON.parse(this.response);
-                    const table = document.getElementById("newsTable");
+                    const table = document.getElementById('newsTable');
                     for (let x = 0; x < news.length; x++) {
                         let row = table.insertRow(-1);
                         let cell1 = row.insertCell(0);
@@ -208,12 +208,12 @@
                     }
                 }
             };
-            getNewsTable.open("GET", "/getNews", true);
+            getNewsTable.open('GET', '/getNews', true);
             getNewsTable.send();
 
             function toggleActive() {
                 let toggleGameActive = new XMLHttpRequest();
-                toggleGameActive.open("POST", "/toggleGameActive", true);
+                toggleGameActive.open('POST', '/toggleGameActive', true);
                 toggleGameActive.send();
             }
 
@@ -234,24 +234,24 @@
             }
 
             function confirmSetTeamPasswords() {
-                return confirm("ARE YOU SURE YOU WANT TO UPDATE TEAM PASSWORDS?");
+                return confirm('ARE YOU SURE YOU WANT TO UPDATE TEAM PASSWORDS?');
             }
 
-            switch (getUrlParam("gameReset")) {
-                case "success":
-                    document.getElementById("SuccessTag").innerHTML = "Successfully Reset Game";
+            switch (getUrlParam('gameReset')) {
+                case 'success':
+                    document.getElementById('SuccessTag').innerHTML = 'Successfully Reset Game';
                     break;
-                case "failed":
-                    document.getElementById("ErrorTag").innerHTML = "Failed to Reset Game";
+                case 'failed':
+                    document.getElementById('ErrorTag').innerHTML = 'Failed to Reset Game';
                     break;
             }
 
-            switch (getUrlParam("setTeamPasswords")) {
-                case "success":
-                    document.getElementById("SuccessTag").innerHTML = "Successfully Updated Passwords";
+            switch (getUrlParam('setTeamPasswords')) {
+                case 'success':
+                    document.getElementById('SuccessTag').innerHTML = 'Successfully Updated Passwords';
                     break;
-                case "failed":
-                    document.getElementById("ErrorTag").innerHTML = "Failed to Update Passwords";
+                case 'failed':
+                    document.getElementById('ErrorTag').innerHTML = 'Failed to Update Passwords';
                     break;
             }
         </script>

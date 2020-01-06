@@ -8,25 +8,25 @@ CREATE TABLE IF NOT EXISTS games (
     gameAdminPassword VARCHAR(32) NOT NULL, -- MD5 Hash
     gameActive INT(1) NOT NULL DEFAULT 0, -- 0 inactive, 1 active
     
-    game0Password VARCHAR(32) NOT NULL DEFAULT '5f4dcc3b5aa765d61d8327deb882cf99', -- MD5 Hash
-    game1Password VARCHAR(32) NOT NULL DEFAULT '5f4dcc3b5aa765d61d8327deb882cf99',
+    gameBluePassword VARCHAR(32) NOT NULL DEFAULT '5f4dcc3b5aa765d61d8327deb882cf99', -- MD5 Hash
+    gameRedPassword VARCHAR(32) NOT NULL DEFAULT '5f4dcc3b5aa765d61d8327deb882cf99',
     
-    game0Controller0 INT(1) NOT NULL DEFAULT 0, -- 0 not logged in, 1 logged in
-    game0Controller1 INT(1) NOT NULL DEFAULT 0,
-    game0Controller2 INT(1) NOT NULL DEFAULT 0,
-    game0Controller3 INT(1) NOT NULL DEFAULT 0,
-    game0Controller4 INT(1) NOT NULL DEFAULT 0,
-    game1Controller0 INT(1) NOT NULL DEFAULT 0,
-    game1Controller1 INT(1) NOT NULL DEFAULT 0,
-    game1Controller2 INT(1) NOT NULL DEFAULT 0,
-    game1Controller3 INT(1) NOT NULL DEFAULT 0,
-    game1Controller4 INT(1) NOT NULL DEFAULT 0,
+    gameBlueController0 INT(1) NOT NULL DEFAULT 0, -- 0 not logged in, 1 logged in
+    gameBlueController1 INT(1) NOT NULL DEFAULT 0,
+    gameBlueController2 INT(1) NOT NULL DEFAULT 0,
+    gameBlueController3 INT(1) NOT NULL DEFAULT 0,
+    gameBlueController4 INT(1) NOT NULL DEFAULT 0,
+    gameRedController0 INT(1) NOT NULL DEFAULT 0, -- COCOM
+    gameRedController1 INT(1) NOT NULL DEFAULT 0, -- JFACC
+    gameRedController2 INT(1) NOT NULL DEFAULT 0, -- JFLCC
+    gameRedController3 INT(1) NOT NULL DEFAULT 0, -- JFMCC
+    gameRedController4 INT(1) NOT NULL DEFAULT 0, -- JFSOCC
     
-	game0Status INT(1) NOT NULL DEFAULT 0,  -- 0: still active, 1: waiting for other player
-	game1Status INT(1) NOT NULL DEFAULT 0,
+	gameBlueStatus INT(1) NOT NULL DEFAULT 0,  -- 0: still active, 1: waiting for other player
+	gameRedStatus INT(1) NOT NULL DEFAULT 0,
     
-    game0Points INT(5) NOT NULL DEFAULT 5000,
-    game1Points INT(5) NOT NULL DEFAULT 5000,
+    gameBluePoints INT(5) NOT NULL DEFAULT 5000,
+    gameRedPoints INT(5) NOT NULL DEFAULT 5000,
     
     gamePhase INT(1) NOT NULL DEFAULT 0, -- 0: news, 1: buy, 2: combat, 3: place inv
     gameRound INT(1) NOT NULL DEFAULT 0, -- 0, 1, 2  rounds of movement
@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS pieces (
     pieceTypeId INT(2) NOT NULL,
     piecePositionId INT(4) NOT NULL,
     pieceContainerId INT(8) NOT NULL,
+    pieceLanded INT(1) NOT NULL DEFAULT 0,
     pieceVisible INT(1) NOT NULL,
     pieceMoves INT(2) NOT NULL,
     pieceFuel INT(2) NOT NULL,

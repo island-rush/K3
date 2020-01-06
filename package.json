@@ -5,11 +5,13 @@
     "main": "./dist/server.js",
     "scripts": {
         "dev": "concurrently \"npm:devBackend\" \"npm:devFrontend\"",
+        "lint": "eslint ./src/**/*.ts",
+        "build": "npm run clearBuild && npm run compileBackend && npm run buildClient && npm run moveFrontend",
         "start": "cross-env NODE_ENV=production node -r dotenv/config ./dist/server.js",
-        "build": "npm run compileBackend && npm run buildClient && npm run moveFrontend",
         "dev:debug": "concurrently \"npm:devBackend:debug\" \"npm:devFrontend\"",
+        "clearBuild": "trash ./dist",
         "devBackend": "nodemon -r dotenv/config ./src/server.ts",
-        "devFrontend": "cd ./src/react-client && npm start",
+        "devFrontend": "cd ./src/react-client && cross-env NODE_OPTIONS=--max_old_space_size=4096 npm start",
         "buildClient": "cd ./src/react-client && npm run build && cd ../..",
         "moveFrontend": "copyfiles -u 1 ./src/react-client/build/**/*.* ./dist",
         "compileBackend": "tsc -p . && copyfiles -u 3 ./src/server/pages/**/*.html ./dist/server/pages",
@@ -34,17 +36,22 @@
         "@types/md5": "^2.1.33",
         "@types/mysql2": "github:types/mysql2",
         "@types/node": "^12.12.17",
+        "@types/redux": "^3.6.0",
         "@types/socket.io": "^2.1.4",
+        "@typescript-eslint/eslint-plugin": "^2.12.0",
         "concurrently": "^5.0.1",
         "copyfiles": "^2.1.1",
         "cross-env": "^6.0.3",
         "dotenv": "^8.2.0",
+        "eslint": "^6.8.0",
+        "eslint-config-airbnb-typescript": "^6.3.1",
+        "eslint-plugin-import": "^2.19.1",
         "nodemon": "^2.0.2",
+        "trash-cli": "^3.0.0",
         "ts-node": "^8.5.4",
         "typescript": "^3.7.3"
     },
     "dependencies": {
-        "@types/redux": "^3.6.0",
         "connect-azuretables": "^1.0.20",
         "connect-loki": "^1.1.0",
         "express": "^4.17.1",
@@ -53,19 +60,5 @@
         "md5": "^2.2.1",
         "mysql2": "^2.0.2",
         "socket.io": "^2.3.0"
-    },
-    "prettier": {
-        "tabWidth": 4,
-        "semi": true,
-        "singleQuote": false,
-        "printWidth": 150
-    },
-    "nodemonConfig": {
-        "ignore": [
-            "src/react-client/*"
-        ],
-        "execMap": {
-            "ts": "node --require ts-node/register"
-        }
     }
 }

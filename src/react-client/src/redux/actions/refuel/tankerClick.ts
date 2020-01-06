@@ -1,23 +1,24 @@
-import { Dispatch } from "redux";
-import { EmitType, PieceType } from "../../../constants/interfaces";
-import { TANKER_CLICK } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { TANKER_CLICK } from '../../../../../constants';
+import { PieceType, TankerClickAction } from '../../../../../types';
 
 /**
  * Action to select tanker to give fuel to other pieces.
  */
-const tankerClick = (tankerPiece: PieceType, tankerPieceIndex: number) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+export const tankerClick = (tankerPiece: PieceType, tankerPieceIndex: number) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         //TODO: check for bad state (wrong phase? ...use userFeedback...)
 
-        dispatch({
+        const tankerClickAction: TankerClickAction = {
             type: TANKER_CLICK,
             payload: {
                 tankerPiece,
                 tankerPieceIndex
             }
-        });
+        };
+
+        dispatch(tankerClickAction);
         return;
     };
 };
-
-export default tankerClick;

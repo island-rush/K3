@@ -1,34 +1,31 @@
-import { AnyAction } from "redux";
-import { ShopItemType, ShopPurchaseAction, ShopRefundAction } from "../../constants/interfaces";
-import { INITIAL_GAMESTATE, SHOP_CLEAR, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from "../actions/actionTypes";
+import { INITIAL_GAMESTATE, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../../../../constants';
+import { GameInitialStateAction, ShopConfirmPurchaseAction, ShopItemType, ShopPurchaseAction, ShopRefundAction, ShopState } from '../../../../types';
 
-const initialShopState: ShopItemType[] = [];
+type ShopReducerActions = GameInitialStateAction | ShopPurchaseAction | ShopRefundAction | ShopConfirmPurchaseAction;
 
-function shopReducer(state = initialShopState, action: AnyAction) {
+const initialShopState: ShopState = [];
+
+export function shopReducer(state = initialShopState, action: ShopReducerActions) {
     const { type } = action;
+
+    let stateCopy: ShopState = JSON.parse(JSON.stringify(state));
+
     switch (type) {
         case INITIAL_GAMESTATE:
-            state = (action as AnyAction).payload.shopItems;
-            break;
+            return (action as GameInitialStateAction).payload.shopItems;
+
         case SHOP_PURCHASE:
-            state = state.concat([(action as ShopPurchaseAction).payload.shopItem]); //need to append the payload to the state
-            break;
-        case SHOP_CLEAR:
-            state = [];
-            break;
+            return stateCopy.concat([(action as ShopPurchaseAction).payload.shopItem]);
+
+        case SHOP_TRANSFER:
+            return [];
+
         case SHOP_REFUND:
-            state = state.filter((shopItem: ShopItemType) => {
+            return stateCopy.filter((shopItem: ShopItemType) => {
                 return shopItem.shopItemId !== (action as ShopRefundAction).payload.shopItemId;
             });
-            break;
-        case SHOP_TRANSFER:
-            state = [];
-            break;
+
         default:
-        //don't change anything...
+            return state;
     }
-
-    return state;
 }
-
-export default shopReducer;

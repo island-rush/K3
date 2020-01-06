@@ -1,23 +1,24 @@
-import { Dispatch } from "redux";
-import { EmitType, PieceType } from "../../constants/interfaces";
-import { PIECE_CLICK } from "./actionTypes";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../';
+import { PIECE_CLICK } from '../../../../constants';
+import { PieceClickAction, PieceType } from '../../../../types';
 
 /**
  * Change the state based on the piece that the user selected.
  */
-const selectPiece = (selectedPiece: PieceType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        const { gameboardMeta } = getState();
+export const selectPiece = (selectedPiece: PieceType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
+        const { planning } = getState();
 
-        if (!gameboardMeta.planning.active) {
-            dispatch({
+        if (!planning.active) {
+            const clientAction: PieceClickAction = {
                 type: PIECE_CLICK,
                 payload: {
                     selectedPiece
                 }
-            });
+            };
+
+            dispatch(clientAction);
         }
     };
 };
-
-export default selectPiece;

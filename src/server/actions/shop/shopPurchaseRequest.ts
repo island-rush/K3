@@ -1,64 +1,61 @@
-import { AnyAction } from "redux";
-import { Socket } from "socket.io";
-import { BLUE_TEAM_ID, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from "../../../react-client/src/constants/gameConstants";
-import { GameSession, ShopPurchaseRequestAction, ShopPurchaseAction } from "../../../react-client/src/constants/interfaces";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
-import { SHOP_PURCHASE } from "../../../react-client/src/redux/actions/actionTypes";
-import { Game, ShopItem } from "../../classes";
-import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import sendUserFeedback from "../sendUserFeedback";
+import { Socket } from 'socket.io';
+// prettier-ignore
+import { BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_PURCHASE, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
+import { GameSession, ShopPurchaseAction, ShopPurchaseRequestAction } from '../../../types';
+import { Game, ShopItem } from '../../classes';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * Client is requesting to buy something from the shop and place it into their cart. (Insert ShopItem)
  */
-const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRequestAction) => {
-    //Grab the session
-    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRequestAction) => {
+    // Grab the session
+    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     if (action.payload == null || action.payload.shopItemTypeId == null) {
-        sendUserFeedback(socket, "Server Error: Malformed Payload (missing shopItemTypeId)");
+        sendUserFeedback(socket, 'Server Error: Malformed Payload (missing shopItemTypeId)');
         return;
     }
 
     const { shopItemTypeId } = action.payload;
 
-    //Grab the Game
+    // Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
-    const { gameActive, gamePhase, game0Points, game1Points } = thisGame;
+    const { gameActive, gamePhase, gameBluePoints, gameRedPoints } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
-    if (gamePhase != PURCHASE_PHASE_ID) {
-        sendUserFeedback(socket, "Not the right phase...");
+    if (gamePhase !== PURCHASE_PHASE_ID) {
+        sendUserFeedback(socket, 'Not the right phase...');
         return;
     }
 
-    //Only the main controller (0) can buy things
+    // Only the main controller (0) can buy things
     if (!gameControllers.includes(TYPE_MAIN)) {
-        sendUserFeedback(socket, "Not the main controller (0)...");
+        sendUserFeedback(socket, 'Not the main controller (0)...');
         return;
     }
 
     const shopItemCost = TYPE_COSTS[shopItemTypeId];
-    const teamPoints = gameTeam == BLUE_TEAM_ID ? game0Points : game1Points;
+    const teamPoints = gameTeam === BLUE_TEAM_ID ? gameBluePoints : gameRedPoints;
 
     if (teamPoints < shopItemCost) {
-        sendUserFeedback(socket, "Not enough points to purchase");
+        sendUserFeedback(socket, 'Not enough points to purchase');
         return;
     }
 
     const newPoints = teamPoints - shopItemCost;
     await thisGame.setPoints(gameTeam, newPoints);
 
-    //TODO: possible error checking if was unable to insert the piece? (don't setPoints until inserted...)
+    // TODO: possible error checking if was unable to insert the piece? (don't setPoints until inserted...)
     const shopItem = await ShopItem.insert(gameId, gameTeam, shopItemTypeId);
 
     const serverAction: ShopPurchaseAction = {
@@ -69,9 +66,6 @@ const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRequestAc
         }
     };
 
-    //Send update to client(s)
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
-    socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    // Send update to client(s)
+    sendToThisTeam(socket, serverAction);
 };
-
-export default shopPurchaseRequest;

@@ -1,34 +1,34 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { cancelPlan, confirmPlan, containerMove, startPlan, undoMove } from "../../redux/actions";
-import { LEFT_CONTROLS_IMAGES } from "../styleConstants";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { cancelPlan, confirmPlan, startPlan, undoMove } from '../../redux';
+import { LEFT_CONTROLS_IMAGES } from '../styleConstants';
 
 const leftcontrolsStyle: any = {
-    background: "grey",
-    height: "80%",
-    width: "25%",
-    position: "relative",
-    float: "left",
-    margin: ".5%"
+    background: 'grey',
+    height: '80%',
+    width: '25%',
+    position: 'relative',
+    float: 'left',
+    margin: '.5%'
 };
 
 const buttonStyle: any = {
-    background: "white",
-    height: "80%",
-    width: "18%",
-    float: "left",
-    margin: "1%",
-    marginTop: "2%",
-    backgroundSize: "100% 100%",
-    backgroundRepeat: "no-repeat"
+    background: 'white',
+    height: '80%',
+    width: '18%',
+    float: 'left',
+    margin: '1%',
+    marginTop: '2%',
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat'
 };
 
 const buttonTitles: any = {
-    start: "Start Planning a Move for a Piece",
-    undo: "Undo a Planned Move",
-    cancel: "Cancel a Plan",
-    confirm: "Confirm a Plan",
-    container: "Open Container Controls Or Something Idk"
+    start: 'Start Planning a Move for a Piece',
+    undo: 'Undo a Planned Move',
+    cancel: 'Cancel a Plan',
+    confirm: 'Confirm a Plan',
+    container: 'Open Container Controls Or Something Idk'
 };
 
 interface Props {
@@ -36,12 +36,11 @@ interface Props {
     cancelPlan: () => void;
     confirmPlan: () => void;
     undoMove: () => void;
-    containerMove: () => void;
 }
 
 class Leftcontrols extends Component<Props> {
     render() {
-        const { startPlan, cancelPlan, undoMove, containerMove, confirmPlan } = this.props;
+        const { startPlan, cancelPlan, undoMove, confirmPlan } = this.props;
 
         return (
             <div style={leftcontrolsStyle}>
@@ -73,15 +72,6 @@ class Leftcontrols extends Component<Props> {
                     }}
                 />
                 <div
-                    title={buttonTitles.container}
-                    style={{ ...buttonStyle, ...LEFT_CONTROLS_IMAGES.container }}
-                    onClick={event => {
-                        event.preventDefault();
-                        containerMove();
-                        event.stopPropagation();
-                    }}
-                />
-                <div
                     title={buttonTitles.confirm}
                     style={{ ...buttonStyle, ...LEFT_CONTROLS_IMAGES.confirm }}
                     onClick={event => {
@@ -99,8 +89,7 @@ const mapActionsToProps = {
     startPlan,
     cancelPlan,
     confirmPlan,
-    undoMove,
-    containerMove
+    undoMove
 };
 
 //Null for mapStateToProps since we aren't using any game state

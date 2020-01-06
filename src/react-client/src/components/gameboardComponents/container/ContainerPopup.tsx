@@ -1,67 +1,67 @@
-import React, { Component } from "react";
-import { TRANSPORT_TYPE_ID } from "../../../constants/gameConstants";
-import ContainerPiece from "./ContainerPiece";
-import { PieceType } from "../../../constants/interfaces";
+import React, { Component } from 'react';
+import { TRANSPORT_TYPE_ID } from '../../../../../constants';
+import { ContainerState, PieceType } from '../../../../../types';
+import { ContainerPiece } from './ContainerPiece';
 
 const containerPopupStyle: any = {
-    position: "absolute",
-    display: "block",
-    width: "80%",
-    height: "70%",
-    top: "10%",
-    right: "10%",
-    backgroundColor: "white",
-    border: "2px solid black",
+    position: 'absolute',
+    display: 'block',
+    width: '80%',
+    height: '70%',
+    top: '10%',
+    right: '10%',
+    backgroundColor: 'white',
+    border: '2px solid black',
     zIndex: 4
 };
 
 const leftSectionStyle: any = {
-    position: "relative",
-    overflow: "scroll",
-    float: "left",
-    backgroundColor: "grey",
-    height: "96%",
-    width: "48%",
-    margin: "1%"
+    position: 'relative',
+    overflow: 'scroll',
+    float: 'left',
+    backgroundColor: 'grey',
+    height: '96%',
+    width: '48%',
+    margin: '1%'
 };
 
 const rightSectionStyle: any = {
-    position: "relative",
-    overflow: "scroll",
-    backgroundColor: "grey",
-    height: "96%",
-    width: "48%",
-    float: "right",
-    margin: "1%"
+    position: 'relative',
+    overflow: 'scroll',
+    backgroundColor: 'grey',
+    height: '96%',
+    width: '48%',
+    float: 'right',
+    margin: '1%'
 };
 
 const confirmButtonStyle: any = {
-    position: "absolute",
-    display: "block",
-    width: "7%",
-    height: "12%",
-    top: "0%",
-    left: "-8%",
-    backgroundColor: "white",
-    border: "2px solid black",
+    position: 'absolute',
+    display: 'block',
+    width: '7%',
+    height: '12%',
+    top: '0%',
+    left: '-8%',
+    backgroundColor: 'white',
+    border: '2px solid black',
     zIndex: 4,
-    backgroundSize: "100% 100%",
-    backgroundRepeat: "no-repeat"
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat'
 };
 
 const invisibleStyle: any = {
-    display: "none"
+    display: 'none'
 };
 
 interface Props {
-    container: any;
+    container: ContainerState;
     pieceClose: any;
     outerPieceClick: any;
     innerPieceClick: any;
     innerTransportPieceClick: any;
 }
 
-class ContainerPopup extends Component<Props> {
+export class ContainerPopup extends Component<Props> {
     render() {
         const { container, pieceClose, outerPieceClick, innerPieceClick, innerTransportPieceClick } = this.props;
 
@@ -71,7 +71,7 @@ class ContainerPopup extends Component<Props> {
         ));
 
         const innerPieces =
-            container.containerPiece === null
+            container.containerPiece == null || container.containerPiece.pieceContents == null
                 ? null
                 : container.containerPiece.pieceContents.pieces.map((piece: PieceType, index: number) => (
                       <ContainerPiece
@@ -79,7 +79,8 @@ class ContainerPopup extends Component<Props> {
                           piece={piece}
                           container={container}
                           //could need extra stuff for tanks in transport (need extra step to select the hex to go in)
-                          clickFunction={container.containerPiece.pieceTypeId === TRANSPORT_TYPE_ID ? innerTransportPieceClick : innerPieceClick}
+                          // TODO: try not to use these exclamations when possible (should properly check for nulls/undefineds)
+                          clickFunction={container.containerPiece!.pieceTypeId === TRANSPORT_TYPE_ID ? innerTransportPieceClick : innerPieceClick}
                       />
                   ));
 
@@ -105,5 +106,3 @@ class ContainerPopup extends Component<Props> {
         );
     }
 }
-
-export default ContainerPopup;

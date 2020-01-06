@@ -1,52 +1,50 @@
-import { Socket } from "socket.io";
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from "../../../react-client/src/constants/gameConstants";
-import { DeletePlanAction, DeletePlanRequestAction, GameSession } from "../../../react-client/src/constants/interfaces";
-import { SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from "../../../react-client/src/constants/otherConstants";
-import { DELETE_PLAN } from "../../../react-client/src/redux/actions/actionTypes";
-import { Game, Piece } from "../../classes";
-import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG } from "../../pages/errorTypes";
-import sendUserFeedback from "../sendUserFeedback";
+import { Socket } from 'socket.io';
+// prettier-ignore
+import { COMBAT_PHASE_ID, DELETE_PLAN, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID } from '../../../constants';
+import { DeletePlanAction, DeletePlanRequestAction, GameSession } from '../../../types';
+import { Game, Piece } from '../../classes';
+import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * Client request to delete a plan for a piece.
  */
-const deletePlan = async (socket: Socket, action: DeletePlanRequestAction) => {
-    //Grab the Session
-    const { gameId, gameTeam, gameControllers }: GameSession = socket.handshake.session.ir3;
+export const deletePlan = async (socket: Socket, action: DeletePlanRequestAction) => {
+    // Grab the Session
+    const { gameId, gameTeam } = socket.handshake.session.ir3 as GameSession;
 
     const { pieceId } = action.payload;
 
-    //Grab the Game
+    // Grab the Game
     const thisGame = await new Game({ gameId }).init();
     if (!thisGame) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
+        redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
-        socket.emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
+        redirectClient(socket, GAME_INACTIVE_TAG);
         return;
     }
 
-    //Can only change/delete plans in combat phase (2) and slice 0
-    if (gamePhase != COMBAT_PHASE_ID || gameSlice != SLICE_PLANNING_ID) {
-        sendUserFeedback(socket, "Not the right phase/slice...looking for phase 2 slice 0");
+    // Can only change/delete plans in combat phase (2) and slice 0
+    if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
+        sendUserFeedback(socket, 'Not the right phase/slice...looking for phase 2 slice 0');
         return;
     }
 
-    //Does the piece exist? (And match for this game/team/controller)
+    // Does the piece exist? (And match for this game/team/controller)
     const thisPiece = await new Piece(pieceId).init();
     if (!thisPiece) {
-        sendUserFeedback(socket, "Piece did not exists...refresh page?");
+        sendUserFeedback(socket, 'Piece did not exists...refresh page?');
         return;
     }
 
     const { pieceGameId, pieceTeamId } = thisPiece;
 
-    if (pieceGameId != gameId || pieceTeamId != gameTeam) {
-        sendUserFeedback(socket, "Piece did not belong to your team...(or this game)");
+    if (pieceGameId !== gameId || pieceTeamId !== gameTeam) {
+        sendUserFeedback(socket, 'Piece did not belong to your team...(or this game)');
         return;
     }
 
@@ -59,9 +57,6 @@ const deletePlan = async (socket: Socket, action: DeletePlanRequestAction) => {
         }
     };
 
-    //Send the update to the client(s)
-    socket.emit(SOCKET_SERVER_SENDING_ACTION, serverAction); //TODO: should the other sockets for this team get the update? (in the background?)
-    socket.to("game" + gameId + "team" + gameTeam).emit(SOCKET_SERVER_SENDING_ACTION, serverAction);
+    // Send the update to the client(s)
+    sendToThisTeam(socket, serverAction);
 };
-
-export default deletePlan;

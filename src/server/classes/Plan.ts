@@ -1,15 +1,21 @@
-import { PlanType } from "../../react-client/src/constants/interfaces";
-import pool from "../database";
+import { RowDataPacket } from 'mysql2/promise';
+import { ConfirmedPlansType, PlanType } from '../../types';
+import { pool } from '../database';
 
 /**
  * Represents rows for plans in the database.
  */
-class Plan implements PlanType {
+export class Plan implements PlanType {
     planGameId: number;
+
     planTeamId: number;
+
     planPieceId: number;
+
     planMovementOrder: number;
+
     planPositionId: number;
+
     planSpecialFlag: number;
 
     constructor(planPieceId: number, planMovementOrder: number) {
@@ -21,23 +27,22 @@ class Plan implements PlanType {
      * Get's information from database about this plan.
      */
     async init() {
-        const queryString = "SELECT * FROM plans WHERE planPieceId = ? AND planMovementOrder = ?";
+        const queryString = 'SELECT * FROM plans WHERE planPieceId = ? AND planMovementOrder = ?';
         const inserts = [this.planPieceId, this.planMovementOrder];
-        const [results, fields] = await pool.query(queryString, inserts);
+        const [results] = await pool.query<RowDataPacket[] & PlanType[]>(queryString, inserts);
 
-        if (results.length != 1) {
+        if (results.length !== 1) {
             return null;
-        } else {
-            Object.assign(this, results[0]);
-            return this;
         }
+        Object.assign(this, results[0]);
+        return this;
     }
 
     /**
      * Insert Plans into the database.
      */
     static async insert(plansToInsert: any) {
-        const queryString = "INSERT INTO plans (planGameId, planTeamId, planPieceId, planMovementOrder, planPositionId, planSpecialFlag) VALUES ?";
+        const queryString = 'INSERT INTO plans (planGameId, planTeamId, planPieceId, planMovementOrder, planPositionId, planSpecialFlag) VALUES ?';
         const inserts = [plansToInsert];
         await pool.query(queryString, inserts);
     }
@@ -46,7 +51,7 @@ class Plan implements PlanType {
      * Delete all plans for a certain piece.
      */
     static async delete(pieceId: number) {
-        const queryString = "DELETE FROM plans WHERE planPieceId = ?";
+        const queryString = 'DELETE FROM plans WHERE planPieceId = ?';
         const inserts = [pieceId];
         await pool.query(queryString, inserts);
     }
@@ -55,10 +60,10 @@ class Plan implements PlanType {
      * Get current movement order for this game's team.
      */
     static async getCurrentMovementOrder(gameId: number, gameTeam: number) {
-        const queryString = "SELECT planMovementOrder FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planMovementOrder ASC LIMIT 1";
+        const queryString = 'SELECT planMovementOrder FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planMovementOrder ASC LIMIT 1';
         const inserts = [gameId, gameTeam];
-        const [results, fields] = await pool.query(queryString, inserts);
-        return results.length !== 0 ? results[0]["planMovementOrder"] : null;
+        const [results] = await pool.query<RowDataPacket[] & PlanType[]>(queryString, inserts);
+        return results.length !== 0 ? results[0].planMovementOrder : null;
     }
 
     /**
@@ -66,10 +71,10 @@ class Plan implements PlanType {
      */
     static async getCollisions(gameId: number, movementOrder: number) {
         const queryString =
-            "SELECT * FROM (SELECT pieceId as pieceId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0, piecePositionId as piecePositionId0, planPositionId as planPositionId0 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 0 AND pieceGameId = ? AND planMovementOrder = ?) as a JOIN (SELECT pieceId as pieceId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1, piecePositionId as piecePositionId1, planPositionId as planPositionId1 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 1 AND pieceGameId = ? AND planMovementOrder = ?) as b ON piecePositionId0 = planPositionId1 AND planPositionId0 = piecePositionId1";
+            'SELECT * FROM (SELECT pieceId as pieceId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0, piecePositionId as piecePositionId0, planPositionId as planPositionId0 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 0 AND pieceGameId = ? AND planMovementOrder = ?) as a JOIN (SELECT pieceId as pieceId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1, piecePositionId as piecePositionId1, planPositionId as planPositionId1 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 1 AND pieceGameId = ? AND planMovementOrder = ?) as b ON piecePositionId0 = planPositionId1 AND planPositionId0 = piecePositionId1';
         const inserts = [gameId, movementOrder, gameId, movementOrder];
-        const [results] = await pool.query(queryString, inserts);
-        return results;
+        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts); // TODO: weird datatype here with query
+        return results as any;
     }
 
     /**
@@ -77,25 +82,25 @@ class Plan implements PlanType {
      */
     static async getPositionCombinations(gameId: number) {
         const queryString =
-            "SELECT * FROM (SELECT pieceId as pieceId0, piecePositionId as piecePositionId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 0) as a JOIN (SELECT pieceId as pieceId1, piecePositionId as piecePositionId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 1) as b ON piecePositionId0 = piecePositionId1";
+            'SELECT * FROM (SELECT pieceId as pieceId0, piecePositionId as piecePositionId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 0) as a JOIN (SELECT pieceId as pieceId1, piecePositionId as piecePositionId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 1) as b ON piecePositionId0 = piecePositionId1';
         const inserts = [gameId, gameId];
-        const [results] = await pool.query(queryString, inserts);
-        return results;
+        const [results] = await pool.query<RowDataPacket[]>(queryString, inserts); // TODO: weird datatype with query
+        return results as any;
     }
 
     /**
      * Get all confirmed plans for this game's team.
      */
     static async getConfirmedPlans(gameId: number, gameTeam: number) {
-        const queryString = "SELECT * FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planPieceId, planMovementOrder ASC";
+        const queryString = 'SELECT * FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planPieceId, planMovementOrder ASC';
         const inserts = [gameId, gameTeam];
-        const [resultPlans, fields] = await pool.query(queryString, inserts);
+        const [resultPlans] = await pool.query<RowDataPacket[] & PlanType[]>(queryString, inserts);
 
-        //formatting for the client, needs it in this object kinda way
-        let confirmedPlans: any = {};
+        // formatting for the client, needs it in this object kinda way
+        const confirmedPlans: ConfirmedPlansType = {};
         for (let x = 0; x < resultPlans.length; x++) {
-            let { planPieceId, planPositionId, planSpecialFlag } = resultPlans[x];
-            let type = planSpecialFlag == 0 ? "move" : planSpecialFlag == 1 ? "container" : "NULL_SPECIAL";
+            const { planPieceId, planPositionId, planSpecialFlag } = resultPlans[x];
+            const type = planSpecialFlag === 0 ? 'move' : planSpecialFlag === 1 ? 'container' : 'NULL_SPECIAL';
 
             if (!(planPieceId in confirmedPlans)) {
                 confirmedPlans[planPieceId] = [];
@@ -110,5 +115,3 @@ class Plan implements PlanType {
         return confirmedPlans;
     }
 }
-
-export default Plan;

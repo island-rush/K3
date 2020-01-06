@@ -1,14 +1,14 @@
-import { AnyAction, Dispatch } from "redux";
-import { CONTAINER_TYPES } from "../../../constants/gameConstants";
-import { EmitType, PieceType } from "../../../constants/interfaces";
-import { PIECE_OPEN_ACTION } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { CONTAINER_TYPES, PIECE_OPEN_ACTION } from '../../../../../constants';
+import { PieceOpenAction, PieceType } from '../../../../../types';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Double Click a container piece to open it.
  */
-const pieceOpen = (selectedPiece: PieceType) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+export const pieceOpen = (selectedPiece: PieceType) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboard } = getState();
 
         const { pieceTypeId } = selectedPiece;
@@ -19,11 +19,11 @@ const pieceOpen = (selectedPiece: PieceType) => {
 
         //don't want to open pieces that aren't container types
         if (!CONTAINER_TYPES.includes(pieceTypeId)) {
-            dispatch(setUserfeedbackAction("Not a piece that can hold other pieces..."));
+            dispatch(setUserfeedbackAction('Not a piece that can hold other pieces...'));
             return;
         }
 
-        const clientAction: AnyAction = {
+        const clientAction: PieceOpenAction = {
             type: PIECE_OPEN_ACTION,
             payload: {
                 selectedPiece,
@@ -34,5 +34,3 @@ const pieceOpen = (selectedPiece: PieceType) => {
         dispatch(clientAction);
     };
 };
-
-export default pieceOpen;

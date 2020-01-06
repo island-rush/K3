@@ -1,30 +1,29 @@
-import { AnyAction, Dispatch } from "redux";
-import { EmitType } from "../../../constants/interfaces";
-import { SOCKET_CLIENT_SENDING_ACTION } from "../../../constants/otherConstants";
-import { SERVER_CONFIRM_PLAN } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { SERVER_CONFIRM_PLAN } from '../../../../../constants';
+import { ConfirmPlanRequestAction } from '../../../../../types';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Action to confirm a list of moves as a plan for a piece.
  */
-const confirmPlan = () => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        const { gameboardMeta } = getState();
+export const confirmPlan = () => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
+        const { gameboardMeta, planning } = getState();
 
-        if (gameboardMeta.planning.moves.length === 0) {
-            dispatch(setUserfeedbackAction("Can't submit an empty plan..."));
+        if (planning.moves.length === 0 || !gameboardMeta.selectedPiece) {
+            dispatch(setUserfeedbackAction("Can't submit an empty plan...or unselected piece."));
         } else {
-            const clientAction: AnyAction = {
+            const clientAction: ConfirmPlanRequestAction = {
                 type: SERVER_CONFIRM_PLAN,
                 payload: {
+                    // TODO: send the piece, not just the id (even though only using the id on the server side anyway)
                     pieceId: gameboardMeta.selectedPiece.pieceId,
-                    plan: gameboardMeta.planning.moves
+                    plan: planning.moves
                 }
             };
 
-            emit(SOCKET_CLIENT_SENDING_ACTION, clientAction);
+            sendToServer(clientAction);
         }
     };
 };
-
-export default confirmPlan;

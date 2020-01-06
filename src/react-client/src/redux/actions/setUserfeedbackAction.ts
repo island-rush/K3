@@ -1,10 +1,10 @@
-import { UserfeedbackAction } from "../../constants/interfaces";
-import { SET_USERFEEDBACK } from "./actionTypes";
+import { SET_USERFEEDBACK } from '../../../../constants';
+import { UserfeedbackAction } from '../../../../types';
 
 /**
  * Helper function to create Redux Action to send userfeedback to the state.
  */
-const setUserfeedbackAction = (userFeedback: string) => {
+export const setUserfeedbackAction = (userFeedback: string) => {
     const userFeedbackAction: UserfeedbackAction = {
         type: SET_USERFEEDBACK,
         payload: {
@@ -13,5 +13,3 @@ const setUserfeedbackAction = (userFeedback: string) => {
     };
     return userFeedbackAction;
 };
-
-export default setUserfeedbackAction;

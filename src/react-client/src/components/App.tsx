@@ -1,24 +1,26 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { clearPieceSelection, menuSelect, selectPosition } from "../redux/actions";
-import Bottombar from "./bottombarComponents/Bottombar";
-import Gameboard from "./gameboardComponents/Gameboard";
-import Sidebar from "./sidebarComponents/Sidebar";
-import Zoombox from "./zoomboxComponents/Zoombox";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { GameboardMetaState, PlanningState } from '../../../types';
+import { clearPieceSelection, menuSelect, selectPosition } from '../redux';
+import Bottombar from './bottombarComponents/Bottombar';
+import Gameboard from './gameboardComponents/Gameboard';
+import Sidebar from './sidebarComponents/Sidebar';
+import Zoombox from './zoomboxComponents/Zoombox';
 
 const appStyle: any = {
-    position: "relative",
-    backgroundColor: "blue",
-    height: "100%",
-    width: "100%"
+    position: 'relative',
+    backgroundColor: 'blue',
+    height: '100%',
+    width: '100%'
 };
 
 const isPlanningStyle: any = {
-    backgroundColor: "yellow"
+    backgroundColor: 'yellow'
 };
 
 interface Props {
-    gameboardMeta: any;
+    gameboardMeta: GameboardMetaState;
+    planning: PlanningState;
     selectPosition(someNum: number): any;
     menuSelect(menuId: number): any;
     clearPieceSelection(): any;
@@ -26,13 +28,13 @@ interface Props {
 
 class App extends Component<Props> {
     render() {
-        const { gameboardMeta, selectPosition, menuSelect, clearPieceSelection } = this.props;
+        const { gameboardMeta, selectPosition, menuSelect, clearPieceSelection, planning } = this.props;
 
         return (
             <div
                 style={{
                     ...appStyle,
-                    ...(gameboardMeta.planning.active ? isPlanningStyle : "")
+                    ...(planning.active ? isPlanningStyle : '')
                 }}
                 onClick={event => {
                     event.preventDefault();
@@ -54,8 +56,9 @@ class App extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ gameboardMeta }: { gameboardMeta: any }) => ({
-    gameboardMeta
+const mapStateToProps = ({ gameboardMeta, planning }: { gameboardMeta: GameboardMetaState; planning: PlanningState }) => ({
+    gameboardMeta,
+    planning
 });
 
 const mapActionsToProps = {

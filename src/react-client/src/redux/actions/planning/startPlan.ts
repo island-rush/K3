@@ -1,31 +1,31 @@
-import { Dispatch } from "redux";
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from "../../../constants/gameConstants";
-import { EmitType } from "../../../constants/interfaces";
-import { START_PLAN } from "../actionTypes";
-import setUserfeedbackAction from "../setUserfeedbackAction";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, START_PLAN, TYPE_OWNERS } from '../../../../../constants';
+import { StartPlanAction } from '../../../../../types';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 //TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)
 /**
  * Action to set gamestate in a planning state to click positions for a plan for a piece.
  */
-const startPlan = () => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
-        const { gameboardMeta, gameInfo } = getState();
+export const startPlan = () => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
+        const { gameboardMeta, gameInfo, planning } = getState();
 
         if (gameboardMeta.selectedPiece == null) {
-            dispatch(setUserfeedbackAction("Must select a piece to plan a move..."));
+            dispatch(setUserfeedbackAction('Must select a piece to plan a move...'));
             return;
         }
         const { selectedPiece } = gameboardMeta;
         const { gamePhase, gameControllers, gameTeam, gameSlice } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
-            dispatch(setUserfeedbackAction("Not the right phase for planning..."));
+            dispatch(setUserfeedbackAction('Not the right phase for planning...'));
             return;
         }
 
         if (gameSlice !== SLICE_PLANNING_ID) {
-            dispatch(setUserfeedbackAction("Already Executing, wait for next planning slice."));
+            dispatch(setUserfeedbackAction('Already Executing, wait for next planning slice.'));
             return;
         }
 
@@ -38,23 +38,26 @@ const startPlan = () => {
             }
         }
 
-        if (!atLeast1Owner || parseInt(selectedPiece.pieceTeamId) !== parseInt(gameTeam)) {
+        if (!atLeast1Owner || selectedPiece.pieceTeamId !== gameTeam) {
             dispatch(setUserfeedbackAction("Piece doesn't fall under your control"));
             return;
         }
 
         if (selectedPiece.pieceDisabled) {
-            dispatch(setUserfeedbackAction("Piece is disabled from something (probably goldeneye)"));
+            dispatch(setUserfeedbackAction('Piece is disabled from something (probably goldeneye)'));
             return;
         }
 
-        if (gameboardMeta.planning.active) {
-            dispatch(setUserfeedbackAction("Already planning a move..."));
+        if (planning.active) {
+            dispatch(setUserfeedbackAction('Already planning a move...'));
             return;
         }
 
-        dispatch({ type: START_PLAN, payload: {} });
+        const startPlanAction: StartPlanAction = {
+            type: START_PLAN,
+            payload: {}
+        };
+
+        dispatch(startPlanAction);
     };
 };
-
-export default startPlan;

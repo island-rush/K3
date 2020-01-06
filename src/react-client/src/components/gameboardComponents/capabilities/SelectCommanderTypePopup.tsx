@@ -1,37 +1,38 @@
-import React from "react";
-import { TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL } from "../../../constants/gameConstants";
+import React from 'react';
+import { TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL } from '../../../../../constants';
+import { PlanningState } from '../../../../../types';
 
 const popupStyle: any = {
-    backgroundColor: "white",
-    width: "50%",
-    height: "30%",
-    top: "25%",
-    right: "25%",
-    position: "absolute"
+    backgroundColor: 'white',
+    width: '50%',
+    height: '30%',
+    top: '25%',
+    right: '25%',
+    position: 'absolute'
 };
 
 const titleStyle: any = {
-    textAlign: "center"
+    textAlign: 'center'
 };
 
 const buttonStyle: any = {
-    float: "left",
-    backgroundColor: "grey",
-    margin: "5%",
-    padding: "5%"
+    float: 'left',
+    backgroundColor: 'grey',
+    margin: '5%',
+    padding: '5%'
 };
 
 const invisibleStyle: any = {
-    display: "none"
+    display: 'none'
 };
 
 interface Props {
     raiseMoraleSelectCommanderType: any;
-    gameboardMeta: any;
+    planning: PlanningState;
 }
 
-const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, gameboardMeta }: Props) => {
-    const { raiseMoralePopupActive } = gameboardMeta.planning;
+export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, planning }: Props) => {
+    const { raiseMoralePopupActive } = planning;
 
     return (
         <div style={raiseMoralePopupActive ? popupStyle : invisibleStyle}>
@@ -79,5 +80,3 @@ const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, gameboardMet
         </div>
     );
 };
-
-export default SelectCommanderTypePopup;

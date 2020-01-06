@@ -1,10 +1,10 @@
-import { Dispatch } from "redux";
-import { WAITING_STATUS } from "../../../constants/gameConstants";
-import { EmitType } from "../../../constants/interfaces";
-import { TARGET_PIECE_SELECT } from "../actionTypes";
+import { Dispatch } from 'redux';
+import { emit, FullState } from '../../';
+import { TARGET_PIECE_SELECT, WAITING_STATUS } from '../../../../../constants';
+import { TargetPieceClickAction } from '../../../../../types';
 
-const targetPieceClick = (battlePiece: any, battlePieceIndex: number) => {
-    return (dispatch: Dispatch, getState: any, emit: EmitType) => {
+export const targetPieceClick = (battlePiece: any, battlePieceIndex: number) => {
+    return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         //check the local state before sending to the server
 
         const { gameInfo } = getState();
@@ -13,14 +13,14 @@ const targetPieceClick = (battlePiece: any, battlePieceIndex: number) => {
             return;
         }
 
-        dispatch({
+        const targetPieceSelectAction: TargetPieceClickAction = {
             type: TARGET_PIECE_SELECT,
             payload: {
                 battlePiece,
                 battlePieceIndex
             }
-        });
+        };
+
+        dispatch(targetPieceSelectAction);
     };
 };
-
-export default targetPieceClick;
