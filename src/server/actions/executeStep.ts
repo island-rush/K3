@@ -141,6 +141,8 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
 
     await Piece.deletePlanesWithoutFuel(gameId);
 
+    await Piece.giveFuelToHelisOverLand(gameId);
+
     await Piece.updateVisibilities(gameId);
 
     const didUpdateFlags = await thisGame.updateFlags();
