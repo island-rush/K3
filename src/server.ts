@@ -51,7 +51,7 @@ app.use('/', router);
 // Statically serve all frontend files
 app.use(express.static(`${__dirname}/react-client/build`)); // TODO: Use middleware or reverse proxy to serve static files -> aka, anything with res.sendFile()
 
-// Handle 404
+// Handle 404 (if no other route is hit in router or static serve)
 app.use((req: Request, res: Response) => {
     res.status(404).sendFile(`${__dirname}/server/pages/404.html`);
 });
