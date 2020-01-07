@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
-import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from '../../constants';
+import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG, SOCKET_SERVER_REDIRECT } from '../../constants';
+import { io } from '../../server';
 import { TeacherSession } from '../../types';
 import { Game } from '../classes';
 
@@ -36,6 +37,8 @@ export const setTeamPasswords = async (req: Request, res: Response) => {
     const gameRedPasswordHashed = md5(gameRedPassword);
 
     await thisGame.setTeamPasswords(gameBluePasswordHashed, gameRedPasswordHashed);
+
+    io.sockets.to(`game${gameId}`).emit(SOCKET_SERVER_REDIRECT, LOGIN_TAG);
 
     res.redirect('/teacher.html?setTeamPasswords=success');
 };

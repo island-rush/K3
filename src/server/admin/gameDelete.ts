@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { ACCESS_TAG } from '../../constants';
+import { ACCESS_TAG, GAME_DOES_NOT_EXIST, SOCKET_SERVER_REDIRECT } from '../../constants';
+import { io } from '../../server';
 import { Game } from '../classes';
 
 /**
@@ -28,6 +29,8 @@ export const gameDelete = async (req: Request, res: Response) => {
     }
 
     await thisGame.delete();
+
+    io.sockets.to(`game${gameId}`).emit(SOCKET_SERVER_REDIRECT, GAME_DOES_NOT_EXIST);
 
     res.redirect('/courseDirector.html?gameDelete=success');
 };
