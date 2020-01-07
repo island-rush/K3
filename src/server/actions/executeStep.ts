@@ -138,6 +138,9 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
     }
 
     await Piece.move(gameId, currentMovementOrder); // changes the piecePositionId, deletes the plan, all for specialflag = 0
+
+    await Piece.deletePlanesWithoutFuel(gameId);
+
     await Piece.updateVisibilities(gameId);
 
     const didUpdateFlags = await thisGame.updateFlags();

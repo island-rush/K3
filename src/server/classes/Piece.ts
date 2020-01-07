@@ -1,8 +1,8 @@
 // prettier-ignore
-import { RowDataPacket, OkPacket } from 'mysql2/promise';
+import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
-import { PieceType, GoldenEyeType, RemoteSensingType, BiologicalWeaponsType } from '../../types';
+import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
+import { BiologicalWeaponsType, GoldenEyeType, PieceType, RemoteSensingType } from '../../types';
 import { pool } from '../database';
 
 /**
@@ -226,6 +226,22 @@ export class Piece implements PieceType {
         }
 
         conn.release();
+    }
+
+    static async deletePlanesWithoutFuel(gameId: number) {
+        const queryString = 'DELETE FROM pieces WHERE pieceGameId = ? AND pieceFuel < 0 AND pieceTypeId in (?)';
+        const inserts = [gameId, PIECES_WITH_FUEL];
+        await pool.query(queryString, inserts);
+    }
+
+    /**
+     * Removing fuel from pieces that don't have any plans (and already have some amount of fuel (not -1))
+     */
+    static async removeFuelForLoitering(gameId: number) {
+        const queryString =
+            'UPDATE pieces LEFT JOIN plans ON pieceId = planPieceId SET pieceFuel = pieceFuel - 1 WHERE planPieceId IS NULL AND pieceFuel != -1 AND pieceGameId = 1;';
+        const inserts = [gameId];
+        await pool.query(queryString, inserts);
     }
 
     /**
