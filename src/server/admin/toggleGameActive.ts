@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import { GAME_INACTIVE_TAG, SOCKET_SERVER_REDIRECT } from '../../constants';
+import { io } from '../../server';
 import { TeacherSession } from '../../types';
 import { Game } from '../classes';
 
@@ -21,6 +23,8 @@ export const toggleGameActive = async (req: Request, res: Response) => {
     const newValue = (gameActive + 1) % 2;
 
     await thisGame.setGameActive(newValue);
+
+    io.sockets.to(`game${gameId}`).emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
 
     res.sendStatus(200);
 };

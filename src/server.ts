@@ -57,7 +57,7 @@ app.use((req: Request, res: Response) => {
 });
 
 // Socket Setup
-const io: SocketIO.Server = require('socket.io')(server);
+export const io: SocketIO.Server = require('socket.io')(server);
 
 io.use(sharedsession(fullSession)); // Socket has access to sessions
 io.sockets.on('connection', (socket: Socket) => {
