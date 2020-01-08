@@ -2,7 +2,7 @@
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 import { Capability, Event, InvItem, Piece, Plan, ShopItem } from '.';
 // prettier-ignore
-import { AIR_REFUELING_SQUADRON_ID, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, COL_BATTLE_EVENT_TYPE, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, INITIAL_GAMESTATE, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NEWS_PHASE_ID, NOYARC_ISLAND_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../constants';
+import { AIR_REFUELING_SQUADRON_ID, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, COL_BATTLE_EVENT_TYPE, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, INITIAL_GAMESTATE, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NEWS_PHASE_ID, NOYARC_ISLAND_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID, ALL_AIRFIELD_LOCATIONS } from '../../constants';
 import { GameInitialStateAction, GameType, NewsState, NewsType, PieceType, RefuelState, BattleState } from '../../types';
 import { gameInitialNews, gameInitialPieces } from '../admin';
 import { pool } from '../database';
@@ -478,6 +478,43 @@ export class Game implements GameType {
         return didUpdateFlags;
     }
 
+    async updateAirfields() {
+        const queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?) AND pieceTypeId in (?)';
+        const inserts = [this.gameId, ALL_AIRFIELD_LOCATIONS, CAPTURE_TYPES];
+        const [results] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts);
+
+        if (results.length === 0) {
+            return false;
+        }
+
+        // loop through pieces, decide if any airfield should change ownership
+
+        const eachAirfieldTeams: number[][] = [[], [], [], [], [], [], [], [], [], []];
+
+        for (const thisPiece of results as PieceType[]) {
+            const { piecePositionId, pieceTeamId } = thisPiece;
+            const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(piecePositionId);
+            eachAirfieldTeams[airfieldNum].push(pieceTeamId);
+        }
+
+        let didUpdateAirfields = false;
+
+        for (let y = 0; y < eachAirfieldTeams.length; y++) {
+            const thisAirfieldTeams = eachAirfieldTeams[y];
+            if (thisAirfieldTeams.length === 0) continue;
+            if (thisAirfieldTeams.includes(BLUE_TEAM_ID) && thisAirfieldTeams.includes(RED_TEAM_ID)) continue;
+            // else update this thing
+            this.setAirfield(y, thisAirfieldTeams[0]);
+            // sql update
+            const queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
+            const inserts = [`airfield${y}`, thisAirfieldTeams[0], this.gameId];
+            await pool.query(queryString, inserts);
+            didUpdateAirfields = true;
+        }
+
+        return didUpdateAirfields;
+    }
+
     /**
      * Change flag ownership for a certain team.
      */
@@ -521,6 +558,42 @@ export class Game implements GameType {
                 break;
             case 12:
                 this.flag12 = flagValue;
+                break;
+            default:
+        }
+    }
+
+    setAirfield(airfieldNumber: number, airfieldValue: GameType['airfield0']) {
+        switch (airfieldNumber) {
+            case 0:
+                this.airfield0 = airfieldValue;
+                break;
+            case 1:
+                this.airfield1 = airfieldValue;
+                break;
+            case 2:
+                this.airfield2 = airfieldValue;
+                break;
+            case 3:
+                this.airfield3 = airfieldValue;
+                break;
+            case 4:
+                this.airfield4 = airfieldValue;
+                break;
+            case 5:
+                this.airfield5 = airfieldValue;
+                break;
+            case 6:
+                this.airfield6 = airfieldValue;
+                break;
+            case 7:
+                this.airfield7 = airfieldValue;
+                break;
+            case 8:
+                this.airfield8 = airfieldValue;
+                break;
+            case 9:
+                this.airfield9 = airfieldValue;
                 break;
             default:
         }
@@ -676,7 +749,17 @@ export class Game implements GameType {
                     flag9: this.flag9,
                     flag10: this.flag10,
                     flag11: this.flag11,
-                    flag12: this.flag12
+                    flag12: this.flag12,
+                    airfield0: this.airfield0,
+                    airfield1: this.airfield1,
+                    airfield2: this.airfield2,
+                    airfield3: this.airfield3,
+                    airfield4: this.airfield4,
+                    airfield5: this.airfield5,
+                    airfield6: this.airfield6,
+                    airfield7: this.airfield7,
+                    airfield8: this.airfield8,
+                    airfield9: this.airfield9
                 }
             }
         };

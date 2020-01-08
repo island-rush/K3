@@ -40,7 +40,17 @@ const initialGameInfoState: GameInfoState = {
     flag9: -1,
     flag10: -1,
     flag11: -1,
-    flag12: -1
+    flag12: -1,
+    airfield0: -1,
+    airfield1: -1,
+    airfield2: -1,
+    airfield3: -1,
+    airfield4: -1,
+    airfield5: -1,
+    airfield6: -1,
+    airfield7: -1,
+    airfield8: -1,
+    airfield9: -1
 };
 
 export function gameInfoReducer(state = initialGameInfoState, action: GameInfoReducerActions) {

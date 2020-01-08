@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
-import { NewRoundAction, PlacePhaseAction, UpdateFlagAction } from '../../types';
+import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, UPDATE_FLAGS, WAITING_STATUS, UPDATE_AIRFIELDS } from '../../constants';
+import { NewRoundAction, PlacePhaseAction, UpdateFlagAction, UpdateAirfieldAction } from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
 import { sendToGame, sendToTeam } from '../helpers';
 import { giveNextEvent } from './giveNextEvent';
@@ -168,6 +168,30 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
 
         // Send all flag updates to every team
         sendToGame(socket, updateFlagAction);
+    }
+
+    // TODO: combine with flag updates (less requests)
+
+    const didUpdateAirfields = await thisGame.updateAirfields();
+    if (didUpdateAirfields) {
+        const updateAirfieldAction: UpdateAirfieldAction = {
+            type: UPDATE_AIRFIELDS,
+            payload: {
+                airfield0: thisGame.airfield0,
+                airfield1: thisGame.airfield1,
+                airfield2: thisGame.airfield2,
+                airfield3: thisGame.airfield3,
+                airfield4: thisGame.airfield4,
+                airfield5: thisGame.airfield5,
+                airfield6: thisGame.airfield6,
+                airfield7: thisGame.airfield7,
+                airfield8: thisGame.airfield8,
+                airfield9: thisGame.airfield9
+            }
+        };
+
+        // Send all airfield updates to every team
+        sendToGame(socket, updateAirfieldAction);
     }
 
     // Position Battle Events
