@@ -85,6 +85,26 @@ export class Game implements GameType {
 
     flag12: number;
 
+    airfield0: number;
+
+    airfield1: number;
+
+    airfield2: number;
+
+    airfield3: number;
+
+    airfield4: number;
+
+    airfield5: number;
+
+    airfield6: number;
+
+    airfield7: number;
+
+    airfield8: number;
+
+    airfield9: number;
+
     // TODO: refactor with 1 constructor with id, and another static factory method with section/instructor
     constructor(options: GameOptions) {
         if ((options as GameConstructorOptionsWithId).gameId) {

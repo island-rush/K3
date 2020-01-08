@@ -90,6 +90,12 @@ export class Piece implements PieceType {
         return allPieces;
     }
 
+    // static async landPiecesOverAirfieldsWithoutPlans(gameId: number) {
+    //     const queryString = 'UPDATE pieces SET pieceLanded = 1 WHERE pieceGameId = ? AND pieceTypeId in (?) ';
+    //     const inserts = [gameId];
+    //     await pool.query(queryString, inserts);
+    // }
+
     // prettier-ignore
     /**
      * Globally update each piece's visibility based on it's surroundings for this game.

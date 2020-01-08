@@ -44,6 +44,17 @@ export type GameType = {
     flag10: number;
     flag11: number;
     flag12: number;
+
+    airfield0: number;
+    airfield1: number;
+    airfield2: number;
+    airfield3: number;
+    airfield4: number;
+    airfield5: number;
+    airfield6: number;
+    airfield7: number;
+    airfield8: number;
+    airfield9: number;
 };
 
 export type ShopItemType = {
