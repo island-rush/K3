@@ -1,7 +1,7 @@
 // prettier-ignore
-import { COMBAT_PHASE, COMBAT_PHASE_ID, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEWS_PHASE, NEWS_PHASE_ID, NEW_ROUND, NOT_WAITING_STATUS, NO_MORE_EVENTS, PLACE_PHASE, PLACE_PHASE_ID, PURCHASE_PHASE, PURCHASE_PHASE_ID, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, UPDATE_FLAGS, WAITING_STATUS } from '../../../../constants';
+import { COMBAT_PHASE, COMBAT_PHASE_ID, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEWS_PHASE, NEWS_PHASE_ID, NEW_ROUND, NOT_WAITING_STATUS, NO_MORE_EVENTS, PLACE_PHASE, PLACE_PHASE_ID, PURCHASE_PHASE, PURCHASE_PHASE_ID, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, UPDATE_FLAGS, WAITING_STATUS, UPDATE_AIRFIELDS } from '../../../../constants';
 // prettier-ignore
-import { CombatPhaseAction, EventBattleAction, GameInfoState, GameInitialStateAction, MainButtonClickAction, NewRoundAction, NewsPhaseAction, NoMoreEventsAction, PlacePhaseAction, PurchasePhaseAction, ShopPurchaseAction, ShopRefundAction, SliceChangeAction, UpdateFlagAction } from '../../../../types';
+import { CombatPhaseAction, EventBattleAction, GameInfoState, GameInitialStateAction, MainButtonClickAction, NewRoundAction, NewsPhaseAction, NoMoreEventsAction, PlacePhaseAction, PurchasePhaseAction, ShopPurchaseAction, ShopRefundAction, SliceChangeAction, UpdateFlagAction, UpdateAirfieldAction } from '../../../../types';
 
 type GameInfoReducerActions =
     | GameInitialStateAction
@@ -16,6 +16,7 @@ type GameInfoReducerActions =
     | PlacePhaseAction
     | EventBattleAction
     | NewRoundAction
+    | UpdateAirfieldAction
     | NewsPhaseAction;
 
 const initialGameInfoState: GameInfoState = {
@@ -81,6 +82,10 @@ export function gameInfoReducer(state = initialGameInfoState, action: GameInfoRe
 
         case UPDATE_FLAGS:
             Object.assign(stateCopy, (action as UpdateFlagAction).payload);
+            return stateCopy;
+
+        case UPDATE_AIRFIELDS:
+            Object.assign(stateCopy, (action as UpdateAirfieldAction).payload);
             return stateCopy;
 
         case MAIN_BUTTON_CLICK:
