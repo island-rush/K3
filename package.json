@@ -6,7 +6,7 @@
     "scripts": {
         "dev": "concurrently \"npm:devBackend\" \"npm:devFrontend\"",
         "lint": "eslint ./src/**/*.ts",
-        "test": "jest --config ./jest.json",
+        "test": "jest --config ./jest.config.js",
         "build": "npm run clearBuild && npm run compileBackend && npm run buildClient && npm run moveFrontend",
         "start": "cross-env NODE_ENV=production node -r dotenv/config ./dist/server.js",
         "dev:debug": "concurrently \"npm:devBackend:debug\" \"npm:devFrontend\"",
