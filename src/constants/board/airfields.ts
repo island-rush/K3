@@ -1,15 +1,16 @@
-export const AIRFIELD_1_LOCATION = 21;
-export const AIRFIELD_2_LOCATION = 70;
-export const AIRFIELD_3_LOCATION = 92;
-export const AIRFIELD_4_LOCATION = 197;
-export const AIRFIELD_5_LOCATION = 253;
-export const AIRFIELD_6_LOCATION = 372;
-export const AIRFIELD_7_LOCATION = 383;
-export const AIRFIELD_8_LOCATION = 626;
-export const AIRFIELD_9_LOCATION = 640;
-export const AIRFIELD_10_LOCATION = 721;
+export const AIRFIELD_0_LOCATION = 21; // Dragon Bottom
+export const AIRFIELD_1_LOCATION = 70; // Dragon Top
+export const AIRFIELD_2_LOCATION = 92; // HR Republic
+export const AIRFIELD_3_LOCATION = 197; // Montaville
+export const AIRFIELD_4_LOCATION = 253; // Lion
+export const AIRFIELD_5_LOCATION = 372; // Fuller
+export const AIRFIELD_6_LOCATION = 383; // Rico
+export const AIRFIELD_7_LOCATION = 626; // Keoni
+export const AIRFIELD_8_LOCATION = 640; // Eagle Bottom
+export const AIRFIELD_9_LOCATION = 721; // Eagle Top
 
 export const ALL_AIRFIELD_LOCATIONS = [
+    AIRFIELD_0_LOCATION,
     AIRFIELD_1_LOCATION,
     AIRFIELD_2_LOCATION,
     AIRFIELD_3_LOCATION,
@@ -18,6 +19,5 @@ export const ALL_AIRFIELD_LOCATIONS = [
     AIRFIELD_6_LOCATION,
     AIRFIELD_7_LOCATION,
     AIRFIELD_8_LOCATION,
-    AIRFIELD_9_LOCATION,
-    AIRFIELD_10_LOCATION
+    AIRFIELD_9_LOCATION
 ];

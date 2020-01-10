@@ -35,8 +35,17 @@ export type GameInfoState = {
     flag10: GameType['flag10'];
     flag11: GameType['flag11'];
     flag12: GameType['flag12'];
+    airfield0: GameType['airfield0'];
+    airfield1: GameType['airfield1'];
+    airfield2: GameType['airfield2'];
+    airfield3: GameType['airfield3'];
+    airfield4: GameType['airfield4'];
+    airfield5: GameType['airfield5'];
+    airfield6: GameType['airfield6'];
+    airfield7: GameType['airfield7'];
+    airfield8: GameType['airfield8'];
+    airfield9: GameType['airfield9'];
 };
-
 export type GameboardMetaState = {
     selectedPosition: number;
     highlightedPositions: number[];

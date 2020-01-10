@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
-import { ACCESS_TAG, GAME_DOES_NOT_EXIST } from '../../constants';
+import { ACCESS_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SOCKET_SERVER_REDIRECT } from '../../constants';
+import { io } from '../../server';
 import { TeacherSession } from '../../types';
 import { Game } from '../classes';
 
@@ -22,6 +23,8 @@ export const gameReset = async (req: Request, res: Response) => {
     }
 
     await thisGame.reset();
+
+    io.sockets.to(`game${gameId}`).emit(SOCKET_SERVER_REDIRECT, GAME_INACTIVE_TAG);
 
     res.redirect('/teacher.html?gameReset=success');
 };

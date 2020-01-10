@@ -1,8 +1,8 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BATTLE_FIGHT_RESULTS, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, UPDATE_FLAGS, WAITING_STATUS } from '../../../constants';
+import { BATTLE_FIGHT_RESULTS, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, UPDATE_FLAGS, WAITING_STATUS, UPDATE_AIRFIELDS } from '../../../constants';
 // prettier-ignore
-import { BattleResultsAction, ConfirmBattleSelectionRequestAction, GameSession, UpdateFlagAction } from '../../../types';
+import { BattleResultsAction, ConfirmBattleSelectionRequestAction, GameSession, UpdateFlagAction, UpdateAirfieldAction } from '../../../types';
 import { Event, Game } from '../../classes';
 import { redirectClient, sendToGame, sendUserFeedback } from '../../helpers';
 import { giveNextEvent } from '../giveNextEvent';
@@ -105,6 +105,30 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
         };
 
         sendToGame(socket, updateFlagAction);
+    }
+
+    // TODO: combine with flag update for less requests
+
+    const didUpdateAirfields = await thisGame.updateAirfields();
+    if (didUpdateAirfields) {
+        const updateAirfieldAction: UpdateAirfieldAction = {
+            type: UPDATE_AIRFIELDS,
+            payload: {
+                airfield0: thisGame.airfield0,
+                airfield1: thisGame.airfield1,
+                airfield2: thisGame.airfield2,
+                airfield3: thisGame.airfield3,
+                airfield4: thisGame.airfield4,
+                airfield5: thisGame.airfield5,
+                airfield6: thisGame.airfield6,
+                airfield7: thisGame.airfield7,
+                airfield8: thisGame.airfield8,
+                airfield9: thisGame.airfield9
+            }
+        };
+
+        // Send all airfield updates to every team
+        sendToGame(socket, updateAirfieldAction);
     }
 
     await giveNextEvent(socket, { thisGame, gameTeam: 0 }); // not putting executingStep in options to let it know not to send pieceMove

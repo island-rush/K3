@@ -44,7 +44,18 @@ CREATE TABLE IF NOT EXISTS games (
     flag9 INT(1) NOT NULL DEFAULT 0, -- Shor
     flag10 INT(1) NOT NULL DEFAULT -1, -- Keoni
     flag11 INT(1) NOT NULL DEFAULT 0, -- Eagle Top
-    flag12 INT(1) NOT NULL DEFAULT 0 -- Eagle Bottom
+    flag12 INT(1) NOT NULL DEFAULT 0, -- Eagle Bottom
+
+    airfield0 INT(1) NOT NULL DEFAULT -1, -- Dragon bottom
+    airfield1 INT(1) NOT NULL DEFAULT -1, -- Dragon top
+    airfield2 INT(1) NOT NULL DEFAULT -1, -- HR Republic
+    airfield3 INT(1) NOT NULL DEFAULT -1, -- Montaville
+    airfield4 INT(1) NOT NULL DEFAULT -1, -- Lion
+    airfield5 INT(1) NOT NULL DEFAULT -1, -- Fuller
+    airfield6 INT(1) NOT NULL DEFAULT -1, -- Rico
+    airfield7 INT(1) NOT NULL DEFAULT -1, -- Keoni
+    airfield8 INT(1) NOT NULL DEFAULT -1, -- Eagle bottom
+    airfield9 INT(1) NOT NULL DEFAULT -1 -- Eagle top
 ) AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS shopItems (
