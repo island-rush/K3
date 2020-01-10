@@ -20,7 +20,7 @@ export const goldenEyeConfirm = async (socket: Socket, action: GoldenEyeRequestA
     const { selectedPositionId, invItem } = action.payload;
 
     // Get the Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;

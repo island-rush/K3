@@ -20,7 +20,7 @@ export const insurgencyConfirm = async (socket: Socket, action: InsurgencyReques
     const { selectedPositionId, invItem } = action.payload;
 
     // Grab the Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;

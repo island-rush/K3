@@ -21,7 +21,7 @@ export const socketSetup = async (socket: Socket) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     // Get the game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;

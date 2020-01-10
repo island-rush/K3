@@ -15,7 +15,7 @@ export const enterContainer = async (socket: Socket, action: EnterContainerReque
     const { selectedPiece, containerPiece } = action.payload;
 
     // Grab the Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;

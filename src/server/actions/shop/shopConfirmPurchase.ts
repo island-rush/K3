@@ -13,7 +13,7 @@ export const shopConfirmPurchase = async (socket: Socket) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     // Grab the Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;

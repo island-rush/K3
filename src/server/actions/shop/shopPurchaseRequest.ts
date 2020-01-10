@@ -20,7 +20,7 @@ export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRe
     const { shopItemTypeId } = action.payload;
 
     // Grab the Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;

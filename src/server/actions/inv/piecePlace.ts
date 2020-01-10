@@ -15,7 +15,7 @@ export const piecePlace = async (socket: Socket, action: InvItemPlaceRequestActi
     const { invItemId, selectedPosition } = action.payload;
 
     // Grab the Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;

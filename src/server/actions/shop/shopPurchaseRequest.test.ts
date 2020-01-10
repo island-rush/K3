@@ -20,6 +20,7 @@ describe('shop purchase', () => {
     it('should fail if game does not exist', async () => {
         const thisGame = await new Game({ gameId: testGameId - 1 }).init();
         expect(thisGame).toBeNull();
+        expect(thisGame).toBeFalsy();
     });
     it('should fail if game is not active', () => {});
     it('should fail if phase is not purchasing', () => {});

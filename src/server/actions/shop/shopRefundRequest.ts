@@ -13,7 +13,7 @@ export const shopRefundRequest = async (socket: Socket, action: ShopRefundReques
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     // Get Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         redirectClient(socket, GAME_DOES_NOT_EXIST);
         return;

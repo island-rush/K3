@@ -22,7 +22,7 @@ export const setAdminPassword = async (req: Request, res: Response) => {
     const { gameId, adminPassword }: SetAdminPassRequest = req.body;
 
     // Get game info
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         res.status(400).redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
         return;

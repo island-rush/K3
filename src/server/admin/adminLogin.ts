@@ -29,7 +29,13 @@ export const adminLogin = async (req: Request, res: Response) => {
     }
 
     // Get game info
-    const thisGame = await new Game({ gameSection: adminSection, gameInstructor: adminInstructor }).init();
+    const gameIdFromSearch = await Game.getId(adminSection, adminInstructor);
+    if (!gameIdFromSearch) {
+        res.redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
+        return;
+    }
+
+    const thisGame = await new Game(gameIdFromSearch).init();
     if (!thisGame) {
         res.redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
         return;
