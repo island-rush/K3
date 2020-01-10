@@ -1,19 +1,19 @@
-import { Socket } from 'socket.io';
 // prettier-ignore
 import { BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_PURCHASE, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
-import { GameSession, ShopPurchaseAction, ShopPurchaseRequestAction } from '../../../types';
+import { ShopPurchaseAction, ShopPurchaseRequestAction, SocketSession } from '../../../types';
 import { Game, ShopItem } from '../../classes';
-import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
+import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * Client is requesting to buy something from the shop and place it into their cart. (Insert ShopItem)
  */
-export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRequestAction) => {
+export const shopPurchaseRequest = async (session: SocketSession, action: ShopPurchaseRequestAction) => {
     // Grab the session
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
+    const { ir3, socketId } = session;
+    const { gameId, gameTeam, gameControllers } = ir3;
 
     if (action.payload == null || action.payload.shopItemTypeId == null) {
-        sendUserFeedback(socket, 'Server Error: Malformed Payload (missing shopItemTypeId)');
+        sendUserFeedback(socketId, 'Server Error: Malformed Payload (missing shopItemTypeId)');
         return;
     }
 
@@ -22,25 +22,25 @@ export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRe
     // Grab the Game
     const thisGame = await new Game(gameId).init();
     if (!thisGame) {
-        redirectClient(socket, GAME_DOES_NOT_EXIST);
+        redirectClient(socketId, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameBluePoints, gameRedPoints } = thisGame;
 
     if (!gameActive) {
-        redirectClient(socket, GAME_INACTIVE_TAG);
+        redirectClient(socketId, GAME_INACTIVE_TAG);
         return;
     }
 
     if (gamePhase !== PURCHASE_PHASE_ID) {
-        sendUserFeedback(socket, 'Not the right phase...');
+        sendUserFeedback(socketId, 'Not the right phase...');
         return;
     }
 
     // Only the main controller (0) can buy things
     if (!gameControllers.includes(TYPE_MAIN)) {
-        sendUserFeedback(socket, 'Not the main controller (0)...');
+        sendUserFeedback(socketId, 'Not the main controller (0)...');
         return;
     }
 
@@ -48,7 +48,7 @@ export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRe
     const teamPoints = gameTeam === BLUE_TEAM_ID ? gameBluePoints : gameRedPoints;
 
     if (teamPoints < shopItemCost) {
-        sendUserFeedback(socket, 'Not enough points to purchase');
+        sendUserFeedback(socketId, 'Not enough points to purchase');
         return;
     }
 
@@ -67,5 +67,5 @@ export const shopPurchaseRequest = async (socket: Socket, action: ShopPurchaseRe
     };
 
     // Send update to client(s)
-    sendToThisTeam(socket, serverAction);
+    sendToTeam(gameId, gameTeam, serverAction);
 };

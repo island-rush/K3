@@ -1,7 +1,7 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
 import { BAD_SESSION, GAME_DOES_NOT_EXIST, LOGGED_IN_VALUE, NOT_LOGGED_IN_TAG, NOT_LOGGED_IN_VALUE, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_MAIN_BUTTON_CLICK, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SOCKET_CLIENT_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from '../constants';
-import { GameInitialStateAction, GameSession } from '../types';
+import { GameInitialStateAction, GameSession, SocketSession } from '../types';
 // prettier-ignore
 import { biologicalWeaponsConfirm, commInterruptConfirm, confirmBattleSelection, confirmFuelSelection, confirmPlan, deletePlan, enterContainer, exitContainer, exitTransportContainer, goldenEyeConfirm, insurgencyConfirm, mainButtonClick, piecePlace, raiseMoraleConfirm, remoteSensingConfirm, rodsFromGodConfirm, sendUserFeedback, shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from './actions';
 import { Game } from './classes';
@@ -23,7 +23,7 @@ export const socketSetup = async (socket: Socket) => {
     // Get the game
     const thisGame = await new Game(gameId).init();
     if (!thisGame) {
-        redirectClient(socket, GAME_DOES_NOT_EXIST);
+        redirectClient(socket.id, GAME_DOES_NOT_EXIST);
         return;
     }
 
@@ -44,77 +44,81 @@ export const socketSetup = async (socket: Socket) => {
     socket.join(`game${gameId}`);
     socket.join(`game${gameId}team${gameTeam}`);
 
+    // Add socketId to session information
+    socket.handshake.session.socketId = socket.id;
+
     // Send the client intial game state data
     const serverAction: GameInitialStateAction = await thisGame.initialStateAction(gameTeam, gameControllers);
-    sendToClient(socket, serverAction);
+    sendToClient(socket.id, serverAction);
 
     // Setup the socket functions to respond to client requests
+    // TODO: combine all possible payloads into a type and use that instead of any, could also combine other types and use instead of string
     socket.on(SOCKET_CLIENT_SENDING_ACTION, ({ type, payload }: { type: string; payload: any }) => {
         try {
             switch (type) {
                 case SERVER_SHOP_PURCHASE_REQUEST:
-                    shopPurchaseRequest(socket, { type, payload });
+                    shopPurchaseRequest(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_SHOP_REFUND_REQUEST:
-                    shopRefundRequest(socket, { type, payload });
+                    shopRefundRequest(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_SHOP_CONFIRM_PURCHASE:
-                    shopConfirmPurchase(socket);
+                    shopConfirmPurchase(socket.handshake.session as SocketSession);
                     break;
                 case SERVER_CONFIRM_PLAN:
-                    confirmPlan(socket, { type, payload });
+                    confirmPlan(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_DELETE_PLAN:
-                    deletePlan(socket, { type, payload });
+                    deletePlan(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_PIECE_PLACE:
-                    piecePlace(socket, { type, payload });
+                    piecePlace(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_MAIN_BUTTON_CLICK:
-                    mainButtonClick(socket);
+                    mainButtonClick(socket.handshake.session as SocketSession);
                     break;
                 case SERVER_CONFIRM_BATTLE_SELECTION:
-                    confirmBattleSelection(socket, { type, payload });
+                    confirmBattleSelection(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_CONFIRM_FUEL_SELECTION:
-                    confirmFuelSelection(socket, { type, payload });
+                    confirmFuelSelection(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_RODS_FROM_GOD_CONFIRM:
-                    rodsFromGodConfirm(socket, { type, payload });
+                    rodsFromGodConfirm(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_REMOTE_SENSING_CONFIRM:
-                    remoteSensingConfirm(socket, { type, payload });
+                    remoteSensingConfirm(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_INSURGENCY_CONFIRM:
-                    insurgencyConfirm(socket, { type, payload });
+                    insurgencyConfirm(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_BIOLOGICAL_WEAPONS_CONFIRM:
-                    biologicalWeaponsConfirm(socket, { type, payload });
+                    biologicalWeaponsConfirm(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_RAISE_MORALE_CONFIRM:
-                    raiseMoraleConfirm(socket, { type, payload });
+                    raiseMoraleConfirm(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_COMM_INTERRUPT_CONFIRM:
-                    commInterruptConfirm(socket, { type, payload });
+                    commInterruptConfirm(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_GOLDEN_EYE_CONFIRM:
-                    goldenEyeConfirm(socket, { type, payload });
+                    goldenEyeConfirm(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_OUTER_PIECE_CLICK:
-                    enterContainer(socket, { type, payload });
+                    enterContainer(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_INNER_PIECE_CLICK:
-                    exitContainer(socket, { type, payload });
+                    exitContainer(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 case SERVER_INNER_TRANSPORT_PIECE_CLICK:
-                    exitTransportContainer(socket, { type, payload });
+                    exitTransportContainer(socket.handshake.session as SocketSession, { type, payload });
                     break;
                 default:
-                    sendUserFeedback(socket, 'Did not recognize client socket request type');
+                    sendUserFeedback(socket.id, 'Did not recognize client socket request type');
             }
         } catch (error) {
             console.error(error);
-            sendUserFeedback(socket, `INTERNAL SERVER ERROR: CHECK DATABASE -> error: ${error}`);
+            sendUserFeedback(socket.id, `INTERNAL SERVER ERROR: CHECK DATABASE -> error: ${error}`);
         }
     });
 
@@ -127,6 +131,7 @@ export const socketSetup = async (socket: Socket) => {
                 }
                 delete socket.handshake.session.ir3;
             }, 5000);
+            delete socket.handshake.session.socketId;
         } catch (error) {
             // TODO: log errors to a file (for production/deployment reasons)
             console.error(error);

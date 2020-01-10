@@ -9,11 +9,8 @@ import { pool } from '../database';
  */
 export class InvItem implements InvItemType {
     invItemId: number;
-
     invItemGameId: number;
-
     invItemTeamId: number;
-
     invItemTypeId: number;
 
     constructor(invItemId: number) {

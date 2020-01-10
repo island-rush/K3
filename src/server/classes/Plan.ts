@@ -7,15 +7,10 @@ import { pool } from '../database';
  */
 export class Plan implements PlanType {
     planGameId: number;
-
     planTeamId: number;
-
     planPieceId: number;
-
     planMovementOrder: number;
-
     planPositionId: number;
-
     planSpecialFlag: number;
 
     constructor(planPieceId: number, planMovementOrder: number) {

@@ -1,8 +1,7 @@
-import { Socket } from 'socket.io';
 // prettier-ignore
-import { BATTLE_FIGHT_RESULTS, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, UPDATE_FLAGS, WAITING_STATUS, UPDATE_AIRFIELDS } from '../../../constants';
+import { BATTLE_FIGHT_RESULTS, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../../constants';
 // prettier-ignore
-import { BattleResultsAction, ConfirmBattleSelectionRequestAction, GameSession, UpdateFlagAction, UpdateAirfieldAction } from '../../../types';
+import { BattleResultsAction, ConfirmBattleSelectionRequestAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../../types';
 import { Event, Game } from '../../classes';
 import { redirectClient, sendToGame, sendUserFeedback } from '../../helpers';
 import { giveNextEvent } from '../giveNextEvent';
@@ -10,33 +9,34 @@ import { giveNextEvent } from '../giveNextEvent';
 /**
  * User request to confirm their battle selections. (what pieces are attacking what other pieces)
  */
-export const confirmBattleSelection = async (socket: Socket, action: ConfirmBattleSelectionRequestAction) => {
+export const confirmBattleSelection = async (session: SocketSession, action: ConfirmBattleSelectionRequestAction) => {
     // Grab the Session
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
+    const { ir3, socketId } = session;
+    const { gameId, gameTeam, gameControllers } = ir3;
 
     const { friendlyPieces } = action.payload;
 
     // Get the Game
     const thisGame = await new Game(gameId).init();
     if (!thisGame) {
-        redirectClient(socket, GAME_DOES_NOT_EXIST);
+        redirectClient(socketId, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameBlueStatus, gameRedStatus } = thisGame;
 
     if (!gameActive) {
-        redirectClient(socket, GAME_INACTIVE_TAG);
+        redirectClient(socketId, GAME_INACTIVE_TAG);
         return;
     }
 
     if (gamePhase !== COMBAT_PHASE_ID) {
-        sendUserFeedback(socket, 'Not the right phase for battle selections.');
+        sendUserFeedback(socketId, 'Not the right phase for battle selections.');
         return;
     }
 
     if (!gameControllers.includes(TYPE_MAIN)) {
-        sendUserFeedback(socket, 'Need to be air commander.');
+        sendUserFeedback(socketId, 'Need to be air commander.');
         return;
     }
 
@@ -45,7 +45,7 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
     const otherTeamStatus = otherTeam === BLUE_TEAM_ID ? gameBlueStatus : gameRedStatus;
 
     if (thisTeamStatus === WAITING_STATUS && otherTeamStatus === NOT_WAITING_STATUS) {
-        sendUserFeedback(socket, 'still waiting stupid...');
+        sendUserFeedback(socketId, 'still waiting stupid...');
         return;
     }
 
@@ -57,7 +57,7 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
     // and if thisTeamStatus == NOT_WAITING....(maybe make explicit here <-TODO:
     if (otherTeamStatus === NOT_WAITING_STATUS) {
         await thisGame.setStatus(gameTeam, WAITING_STATUS);
-        sendUserFeedback(socket, 'confirmed, now waiting on other team...');
+        sendUserFeedback(socketId, 'confirmed, now waiting on other team...');
         return;
     }
 
@@ -76,7 +76,7 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
             }
         };
 
-        sendToGame(socket, serverAction);
+        sendToGame(gameId, serverAction);
         return;
     }
 
@@ -104,7 +104,7 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
             }
         };
 
-        sendToGame(socket, updateFlagAction);
+        sendToGame(gameId, updateFlagAction);
     }
 
     // TODO: combine with flag update for less requests
@@ -128,9 +128,9 @@ export const confirmBattleSelection = async (socket: Socket, action: ConfirmBatt
         };
 
         // Send all airfield updates to every team
-        sendToGame(socket, updateAirfieldAction);
+        sendToGame(gameId, updateAirfieldAction);
     }
 
-    await giveNextEvent(socket, { thisGame, gameTeam: 0 }); // not putting executingStep in options to let it know not to send pieceMove
-    await giveNextEvent(socket, { thisGame, gameTeam: 1 }); // not putting executingStep in options to let it know not to send pieceMove
+    await giveNextEvent(session, { thisGame, gameTeam: 0 }); // not putting executingStep in options to let it know not to send pieceMove
+    await giveNextEvent(session, { thisGame, gameTeam: 1 }); // not putting executingStep in options to let it know not to send pieceMove
 };

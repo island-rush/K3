@@ -10,15 +10,10 @@ import { pool } from '../database';
  */
 export class Event implements EventQueueType {
     eventId: number;
-
     eventGameId: number;
-
     eventTeamId: number;
-
     eventTypeId: number;
-
     eventPosA: number;
-
     eventPosB: number;
 
     // TODO: we have a class for event, but multiple tables for keeping track of events, event items, and that one for temp stuff (efficient)

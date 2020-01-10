@@ -1,3 +1,10 @@
+import { Socket } from 'socket.io';
+
+export type SocketSession = Socket['handshake']['session'] & {
+    ir3: GameSession;
+    socketId: Socket['id'];
+};
+
 /**
  * This object stored within session.ir3 to tie users to game, team, and controller(s)
  */

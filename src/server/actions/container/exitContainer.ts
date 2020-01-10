@@ -1,58 +1,58 @@
-import { Socket } from 'socket.io';
 // prettier-ignore
 import { COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, SLICE_PLANNING_ID, TYPE_MAIN, TYPE_TERRAIN } from '../../../constants';
-import { ExitContainerAction, ExitContainerRequestAction, GameSession } from '../../../types';
+import { ExitContainerAction, ExitContainerRequestAction, SocketSession } from '../../../types';
 import { Game, Piece } from '../../classes';
-import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
+import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * User request to move piece outside of a container to the same position.
  */
-export const exitContainer = async (socket: Socket, action: ExitContainerRequestAction) => {
+export const exitContainer = async (session: SocketSession, action: ExitContainerRequestAction) => {
     // Grab the Session
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
+    const { ir3, socketId } = session;
+    const { gameId, gameTeam, gameControllers } = ir3;
 
     const { selectedPiece, containerPiece } = action.payload;
 
     // Grab the Game
     const thisGame = await new Game(gameId).init();
     if (!thisGame) {
-        redirectClient(socket, GAME_DOES_NOT_EXIST);
+        redirectClient(socketId, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
-        redirectClient(socket, GAME_INACTIVE_TAG);
+        redirectClient(socketId, GAME_INACTIVE_TAG);
         return;
     }
 
     if (!gameControllers.includes(TYPE_MAIN)) {
-        sendUserFeedback(socket, 'Not the right controller type for this action...');
+        sendUserFeedback(socketId, 'Not the right controller type for this action...');
         return;
     }
 
     if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
-        sendUserFeedback(socket, 'Not the right phase/slice for container entering.');
+        sendUserFeedback(socketId, 'Not the right phase/slice for container entering.');
         return;
     }
 
     // Grab the Pieces
     const thisSelectedPiece = await new Piece(selectedPiece.pieceId).init();
     if (!thisSelectedPiece) {
-        sendUserFeedback(socket, 'Selected Piece did not exists...refresh page probably');
+        sendUserFeedback(socketId, 'Selected Piece did not exists...refresh page probably');
         return;
     }
 
     const thisContainerPiece = await new Piece(containerPiece.pieceId).init();
     if (!thisContainerPiece) {
-        sendUserFeedback(socket, 'Selected Container piece did not exist...');
+        sendUserFeedback(socketId, 'Selected Container piece did not exist...');
         return;
     }
 
     if (!CONTAINER_TYPES.includes(thisContainerPiece.pieceTypeId)) {
-        sendUserFeedback(socket, 'Selected Container piece was not a container type');
+        sendUserFeedback(socketId, 'Selected Container piece was not a container type');
         return;
     }
 
@@ -60,7 +60,7 @@ export const exitContainer = async (socket: Socket, action: ExitContainerRequest
     // TODO: could combine with exitTransport container and do more switch case for edge cases / terrain checking?
 
     if (!TYPE_TERRAIN[thisSelectedPiece.pieceTypeId].includes(initialGameboardEmpty[thisSelectedPiece.piecePositionId].type)) {
-        sendUserFeedback(socket, "that piece can't be on that terrain.");
+        sendUserFeedback(socketId, "that piece can't be on that terrain.");
         return;
     }
 
@@ -76,5 +76,5 @@ export const exitContainer = async (socket: Socket, action: ExitContainerRequest
     };
 
     // Send the update to the client(s)
-    sendToThisTeam(socket, serverAction);
+    sendToTeam(gameId, gameTeam, serverAction);
 };
