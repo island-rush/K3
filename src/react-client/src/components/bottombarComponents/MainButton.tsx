@@ -47,13 +47,15 @@ export class MainButton extends Component<Props> {
                 style={mainButtonStyle}
                 onClick={event => {
                     // normally confirms are obtrusive UI, and should use something else TODO: confirm dialog box...
-                    // eslint-disable-next-line no-restricted-globals
-                    // if (confirm("Are you sure you want to move on?")) {
-                    // 	this.props.mainButtonClick();
-                    // }
-                    event.preventDefault();
-                    mainButtonClick();
-                    event.stopPropagation();
+                    //eslint-disable-next-line no-restricted-globals
+                    if(gameStatus != WAITING_STATUS){
+                        if (window.confirm("Are you sure you want to move on?")) {
+                            this.props.mainButtonClick();
+                        }
+                        event.preventDefault();
+                        mainButtonClick();
+                        event.stopPropagation();
+                    }
                 }}
             >
                 {buttonText}
