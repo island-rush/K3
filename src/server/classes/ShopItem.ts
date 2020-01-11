@@ -1,6 +1,6 @@
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
-import { ShopItemType } from '../../../types';
-import { pool } from '../../database';
+import { ShopItemType } from '../../types';
+import { pool } from '../database';
 
 /**
  * Represents rows for shopItems table in database.
