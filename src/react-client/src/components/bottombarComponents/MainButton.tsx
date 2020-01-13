@@ -53,7 +53,6 @@ export class MainButton extends Component<Props> {
                         if (window.confirm("Are you sure you want to move on?")) {
                             this.props.mainButtonClick();
                         }
-                        mainButtonClick();
                     }
                     event.stopPropagation();
                 }}
