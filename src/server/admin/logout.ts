@@ -10,7 +10,7 @@ export const logout = async (session: GameSession) => {
     const { gameId, gameTeam, gameControllers } = session;
 
     // Grab the Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         return false;
     }

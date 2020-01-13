@@ -1,5 +1,5 @@
 {
-    "ignore": ["src/react-client/*"],
+    "ignore": ["src/react-client/*", "*.test.ts"],
     "execMap": {
         "ts": "node --require ts-node/register"
     }

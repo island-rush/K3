@@ -1,39 +1,39 @@
-import { Socket } from 'socket.io';
 // prettier-ignore
 import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REFUEL_RESULTS, TYPE_AIR, TYPE_FUEL } from '../../../constants';
-import { ConfirmFuelSelectionRequestAction, FuelResultsAction, GameSession, PieceType } from '../../../types';
+import { ConfirmFuelSelectionRequestAction, FuelResultsAction, PieceType, SocketSession } from '../../../types';
 import { Event, Game } from '../../classes';
-import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
+import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 import { giveNextEvent } from '../giveNextEvent';
 
 /**
  * Client Request to transfer fuel from tankers to other aircraft. Finishes a Refuel Event
  */
-export const confirmFuelSelection = async (socket: Socket, action: ConfirmFuelSelectionRequestAction) => {
+export const confirmFuelSelection = async (session: SocketSession, action: ConfirmFuelSelectionRequestAction) => {
     // Grab the Session
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
+    const { ir3, socketId } = session;
+    const { gameId, gameTeam, gameControllers } = ir3;
 
     // Grab the Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
-        redirectClient(socket, GAME_DOES_NOT_EXIST);
+        redirectClient(socketId, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase } = thisGame;
 
     if (!gameActive) {
-        redirectClient(socket, GAME_INACTIVE_TAG);
+        redirectClient(socketId, GAME_INACTIVE_TAG);
         return;
     }
 
     if (gamePhase !== COMBAT_PHASE_ID) {
-        sendUserFeedback(socket, 'Wrong phase for refueling.');
+        sendUserFeedback(socketId, 'Wrong phase for refueling.');
         return;
     }
 
     if (!gameControllers.includes(TYPE_AIR)) {
-        sendUserFeedback(socket, 'Need to be air commander.');
+        sendUserFeedback(socketId, 'Need to be air commander.');
         return;
     }
 
@@ -112,12 +112,12 @@ export const confirmFuelSelection = async (socket: Socket, action: ConfirmFuelSe
             };
 
             // sending results and no matter what, going to next event (refuel isn't multiple things, its 1 and done)
-            sendToThisTeam(socket, serverAction);
+            sendToTeam(gameId, gameTeam, serverAction);
         }
     }
 
     // TODO: would be more efficient to put the REFUEL_RESULTS into the next event action, 1 request instead of 2 (make sure to remember to include new piece positions if do things here)
 
     await thisRefuelEvent.delete();
-    await giveNextEvent(socket, { thisGame, gameTeam }); // not putting executingStep in options to let it know not to send pieceMove
+    await giveNextEvent(session, { thisGame, gameTeam }); // not putting executingStep in options to let it know not to send pieceMove
 };

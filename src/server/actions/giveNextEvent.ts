@@ -1,14 +1,13 @@
-import { Socket } from 'socket.io';
 // prettier-ignore
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, EVENT_BATTLE, EVENT_REFUEL, NOT_WAITING_STATUS, NO_MORE_EVENTS, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE } from '../../constants';
-import { EventBattleAction, EventRefuelAction, NoMoreEventsAction } from '../../types';
+import { EventBattleAction, EventRefuelAction, NoMoreEventsAction, SocketSession } from '../../types';
 import { Event, Game, Piece } from '../classes';
 import { sendToTeam, sendUserFeedback } from '../helpers';
 
 /**
  * Find the next event in the EventQueue and send to this team (through a socket)
  */
-export const giveNextEvent = async (socket: Socket, options: GiveNextEventOptions) => {
+export const giveNextEvent = async (session: SocketSession, options: GiveNextEventOptions) => {
     // prettier-ignore
     const { thisGame: { gameId }, gameTeam } = options;
 
@@ -25,7 +24,7 @@ export const giveNextEvent = async (socket: Socket, options: GiveNextEventOption
             }
         };
 
-        sendToTeam(socket, gameTeam, noMoreEventsAction);
+        sendToTeam(gameId, gameTeam, noMoreEventsAction);
         return;
     }
 
@@ -68,7 +67,7 @@ export const giveNextEvent = async (socket: Socket, options: GiveNextEventOption
                 }
             };
 
-            sendToTeam(socket, gameTeam, eventBattleAction);
+            sendToTeam(gameId, gameTeam, eventBattleAction);
             return;
         case REFUEL_EVENT_TYPE:
             // get the pieces from the event, put them into payload (pre-format based on state?)
@@ -98,10 +97,10 @@ export const giveNextEvent = async (socket: Socket, options: GiveNextEventOption
                 }
             };
 
-            sendToTeam(socket, gameTeam, eventRefuelAction);
+            sendToTeam(gameId, gameTeam, eventRefuelAction);
             return;
         default:
-            sendUserFeedback(socket, 'Server Error, unknown event type...');
+            sendUserFeedback(session.socketId, 'Server Error, unknown event type...');
     }
 };
 

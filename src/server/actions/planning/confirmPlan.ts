@@ -1,43 +1,43 @@
-import { Socket } from 'socket.io';
 // prettier-ignore
 import { COMBAT_PHASE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, PLAN_WAS_CONFIRMED, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
-import { ConfirmPlanAction, ConfirmPlanRequestAction, GameSession } from '../../../types';
+import { ConfirmPlanAction, ConfirmPlanRequestAction, SocketSession } from '../../../types';
 import { Game, Piece, Plan } from '../../classes';
-import { redirectClient, sendToThisTeam, sendUserFeedback } from '../../helpers';
+import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * User Request to confirm a plan for a piece.
  */
-export const confirmPlan = async (socket: Socket, action: ConfirmPlanRequestAction) => {
+export const confirmPlan = async (session: SocketSession, action: ConfirmPlanRequestAction) => {
     // Grab Session
-    const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
+    const { ir3, socketId } = session;
+    const { gameId, gameTeam, gameControllers } = ir3;
 
     const { pieceId, plan } = action.payload;
 
     // Grab the Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
-        redirectClient(socket, GAME_DOES_NOT_EXIST);
+        redirectClient(socketId, GAME_DOES_NOT_EXIST);
         return;
     }
 
     const { gameActive, gamePhase, gameSlice } = thisGame;
 
     if (!gameActive) {
-        redirectClient(socket, GAME_INACTIVE_TAG);
+        redirectClient(socketId, GAME_INACTIVE_TAG);
         return;
     }
 
     // Must be in combat phase (2), planning slice (0) to make plans
     if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
-        sendUserFeedback(socket, 'Not the right phase/slice...looking for phase 2 slice 0');
+        sendUserFeedback(socketId, 'Not the right phase/slice...looking for phase 2 slice 0');
         return;
     }
 
     // Does the piece exist?
     const thisPiece = await new Piece(pieceId).init();
     if (!thisPiece) {
-        sendUserFeedback(socket, 'Piece did not exists...refresh page?');
+        sendUserFeedback(socketId, 'Piece did not exists...refresh page?');
         return;
     }
 
@@ -45,7 +45,7 @@ export const confirmPlan = async (socket: Socket, action: ConfirmPlanRequestActi
 
     // Is this piece ours? (TODO: could also check pieceType with gameControllers)
     if (pieceGameId !== gameId || pieceTeamId !== gameTeam) {
-        sendUserFeedback(socket, 'Piece did not belong to your team...(or this game)');
+        sendUserFeedback(socketId, 'Piece did not belong to your team...(or this game)');
         return;
     }
 
@@ -59,12 +59,12 @@ export const confirmPlan = async (socket: Socket, action: ConfirmPlanRequestActi
     }
 
     if (!atLeast1Owner) {
-        sendUserFeedback(socket, "Piece doesn't fall under your control");
+        sendUserFeedback(socketId, "Piece doesn't fall under your control");
         return;
     }
 
     if (pieceDisabled) {
-        sendUserFeedback(socket, 'Piece is disabled from game effect (probably golden eye)');
+        sendUserFeedback(socketId, 'Piece is disabled from game effect (probably golden eye)');
         return;
     }
 
@@ -77,14 +77,14 @@ export const confirmPlan = async (socket: Socket, action: ConfirmPlanRequestActi
         const positionTerrain = initialGameboardEmpty[positionId].type;
 
         if (!TYPE_TERRAIN[pieceTypeId].includes(positionTerrain)) {
-            sendUserFeedback(socket, "can't go on that terrain with this piece type");
+            sendUserFeedback(socketId, "can't go on that terrain with this piece type");
             return;
         }
 
         trueMoveCount++;
 
         if (distanceMatrix[previousPosition][positionId] !== 1) {
-            sendUserFeedback(socket, 'sent a bad plan, positions were not adjacent...');
+            sendUserFeedback(socketId, 'sent a bad plan, positions were not adjacent...');
             return;
         }
 
@@ -93,7 +93,7 @@ export const confirmPlan = async (socket: Socket, action: ConfirmPlanRequestActi
 
     // Is the plan length less than or equal to the max moves of the piece?
     if (trueMoveCount > pieceMoves) {
-        sendUserFeedback(socket, 'sent a bad plan, piece was moved more than its range...');
+        sendUserFeedback(socketId, 'sent a bad plan, piece was moved more than its range...');
         return;
     }
 
@@ -118,5 +118,5 @@ export const confirmPlan = async (socket: Socket, action: ConfirmPlanRequestActi
     };
 
     // Send the update to the client(s)
-    sendToThisTeam(socket, serverAction);
+    sendToTeam(gameId, gameTeam, serverAction);
 };

@@ -10,7 +10,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
     // Delete the game
-    const testGame = new Game({ gameId: testGameId });
+    const testGame = new Game(testGameId);
     await testGame.delete();
 });
 
@@ -18,8 +18,9 @@ describe('shop purchase', () => {
     it('should fail if bad session', () => {});
     it('should fail if bad payload', () => {});
     it('should fail if game does not exist', async () => {
-        const thisGame = await new Game({ gameId: testGameId - 1 }).init();
+        const thisGame = await new Game(testGameId - 1).init();
         expect(thisGame).toBeNull();
+        expect(thisGame).toBeFalsy();
     });
     it('should fail if game is not active', () => {});
     it('should fail if phase is not purchasing', () => {});

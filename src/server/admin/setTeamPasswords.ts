@@ -26,7 +26,7 @@ export const setTeamPasswords = async (req: Request, res: Response) => {
     const { gameId } = req.session.ir3teacher as TeacherSession;
 
     // Get game info
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         res.status(400).redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
         return;

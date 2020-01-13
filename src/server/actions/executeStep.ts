@@ -1,7 +1,6 @@
-import { Socket } from 'socket.io';
 // prettier-ignore
-import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, UPDATE_FLAGS, WAITING_STATUS, UPDATE_AIRFIELDS } from '../../constants';
-import { NewRoundAction, PlacePhaseAction, UpdateFlagAction, UpdateAirfieldAction } from '../../types';
+import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
+import { NewRoundAction, PlacePhaseAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
 import { sendToGame, sendToTeam } from '../helpers';
 import { giveNextEvent } from './giveNextEvent';
@@ -9,7 +8,7 @@ import { giveNextEvent } from './giveNextEvent';
 /**
  * Move pieces / step through plans
  */
-export const executeStep = async (socket: Socket, thisGame: Game) => {
+export const executeStep = async (session: SocketSession, thisGame: Game) => {
     // inserting events here and moving pieces, or changing to new round or something...
     const { gameId, gameRound } = thisGame;
 
@@ -59,8 +58,8 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
                 }
             };
 
-            sendToTeam(socket, BLUE_TEAM_ID, placePhaseActionBlue);
-            sendToTeam(socket, RED_TEAM_ID, placePhaseActionRed);
+            sendToTeam(gameId, BLUE_TEAM_ID, placePhaseActionBlue);
+            sendToTeam(gameId, RED_TEAM_ID, placePhaseActionRed);
             return;
         }
         // Next Round of Combat
@@ -91,8 +90,8 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
             }
         };
 
-        sendToTeam(socket, BLUE_TEAM_ID, newRoundActionBlue);
-        sendToTeam(socket, RED_TEAM_ID, newRoundActionRed);
+        sendToTeam(gameId, BLUE_TEAM_ID, newRoundActionBlue);
+        sendToTeam(gameId, RED_TEAM_ID, newRoundActionRed);
         return;
     }
 
@@ -167,7 +166,7 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
         };
 
         // Send all flag updates to every team
-        sendToGame(socket, updateFlagAction);
+        sendToGame(gameId, updateFlagAction);
     }
 
     // TODO: combine with flag updates (less requests)
@@ -191,7 +190,7 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
         };
 
         // Send all airfield updates to every team
-        sendToGame(socket, updateAirfieldAction);
+        sendToGame(gameId, updateAirfieldAction);
     }
 
     // Position Battle Events
@@ -268,6 +267,6 @@ export const executeStep = async (socket: Socket, thisGame: Game) => {
     // Note: All non-move (specialflag != 0) plans should result in events (refuel/container)...
     // If there is now an event, send to user instead of PIECES_MOVE
 
-    await giveNextEvent(socket, { thisGame, gameTeam: BLUE_TEAM_ID });
-    await giveNextEvent(socket, { thisGame, gameTeam: RED_TEAM_ID });
+    await giveNextEvent(session, { thisGame, gameTeam: BLUE_TEAM_ID });
+    await giveNextEvent(session, { thisGame, gameTeam: RED_TEAM_ID });
 };

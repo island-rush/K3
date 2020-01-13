@@ -22,7 +22,7 @@ export const gameDelete = async (req: Request, res: Response) => {
     const { gameId }: GameDeleteRequest = req.body;
 
     // Get the Game
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         res.status(400).redirect('/courseDirector.html?gameDelete=failed');
         return;

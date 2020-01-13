@@ -10,27 +10,16 @@ import { pool } from '../database';
  */
 export class Piece implements PieceType {
     pieceLanded: number;
-
     pieceId: number;
-
     pieceGameId: number;
-
     pieceTeamId: number;
-
     pieceTypeId: number;
-
     piecePositionId: number;
-
     pieceContainerId: number;
-
     pieceVisible: number;
-
     pieceMoves: number;
-
     pieceFuel: number;
-
     pieceContents?: { pieces: PieceType[] };
-
     pieceDisabled?: boolean;
 
     constructor(pieceId: number) {

@@ -14,7 +14,7 @@ export const getGameActive = async (req: Request, res: Response) => {
 
     const { gameId } = req.session.ir3teacher as TeacherSession;
 
-    const thisGame = await new Game({ gameId }).init();
+    const thisGame = await new Game(gameId).init();
     if (!thisGame) {
         res.sendStatus(404);
         return;
