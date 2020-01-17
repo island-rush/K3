@@ -22,7 +22,7 @@ const invisibleStyle: any = {
 };
 
 const airpieceItemsContainerStyle: any = {
-    backgroundColor: 'pink',
+    backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
@@ -31,7 +31,7 @@ const airpieceItemsContainerStyle: any = {
 };
 
 const landpieceItemsContainerStyle: any = {
-    backgroundColor: 'pink',
+    backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
@@ -40,7 +40,7 @@ const landpieceItemsContainerStyle: any = {
 };
 
 const seapieceItemsContainerStyle: any = {
-    backgroundColor: 'pink',
+    backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
@@ -49,7 +49,7 @@ const seapieceItemsContainerStyle: any = {
 };
 
 const specialpieceItemsContainerStyle: any = {
-    backgroundColor: 'pink',
+    backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
@@ -58,7 +58,7 @@ const specialpieceItemsContainerStyle: any = {
 };
 
 const warfareItemsContainerStyle: any = {
-    backgroundColor: 'pink',
+    backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',

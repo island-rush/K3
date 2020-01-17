@@ -16,7 +16,7 @@ const spaceAreaStyle: any = {
 };
 
 const remoteSensingContainerStyle: any = {
-    backgroundColor: 'pink',
+    backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
@@ -25,7 +25,7 @@ const remoteSensingContainerStyle: any = {
 };
 
 const rodsfromGodContainerStyle: any = {
-    backgroundColor: 'pink',
+    backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
@@ -34,7 +34,7 @@ const rodsfromGodContainerStyle: any = {
 };
 
 const antiSatelliteMissilesContainerStyle: any = {
-    backgroundColor: 'pink',
+    backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
@@ -43,7 +43,7 @@ const antiSatelliteMissilesContainerStyle: any = {
 };
 
 const future1ContainerStyle: any = {
-    backgroundColor: 'pink',
+    backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
@@ -52,7 +52,7 @@ const future1ContainerStyle: any = {
 };
 
 const future2ContainerStyle: any = {
-    backgroundColor: 'pink',
+    backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',

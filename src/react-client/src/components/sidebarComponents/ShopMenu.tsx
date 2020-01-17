@@ -25,11 +25,11 @@ const purchaseButtonStyle: any = {
     right: '1%',
     height: '5%',
     width: '10%',
-    backgroundColor: 'pink'
+    backgroundColor: 'red'
 };
 
 const purchaseableItemsContainerStyle: any = {
-    backgroundColor: 'red',
+    backgroundColor: '#b9b9b9',
     position: 'relative',
     width: '15%',
     height: '80%',

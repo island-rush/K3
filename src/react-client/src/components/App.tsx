@@ -9,7 +9,7 @@ import Zoombox from './zoomboxComponents/Zoombox';
 
 const appStyle: any = {
     position: 'relative',
-    backgroundColor: 'blue',
+    backgroundColor: '#b9b9b9',
     height: '100%',
     width: '100%'
 };
