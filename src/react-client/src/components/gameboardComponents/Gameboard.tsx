@@ -18,7 +18,7 @@ const imageSize = { x: 3.4, y: 2.75 };
 const positionImagesPath = './images/positionImages/';
 
 const gameboardStyle: any = {
-    backgroundColor: 'blue',
+    backgroundColor: 'b9b9b9',
     width: '94%',
     height: '88%',
     top: '0%',

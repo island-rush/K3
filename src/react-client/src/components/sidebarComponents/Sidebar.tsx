@@ -27,14 +27,17 @@ const buttonStyle: any = {
 };
 
 const shopButtonStyle = {
+    backgroundImage: 'url("./images/graphics/shop.png")',
     top: '4%'
 };
 
 const invButtonStyle = {
+    backgroundImage: 'url("./images/graphics/inventory.png")',
     top: '28%'
 };
 
 const spaceButtonStyle = {
+    backgroundImage: 'url("./images/graphics/space.png")',
     top: '52%'
 };
 
