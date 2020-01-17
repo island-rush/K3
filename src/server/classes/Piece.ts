@@ -185,7 +185,7 @@ export class Piece implements PieceType {
         // update fuel (only for pieces that are restricted by fuel (air pieces))
         const inserts2 = [gameId, movementOrder, TYPE_AIR_PIECES];
         const removeFuel =
-            'UPDATE pieces, plans SET pieces.pieceFuel = pieces.pieceFuel - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ? AND plans.planSpecialFlag = 0 AND pieces.pieceTypeId in (?)';
+            'UPDATE pieces, plans SET pieces.pieceFuel = pieces.pieceFuel - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ? AND plans.planSpecialFlag = 0 AND pieces.pieceLanded = 0 AND pieces.pieceTypeId in (?)';
         await conn.query(removeFuel, inserts2);
 
         const updateContents =
@@ -326,7 +326,7 @@ export class Piece implements PieceType {
     /**
      * Put 1 piece inside another container piece.
      */
-    static async putInsideContainer(selectedPiece: any, containerPiece: any) {
+    static async putInsideContainer(selectedPiece: PieceType, containerPiece: PieceType) {
         // TODO: could combine into 1 query, or could have a selection for variable query, 1 request instead of 2 would be better
 
         let queryString = 'UPDATE pieces SET pieceContainerId = ?, piecePositionId = ? WHERE pieceId = ?';
