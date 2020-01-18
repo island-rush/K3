@@ -1,9 +1,10 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_MOVES, VISIBILITY_MATRIX, ALL_LAND_POSITIONS } from '../../constants';
-import { BiologicalWeaponsType, GoldenEyeType, PieceType, RemoteSensingType } from '../../types';
+import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_MOVES, VISIBILITY_MATRIX, ALL_LAND_POSITIONS, LIST_ALL_AIRFIELD_PIECES, ALL_AIRFIELD_LOCATIONS } from '../../constants';
+import { BiologicalWeaponsType, GoldenEyeType, PieceType, RemoteSensingType, GameType } from '../../types';
 import { pool } from '../database';
+import { Game } from './Game';
 
 /**
  * Represents a row in the pieces database table.
@@ -223,8 +224,8 @@ export class Piece implements PieceType {
     }
 
     static async giveFuelToHelisOverLand(gameId: number) {
-        const queryString = 'UPDATE pieces SET pieceFuel = ? WHERE pieceGameId = ? AND piecePositionId in (?)';
-        const inserts = [TYPE_FUEL[ATTACK_HELICOPTER_TYPE_ID], gameId, ALL_LAND_POSITIONS];
+        const queryString = 'UPDATE pieces SET pieceFuel = ? WHERE pieceGameId = ? AND piecePositionId in (?) AND pieceTypeId = ?';
+        const inserts = [TYPE_FUEL[ATTACK_HELICOPTER_TYPE_ID], gameId, ALL_LAND_POSITIONS, ATTACK_HELICOPTER_TYPE_ID];
         await pool.query(queryString, inserts);
     }
 
@@ -407,5 +408,29 @@ export class Piece implements PieceType {
             'UPDATE pieces LEFT JOIN plans ON pieceId = planPieceId SET pieceFuel = pieceFuel - 1 WHERE planPieceId IS NULL AND pieceFuel != -1 AND pieceGameId = 1;';
         const inserts = [gameId];
         await pool.query(queryString, inserts);
+    }
+
+    static async refuelPlanesOverAirfields(game: Game) {
+        // planes (piece type) over airfield positions, and the plane's team has to own the airfield
+        // TODO: probably a good, efficient way of doing this
+        const testquery =
+            'UPDATE pieces SET pieceFuel = CASE WHEN pieceTypeId = 0 THEN ? WHEN pieceTypeId = 1 THEN ? WHEN pieceTypeId = 2 THEN ? WHEN pieceTypeId = 3 THEN ? WHEN pieceTypeId = 4 THEN ? WHEN pieceTypeId = 5 THEN ? WHEN pieceTypeId = 17 THEN ? WHEN pieceTypeId = 18 THEN ? END WHERE pieceGameId = ? AND piecePositionId = ? AND pieceTeamId = ?';
+
+        for (let x = 0; x < ALL_AIRFIELD_LOCATIONS.length; x++) {
+            const inserts = [
+                TYPE_FUEL[0],
+                TYPE_FUEL[1],
+                TYPE_FUEL[2],
+                TYPE_FUEL[3],
+                TYPE_FUEL[4],
+                TYPE_FUEL[5],
+                TYPE_FUEL[17],
+                TYPE_FUEL[18],
+                game.gameId,
+                ALL_AIRFIELD_LOCATIONS[x],
+                game[`airfield${x}`]
+            ];
+            await pool.query(testquery, inserts);
+        }
     }
 }

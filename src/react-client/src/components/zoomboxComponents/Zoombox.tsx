@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { GameboardMetaState, GameboardState, PieceType } from '../../../../types';
+import { GameboardMetaState, GameboardState, PieceType, GameInfoState } from '../../../../types';
 import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux';
 import { ZOOMBOX_BACKGROUNDS } from '../styleConstants';
 import { Piece } from './Piece';
@@ -25,11 +25,12 @@ interface Props {
     selectPiece: any;
     clearPieceSelection: any;
     pieceOpen: any;
+    gameInfo: GameInfoState;
 }
 
 class Zoombox extends Component<Props> {
     render() {
-        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen } = this.props;
+        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, gameInfo } = this.props;
 
         const isVisible = selectedPos !== -1;
 
@@ -43,6 +44,7 @@ class Zoombox extends Component<Props> {
                       topLevel={true}
                       key={index}
                       piece={piece}
+                      gameInfo={gameInfo}
                   />
               ));
 
@@ -62,10 +64,19 @@ class Zoombox extends Component<Props> {
     }
 }
 
-const mapStateToProps = ({ gameboard, gameboardMeta }: { gameboard: GameboardState; gameboardMeta: GameboardMetaState }) => ({
+const mapStateToProps = ({
+    gameboard,
+    gameboardMeta,
+    gameInfo
+}: {
+    gameboard: GameboardState;
+    gameboardMeta: GameboardMetaState;
+    gameInfo: GameInfoState;
+}) => ({
     selectedPos: gameboardMeta.selectedPosition,
     selectedPiece: gameboardMeta.selectedPiece,
-    gameboard
+    gameboard,
+    gameInfo
 });
 
 const mapActionsToProps = {

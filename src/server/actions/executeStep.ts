@@ -193,6 +193,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         sendToGame(gameId, updateAirfieldAction);
     }
 
+    await Piece.refuelPlanesOverAirfields(thisGame);
+
     // Position Battle Events
     const allPositionCombinations: any = await Plan.getPositionCombinations(gameId);
     if (allPositionCombinations.length > 0) {

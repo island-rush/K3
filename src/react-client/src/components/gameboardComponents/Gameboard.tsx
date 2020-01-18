@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
-import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from '../../../../constants';
+import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW, ALL_AIRFIELD_LOCATIONS } from '../../../../constants';
 // prettier-ignore
 import { BattleState, CapabilitiesState, ContainerState, GameboardMetaState, GameboardState, GameInfoState, NewsState, PlanningState } from '../../../../types';
 //prettier-ignore
@@ -74,6 +74,13 @@ const patternSolver = (position: any, gameInfo: any, positionIndex: number) => {
         const flagNum = ALL_FLAG_LOCATIONS.indexOf(positionIndex);
         const islandOwner = gameInfo['flag' + flagNum];
         const finalType = islandOwner === BLUE_TEAM_ID ? 'blueflag' : islandOwner === RED_TEAM_ID ? 'redflag' : 'flag';
+        return finalType;
+    }
+
+    if (ALL_AIRFIELD_LOCATIONS.includes(positionIndex)) {
+        const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(positionIndex);
+        const airfieldOwner = gameInfo['airfield' + airfieldNum]; // TODO: should use actual types instead of any here
+        const finalType = airfieldOwner === BLUE_TEAM_ID ? 'blueairfield' : airfieldOwner === RED_TEAM_ID ? 'redairfield' : 'airfield';
         return finalType;
     }
 
@@ -303,6 +310,8 @@ class Gameboard extends Component<Props> {
                         <Pattern id="redflag" link={positionImagesPath + 'redflag.png'} size={imageSize} />
                         <Pattern id="blueflag" link={positionImagesPath + 'blueflag.png'} size={imageSize} />
                         <Pattern id="airfield" link={positionImagesPath + 'airfield.png'} size={imageSize} />
+                        <Pattern id="blueairfield" link={positionImagesPath + 'blueairfield.png'} size={imageSize} />
+                        <Pattern id="redairfield" link={positionImagesPath + 'redairfield.png'} size={imageSize} />
                         <Pattern id="missile" link={positionImagesPath + 'missile.png'} size={imageSize} />
                     </HexGrid>
                 </div>

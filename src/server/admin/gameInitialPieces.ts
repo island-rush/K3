@@ -33,7 +33,7 @@ const piece = (pieceGameId: number, pieceTeamId: number, pieceTypeId: number, pi
 export const gameInitialPieces = async (gameId: number) => {
     // TODO: create an excel doc to help facilitate game creation, read it like a csv to generate values (future idea = game creator interface (right click insert piece))
     const firstPieces: number[][] = [
-        piece(gameId, BLUE_TEAM_ID, STEALTH_FIGHTER_TYPE_ID, 21)
+        piece(gameId, RED_TEAM_ID, STEALTH_FIGHTER_TYPE_ID, 21)
     ];
 
     const queryString = 'INSERT INTO pieces (pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel) VALUES ?';
