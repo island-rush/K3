@@ -9,7 +9,6 @@ import { pool } from '../database';
  * Represents a row in the pieces database table.
  */
 export class Piece implements PieceType {
-    pieceLanded: number;
     pieceId: number;
     pieceGameId: number;
     pieceTeamId: number;
@@ -78,12 +77,6 @@ export class Piece implements PieceType {
         const [allPieces] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts);
         return allPieces;
     }
-
-    // static async landPiecesOverAirfieldsWithoutPlans(gameId: number) {
-    //     const queryString = 'UPDATE pieces SET pieceLanded = 1 WHERE pieceGameId = ? AND pieceTypeId in (?) ';
-    //     const inserts = [gameId];
-    //     await pool.query(queryString, inserts);
-    // }
 
     // prettier-ignore
     /**
@@ -185,7 +178,7 @@ export class Piece implements PieceType {
         // update fuel (only for pieces that are restricted by fuel (air pieces))
         const inserts2 = [gameId, movementOrder, TYPE_AIR_PIECES];
         const removeFuel =
-            'UPDATE pieces, plans SET pieces.pieceFuel = pieces.pieceFuel - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ? AND plans.planSpecialFlag = 0 AND pieces.pieceLanded = 0 AND pieces.pieceTypeId in (?)';
+            'UPDATE pieces, plans SET pieces.pieceFuel = pieces.pieceFuel - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ? AND plans.planSpecialFlag = 0 AND pieces.pieceTypeId in (?)';
         await conn.query(removeFuel, inserts2);
 
         const updateContents =
@@ -226,16 +219,6 @@ export class Piece implements PieceType {
     static async deletePlanesWithoutFuel(gameId: number) {
         const queryString = 'DELETE FROM pieces WHERE pieceGameId = ? AND pieceFuel < 0 AND pieceTypeId in (?)';
         const inserts = [gameId, PIECES_WITH_FUEL];
-        await pool.query(queryString, inserts);
-    }
-
-    /**
-     * Removing fuel from pieces that don't have any plans (and already have some amount of fuel (not -1))
-     */
-    static async removeFuelForLoitering(gameId: number) {
-        const queryString =
-            'UPDATE pieces LEFT JOIN plans ON pieceId = planPieceId SET pieceFuel = pieceFuel - 1 WHERE planPieceId IS NULL AND pieceFuel != -1 AND pieceGameId = 1;';
-        const inserts = [gameId];
         await pool.query(queryString, inserts);
     }
 
@@ -414,5 +397,15 @@ export class Piece implements PieceType {
             gameId
         ];
         await pool.query(testquery, inserts);
+    }
+
+    /**
+     * Removing fuel from pieces that don't have any plans (and already have some amount of fuel (not -1))
+     */
+    static async removeFuelForLoitering(gameId: number) {
+        const queryString =
+            'UPDATE pieces LEFT JOIN plans ON pieceId = planPieceId SET pieceFuel = pieceFuel - 1 WHERE planPieceId IS NULL AND pieceFuel != -1 AND pieceGameId = 1;';
+        const inserts = [gameId];
+        await pool.query(queryString, inserts);
     }
 }

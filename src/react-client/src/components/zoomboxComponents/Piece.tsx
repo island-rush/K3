@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { TYPE_NAMES } from '../../../../constants';
-import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../styleConstants';
+import { TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { PieceType } from '../../../../types';
+import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../styleConstants';
 
 const pieceStyle = {
     backgroundColor: 'grey',
@@ -54,11 +54,11 @@ export class Piece extends Component<Props> {
             ...(piece.pieceDisabled ? disabledStyle : '')
         };
 
-        const disabledText = piece.pieceDisabled ? `\nDisabled` : ``;
+        const disabledText = piece.pieceDisabled ? `\nDisabled` : '';
+        const fuelText = piece.pieceFuel >= 0 ? `\nFuel: ${piece.pieceFuel}` : '';
+        const movesText = TYPE_MOVES[piece.pieceTypeId] !== 0 ? `\nMoves: ${piece.pieceMoves}` : '';
 
-        const title = `${TYPE_NAMES[piece.pieceTypeId]}\nMoves: ${piece.pieceMoves}\nFuel: ${
-            piece.pieceFuel !== -1 ? piece.pieceFuel : 'N/A'
-        }${disabledText}`;
+        const title = `${TYPE_NAMES[piece.pieceTypeId]}${movesText}${fuelText}${disabledText}`;
 
         const onClick = (event: any) => {
             event.preventDefault();

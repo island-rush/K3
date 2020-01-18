@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ALL_AIRFIELD_LOCATIONS } from '../../../../constants';
 import { GameboardMetaState, GameboardState, PieceType } from '../../../../types';
 import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux';
 import { ZOOMBOX_BACKGROUNDS } from '../styleConstants';
@@ -13,15 +12,6 @@ const zoomboxStyle = {
     height: '29%',
     width: '24%',
     boxShadow: '0px 0px 0px 2px rgba(0, 0, 0, 1) inset'
-};
-
-const airfieldStyle: any = {
-    backgroundColor: 'yellow',
-    margin: '1%',
-    float: 'left',
-    position: 'relative',
-    height: '40%',
-    width: '30%'
 };
 
 const invisibleStyle = {
@@ -42,19 +32,6 @@ class Zoombox extends Component<Props> {
         const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen } = this.props;
 
         const isVisible = selectedPos !== -1;
-
-        const airfieldBox = !ALL_AIRFIELD_LOCATIONS.includes(selectedPos) ? null : (
-            <div
-                style={airfieldStyle}
-                onDoubleClick={e => {
-                    e.preventDefault();
-                    alert('clicked to open airfield');
-                    e.stopPropagation();
-                }}
-            >
-                AIRFIELD
-            </div>
-        );
 
         const pieces = !isVisible
             ? null
@@ -79,8 +56,6 @@ class Zoombox extends Component<Props> {
 
         return (
             <div style={style} onClick={onClick}>
-                <div>{airfieldBox}</div>
-
                 {pieces}
             </div>
         );
