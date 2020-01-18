@@ -107,8 +107,7 @@ export const initialStateAction = async (game: Game, gameTeam: number, gameContr
                             pieceVisible: friendlyPiecesList[x].pieceVisible,
                             pieceMoves: friendlyPiecesList[x].pieceMoves,
                             pieceFuel: friendlyPiecesList[x].pieceFuel,
-                            pieceContainerId: -1, // TODO: don't force these values to fit type, actually get them and put them here
-                            pieceLanded: -1
+                            pieceContainerId: -1 // TODO: don't force these values to fit type, actually get them and put them here
                         },
                         targetPiece:
                             friendlyPiecesList[x].tpieceId == null
@@ -122,8 +121,7 @@ export const initialStateAction = async (game: Game, gameTeam: number, gameContr
                                       pieceVisible: friendlyPiecesList[x].tpieceVisible,
                                       pieceMoves: friendlyPiecesList[x].tpieceMoves,
                                       pieceFuel: friendlyPiecesList[x].tpieceFuel,
-                                      pieceContainerId: -1, // TODO: don't force these (same as above)
-                                      pieceLanded: -1
+                                      pieceContainerId: -1 // TODO: don't force these (same as above)
                                   }
                     };
                     friendlyPieces.push(thisFriendlyPiece);

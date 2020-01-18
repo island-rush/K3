@@ -48,10 +48,9 @@ export class MainButton extends Component<Props> {
                 onClick={event => {
                     event.preventDefault();
                     // normally confirms are obtrusive UI, and should use something else TODO: confirm dialog box...
-                    //eslint-disable-next-line no-restricted-globals
-                    if(gameStatus != WAITING_STATUS){
-                        if (window.confirm("Are you sure you want to move on?")) {
-                            this.props.mainButtonClick();
+                    if (gameStatus !== WAITING_STATUS) {
+                        if (window.confirm('Are you sure you want to move on?')) {
+                            mainButtonClick();
                         }
                     }
                     event.stopPropagation();

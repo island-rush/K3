@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { ALL_AIRFIELD_LOCATIONS } from '../../../../constants';
-import { GameboardMetaState, GameboardState, PieceType } from '../../../../types';
+import { GameboardMetaState, GameboardState, PieceType, GameInfoState } from '../../../../types';
 import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux';
 import { ZOOMBOX_BACKGROUNDS } from '../styleConstants';
 import { Piece } from './Piece';
@@ -15,15 +14,6 @@ const zoomboxStyle = {
     boxShadow: '0px 0px 0px 2px rgba(0, 0, 0, 1) inset'
 };
 
-const airfieldStyle: any = {
-    backgroundColor: 'yellow',
-    margin: '1%',
-    float: 'left',
-    position: 'relative',
-    height: '40%',
-    width: '30%'
-};
-
 const invisibleStyle = {
     display: 'none'
 };
@@ -35,26 +25,14 @@ interface Props {
     selectPiece: any;
     clearPieceSelection: any;
     pieceOpen: any;
+    gameInfo: GameInfoState;
 }
 
 class Zoombox extends Component<Props> {
     render() {
-        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen } = this.props;
+        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, gameInfo } = this.props;
 
         const isVisible = selectedPos !== -1;
-
-        const airfieldBox = !ALL_AIRFIELD_LOCATIONS.includes(selectedPos) ? null : (
-            <div
-                style={airfieldStyle}
-                onDoubleClick={e => {
-                    e.preventDefault();
-                    alert('clicked to open airfield');
-                    e.stopPropagation();
-                }}
-            >
-                AIRFIELD
-            </div>
-        );
 
         const pieces = !isVisible
             ? null
@@ -66,6 +44,7 @@ class Zoombox extends Component<Props> {
                       topLevel={true}
                       key={index}
                       piece={piece}
+                      gameInfo={gameInfo}
                   />
               ));
 
@@ -79,18 +58,25 @@ class Zoombox extends Component<Props> {
 
         return (
             <div style={style} onClick={onClick}>
-                <div>{airfieldBox}</div>
-
                 {pieces}
             </div>
         );
     }
 }
 
-const mapStateToProps = ({ gameboard, gameboardMeta }: { gameboard: GameboardState; gameboardMeta: GameboardMetaState }) => ({
+const mapStateToProps = ({
+    gameboard,
+    gameboardMeta,
+    gameInfo
+}: {
+    gameboard: GameboardState;
+    gameboardMeta: GameboardMetaState;
+    gameInfo: GameInfoState;
+}) => ({
     selectedPos: gameboardMeta.selectedPosition,
     selectedPiece: gameboardMeta.selectedPiece,
-    gameboard
+    gameboard,
+    gameInfo
 });
 
 const mapActionsToProps = {
