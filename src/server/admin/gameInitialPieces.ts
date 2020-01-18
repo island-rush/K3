@@ -33,7 +33,31 @@ const piece = (pieceGameId: number, pieceTeamId: number, pieceTypeId: number, pi
 export const gameInitialPieces = async (gameId: number) => {
     // TODO: create an excel doc to help facilitate game creation, read it like a csv to generate values (future idea = game creator interface (right click insert piece))
     const firstPieces: number[][] = [
-        piece(gameId, RED_TEAM_ID, STEALTH_FIGHTER_TYPE_ID, 21)
+        // typical battle setup (top left corner meet up on cross-over)
+        piece(gameId, BLUE_TEAM_ID, TANK_COMPANY_TYPE_ID, 0),
+        piece(gameId, RED_TEAM_ID, TANK_COMPANY_TYPE_ID, 1),
+
+        // pieces to show refueling (starting on airfields)
+        piece(gameId, RED_TEAM_ID, STEALTH_FIGHTER_TYPE_ID, 21),
+        piece(gameId, RED_TEAM_ID, STEALTH_BOMBER_TYPE_ID, 21),
+        piece(gameId, RED_TEAM_ID, BOMBER_TYPE_ID, 21),
+        piece(gameId, RED_TEAM_ID, AIRBORN_ISR_TYPE_ID, 21),
+        piece(gameId, RED_TEAM_ID, AIR_REFUELING_SQUADRON_ID, 70),
+        piece(gameId, RED_TEAM_ID, AIR_REFUELING_SQUADRON_ID, 70),
+
+        // show submarines
+        piece(gameId, RED_TEAM_ID, SUBMARINE_TYPE_ID, 120),
+        piece(gameId, RED_TEAM_ID, SUBMARINE_TYPE_ID, 120),
+
+        // bigger battle setup (meet in the middle)
+        piece(gameId, BLUE_TEAM_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, 118),
+        piece(gameId, BLUE_TEAM_ID, ARTILLERY_BATTERY_TYPE_ID, 118),
+        piece(gameId, BLUE_TEAM_ID, TANK_COMPANY_TYPE_ID, 118),
+        piece(gameId, BLUE_TEAM_ID, TANK_COMPANY_TYPE_ID, 118),
+
+        piece(gameId, RED_TEAM_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, 102),
+        piece(gameId, RED_TEAM_ID, ARTILLERY_BATTERY_TYPE_ID, 102),
+        piece(gameId, RED_TEAM_ID, ATTACK_HELICOPTER_TYPE_ID, 102),
     ];
 
     const queryString = 'INSERT INTO pieces (pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel) VALUES ?';
