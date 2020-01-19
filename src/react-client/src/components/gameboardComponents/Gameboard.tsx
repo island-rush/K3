@@ -175,7 +175,7 @@ class Gameboard extends Component<Props> {
         //prettier-ignore
         const { selectedPosition, selectedPiece, highlightedPositions } = gameboardMeta;
         //prettier-ignore
-        const { confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines} = capabilities;
+        const { confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines, seaMineHits} = capabilities;
 
         const { confirmedPlans } = planning;
 
@@ -290,6 +290,8 @@ class Gameboard extends Component<Props> {
                         ? 'commInterruptPos'
                         : goldenEyePositions.includes(parseInt(positionIndex))
                         ? 'goldenEyePos'
+                        : seaMineHits.includes(parseInt(positionIndex))
+                        ? 'goldenEyePos' // TODO: change to different style for sea mine indication
                         : ''
                 }
                 //TODO: pass down what the highlighting means into the title

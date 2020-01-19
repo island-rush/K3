@@ -1,6 +1,14 @@
 // prettier-ignore
-import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
-import { NewRoundAction, PlacePhaseAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../types';
+import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
+import {
+    ClearSeaMineNotifyAction,
+    NewRoundAction,
+    PlacePhaseAction,
+    SeaMineHitNotifyAction,
+    SocketSession,
+    UpdateAirfieldAction,
+    UpdateFlagAction
+} from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
 import { sendToGame, sendToTeam } from '../helpers';
 import { giveNextEvent } from './giveNextEvent';
@@ -43,7 +51,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                     confirmedBioWeapons: await Capability.getBiologicalWeapons(gameId, BLUE_TEAM_ID),
                     confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, BLUE_TEAM_ID),
                     confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, BLUE_TEAM_ID),
-                    confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID)
+                    confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID),
+                    confirmedSeaMines: await Capability.getSeaMines(gameId, BLUE_TEAM_ID)
                 }
             };
             const placePhaseActionRed: PlacePhaseAction = {
@@ -54,7 +63,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                     confirmedBioWeapons: await Capability.getBiologicalWeapons(gameId, RED_TEAM_ID),
                     confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, RED_TEAM_ID),
                     confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, RED_TEAM_ID),
-                    confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID)
+                    confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID),
+                    confirmedSeaMines: await Capability.getSeaMines(gameId, RED_TEAM_ID)
                 }
             };
 
@@ -74,7 +84,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                 confirmedBioWeapons: await Capability.getBiologicalWeapons(gameId, BLUE_TEAM_ID),
                 confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, BLUE_TEAM_ID),
                 confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, BLUE_TEAM_ID),
-                confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID)
+                confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID),
+                confirmedSeaMines: await Capability.getSeaMines(gameId, BLUE_TEAM_ID)
             }
         };
         const newRoundActionRed: NewRoundAction = {
@@ -86,7 +97,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                 confirmedBioWeapons: await Capability.getBiologicalWeapons(gameId, RED_TEAM_ID),
                 confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, RED_TEAM_ID),
                 confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, RED_TEAM_ID),
-                confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID)
+                confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID),
+                confirmedSeaMines: await Capability.getSeaMines(gameId, RED_TEAM_ID)
             }
         };
 
@@ -134,6 +146,29 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
 
         await Event.bulkInsertEvents(eventInserts);
         await Event.bulkInsertItems(gameId, eventItemInserts);
+    }
+
+    const positionsThatWereHit = await Capability.checkSeaMineHit(gameId);
+    if (positionsThatWereHit.length !== 0) {
+        // need to send to client that these positions were hit
+        const seaMineHitNotifyAction: SeaMineHitNotifyAction = {
+            type: SEA_MINE_HIT_NOTIFICATION,
+            payload: {
+                positionsToHighlight: positionsThatWereHit
+            }
+        };
+
+        // Send all flag updates to every team
+        sendToGame(gameId, seaMineHitNotifyAction);
+
+        const clearSeaMineNotifyAction: ClearSeaMineNotifyAction = {
+            type: SEA_MINE_NOTIFY_CLEAR,
+            payload: {}
+        };
+
+        setTimeout(() => {
+            sendToGame(gameId, clearSeaMineNotifyAction);
+        }, 5000);
     }
 
     await Piece.move(gameId, currentMovementOrder); // changes the piecePositionId, deletes the plan, all for specialflag = 0

@@ -45,6 +45,7 @@ export class Piece extends Component<Props> {
     render() {
         const { piece, topLevel, selected, pieceClick, pieceOpen, gameInfo } = this.props;
 
+        // TODO: top level probably not used anymore now that containers are their own popup
         const pieceCombinedStyle = {
             ...pieceStyle,
             ...(topLevel ? topLevelStyle : bottomLevelStyle),

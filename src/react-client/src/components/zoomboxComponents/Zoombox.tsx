@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { GameboardMetaState, GameboardState, PieceType, GameInfoState, CapabilitiesState } from '../../../../types';
 import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux';
-import { ZOOMBOX_BACKGROUNDS } from '../styleConstants';
+import { ZOOMBOX_BACKGROUNDS, TYPE_IMAGES } from '../styleConstants';
 import { Piece } from './Piece';
+import { SEA_MINES_TYPE_ID } from '../../../../constants';
 
 const zoomboxStyle = {
     position: 'absolute',
@@ -16,6 +17,19 @@ const zoomboxStyle = {
 
 const invisibleStyle = {
     display: 'none'
+};
+
+const seaMineStyle = {
+    backgroundColor: 'grey',
+    margin: '1%',
+    float: 'left',
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat',
+    position: 'relative',
+    width: '15%',
+    height: '24%',
+    boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset', // disabled style (for pieces)
+    ...TYPE_IMAGES[SEA_MINES_TYPE_ID]
 };
 
 interface Props {
@@ -50,7 +64,7 @@ class Zoombox extends Component<Props> {
               ));
 
         // TODO: make sea mine actually look like a thing
-        const seaMine = confirmedSeaMines.includes(selectedPos) ? <div>Sea Mine</div> : null;
+        const seaMine = confirmedSeaMines.includes(selectedPos) ? <div style={seaMineStyle} title={'Sea Mine'} /> : null;
 
         const style = isVisible ? { ...zoomboxStyle, ...ZOOMBOX_BACKGROUNDS[gameboard[selectedPos].type] } : invisibleStyle;
 
