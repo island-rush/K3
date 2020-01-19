@@ -31,10 +31,25 @@ export const REFUEL_EVENT_TYPE = 2;
 
 export const ROUNDS_PER_COMBAT_PHASE = 2; // 0 indexed
 
+/**
+ * COCOM
+ */
 export const TYPE_MAIN = 0;
+/**
+ * JFACC
+ */
 export const TYPE_AIR = 1;
+/**
+ * JFLCC
+ */
 export const TYPE_LAND = 2;
+/**
+ * JFMCC
+ */
 export const TYPE_SEA = 3;
+/**
+ * JFSOCC
+ */
 export const TYPE_SPECIAL = 4;
 
 export const TYPE_OWNER_NAMES: { [id: number]: string } = {};

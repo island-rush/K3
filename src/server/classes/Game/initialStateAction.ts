@@ -24,7 +24,8 @@ export const initialStateAction = async (game: Game, gameTeam: number, gameContr
                 confirmedBioWeapons: await Capability.getBiologicalWeapons(game.gameId, gameTeam),
                 confirmedRaiseMorale: await Capability.getRaiseMorale(game.gameId, gameTeam),
                 confirmedCommInterrupt: await Capability.getCommInterrupt(game.gameId, gameTeam),
-                confirmedGoldenEye: await Capability.getGoldenEye(game.gameId, gameTeam)
+                confirmedGoldenEye: await Capability.getGoldenEye(game.gameId, gameTeam),
+                confirmedSeaMines: await Capability.getSeaMines(game.gameId, gameTeam)
             },
             gameInfo: {
                 gameSection: game.gameSection,

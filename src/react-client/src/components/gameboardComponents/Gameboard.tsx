@@ -87,7 +87,7 @@ const patternSolver = (position: any, gameInfo: any, positionIndex: number) => {
     return type; //This resolves what image is shown on the board (see ./images/positionImages)
 };
 
-const hasPieceType = (position: any, highLow: 'top' | 'bottom', team: 'blue' | 'red') => {
+const hasPieceType = (position: any, highLow: 'top' | 'bottom', team: 'blue' | 'red', confirmedSeaMines: number[], positionIndex: number) => {
     const { pieces } = position;
     const { highPieces, lowPieces } = TYPE_HIGH_LOW;
     const highLowToCheck = highLow === 'top' ? highPieces : lowPieces;
@@ -98,6 +98,10 @@ const hasPieceType = (position: any, highLow: 'top' | 'bottom', team: 'blue' | '
                 return true;
             }
         }
+    }
+
+    if (highLow === 'bottom' && confirmedSeaMines.includes(positionIndex)) {
+        return true;
     }
 
     return false;
@@ -171,7 +175,7 @@ class Gameboard extends Component<Props> {
         //prettier-ignore
         const { selectedPosition, selectedPiece, highlightedPositions } = gameboardMeta;
         //prettier-ignore
-        const { confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods} = capabilities;
+        const { confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines} = capabilities;
 
         const { confirmedPlans } = planning;
 
@@ -290,10 +294,10 @@ class Gameboard extends Component<Props> {
                 }
                 //TODO: pass down what the highlighting means into the title
                 title={titleSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex))}
-                topBlue={hasPieceType(gameboard[parseInt(positionIndex)], 'top', 'blue')}
-                bottomBlue={hasPieceType(gameboard[parseInt(positionIndex)], 'bottom', 'blue')}
-                topRed={hasPieceType(gameboard[parseInt(positionIndex)], 'top', 'red')}
-                bottomRed={hasPieceType(gameboard[parseInt(positionIndex)], 'bottom', 'red')}
+                topBlue={hasPieceType(gameboard[parseInt(positionIndex)], 'top', 'blue', confirmedSeaMines, parseInt(positionIndex))}
+                bottomBlue={hasPieceType(gameboard[parseInt(positionIndex)], 'bottom', 'blue', confirmedSeaMines, parseInt(positionIndex))}
+                topRed={hasPieceType(gameboard[parseInt(positionIndex)], 'top', 'red', confirmedSeaMines, parseInt(positionIndex))}
+                bottomRed={hasPieceType(gameboard[parseInt(positionIndex)], 'bottom', 'red', confirmedSeaMines, parseInt(positionIndex))}
             />
         ));
 

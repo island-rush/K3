@@ -185,3 +185,10 @@ export type GoldenEyePieceType = {
     goldenEyeId: number;
     pieceId: number;
 };
+
+export type SeaMineType = {
+    seaMineId: number;
+    gameId: number;
+    teamId: number;
+    positionId: number;
+};

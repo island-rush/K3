@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { GameboardMetaState, GameboardState, PieceType, GameInfoState } from '../../../../types';
+import { GameboardMetaState, GameboardState, PieceType, GameInfoState, CapabilitiesState } from '../../../../types';
 import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux';
 import { ZOOMBOX_BACKGROUNDS } from '../styleConstants';
 import { Piece } from './Piece';
@@ -26,11 +26,12 @@ interface Props {
     clearPieceSelection: any;
     pieceOpen: any;
     gameInfo: GameInfoState;
+    confirmedSeaMines: CapabilitiesState['confirmedSeaMines'];
 }
 
 class Zoombox extends Component<Props> {
     render() {
-        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, gameInfo } = this.props;
+        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, gameInfo, confirmedSeaMines } = this.props;
 
         const isVisible = selectedPos !== -1;
 
@@ -48,6 +49,9 @@ class Zoombox extends Component<Props> {
                   />
               ));
 
+        // TODO: make sea mine actually look like a thing
+        const seaMine = confirmedSeaMines.includes(selectedPos) ? <div>Sea Mine</div> : null;
+
         const style = isVisible ? { ...zoomboxStyle, ...ZOOMBOX_BACKGROUNDS[gameboard[selectedPos].type] } : invisibleStyle;
 
         const onClick = (event: any) => {
@@ -59,6 +63,7 @@ class Zoombox extends Component<Props> {
         return (
             <div style={style} onClick={onClick}>
                 {pieces}
+                {seaMine}
             </div>
         );
     }
@@ -67,16 +72,19 @@ class Zoombox extends Component<Props> {
 const mapStateToProps = ({
     gameboard,
     gameboardMeta,
-    gameInfo
+    gameInfo,
+    capabilities
 }: {
     gameboard: GameboardState;
     gameboardMeta: GameboardMetaState;
     gameInfo: GameInfoState;
+    capabilities: CapabilitiesState;
 }) => ({
     selectedPos: gameboardMeta.selectedPosition,
     selectedPiece: gameboardMeta.selectedPiece,
     gameboard,
-    gameInfo
+    gameInfo,
+    confirmedSeaMines: capabilities.confirmedSeaMines
 });
 
 const mapActionsToProps = {

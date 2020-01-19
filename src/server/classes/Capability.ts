@@ -10,7 +10,8 @@ import {
     RodsFromGodType,
     RaiseMoraleType,
     CommInterruptType,
-    GoldenEyeType
+    GoldenEyeType,
+    SeaMineType
 } from '../../types';
 import { pool } from '../database';
 
@@ -551,5 +552,35 @@ export class Capability {
 
         queryString = 'DELETE FROM goldenEye WHERE roundsLeft = 0';
         await pool.query(queryString);
+    }
+
+    static async insertSeaMine(gameId: number, gameTeam: number, selectedPositionId: number) {
+        // TODO: could make it unique within the database by doing double primary key, instead of single key id, other database tricks and best practices
+        let queryString = 'SELECT * FROM seaMines WHERE gameId = ? AND positionId = ? AND gameTeam = ?';
+        let inserts = [gameId, selectedPositionId, gameTeam];
+        const [results] = await pool.query<RowDataPacket[] & SeaMineType[]>(queryString, inserts);
+
+        // prevent duplicate entries if possible
+        if (results.length !== 0) {
+            return false;
+        }
+
+        queryString = 'INSERT INTO seaMines (gameId, gameTeam, positionId) VALUES (?, ?, ?)';
+        inserts = [gameId, gameTeam, selectedPositionId];
+        await pool.query(queryString, inserts);
+        return true;
+    }
+
+    static async getSeaMines(gameId: number, gameTeam: number) {
+        const queryString = 'SELECT * FROM seaMines WHERE gameId = ? AND gameTeam = ?';
+        const inserts = [gameId, gameTeam];
+        const [results] = await pool.query<RowDataPacket[] & SeaMineType[]>(queryString, inserts);
+
+        const listOfSeaMines = [];
+        for (let x = 0; x < results.length; x++) {
+            listOfSeaMines.push(results[x].positionId);
+        }
+
+        return listOfSeaMines;
     }
 }

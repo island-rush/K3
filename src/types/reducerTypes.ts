@@ -66,6 +66,7 @@ export type CapabilitiesState = {
     confirmedRaiseMorale: number[];
     confirmedCommInterrupt: number[];
     confirmedGoldenEye: number[];
+    confirmedSeaMines: number[];
 };
 
 export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };

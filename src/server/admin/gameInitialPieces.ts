@@ -58,6 +58,10 @@ export const gameInitialPieces = async (gameId: number) => {
         piece(gameId, RED_TEAM_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, 102),
         piece(gameId, RED_TEAM_ID, ARTILLERY_BATTERY_TYPE_ID, 102),
         piece(gameId, RED_TEAM_ID, ATTACK_HELICOPTER_TYPE_ID, 102),
+
+        // Sea transports to test sea mines
+        piece(gameId, BLUE_TEAM_ID, TRANSPORT_TYPE_ID, 121),
+        piece(gameId, RED_TEAM_ID, TRANSPORT_TYPE_ID, 122)
     ];
 
     const queryString = 'INSERT INTO pieces (pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel) VALUES ?';
