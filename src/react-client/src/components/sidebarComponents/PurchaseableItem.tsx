@@ -26,7 +26,11 @@ export const PurchaseableItem = ({ typeId, purchase }: Props) => {
     const moves = TYPE_MOVES[typeId];
     const fuel = TYPE_FUEL[typeId];
 
-    const title = `${name}\nCost: ${cost}\nMoves: ${moves !== undefined ? moves : 'N/A'}\nFuel: ${fuel !== undefined && fuel !== -1 ? fuel : 'N/A'}`;
+    const costText = `\nCost: ${cost}`;
+    const movesText = moves !== undefined && moves !== 0 ? `\nMoves: ${moves}` : '';
+    const fuelText = fuel !== undefined && fuel !== -1 ? `\nFuel: ${fuel}` : '';
+
+    const title = `${name}${costText}${movesText}${fuelText}`;
 
     const onClick = (event: any) => {
         event.preventDefault();

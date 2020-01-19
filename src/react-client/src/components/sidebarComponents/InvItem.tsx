@@ -16,7 +16,7 @@ const invItemStyle = {
 
 interface Props {
     invItem: InvItemType;
-    invItemClick: any;
+    invItemClick: (invItem: InvItemType) => void;
 }
 
 export const InvItem = ({ invItem, invItemClick }: Props) => {
@@ -31,7 +31,10 @@ export const InvItem = ({ invItem, invItemClick }: Props) => {
         ...TYPE_IMAGES[invItemTypeId]
     };
 
-    const title = `${name}\nMoves: ${moves !== undefined ? moves : 'N/A'}\nFuel: ${fuel !== undefined && fuel !== -1 ? fuel : 'N/A'}`;
+    const movesText = moves !== undefined && moves !== 0 ? `\nMoves: ${moves}` : '';
+    const fuelText = fuel !== undefined && fuel !== -1 ? `\nFuel: ${fuel}` : '';
+
+    const title = `${name}${movesText}${fuelText}`;
 
     const onClick = (event: any) => {
         event.preventDefault();

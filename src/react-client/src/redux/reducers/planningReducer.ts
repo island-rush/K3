@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INSURGENCY_SELECTED, INSURGENCY_SELECTING, PLANNING_SELECT, PLAN_WAS_CONFIRMED, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SLICE_CHANGE, START_PLAN, UNDO_MOVE } from '../../../../constants';
+import { BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INSURGENCY_SELECTED, INSURGENCY_SELECTING, PLANNING_SELECT, PLAN_WAS_CONFIRMED, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SLICE_CHANGE, START_PLAN, UNDO_MOVE } from '../../../../constants';
 // prettier-ignore
-import { BioWeaponsAction, BioWeaponSelectingAction, CommInterruptAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, GameInitialStateAction, GoldenEyeAction, GoldenEyeSelectingAction, InsurgencyAction, InsurgencySelectingAction, PlanningSelectAction, PlanningState, PreventPlanAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RemoteSensingAction, RodsFromGodAction, RodsFromGodSelectingAction, SliceChangeAction, StartPlanAction, UndoMoveAction } from '../../../../types';
+import { BioWeaponsAction, BioWeaponSelectingAction, CommInterruptAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, GameInitialStateAction, GoldenEyeAction, GoldenEyeSelectingAction, InsurgencyAction, InsurgencySelectingAction, PlanningSelectAction, PlanningState, PreventPlanAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RemoteSensingAction, RodsFromGodAction, RodsFromGodSelectingAction, SeaMineAction, SeaMineSelectingAction, SliceChangeAction, StartPlanAction, UndoMoveAction } from '../../../../types';
 
 type PlanningReducerActions =
     | GameInitialStateAction
@@ -14,6 +14,8 @@ type PlanningReducerActions =
     | RodsFromGodSelectingAction
     | GoldenEyeSelectingAction
     | RemoteSenseSelectingAction
+    | SeaMineSelectingAction
+    | SeaMineAction
     | RodsFromGodAction
     | BioWeaponsAction
     | CommInterruptAction
@@ -30,6 +32,7 @@ type PlanningReducerActions =
 type SelectingAction =
     | InsurgencySelectingAction
     | BioWeaponSelectingAction
+    | SeaMineSelectingAction
     | CommInterruptSelectingAction
     | RodsFromGodSelectingAction
     | GoldenEyeSelectingAction
@@ -78,6 +81,7 @@ export function planningReducer(state = initialPlanningState, action: PlanningRe
         case BIO_WEAPON_SELECTING:
         case COMM_INTERRUPT_SELECTING:
         case RODS_FROM_GOD_SELECTING:
+        case SEA_MINE_SELECTING:
         case GOLDEN_EYE_SELECTING:
         case REMOTE_SENSING_SELECTING:
             stateCopy.active = true;
@@ -89,6 +93,7 @@ export function planningReducer(state = initialPlanningState, action: PlanningRe
         case BIO_WEAPON_SELECTED:
         case COMM_INTERRUP_SELECTED:
         case INSURGENCY_SELECTED:
+        case SEA_MINE_SELECTED:
         case REMOTE_SENSING_SELECTED:
         case GOLDEN_EYE_SELECTED:
             stateCopy.capability = false;

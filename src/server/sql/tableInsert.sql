@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS commInterrupt(
 	commInterruptId INT(8) PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	gameId INT(8) NOT NULL,
     teamId INT(1) NOT NULL,
-    positionId INT(2) NOT NULL,
+    positionId INT(4) NOT NULL,
     roundsLeft INT(2) NOT NULL,
     activated INT(1) NOT NULL,
     FOREIGN KEY (gameId) REFERENCES games (gameId) ON DELETE CASCADE
@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS goldenEye(
 	goldenEyeId INT(8) PRIMARY KEY NOT NULL AUTO_INCREMENT,
 	gameId INT(8) NOT NULL,
     teamId INT(1) NOT NULL,
-    positionId INT(2) NOT NULL,
+    positionId INT(4) NOT NULL,
     roundsLeft INT(2) NOT NULL,
     activated INT(1) NOT NULL,
     FOREIGN KEY (gameId) REFERENCES games (gameId) ON DELETE CASCADE
@@ -229,3 +229,11 @@ CREATE TABLE IF NOT EXISTS goldenEyePieces(
     FOREIGN KEY (pieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
     PRIMARY KEY (goldenEyeId, pieceId)
 );
+
+CREATE TABLE IF NOT EXISTS seaMines(
+	seaMineId INT(8) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    gameId INT(8) NOT NULL,
+    gameTeam INT(2) NOT NULL,
+    positionId INT(3) NOT NULL,
+    FOREIGN KEY (gameId) REFERENCES games (gameId) ON DELETE CASCADE
+) AUTO_INCREMENT=1;

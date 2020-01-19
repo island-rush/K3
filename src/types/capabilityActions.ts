@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INSURGENCY_SELECTED, INSURGENCY_SELECTING, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INSURGENCY_CONFIRM, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM } from '../constants';
+import { BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INSURGENCY_SELECTED, INSURGENCY_SELECTING, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INSURGENCY_CONFIRM, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SERVER_SEA_MINE_CONFIRM } from '../constants';
 import { GameboardPiecesDataType } from './actionTypes';
-import { InvItemType } from './databaseTables';
+import { InvItemType, PieceType } from './databaseTables';
 import { CapabilitiesState, GameboardMetaState } from './reducerTypes';
 
 export type RemoteSenseSelectingAction = {
@@ -13,6 +13,13 @@ export type RemoteSenseSelectingAction = {
 
 export type RaiseMoraleSelectingAction = {
     type: typeof RAISE_MORALE_SELECTING;
+    payload: {
+        invItem: InvItemType;
+    };
+};
+
+export type SeaMineSelectingAction = {
+    type: typeof SEA_MINE_SELECTING;
     payload: {
         invItem: InvItemType;
     };
@@ -61,6 +68,14 @@ export type RodsFromGodRequestAction = {
     };
 };
 
+export type SeaMineRequestAction = {
+    type: typeof SERVER_SEA_MINE_CONFIRM;
+    payload: {
+        selectedPiece: PieceType;
+        invItem: InvItemType;
+    };
+};
+
 export type RodsFromGodAction = {
     type: typeof RODS_FROM_GOD_SELECTED;
     payload: {
@@ -96,6 +111,14 @@ export type InsurgencyRequestAction = {
 
 export type InsurgencyAction = {
     type: typeof INSURGENCY_SELECTED;
+    payload: {
+        invItem: InvItemType;
+        selectedPositionId: GameboardMetaState['selectedPosition'];
+    };
+};
+
+export type SeaMineAction = {
+    type: typeof SEA_MINE_SELECTED;
     payload: {
         invItem: InvItemType;
         selectedPositionId: GameboardMetaState['selectedPosition'];

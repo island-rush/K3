@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { GameboardMetaState, GameboardState, PieceType, GameInfoState } from '../../../../types';
+import { GameboardMetaState, GameboardState, PieceType, GameInfoState, CapabilitiesState } from '../../../../types';
 import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux';
-import { ZOOMBOX_BACKGROUNDS } from '../styleConstants';
+import { ZOOMBOX_BACKGROUNDS, TYPE_IMAGES } from '../styleConstants';
 import { Piece } from './Piece';
+import { SEA_MINES_TYPE_ID } from '../../../../constants';
 
 const zoomboxStyle = {
     position: 'absolute',
@@ -18,6 +19,19 @@ const invisibleStyle = {
     display: 'none'
 };
 
+const seaMineStyle = {
+    backgroundColor: 'grey',
+    margin: '1%',
+    float: 'left',
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat',
+    position: 'relative',
+    width: '15%',
+    height: '24%',
+    boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset', // disabled style (for pieces)
+    ...TYPE_IMAGES[SEA_MINES_TYPE_ID]
+};
+
 interface Props {
     selectedPos: number;
     selectedPiece: PieceType | null;
@@ -26,11 +40,12 @@ interface Props {
     clearPieceSelection: any;
     pieceOpen: any;
     gameInfo: GameInfoState;
+    confirmedSeaMines: CapabilitiesState['confirmedSeaMines'];
 }
 
 class Zoombox extends Component<Props> {
     render() {
-        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, gameInfo } = this.props;
+        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, gameInfo, confirmedSeaMines } = this.props;
 
         const isVisible = selectedPos !== -1;
 
@@ -48,6 +63,9 @@ class Zoombox extends Component<Props> {
                   />
               ));
 
+        // TODO: make sea mine actually look like a thing
+        const seaMine = confirmedSeaMines.includes(selectedPos) ? <div style={seaMineStyle} title={'Sea Mine'} /> : null;
+
         const style = isVisible ? { ...zoomboxStyle, ...ZOOMBOX_BACKGROUNDS[gameboard[selectedPos].type] } : invisibleStyle;
 
         const onClick = (event: any) => {
@@ -59,6 +77,7 @@ class Zoombox extends Component<Props> {
         return (
             <div style={style} onClick={onClick}>
                 {pieces}
+                {seaMine}
             </div>
         );
     }
@@ -67,16 +86,19 @@ class Zoombox extends Component<Props> {
 const mapStateToProps = ({
     gameboard,
     gameboardMeta,
-    gameInfo
+    gameInfo,
+    capabilities
 }: {
     gameboard: GameboardState;
     gameboardMeta: GameboardMetaState;
     gameInfo: GameInfoState;
+    capabilities: CapabilitiesState;
 }) => ({
     selectedPos: gameboardMeta.selectedPosition,
     selectedPiece: gameboardMeta.selectedPiece,
     gameboard,
-    gameInfo
+    gameInfo,
+    confirmedSeaMines: capabilities.confirmedSeaMines
 });
 
 const mapActionsToProps = {

@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, NEW_ROUND, NO_MORE_EVENTS, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SLICE_CHANGE } from '../../../../constants';
+import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, NEW_ROUND, NO_MORE_EVENTS, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SLICE_CHANGE, SEA_MINE_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR } from '../../../../constants';
 // prettier-ignore
-import { BioWeaponsAction, CapabilitiesState, CommInterruptAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, NewRoundAction, NoMoreEventsAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SliceChangeAction } from '../../../../types';
+import { BioWeaponsAction, CapabilitiesState, CommInterruptAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, NewRoundAction, NoMoreEventsAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SliceChangeAction, SeaMineAction, ClearSeaMineNotifyAction, SeaMineHitNotifyAction } from '../../../../types';
 
 type CapabilityReducerActions =
     | GameInitialStateAction
@@ -15,6 +15,9 @@ type CapabilityReducerActions =
     | GoldenEyeAction
     | SliceChangeAction
     | EventBattleAction
+    | SeaMineAction
+    | ClearSeaMineNotifyAction
+    | SeaMineHitNotifyAction
     | NoMoreEventsAction
     | EventRefuelAction
     | BioWeaponsAction;
@@ -26,7 +29,9 @@ const initialCapabilitiesState: CapabilitiesState = {
     confirmedBioWeapons: [],
     confirmedRaiseMorale: [],
     confirmedCommInterrupt: [],
-    confirmedGoldenEye: []
+    confirmedGoldenEye: [],
+    confirmedSeaMines: [],
+    seaMineHits: []
 };
 
 export function capabilitiesReducer(state = initialCapabilitiesState, action: CapabilityReducerActions) {
@@ -77,6 +82,21 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
 
         case REMOTE_SENSING_SELECTED:
             stateCopy.confirmedRemoteSense = (action as RemoteSensingAction).payload.confirmedRemoteSense;
+            return stateCopy;
+
+        case SEA_MINE_SELECTED:
+            stateCopy.confirmedSeaMines.push((action as SeaMineAction).payload.selectedPositionId);
+            return stateCopy;
+
+        case SEA_MINE_HIT_NOTIFICATION:
+            stateCopy.seaMineHits = (action as SeaMineHitNotifyAction).payload.positionsToHighlight;
+            stateCopy.confirmedSeaMines = stateCopy.confirmedSeaMines.filter(position => {
+                return !(action as SeaMineHitNotifyAction).payload.positionsToHighlight.includes(position);
+            });
+            return stateCopy;
+
+        case SEA_MINE_NOTIFY_CLEAR:
+            stateCopy.seaMineHits = [];
             return stateCopy;
 
         case GOLDEN_EYE_SELECTED:
