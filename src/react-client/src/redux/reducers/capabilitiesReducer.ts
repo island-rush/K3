@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, NEW_ROUND, NO_MORE_EVENTS, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SLICE_CHANGE, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, ATC_SCRAMBLE_SELECTED } from '../../../../constants';
+import { ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, DRONE_SWARM_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, NEW_ROUND, NO_MORE_EVENTS, NUKE_SELECTED, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SLICE_CHANGE } from '../../../../constants';
 // prettier-ignore
-import { BioWeaponsAction, CapabilitiesState, ClearSeaMineNotifyAction, CommInterruptAction, DroneSwarmAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, NewRoundAction, NoMoreEventsAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, SeaMineHitNotifyAction, SliceChangeAction, DroneSwarmHitNotifyAction, ClearDroneSwarmMineNotifyAction, AtcScrambleAction } from '../../../../types';
+import { AtcScrambleAction, BioWeaponsAction, CapabilitiesState, ClearDroneSwarmMineNotifyAction, ClearSeaMineNotifyAction, CommInterruptAction, DroneSwarmAction, DroneSwarmHitNotifyAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, NewRoundAction, NoMoreEventsAction, NukeAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, SeaMineHitNotifyAction, SliceChangeAction } from '../../../../types';
 
 type CapabilityReducerActions =
     | GameInitialStateAction
@@ -17,6 +17,7 @@ type CapabilityReducerActions =
     | EventBattleAction
     | SeaMineAction
     | AtcScrambleAction
+    | NukeAction
     | DroneSwarmAction
     | ClearSeaMineNotifyAction
     | SeaMineHitNotifyAction
@@ -38,7 +39,8 @@ const initialCapabilitiesState: CapabilitiesState = {
     seaMineHits: [],
     confirmedDroneSwarms: [],
     droneSwarmHits: [],
-    confirmedAtcScramble: []
+    confirmedAtcScramble: [],
+    confirmedNukes: []
 };
 
 export function capabilitiesReducer(state = initialCapabilitiesState, action: CapabilityReducerActions) {
@@ -60,6 +62,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedCommInterrupt = (action as NewRoundAction).payload.confirmedCommInterrupt;
             stateCopy.confirmedDroneSwarms = (action as NewRoundAction).payload.confirmedDroneSwarms;
             stateCopy.confirmedAtcScramble = (action as NewRoundAction).payload.confirmedAtcScramble;
+            stateCopy.confirmedNukes = (action as NewRoundAction).payload.confirmedNukes;
             return stateCopy;
 
         case PLACE_PHASE:
@@ -69,6 +72,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedCommInterrupt = (action as PlacePhaseAction).payload.confirmedCommInterrupt;
             stateCopy.confirmedDroneSwarms = (action as PlacePhaseAction).payload.confirmedDroneSwarms;
             stateCopy.confirmedAtcScramble = (action as PlacePhaseAction).payload.confirmedAtcScramble;
+            stateCopy.confirmedNukes = (action as PlacePhaseAction).payload.confirmedNukes;
             return stateCopy;
 
         case RAISE_MORALE_SELECTED:
@@ -77,6 +81,10 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
 
         case RODS_FROM_GOD_SELECTED:
             stateCopy.confirmedRods.push((action as RodsFromGodAction).payload.selectedPositionId);
+            return stateCopy;
+
+        case NUKE_SELECTED:
+            stateCopy.confirmedNukes.push((action as NukeAction).payload.selectedPositionId);
             return stateCopy;
 
         case BIO_WEAPON_SELECTED:
@@ -140,6 +148,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedInsurgency = (action as SliceChangeAction).payload.confirmedInsurgencyPos;
             stateCopy.confirmedGoldenEye = (action as SliceChangeAction).payload.confirmedGoldenEye;
             stateCopy.confirmedAtcScramble = (action as SliceChangeAction).payload.confirmedAtcScramble;
+            stateCopy.confirmedNukes = (action as SliceChangeAction).payload.confirmedNukes;
             return stateCopy;
 
         case EVENT_BATTLE:

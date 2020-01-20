@@ -4,6 +4,7 @@ import { decreaseCommInterrupt, getCommInterrupt, insertCommInterrupt, useCommIn
 import { checkDroneSwarmHit, decreaseDroneSwarms, getDroneSwarms, insertDroneSwarm } from './droneSwarms';
 import { decreaseGoldenEye, getGoldenEye, insertGoldenEye, useGoldenEye } from './goldenEye';
 import { getInsurgency, insurgencyInsert, useInsurgency } from './insurgency';
+import { getNukes, insertNuke, useNukes } from './nuclearStrike';
 import { decreaseRaiseMorale, getRaiseMorale, insertRaiseMorale } from './raiseMorale';
 import { decreaseRemoteSensing, getRemoteSensing, remoteSensingInsert } from './remoteSensing';
 import { getRodsFromGod, rodsFromGodInsert, useRodsFromGod } from './rodsFromGod';
@@ -13,6 +14,18 @@ import { checkSeaMineHit, getSeaMines, insertSeaMine } from './seaMines';
  * List of static functions for handling capabilities. (Groups all functions inside a single static class)
  */
 export class Capability {
+    static async getNukes(gameId: number, gameTeam: number) {
+        return getNukes(gameId, gameTeam);
+    }
+
+    static async insertNuke(gameId: number, gameTeam: number, selectedPositionId: number) {
+        return insertNuke(gameId, gameTeam, selectedPositionId);
+    }
+
+    static async useNukes(gameId: number) {
+        return useNukes(gameId);
+    }
+
     static async rodsFromGodInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
         return rodsFromGodInsert(gameId, gameTeam, selectedPositionId);
     }

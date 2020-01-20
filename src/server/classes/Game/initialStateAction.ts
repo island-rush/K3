@@ -30,7 +30,8 @@ export const initialStateAction = async (game: Game, gameTeam: number, gameContr
                 seaMineHits: [],
                 confirmedDroneSwarms: await Capability.getDroneSwarms(game.gameId, gameTeam),
                 droneSwarmHits: [],
-                confirmedAtcScramble: await Capability.getAtcScramble(game.gameId, gameTeam)
+                confirmedAtcScramble: await Capability.getAtcScramble(game.gameId, gameTeam),
+                confirmedNukes: await Capability.getNukes(game.gameId, gameTeam)
             },
             gameInfo: {
                 gameSection: game.gameSection,

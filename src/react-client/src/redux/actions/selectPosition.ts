@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
 // prettier-ignore
-import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, TYPE_TERRAIN, SEA_MINES_TYPE_ID, DRONE_SWARMS_TYPE_ID, SERVER_ATC_SCRAMBLE_CONFIRM, ATC_SCRAMBLE_TYPE_ID } from '../../../../constants';
+import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, TYPE_TERRAIN, SEA_MINES_TYPE_ID, DRONE_SWARMS_TYPE_ID, SERVER_ATC_SCRAMBLE_CONFIRM, ATC_SCRAMBLE_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, NUKE_RANGE, SERVER_NUKE_CONFIRM } from '../../../../constants';
 //prettier-ignore
-import { BioWeaponsRequestAction, CommInterruptRequestAction, ExitTransportContainerRequestAction, GoldenEyeRequestAction, HighlightPositionsAction, InsurgencyRequestAction, PlanningSelectAction, PositionSelectAction, RemoteSensingRequestAction, RodsFromGodRequestAction, AtcScrambleRequestAction } from "../../../../types";
+import { BioWeaponsRequestAction, CommInterruptRequestAction, ExitTransportContainerRequestAction, GoldenEyeRequestAction, HighlightPositionsAction, InsurgencyRequestAction, PlanningSelectAction, PositionSelectAction, RemoteSensingRequestAction, RodsFromGodRequestAction, AtcScrambleRequestAction, NukeRequestAction } from "../../../../types";
 import { setUserfeedbackAction } from './setUserfeedbackAction';
 
 type PositionCapabilityRequestAction =
@@ -11,6 +11,7 @@ type PositionCapabilityRequestAction =
     | RemoteSensingRequestAction
     | InsurgencyRequestAction
     | AtcScrambleRequestAction
+    | NukeRequestAction
     | BioWeaponsRequestAction
     | CommInterruptRequestAction
     | GoldenEyeRequestAction;
@@ -119,6 +120,23 @@ export const selectPosition = (selectedPositionId: number) => {
                 dispatch(highlightAction);
             }
 
+            if (planning.invItem && planning.invItem.invItemTypeId === NUCLEAR_STRIKE_TYPE_ID) {
+                let clickedPosition = selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition;
+                let highlightedPositions = [];
+                for (let x = 0; x < distanceMatrix[clickedPosition].length; x++) {
+                    if (distanceMatrix[clickedPosition][x] <= NUKE_RANGE) highlightedPositions.push(x);
+                }
+
+                const highlightAction: HighlightPositionsAction = {
+                    type: HIGHLIGHT_POSITIONS,
+                    payload: {
+                        highlightedPositions
+                    }
+                };
+
+                dispatch(highlightAction);
+            }
+
             if (
                 planning.invItem &&
                 planning.invItem.invItemTypeId !== SEA_MINES_TYPE_ID &&
@@ -144,6 +162,9 @@ export const selectPosition = (selectedPositionId: number) => {
                         break;
                     case GOLDEN_EYE_TYPE_ID:
                         type = SERVER_GOLDEN_EYE_CONFIRM;
+                        break;
+                    case NUCLEAR_STRIKE_TYPE_ID:
+                        type = SERVER_NUKE_CONFIRM;
                         break;
                     case ATC_SCRAMBLE_TYPE_ID:
                         type = SERVER_ATC_SCRAMBLE_CONFIRM;

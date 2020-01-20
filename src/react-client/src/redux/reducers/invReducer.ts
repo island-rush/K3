@@ -1,7 +1,7 @@
 //prettier-ignore
-import { ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_SELECTED, SHOP_TRANSFER } from "../../../../constants";
+import { ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, NUKE_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_SELECTED, SHOP_TRANSFER } from "../../../../constants";
 // prettier-ignore
-import { AtcScrambleAction, BioWeaponsAction, CommInterruptAction, DroneSwarmAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, InvItemPlaceAction, InvItemType, InvState, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, ShopConfirmPurchaseAction } from '../../../../types';
+import { AtcScrambleAction, BioWeaponsAction, CommInterruptAction, DroneSwarmAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, InvItemPlaceAction, InvItemType, InvState, NukeAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, ShopConfirmPurchaseAction } from '../../../../types';
 
 type InvReducerActions =
     | GameInitialStateAction
@@ -13,6 +13,7 @@ type InvReducerActions =
     | BioWeaponsAction
     | SeaMineAction
     | DroneSwarmAction
+    | NukeAction
     | AtcScrambleAction
     | RaiseMoraleAction
     | GoldenEyeAction
@@ -28,6 +29,7 @@ type InvItemCapabilityAction =
     | RaiseMoraleAction
     | SeaMineAction
     | DroneSwarmAction
+    | NukeAction
     | AtcScrambleAction
     | GoldenEyeAction
     | CommInterruptAction;
@@ -56,6 +58,7 @@ export function invReducer(state = initialInvState, action: InvReducerActions) {
         case RAISE_MORALE_SELECTED:
         case SEA_MINE_SELECTED:
         case DRONE_SWARM_SELECTED:
+        case NUKE_SELECTED:
         case GOLDEN_EYE_SELECTED:
         case ATC_SCRAMBLE_SELECTED:
         case COMM_INTERRUP_SELECTED:

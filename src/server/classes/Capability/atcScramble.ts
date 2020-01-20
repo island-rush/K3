@@ -17,7 +17,7 @@ export const getAtcScramble = async (gameId: number, gameTeam: number) => {
 };
 
 export const insertAtcScramble = async (gameId: number, gameTeam: number, selectedPositionId: number) => {
-    const insertQuery = 'SELECT * FROM atcScramble WHERE gameId = ? AND positionId = ? AND (teamId = ? OR activated = ?) ';
+    const insertQuery = 'SELECT * FROM atcScramble WHERE gameId = ? AND positionId = ? AND (teamId = ? OR activated = ?)';
     const inserts = [gameId, selectedPositionId, gameTeam, ACTIVATED];
     const [results] = await pool.query<RowDataPacket[] & AtcScrambleType[]>(insertQuery, inserts);
 
