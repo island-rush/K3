@@ -1,14 +1,7 @@
 // prettier-ignore
-import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
-import {
-    ClearSeaMineNotifyAction,
-    NewRoundAction,
-    PlacePhaseAction,
-    SeaMineHitNotifyAction,
-    SocketSession,
-    UpdateAirfieldAction,
-    UpdateFlagAction
-} from '../../types';
+import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
+// prettier-ignore
+import { ClearDroneSwarmMineNotifyAction, ClearSeaMineNotifyAction, DroneSwarmHitNotifyAction, NewRoundAction, PlacePhaseAction, SeaMineHitNotifyAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
 import { sendToGame, sendToTeam } from '../helpers';
 import { giveNextEvent } from './giveNextEvent';
@@ -37,6 +30,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         await Capability.decreaseGoldenEye(gameId);
         await Capability.decreaseCommInterrupt(gameId);
         await Capability.decreaseRaiseMorale(gameId);
+        await Capability.decreaseDroneSwarms(gameId);
 
         if (gameRound === ROUNDS_PER_COMBAT_PHASE) {
             // Combat -> Place Phase
@@ -52,7 +46,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                     confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, BLUE_TEAM_ID),
                     confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, BLUE_TEAM_ID),
                     confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID),
-                    confirmedSeaMines: await Capability.getSeaMines(gameId, BLUE_TEAM_ID)
+                    confirmedSeaMines: await Capability.getSeaMines(gameId, BLUE_TEAM_ID),
+                    confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, BLUE_TEAM_ID)
                 }
             };
             const placePhaseActionRed: PlacePhaseAction = {
@@ -64,7 +59,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                     confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, RED_TEAM_ID),
                     confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, RED_TEAM_ID),
                     confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID),
-                    confirmedSeaMines: await Capability.getSeaMines(gameId, RED_TEAM_ID)
+                    confirmedSeaMines: await Capability.getSeaMines(gameId, RED_TEAM_ID),
+                    confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, RED_TEAM_ID)
                 }
             };
 
@@ -85,7 +81,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                 confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, BLUE_TEAM_ID),
                 confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, BLUE_TEAM_ID),
                 confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID),
-                confirmedSeaMines: await Capability.getSeaMines(gameId, BLUE_TEAM_ID)
+                confirmedSeaMines: await Capability.getSeaMines(gameId, BLUE_TEAM_ID),
+                confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, BLUE_TEAM_ID)
             }
         };
         const newRoundActionRed: NewRoundAction = {
@@ -98,7 +95,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                 confirmedRaiseMorale: await Capability.getRaiseMorale(gameId, RED_TEAM_ID),
                 confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, RED_TEAM_ID),
                 confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID),
-                confirmedSeaMines: await Capability.getSeaMines(gameId, RED_TEAM_ID)
+                confirmedSeaMines: await Capability.getSeaMines(gameId, RED_TEAM_ID),
+                confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, RED_TEAM_ID)
             }
         };
 
@@ -168,6 +166,31 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
 
         setTimeout(() => {
             sendToGame(gameId, clearSeaMineNotifyAction);
+        }, 5000);
+    }
+
+    // TODO: should combine network requests (instead of doing things twice)
+    const dronePositionsThatWereHit = await Capability.checkDroneSwarmHit(gameId);
+    if (dronePositionsThatWereHit.length !== 0) {
+        // need to send to client that these positions were hit
+        const droneSwarmHitNotifyAction: DroneSwarmHitNotifyAction = {
+            type: DRONE_SWARM_HIT_NOTIFICATION,
+            payload: {
+                positionsToHighlight: dronePositionsThatWereHit
+            }
+        };
+
+        // Send all flag updates to every team
+        sendToGame(gameId, droneSwarmHitNotifyAction);
+
+        const clearDroneSwarmNotifyAction: ClearDroneSwarmMineNotifyAction = {
+            type: DRONE_SWARM_NOTIFY_CLEAR,
+            payload: {}
+        };
+
+        setTimeout(() => {
+            // TODO: can make 'clear notify stuff' a single action that just clears both sea mine and swarm, since they will always happen this way
+            sendToGame(gameId, clearDroneSwarmNotifyAction);
         }, 5000);
     }
 

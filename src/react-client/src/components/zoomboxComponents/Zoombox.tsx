@@ -4,7 +4,7 @@ import { GameboardMetaState, GameboardState, PieceType, GameInfoState, Capabilit
 import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux';
 import { ZOOMBOX_BACKGROUNDS, TYPE_IMAGES } from '../styleConstants';
 import { Piece } from './Piece';
-import { SEA_MINES_TYPE_ID } from '../../../../constants';
+import { SEA_MINES_TYPE_ID, DRONE_SWARMS_TYPE_ID } from '../../../../constants';
 
 const zoomboxStyle = {
     position: 'absolute',
@@ -32,6 +32,19 @@ const seaMineStyle = {
     ...TYPE_IMAGES[SEA_MINES_TYPE_ID]
 };
 
+const droneSwarmStyle = {
+    backgroundColor: 'grey',
+    margin: '1%',
+    float: 'left',
+    backgroundSize: '100% 100%',
+    backgroundRepeat: 'no-repeat',
+    position: 'relative',
+    width: '15%',
+    height: '24%',
+    boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset', // disabled style (for pieces)
+    ...TYPE_IMAGES[DRONE_SWARMS_TYPE_ID]
+};
+
 interface Props {
     selectedPos: number;
     selectedPiece: PieceType | null;
@@ -41,11 +54,22 @@ interface Props {
     pieceOpen: any;
     gameInfo: GameInfoState;
     confirmedSeaMines: CapabilitiesState['confirmedSeaMines'];
+    confirmedDroneSwarms: CapabilitiesState['confirmedDroneSwarms'];
 }
 
 class Zoombox extends Component<Props> {
     render() {
-        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, gameInfo, confirmedSeaMines } = this.props;
+        const {
+            selectedPos,
+            selectedPiece,
+            gameboard,
+            selectPiece,
+            clearPieceSelection,
+            pieceOpen,
+            gameInfo,
+            confirmedSeaMines,
+            confirmedDroneSwarms
+        } = this.props;
 
         const isVisible = selectedPos !== -1;
 
@@ -63,8 +87,8 @@ class Zoombox extends Component<Props> {
                   />
               ));
 
-        // TODO: make sea mine actually look like a thing
         const seaMine = confirmedSeaMines.includes(selectedPos) ? <div style={seaMineStyle} title={'Sea Mine'} /> : null;
+        const droneSwarm = confirmedDroneSwarms.includes(selectedPos) ? <div style={droneSwarmStyle} title={'Drone Swarm'} /> : null;
 
         const style = isVisible ? { ...zoomboxStyle, ...ZOOMBOX_BACKGROUNDS[gameboard[selectedPos].type] } : invisibleStyle;
 
@@ -78,6 +102,7 @@ class Zoombox extends Component<Props> {
             <div style={style} onClick={onClick}>
                 {pieces}
                 {seaMine}
+                {droneSwarm}
             </div>
         );
     }
@@ -98,7 +123,8 @@ const mapStateToProps = ({
     selectedPiece: gameboardMeta.selectedPiece,
     gameboard,
     gameInfo,
-    confirmedSeaMines: capabilities.confirmedSeaMines
+    confirmedSeaMines: capabilities.confirmedSeaMines,
+    confirmedDroneSwarms: capabilities.confirmedDroneSwarms
 });
 
 const mapActionsToProps = {

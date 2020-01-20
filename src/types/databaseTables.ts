@@ -192,3 +192,11 @@ export type SeaMineType = {
     teamId: number;
     positionId: number;
 };
+
+export type DroneSwarmType = {
+    droneSwarmId: number;
+    gameId: number;
+    teamId: number;
+    positionId: number;
+    roundsLeft: number;
+};

@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, NEW_ROUND, NO_MORE_EVENTS, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SLICE_CHANGE, SEA_MINE_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR } from '../../../../constants';
+import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, NEW_ROUND, NO_MORE_EVENTS, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SLICE_CHANGE, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR } from '../../../../constants';
 // prettier-ignore
-import { BioWeaponsAction, CapabilitiesState, CommInterruptAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, NewRoundAction, NoMoreEventsAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SliceChangeAction, SeaMineAction, ClearSeaMineNotifyAction, SeaMineHitNotifyAction } from '../../../../types';
+import { BioWeaponsAction, CapabilitiesState, ClearSeaMineNotifyAction, CommInterruptAction, DroneSwarmAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, NewRoundAction, NoMoreEventsAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, SeaMineHitNotifyAction, SliceChangeAction, DroneSwarmHitNotifyAction, ClearDroneSwarmMineNotifyAction } from '../../../../types';
 
 type CapabilityReducerActions =
     | GameInitialStateAction
@@ -16,8 +16,11 @@ type CapabilityReducerActions =
     | SliceChangeAction
     | EventBattleAction
     | SeaMineAction
+    | DroneSwarmAction
     | ClearSeaMineNotifyAction
     | SeaMineHitNotifyAction
+    | DroneSwarmHitNotifyAction
+    | ClearDroneSwarmMineNotifyAction
     | NoMoreEventsAction
     | EventRefuelAction
     | BioWeaponsAction;
@@ -31,7 +34,9 @@ const initialCapabilitiesState: CapabilitiesState = {
     confirmedCommInterrupt: [],
     confirmedGoldenEye: [],
     confirmedSeaMines: [],
-    seaMineHits: []
+    seaMineHits: [],
+    confirmedDroneSwarms: [],
+    droneSwarmHits: []
 };
 
 export function capabilitiesReducer(state = initialCapabilitiesState, action: CapabilityReducerActions) {
@@ -51,6 +56,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedGoldenEye = (action as NewRoundAction).payload.confirmedGoldenEye;
             stateCopy.confirmedBioWeapons = (action as NewRoundAction).payload.confirmedBioWeapons;
             stateCopy.confirmedCommInterrupt = (action as NewRoundAction).payload.confirmedCommInterrupt;
+            stateCopy.confirmedDroneSwarms = (action as NewRoundAction).payload.confirmedDroneSwarms;
             return stateCopy;
 
         case PLACE_PHASE:
@@ -58,6 +64,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedGoldenEye = (action as PlacePhaseAction).payload.confirmedGoldenEye;
             stateCopy.confirmedBioWeapons = (action as PlacePhaseAction).payload.confirmedBioWeapons;
             stateCopy.confirmedCommInterrupt = (action as PlacePhaseAction).payload.confirmedCommInterrupt;
+            stateCopy.confirmedDroneSwarms = (action as PlacePhaseAction).payload.confirmedDroneSwarms;
             return stateCopy;
 
         case RAISE_MORALE_SELECTED:
@@ -88,6 +95,10 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedSeaMines.push((action as SeaMineAction).payload.selectedPositionId);
             return stateCopy;
 
+        case DRONE_SWARM_SELECTED:
+            stateCopy.confirmedDroneSwarms.push((action as DroneSwarmAction).payload.selectedPositionId);
+            return stateCopy;
+
         case SEA_MINE_HIT_NOTIFICATION:
             stateCopy.seaMineHits = (action as SeaMineHitNotifyAction).payload.positionsToHighlight;
             stateCopy.confirmedSeaMines = stateCopy.confirmedSeaMines.filter(position => {
@@ -95,8 +106,19 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             });
             return stateCopy;
 
+        case DRONE_SWARM_HIT_NOTIFICATION:
+            stateCopy.droneSwarmHits = (action as DroneSwarmHitNotifyAction).payload.positionsToHighlight;
+            stateCopy.confirmedDroneSwarms = stateCopy.confirmedDroneSwarms.filter(position => {
+                return !(action as DroneSwarmHitNotifyAction).payload.positionsToHighlight.includes(position);
+            });
+            return stateCopy;
+
         case SEA_MINE_NOTIFY_CLEAR:
             stateCopy.seaMineHits = [];
+            return stateCopy;
+
+        case DRONE_SWARM_NOTIFY_CLEAR:
+            stateCopy.droneSwarmHits = [];
             return stateCopy;
 
         case GOLDEN_EYE_SELECTED:

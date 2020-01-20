@@ -6,3 +6,4 @@ export * from './raiseMoraleConfirm';
 export * from './remoteSensingConfirm';
 export * from './rodsFromGodConfirm';
 export * from './seaMineConfirm';
+export * from './droneSwarmConfirm';

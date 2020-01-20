@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
-import { PIECE_CLICK, SEA_MINES_TYPE_ID, SERVER_SEA_MINE_CONFIRM } from '../../../../constants';
-import { PieceClickAction, PieceType, SeaMineRequestAction } from '../../../../types';
+import { PIECE_CLICK, SEA_MINES_TYPE_ID, SERVER_SEA_MINE_CONFIRM, DRONE_SWARMS_TYPE_ID, SERVER_DRONE_SWARM_CONFIRM } from '../../../../constants';
+import { PieceClickAction, PieceType, SeaMineRequestAction, DroneSwarmRequestAction } from '../../../../types';
 
 /**
  * Change the state based on the piece that the user selected.
@@ -30,6 +30,20 @@ export const selectPiece = (selectedPiece: PieceType) => {
             if (window.confirm('Are you sure you want to place your sea mine here?')) {
                 const clientAction: SeaMineRequestAction = {
                     type: SERVER_SEA_MINE_CONFIRM,
+                    payload: {
+                        selectedPiece,
+                        invItem: planning.invItem
+                    }
+                };
+
+                sendToServer(clientAction);
+            }
+        }
+
+        if (planning.invItem && planning.invItem.invItemTypeId === DRONE_SWARMS_TYPE_ID) {
+            if (window.confirm('Are you sure you want to place your drone swarm here?')) {
+                const clientAction: DroneSwarmRequestAction = {
+                    type: SERVER_DRONE_SWARM_CONFIRM,
                     payload: {
                         selectedPiece,
                         invItem: planning.invItem
