@@ -1,18 +1,8 @@
-// prettier-ignore
 import { RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, BIO_WEAPONS_ROUNDS, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, RAISE_MORALE_ROUNDS, RED_TEAM_ID, REMOTE_SENSING_ROUNDS, TYPE_AIR, TYPE_AIR_PIECES, TYPE_GROUND_PIECES, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../constants';
-import {
-    BiologicalWeaponsType,
-    InsurgencyType,
-    PieceType,
-    RemoteSensingType,
-    RodsFromGodType,
-    RaiseMoraleType,
-    CommInterruptType,
-    GoldenEyeType,
-    SeaMineType
-} from '../../types';
+import { ACTIVATED, ATTACK_HELICOPTER_TYPE_ID, BIO_WEAPONS_ROUNDS, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, distanceMatrix, DRONE_SWARM_ROUNDS, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, LIST_ALL_AIRFIELD_PIECES, RAISE_MORALE_ROUNDS, RED_TEAM_ID, REMOTE_SENSING_ROUNDS, TYPE_AIR, TYPE_AIR_PIECES, TYPE_GROUND_PIECES, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../constants';
+// prettier-ignore
+import { BiologicalWeaponsType, CommInterruptType, DroneSwarmType, GoldenEyeType, InsurgencyType, PieceType, RaiseMoraleType, RemoteSensingType, RodsFromGodType, SeaMineType } from '../../types';
 import { pool } from '../database';
 import { Piece } from './Piece';
 
@@ -596,7 +586,6 @@ export class Capability {
         };
         const [results] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
 
-        // TODO: give indication that there was a hit to team that lost the piece
         if (results.length !== 0) {
             // delete the piece and try again
             const pieceToDelete = await new Piece(results[0].pieceId).init();
@@ -612,5 +601,71 @@ export class Capability {
         }
 
         return []; // base case
+    }
+
+    static async getDroneSwarms(gameId: number, gameTeam: number): Promise<number[]> {
+        const queryString = 'SELECT * FROM droneSwarms WHERE gameId = ? AND gameTeam = ?';
+        const inserts = [gameId, gameTeam];
+        const [results] = await pool.query<RowDataPacket[] & DroneSwarmType[]>(queryString, inserts);
+
+        const listOfDroneSwarms = [];
+        for (let x = 0; x < results.length; x++) {
+            listOfDroneSwarms.push(results[x].positionId);
+        }
+
+        return listOfDroneSwarms;
+    }
+
+    static async insertDroneSwarm(gameId: number, gameTeam: number, selectedPositionId: number) {
+        const insertQuery = 'SELECT * FROM droneSwarms WHERE gameId = ? AND positionId = ? AND gameTeam = ?';
+        const inserts = [gameId, selectedPositionId, gameTeam];
+        const [results] = await pool.query<RowDataPacket[] & DroneSwarmType[]>(insertQuery, inserts);
+
+        if (results.length !== 0) {
+            return false;
+        }
+
+        const queryString = 'INSERT INTO droneSwarms (gameId, gameTeam, positionId, roundsLeft) VALUES (? ,?, ?, ?)';
+        const preparedInserts = [gameId, gameTeam, selectedPositionId, DRONE_SWARM_ROUNDS];
+        await pool.query(queryString, preparedInserts);
+
+        return true;
+    }
+
+    static async checkDroneSwarmHit(gameId: number): Promise<number[]> {
+        const queryString =
+            'SELECT droneSwarmId, pieceId, positionId FROM droneSwarms INNER JOIN plans ON positionId = planPositionId INNER JOIN pieces ON planPieceId = pieceId WHERE pieceGameId = ? AND pieceTypeId in (?)';
+        const inserts = [gameId, [...LIST_ALL_AIRFIELD_PIECES, ATTACK_HELICOPTER_TYPE_ID]];
+        type QueryResult = {
+            droneSwarmId: number;
+            pieceId: number;
+            positionId: number;
+        };
+        const [results] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
+
+        if (results.length !== 0) {
+            // delete the piece and try again
+            const pieceToDelete = await new Piece(results[0].pieceId).init();
+            pieceToDelete.delete();
+
+            const queryString = 'DELETE FROM droneSwarms WHERE droneSwarmId = ?';
+            const inserts = [results[0].droneSwarmId];
+            await pool.query(queryString, inserts);
+
+            const arrayOfPos = await Capability.checkDroneSwarmHit(gameId); // TODO: probably a better way instead of recursive, but makes sense here since we keep calling it until results.length == 0
+            arrayOfPos.push(results[0].positionId);
+            return arrayOfPos;
+        }
+
+        return []; // base case
+    }
+
+    static async decreaseDroneSwarms(gameId: number) {
+        let queryString = 'UPDATE droneSwarms SET roundsLeft = roundsLeft - 1 WHERE gameId = ?';
+        const inserts = [gameId];
+        await pool.query(queryString, inserts);
+
+        queryString = 'DELETE FROM droneSwarms WHERE roundsLeft = 0';
+        await pool.query(queryString);
     }
 }

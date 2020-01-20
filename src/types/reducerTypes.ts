@@ -68,6 +68,8 @@ export type CapabilitiesState = {
     confirmedGoldenEye: number[];
     confirmedSeaMines: number[];
     seaMineHits: number[];
+    confirmedDroneSwarms: number[];
+    droneSwarmHits: number[];
 };
 
 export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };

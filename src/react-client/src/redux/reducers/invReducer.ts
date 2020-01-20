@@ -1,7 +1,7 @@
 //prettier-ignore
-import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_SELECTED, SHOP_TRANSFER } from "../../../../constants";
+import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_SELECTED, SHOP_TRANSFER, DRONE_SWARM_SELECTED } from "../../../../constants";
 // prettier-ignore
-import { BioWeaponsAction, CommInterruptAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, InvItemPlaceAction, InvItemType, InvState, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, ShopConfirmPurchaseAction } from '../../../../types';
+import { BioWeaponsAction, CommInterruptAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, InvItemPlaceAction, InvItemType, InvState, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, ShopConfirmPurchaseAction, DroneSwarmAction } from '../../../../types';
 
 type InvReducerActions =
     | GameInitialStateAction
@@ -12,6 +12,7 @@ type InvReducerActions =
     | InsurgencyAction
     | BioWeaponsAction
     | SeaMineAction
+    | DroneSwarmAction
     | RaiseMoraleAction
     | GoldenEyeAction
     | CommInterruptAction;
@@ -25,6 +26,7 @@ type InvItemCapabilityAction =
     | BioWeaponsAction
     | RaiseMoraleAction
     | SeaMineAction
+    | DroneSwarmAction
     | GoldenEyeAction
     | CommInterruptAction;
 
@@ -51,6 +53,7 @@ export function invReducer(state = initialInvState, action: InvReducerActions) {
         case BIO_WEAPON_SELECTED:
         case RAISE_MORALE_SELECTED:
         case SEA_MINE_SELECTED:
+        case DRONE_SWARM_SELECTED:
         case GOLDEN_EYE_SELECTED:
         case COMM_INTERRUP_SELECTED:
             return stateCopy.filter((invItem: InvItemType) => {

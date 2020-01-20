@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
 // prettier-ignore
-import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, TYPE_TERRAIN, SEA_MINES_TYPE_ID } from '../../../../constants';
+import { BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, TYPE_TERRAIN, SEA_MINES_TYPE_ID, DRONE_SWARMS_TYPE_ID } from '../../../../constants';
 //prettier-ignore
 import { BioWeaponsRequestAction, CommInterruptRequestAction, ExitTransportContainerRequestAction, GoldenEyeRequestAction, HighlightPositionsAction, InsurgencyRequestAction, PlanningSelectAction, PositionSelectAction, RemoteSensingRequestAction, RodsFromGodRequestAction } from "../../../../types";
 import { setUserfeedbackAction } from './setUserfeedbackAction';
@@ -121,6 +121,7 @@ export const selectPosition = (selectedPositionId: number) => {
             if (
                 planning.invItem &&
                 planning.invItem.invItemTypeId !== SEA_MINES_TYPE_ID &&
+                planning.invItem.invItemTypeId !== DRONE_SWARMS_TYPE_ID &&
                 window.confirm('Are you sure you want to use capability on this position?')
             ) {
                 //TODO: figure out better way of typecasting the 'type' for this action (could be many types)
