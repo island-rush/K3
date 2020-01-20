@@ -1,9 +1,10 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { Capability, Event, InvItem, Piece, Plan } from '..';
+import { Event, InvItem, Piece, Plan } from '..';
 // prettier-ignore
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, INITIAL_GAMESTATE, NEWS_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE } from '../../../constants';
 import { BattleState, GameInitialStateAction, NewsType, PieceType, RefuelState } from '../../../types';
 import { pool } from '../../database';
+import { Capability } from '../Capability';
 import { ShopItem } from '../ShopItem';
 import { Game } from './Game';
 
