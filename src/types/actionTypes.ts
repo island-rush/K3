@@ -272,6 +272,7 @@ export type PlacePhaseAction = {
         confirmedGoldenEye: CapabilitiesState['confirmedGoldenEye'];
         confirmedSeaMines: CapabilitiesState['confirmedSeaMines'];
         confirmedDroneSwarms: CapabilitiesState['confirmedDroneSwarms'];
+        confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
     };
 };
 
@@ -287,6 +288,7 @@ export type NewRoundAction = {
         confirmedGoldenEye: CapabilitiesState['confirmedGoldenEye'];
         confirmedSeaMines: CapabilitiesState['confirmedSeaMines'];
         confirmedDroneSwarms: CapabilitiesState['confirmedDroneSwarms'];
+        confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
     };
 };
 
@@ -315,6 +317,7 @@ export type SliceChangeAction = {
         confirmedBioWeapons: CapabilitiesState['confirmedBioWeapons'];
         confirmedGoldenEye: CapabilitiesState['confirmedGoldenEye'];
         confirmedCommInterrupt: CapabilitiesState['confirmedCommInterrupt'];
+        confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
         confirmedInsurgencyPos: any;
         confirmedInsurgencyPieces: any;
         gameboardPieces: GameboardPiecesDataType;

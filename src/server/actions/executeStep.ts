@@ -31,6 +31,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         await Capability.decreaseCommInterrupt(gameId);
         await Capability.decreaseRaiseMorale(gameId);
         await Capability.decreaseDroneSwarms(gameId);
+        await Capability.decreaseAtcScramble(gameId);
 
         if (gameRound === ROUNDS_PER_COMBAT_PHASE) {
             // Combat -> Place Phase
@@ -47,7 +48,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                     confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, BLUE_TEAM_ID),
                     confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID),
                     confirmedSeaMines: await Capability.getSeaMines(gameId, BLUE_TEAM_ID),
-                    confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, BLUE_TEAM_ID)
+                    confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, BLUE_TEAM_ID),
+                    confirmedAtcScramble: await Capability.getAtcScramble(gameId, BLUE_TEAM_ID)
                 }
             };
             const placePhaseActionRed: PlacePhaseAction = {
@@ -60,7 +62,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                     confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, RED_TEAM_ID),
                     confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID),
                     confirmedSeaMines: await Capability.getSeaMines(gameId, RED_TEAM_ID),
-                    confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, RED_TEAM_ID)
+                    confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, RED_TEAM_ID),
+                    confirmedAtcScramble: await Capability.getAtcScramble(gameId, RED_TEAM_ID)
                 }
             };
 
@@ -82,7 +85,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                 confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, BLUE_TEAM_ID),
                 confirmedGoldenEye: await Capability.getGoldenEye(gameId, BLUE_TEAM_ID),
                 confirmedSeaMines: await Capability.getSeaMines(gameId, BLUE_TEAM_ID),
-                confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, BLUE_TEAM_ID)
+                confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, BLUE_TEAM_ID),
+                confirmedAtcScramble: await Capability.getAtcScramble(gameId, BLUE_TEAM_ID)
             }
         };
         const newRoundActionRed: NewRoundAction = {
@@ -96,7 +100,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                 confirmedCommInterrupt: await Capability.getCommInterrupt(gameId, RED_TEAM_ID),
                 confirmedGoldenEye: await Capability.getGoldenEye(gameId, RED_TEAM_ID),
                 confirmedSeaMines: await Capability.getSeaMines(gameId, RED_TEAM_ID),
-                confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, RED_TEAM_ID)
+                confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, RED_TEAM_ID),
+                confirmedAtcScramble: await Capability.getAtcScramble(gameId, RED_TEAM_ID)
             }
         };
 

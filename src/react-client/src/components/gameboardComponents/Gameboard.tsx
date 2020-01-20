@@ -67,7 +67,7 @@ const rIndexSolver = (index: number) => {
     }
 };
 
-const patternSolver = (position: any, gameInfo: any, positionIndex: number) => {
+const patternSolver = (position: any, gameInfo: any, positionIndex: number, confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble']) => {
     const { type } = position; //position comes from the gameboard state
 
     if (ALL_FLAG_LOCATIONS.includes(positionIndex)) {
@@ -81,6 +81,9 @@ const patternSolver = (position: any, gameInfo: any, positionIndex: number) => {
         const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(positionIndex);
         const airfieldOwner = gameInfo['airfield' + airfieldNum]; // TODO: should use actual types instead of any here
         const finalType = airfieldOwner === BLUE_TEAM_ID ? 'blueairfield' : airfieldOwner === RED_TEAM_ID ? 'redairfield' : 'airfield';
+        if (confirmedAtcScramble.includes(positionIndex)) {
+            return `${finalType}_disabled`;
+        }
         return finalType;
     }
 
@@ -193,7 +196,7 @@ class Gameboard extends Component<Props> {
         //prettier-ignore
         const { selectedPosition, selectedPiece, highlightedPositions } = gameboardMeta;
         //prettier-ignore
-        const { confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines, seaMineHits, confirmedDroneSwarms, droneSwarmHits} = capabilities;
+        const { confirmedAtcScramble, confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines, seaMineHits, confirmedDroneSwarms, droneSwarmHits} = capabilities;
 
         const { confirmedPlans } = planning;
 
@@ -276,7 +279,7 @@ class Gameboard extends Component<Props> {
                 q={qIndexSolver(parseInt(positionIndex))}
                 r={rIndexSolver(parseInt(positionIndex))}
                 s={-999}
-                fill={patternSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex))}
+                fill={patternSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex), confirmedAtcScramble)}
                 //TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
                 onClick={(event: any) => {
                     event.preventDefault();
@@ -368,8 +371,11 @@ class Gameboard extends Component<Props> {
                         <Pattern id="redflag" link={positionImagesPath + 'redflag.png'} size={imageSize} />
                         <Pattern id="blueflag" link={positionImagesPath + 'blueflag.png'} size={imageSize} />
                         <Pattern id="airfield" link={positionImagesPath + 'airfield.png'} size={imageSize} />
+                        <Pattern id="airfield_disabled" link={positionImagesPath + 'airfield_disabled.png'} size={imageSize} />
                         <Pattern id="blueairfield" link={positionImagesPath + 'blueairfield.png'} size={imageSize} />
                         <Pattern id="redairfield" link={positionImagesPath + 'redairfield.png'} size={imageSize} />
+                        <Pattern id="redairfield_disabled" link={positionImagesPath + 'redairfield_disabled.png'} size={imageSize} />
+                        <Pattern id="blueairfield_disabled" link={positionImagesPath + 'blueairfield_disabled.png'} size={imageSize} />
                         <Pattern id="missile" link={positionImagesPath + 'missile.png'} size={imageSize} />
                     </HexGrid>
                 </div>

@@ -1,7 +1,7 @@
 //prettier-ignore
-import { BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_SELECTED, SHOP_TRANSFER, DRONE_SWARM_SELECTED } from "../../../../constants";
+import { ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_SELECTED, SHOP_TRANSFER } from "../../../../constants";
 // prettier-ignore
-import { BioWeaponsAction, CommInterruptAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, InvItemPlaceAction, InvItemType, InvState, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, ShopConfirmPurchaseAction, DroneSwarmAction } from '../../../../types';
+import { AtcScrambleAction, BioWeaponsAction, CommInterruptAction, DroneSwarmAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, InvItemPlaceAction, InvItemType, InvState, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, ShopConfirmPurchaseAction } from '../../../../types';
 
 type InvReducerActions =
     | GameInitialStateAction
@@ -13,6 +13,7 @@ type InvReducerActions =
     | BioWeaponsAction
     | SeaMineAction
     | DroneSwarmAction
+    | AtcScrambleAction
     | RaiseMoraleAction
     | GoldenEyeAction
     | CommInterruptAction;
@@ -27,6 +28,7 @@ type InvItemCapabilityAction =
     | RaiseMoraleAction
     | SeaMineAction
     | DroneSwarmAction
+    | AtcScrambleAction
     | GoldenEyeAction
     | CommInterruptAction;
 
@@ -55,6 +57,7 @@ export function invReducer(state = initialInvState, action: InvReducerActions) {
         case SEA_MINE_SELECTED:
         case DRONE_SWARM_SELECTED:
         case GOLDEN_EYE_SELECTED:
+        case ATC_SCRAMBLE_SELECTED:
         case COMM_INTERRUP_SELECTED:
             return stateCopy.filter((invItem: InvItemType) => {
                 return invItem.invItemId !== (action as InvItemCapabilityAction).payload.invItem.invItemId;

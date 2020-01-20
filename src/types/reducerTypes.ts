@@ -70,6 +70,7 @@ export type CapabilitiesState = {
     seaMineHits: number[];
     confirmedDroneSwarms: number[];
     droneSwarmHits: number[];
+    confirmedAtcScramble: number[];
 };
 
 export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };

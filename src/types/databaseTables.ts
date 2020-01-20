@@ -179,6 +179,7 @@ export type GoldenEyeType = {
     teamId: number;
     positionId: number; // TODO: make sure this number is always within the range
     roundsLeft: number;
+    activated: number;
 };
 
 export type GoldenEyePieceType = {
@@ -189,14 +190,23 @@ export type GoldenEyePieceType = {
 export type SeaMineType = {
     seaMineId: number;
     gameId: number;
-    teamId: number;
+    gameTeam: number;
     positionId: number;
 };
 
 export type DroneSwarmType = {
     droneSwarmId: number;
     gameId: number;
+    gameTeam: number;
+    positionId: number;
+    roundsLeft: number;
+};
+
+export type AtcScrambleType = {
+    atcScrambleId: number;
+    gameId: number;
     teamId: number;
     positionId: number;
     roundsLeft: number;
+    activated: number;
 };

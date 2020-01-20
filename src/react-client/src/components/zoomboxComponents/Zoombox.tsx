@@ -55,6 +55,7 @@ interface Props {
     gameInfo: GameInfoState;
     confirmedSeaMines: CapabilitiesState['confirmedSeaMines'];
     confirmedDroneSwarms: CapabilitiesState['confirmedDroneSwarms'];
+    confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
 }
 
 class Zoombox extends Component<Props> {
@@ -68,7 +69,8 @@ class Zoombox extends Component<Props> {
             pieceOpen,
             gameInfo,
             confirmedSeaMines,
-            confirmedDroneSwarms
+            confirmedDroneSwarms,
+            confirmedAtcScramble
         } = this.props;
 
         const isVisible = selectedPos !== -1;
@@ -84,6 +86,7 @@ class Zoombox extends Component<Props> {
                       key={index}
                       piece={piece}
                       gameInfo={gameInfo}
+                      confirmedAtcScramble={confirmedAtcScramble}
                   />
               ));
 
@@ -124,7 +127,8 @@ const mapStateToProps = ({
     gameboard,
     gameInfo,
     confirmedSeaMines: capabilities.confirmedSeaMines,
-    confirmedDroneSwarms: capabilities.confirmedDroneSwarms
+    confirmedDroneSwarms: capabilities.confirmedDroneSwarms,
+    confirmedAtcScramble: capabilities.confirmedAtcScramble
 });
 
 const mapActionsToProps = {
