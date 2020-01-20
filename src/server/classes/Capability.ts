@@ -1,8 +1,8 @@
 import { RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, ATTACK_HELICOPTER_TYPE_ID, BIO_WEAPONS_ROUNDS, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, distanceMatrix, DRONE_SWARM_ROUNDS, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, LIST_ALL_AIRFIELD_PIECES, RAISE_MORALE_ROUNDS, RED_TEAM_ID, REMOTE_SENSING_ROUNDS, TYPE_AIR, TYPE_AIR_PIECES, TYPE_GROUND_PIECES, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../constants';
+import { ACTIVATED, ATTACK_HELICOPTER_TYPE_ID, BIO_WEAPONS_ROUNDS, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, distanceMatrix, DRONE_SWARM_ROUNDS, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, LIST_ALL_AIRFIELD_PIECES, RAISE_MORALE_ROUNDS, RED_TEAM_ID, REMOTE_SENSING_ROUNDS, TYPE_AIR, TYPE_AIR_PIECES, TYPE_GROUND_PIECES, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL, ATC_SCRAMBLE_ROUNDS } from '../../constants';
 // prettier-ignore
-import { BiologicalWeaponsType, CommInterruptType, DroneSwarmType, GoldenEyeType, InsurgencyType, PieceType, RaiseMoraleType, RemoteSensingType, RodsFromGodType, SeaMineType } from '../../types';
+import { BiologicalWeaponsType, CommInterruptType, DroneSwarmType, GoldenEyeType, InsurgencyType, PieceType, RaiseMoraleType, RemoteSensingType, RodsFromGodType, SeaMineType, AtcScrambleType } from '../../types';
 import { pool } from '../database';
 import { Piece } from './Piece';
 
@@ -667,5 +667,60 @@ export class Capability {
 
         queryString = 'DELETE FROM droneSwarms WHERE roundsLeft = 0';
         await pool.query(queryString);
+    }
+
+    static async getAtcScramble(gameId: number, gameTeam: number) {
+        const queryString = 'SELECT * FROM atcScramble WHERE gameId = ? AND (teamId = ? OR activated = ?)';
+        const inserts = [gameId, gameTeam, ACTIVATED];
+        const [results] = await pool.query<RowDataPacket[] & AtcScrambleType[]>(queryString, inserts);
+
+        const listOfAtcScramble = [];
+        for (let x = 0; x < results.length; x++) {
+            listOfAtcScramble.push(results[x].positionId);
+        }
+
+        return listOfAtcScramble;
+    }
+
+    static async insertAtcScramble(gameId: number, gameTeam: number, selectedPositionId: number) {
+        const insertQuery = 'SELECT * FROM atcScramble WHERE gameId = ? AND positionId = ? AND (teamId = ? OR activated = ?) ';
+        const inserts = [gameId, selectedPositionId, gameTeam, ACTIVATED];
+        const [results] = await pool.query<RowDataPacket[] & AtcScrambleType[]>(insertQuery, inserts);
+
+        if (results.length !== 0) {
+            return false;
+        }
+
+        const queryString = 'INSERT INTO atcScramble (gameId, positionId, roundsLeft, teamId, activated) VALUES (? ,?, ?, ?, ?)';
+        const preparedInserts = [gameId, selectedPositionId, ATC_SCRAMBLE_ROUNDS, gameTeam, DEACTIVATED];
+        await pool.query(queryString, preparedInserts);
+
+        return true;
+    }
+
+    static async decreaseAtcScramble(gameId: number) {
+        let queryString = 'UPDATE atcScramble SET roundsLeft = roundsLeft - 1 WHERE gameId = ? AND activated = ?';
+        const inserts = [gameId, ACTIVATED];
+        await pool.query(queryString, inserts);
+
+        queryString = 'DELETE FROM atcScramble WHERE roundsLeft = 0';
+        await pool.query(queryString);
+    }
+
+    static async useAtcScramble(gameId: number) {
+        let queryString = 'UPDATE atcScramble SET activated = ? WHERE gameId = ?';
+        let inserts = [ACTIVATED, gameId];
+        await pool.query(queryString, inserts);
+
+        queryString = 'SELECT * FROM atcScramble WHERE gameId = ?';
+        inserts = [gameId];
+        const [allAtcScramble] = await pool.query<RowDataPacket[] & AtcScrambleType[]>(queryString, inserts);
+
+        const listPositions = [];
+        for (let x = 0; x < allAtcScramble.length; x++) {
+            listPositions.push(allAtcScramble[x].positionId);
+        }
+
+        return listPositions;
     }
 }

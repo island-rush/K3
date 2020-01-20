@@ -7,3 +7,4 @@ export * from './remoteSensingConfirm';
 export * from './rodsFromGodConfirm';
 export * from './seaMineConfirm';
 export * from './droneSwarmConfirm';
+export * from './atcScrambleConfirm';

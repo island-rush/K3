@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INSURGENCY_SELECTING, MENU_SELECT, PIECE_CLEAR_SELECTION, PIECE_CLICK, PLAN_WAS_CONFIRMED, POSITION_SELECT, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING } from '../../../../constants';
+import { BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INSURGENCY_SELECTING, MENU_SELECT, PIECE_CLEAR_SELECTION, PIECE_CLICK, PLAN_WAS_CONFIRMED, POSITION_SELECT, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING, ATC_SCRAMBLE_SELECTING } from '../../../../constants';
 // prettier-ignore
-import { BioWeaponSelectingAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, DroneSwarmSelectingAction, GameboardMetaState, GoldenEyeSelectingAction, HighlightPositionsAction, InsurgencySelectingAction, MenuSelectAction, PieceClearAction, PieceClickAction, PositionSelectAction, PreventPlanAction, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RodsFromGodSelectingAction, SeaMineSelectingAction } from '../../../../types';
+import { BioWeaponSelectingAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, DroneSwarmSelectingAction, GameboardMetaState, GoldenEyeSelectingAction, HighlightPositionsAction, InsurgencySelectingAction, MenuSelectAction, PieceClearAction, PieceClickAction, PositionSelectAction, PreventPlanAction, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RodsFromGodSelectingAction, SeaMineSelectingAction, AtcScrambleSelectingAction } from '../../../../types';
 
 type GameboardMetaReducerActions =
     | HighlightPositionsAction
@@ -20,6 +20,7 @@ type GameboardMetaReducerActions =
     | ConfirmPlanAction
     | SeaMineSelectingAction
     | DroneSwarmSelectingAction
+    | AtcScrambleSelectingAction
     | DeletePlanAction;
 
 const initialGameboardMeta: GameboardMetaState = {
@@ -71,6 +72,7 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: Gameb
         case GOLDEN_EYE_SELECTING:
         case SEA_MINE_SELECTING:
         case DRONE_SWARM_SELECTING:
+        case ATC_SCRAMBLE_SELECTING:
         case REMOTE_SENSING_SELECTING:
             stateCopy.selectedMenuId = 0;
             return stateCopy;

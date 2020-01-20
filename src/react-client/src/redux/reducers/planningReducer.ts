@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, DRONE_SWARM_SELECTED, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INSURGENCY_SELECTED, INSURGENCY_SELECTING, PLANNING_SELECT, PLAN_WAS_CONFIRMED, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SLICE_CHANGE, START_PLAN, UNDO_MOVE } from '../../../../constants';
+import { BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, DRONE_SWARM_SELECTED, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INSURGENCY_SELECTED, INSURGENCY_SELECTING, PLANNING_SELECT, PLAN_WAS_CONFIRMED, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SLICE_CHANGE, START_PLAN, UNDO_MOVE, ATC_SCRAMBLE_SELECTING, ATC_SCRAMBLE_SELECTED } from '../../../../constants';
 // prettier-ignore
-import { BioWeaponsAction, BioWeaponSelectingAction, CommInterruptAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, DroneSwarmAction, DroneSwarmSelectingAction, GameInitialStateAction, GoldenEyeAction, GoldenEyeSelectingAction, InsurgencyAction, InsurgencySelectingAction, PlanningSelectAction, PlanningState, PreventPlanAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RemoteSensingAction, RodsFromGodAction, RodsFromGodSelectingAction, SeaMineAction, SeaMineSelectingAction, SliceChangeAction, StartPlanAction, UndoMoveAction } from '../../../../types';
+import { BioWeaponsAction, BioWeaponSelectingAction, CommInterruptAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, DroneSwarmAction, DroneSwarmSelectingAction, GameInitialStateAction, GoldenEyeAction, GoldenEyeSelectingAction, InsurgencyAction, InsurgencySelectingAction, PlanningSelectAction, PlanningState, PreventPlanAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RemoteSensingAction, RodsFromGodAction, RodsFromGodSelectingAction, SeaMineAction, SeaMineSelectingAction, SliceChangeAction, StartPlanAction, UndoMoveAction, AtcScrambleAction, AtcScrambleSelectingAction } from '../../../../types';
 
 type PlanningReducerActions =
     | GameInitialStateAction
@@ -18,6 +18,8 @@ type PlanningReducerActions =
     | SeaMineAction
     | DroneSwarmAction
     | DroneSwarmSelectingAction
+    | AtcScrambleAction
+    | AtcScrambleSelectingAction
     | RodsFromGodAction
     | BioWeaponsAction
     | CommInterruptAction
@@ -35,6 +37,7 @@ type SelectingAction =
     | InsurgencySelectingAction
     | BioWeaponSelectingAction
     | SeaMineSelectingAction
+    | AtcScrambleSelectingAction
     | DroneSwarmSelectingAction
     | CommInterruptSelectingAction
     | RodsFromGodSelectingAction
@@ -86,6 +89,7 @@ export function planningReducer(state = initialPlanningState, action: PlanningRe
         case RODS_FROM_GOD_SELECTING:
         case SEA_MINE_SELECTING:
         case DRONE_SWARM_SELECTING:
+        case ATC_SCRAMBLE_SELECTING:
         case GOLDEN_EYE_SELECTING:
         case REMOTE_SENSING_SELECTING:
             stateCopy.active = true;
@@ -99,6 +103,7 @@ export function planningReducer(state = initialPlanningState, action: PlanningRe
         case INSURGENCY_SELECTED:
         case SEA_MINE_SELECTED:
         case DRONE_SWARM_SELECTED:
+        case ATC_SCRAMBLE_SELECTED:
         case REMOTE_SENSING_SELECTED:
         case GOLDEN_EYE_SELECTED:
             stateCopy.capability = false;
