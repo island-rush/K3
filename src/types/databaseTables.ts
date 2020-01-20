@@ -210,3 +210,11 @@ export type AtcScrambleType = {
     roundsLeft: number;
     activated: number;
 };
+
+export type NukeType = {
+    nukeId: number;
+    gameId: number;
+    teamId: number;
+    positionId: number;
+    activated: number;
+};

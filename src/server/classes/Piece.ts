@@ -1,8 +1,8 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
-import { AtcScrambleType, BiologicalWeaponsType, GoldenEyeType, PieceType, RemoteSensingType } from '../../types';
+import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_MOVES, VISIBILITY_MATRIX, NUKE_RANGE } from '../../constants';
+import { AtcScrambleType, BiologicalWeaponsType, GoldenEyeType, PieceType, RemoteSensingType, NukeType } from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
 
@@ -206,8 +206,19 @@ export class Piece implements PieceType {
             listOfPositions.push(positionId);
         }
 
-        // TODO: only do this for ground pieces...
-        // TODO: only for ground pieces?
+        const nukeQuery = 'SELECT * FROM nukes WHERE gameId = ? AND activated = 1';
+        const [moreResults] = await conn.query<RowDataPacket[] & NukeType[]>(nukeQuery, moreInserts);
+        for (let x = 0; x < moreResults.length; x++) {
+            const { positionId } = moreResults[x];
+            for (let y = 0; y < distanceMatrix[positionId].length; y++) {
+                if (distanceMatrix[positionId][y] <= NUKE_RANGE) {
+                    listOfPositions.push(y);
+                }
+            }
+        }
+
+        // TODO: distinguish between killing ground pieces from bio weapons and all pieces for nukes
+
         if (listOfPositions.length > 0) {
             queryString = 'DELETE FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?)';
             const moreInserts2 = [gameId, listOfPositions];

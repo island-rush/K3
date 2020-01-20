@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
-import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW, ALL_AIRFIELD_LOCATIONS } from '../../../../constants';
+import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW, ALL_AIRFIELD_LOCATIONS, NUKE_RANGE } from '../../../../constants';
 // prettier-ignore
 import { BattleState, CapabilitiesState, ContainerState, GameboardMetaState, GameboardState, GameInfoState, NewsState, PlanningState } from '../../../../types';
 //prettier-ignore
@@ -67,13 +67,34 @@ const rIndexSolver = (index: number) => {
     }
 };
 
-const patternSolver = (position: any, gameInfo: any, positionIndex: number, confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble']) => {
+const patternSolver = (
+    position: any,
+    gameInfo: any,
+    positionIndex: number,
+    confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'],
+    confirmedNukes: CapabilitiesState['confirmedNukes']
+) => {
     const { type } = position; //position comes from the gameboard state
+
+    let listOfNukePositions = [];
+    for (let x = 0; x < confirmedNukes.length; x++) {
+        let thisNukeCenter = confirmedNukes[x];
+        for (let y = 0; y < distanceMatrix[thisNukeCenter].length; y++) {
+            if (distanceMatrix[thisNukeCenter][y] <= NUKE_RANGE) {
+                listOfNukePositions.push(y);
+            }
+        }
+    }
+
+    if (listOfNukePositions.includes(positionIndex)) {
+        return `${type}_nuke`;
+    }
 
     if (ALL_FLAG_LOCATIONS.includes(positionIndex)) {
         const flagNum = ALL_FLAG_LOCATIONS.indexOf(positionIndex);
         const islandOwner = gameInfo['flag' + flagNum];
         const finalType = islandOwner === BLUE_TEAM_ID ? 'blueflag' : islandOwner === RED_TEAM_ID ? 'redflag' : 'flag';
+
         return finalType;
     }
 
@@ -196,7 +217,7 @@ class Gameboard extends Component<Props> {
         //prettier-ignore
         const { selectedPosition, selectedPiece, highlightedPositions } = gameboardMeta;
         //prettier-ignore
-        const { confirmedAtcScramble, confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines, seaMineHits, confirmedDroneSwarms, droneSwarmHits} = capabilities;
+        const { confirmedAtcScramble, confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines, seaMineHits, confirmedDroneSwarms, droneSwarmHits, confirmedNukes } = capabilities;
 
         const { confirmedPlans } = planning;
 
@@ -279,7 +300,7 @@ class Gameboard extends Component<Props> {
                 q={qIndexSolver(parseInt(positionIndex))}
                 r={rIndexSolver(parseInt(positionIndex))}
                 s={-999}
-                fill={patternSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex), confirmedAtcScramble)}
+                fill={patternSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex), confirmedAtcScramble, confirmedNukes)}
                 //TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
                 onClick={(event: any) => {
                     event.preventDefault();
@@ -366,17 +387,22 @@ class Gameboard extends Component<Props> {
                             {positions}
                         </Layout>
                         <Pattern id="land" link={positionImagesPath + 'land.png'} size={imageSize} />
+                        <Pattern id="land_nuke" link={positionImagesPath + 'land_nuke.png'} size={imageSize} />
                         <Pattern id="water" link={positionImagesPath + 'water.png'} size={imageSize} />
+                        <Pattern id="water_nuke" link={positionImagesPath + 'water_nuke.png'} size={imageSize} />
                         <Pattern id="flag" link={positionImagesPath + 'flag.png'} size={imageSize} />
+                        <Pattern id="flag_nuke" link={positionImagesPath + 'flag_nuke.png'} size={imageSize} />
                         <Pattern id="redflag" link={positionImagesPath + 'redflag.png'} size={imageSize} />
                         <Pattern id="blueflag" link={positionImagesPath + 'blueflag.png'} size={imageSize} />
                         <Pattern id="airfield" link={positionImagesPath + 'airfield.png'} size={imageSize} />
+                        <Pattern id="airfield_nuke" link={positionImagesPath + 'airfield_nuke.png'} size={imageSize} />
                         <Pattern id="airfield_disabled" link={positionImagesPath + 'airfield_disabled.png'} size={imageSize} />
                         <Pattern id="blueairfield" link={positionImagesPath + 'blueairfield.png'} size={imageSize} />
                         <Pattern id="redairfield" link={positionImagesPath + 'redairfield.png'} size={imageSize} />
                         <Pattern id="redairfield_disabled" link={positionImagesPath + 'redairfield_disabled.png'} size={imageSize} />
                         <Pattern id="blueairfield_disabled" link={positionImagesPath + 'blueairfield_disabled.png'} size={imageSize} />
                         <Pattern id="missile" link={positionImagesPath + 'missile.png'} size={imageSize} />
+                        <Pattern id="missile_nuke" link={positionImagesPath + 'missile_nuke.png'} size={imageSize} />
                     </HexGrid>
                 </div>
 
