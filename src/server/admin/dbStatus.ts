@@ -9,8 +9,6 @@ import { pool } from '../database';
  */
 export const dbStatus = async (req: Request, res: Response) => {
     const conn: PoolConnection = await pool.getConnection();
-
     res.send('Connected');
-
     conn.release();
 };

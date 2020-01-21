@@ -71,7 +71,7 @@
     <body>
         <h1>Island Rush Course Director</h1>
         <nav>
-            <a href="index.html">Home</a>
+            <a href="./">Home</a>
             <a href="troubleshoot.html">Troubleshoot</a>
             <a href="credits.html">Credits</a>
             <a href="https://gitreports.com/issue/island-rush/K3" target="_blank" style="float: right">Report an Issue</a>
@@ -180,7 +180,7 @@
             getGamesXMLHttp.onreadystatechange = function() {
                 if (this.readyState == 4) {
                     const games = JSON.parse(this.response);
-                    const table = document.getElementById("gamesTable");
+                    const table = document.getElementById('gamesTable');
                     for (let x = 0; x < games.length; x++) {
                         let row = table.insertRow(-1);
                         let cell1 = row.insertCell(0);
@@ -190,20 +190,20 @@
                         let cell3 = row.insertCell(2);
                         cell3.innerHTML = games[x].gameInstructor;
                         let cell4 = row.insertCell(3);
-                        cell4.innerHTML = games[x].gameActive == 1 ? "<Green>Active</Green>" : "<Red>Inactive</Red>";
+                        cell4.innerHTML = games[x].gameActive == 1 ? '<Green>Active</Green>' : '<Red>Inactive</Red>';
                     }
                 }
             };
-            getGamesXMLHttp.open("GET", "/getGames", true);
+            getGamesXMLHttp.open('GET', '/getGames', true);
             getGamesXMLHttp.send();
 
             let getDatabaseStatusXMLHttp = new XMLHttpRequest();
             getDatabaseStatusXMLHttp.onreadystatechange = function() {
                 if (this.readyState == 4) {
-                    document.getElementById("DatabaseConnectionTag").innerHTML = "Database:" + this.response;
+                    document.getElementById('DatabaseConnectionTag').innerHTML = 'Database:' + this.response;
                 }
             };
-            getDatabaseStatusXMLHttp.open("GET", "/databaseStatus", true);
+            getDatabaseStatusXMLHttp.open('GET', '/databaseStatus', true);
             getDatabaseStatusXMLHttp.send();
 
             function getUrlVars() {
@@ -222,62 +222,62 @@
                 return urlparameter;
             }
 
-            switch (getUrlParam("gameAdd")) {
-                case "success":
-                    document.getElementById("SuccessTag").innerHTML = "Successfully Created Game";
+            switch (getUrlParam('gameAdd')) {
+                case 'success':
+                    document.getElementById('SuccessTag').innerHTML = 'Successfully Created Game';
                     break;
-                case "failed":
-                    document.getElementById("ErrorTag").innerHTML = "Failed to Create Game: Already Exists, or Database Failed.";
-                    break;
-            }
-
-            switch (getUrlParam("gameDelete")) {
-                case "success":
-                    document.getElementById("SuccessTag").innerHTML = "Successfully Deleted Game";
-                    break;
-                case "failed":
-                    document.getElementById("ErrorTag").innerHTML = "Failed to Delete Game";
+                case 'failed':
+                    document.getElementById('ErrorTag').innerHTML = 'Failed to Create Game: Already Exists, or Database Failed.';
                     break;
             }
 
-            switch (getUrlParam("setAdminPassword")) {
-                case "success":
-                    document.getElementById("SuccessTag").innerHTML = "Successfully Updated Admin Password";
+            switch (getUrlParam('gameDelete')) {
+                case 'success':
+                    document.getElementById('SuccessTag').innerHTML = 'Successfully Deleted Game';
                     break;
-                case "failed":
-                    document.getElementById("ErrorTag").innerHTML = "Failed to Update Admin Password";
+                case 'failed':
+                    document.getElementById('ErrorTag').innerHTML = 'Failed to Delete Game';
                     break;
             }
 
-            switch (getUrlParam("initializeDatabase")) {
-                case "success":
-                    document.getElementById("SuccessTag").innerHTML = "Successfully Initialized Database";
+            switch (getUrlParam('setAdminPassword')) {
+                case 'success':
+                    document.getElementById('SuccessTag').innerHTML = 'Successfully Updated Admin Password';
                     break;
-                case "failed":
-                    document.getElementById("ErrorTag").innerHTML = "Failed to Initialize Database";
+                case 'failed':
+                    document.getElementById('ErrorTag').innerHTML = 'Failed to Update Admin Password';
+                    break;
+            }
+
+            switch (getUrlParam('initializeDatabase')) {
+                case 'success':
+                    document.getElementById('SuccessTag').innerHTML = 'Successfully Initialized Database';
+                    break;
+                case 'failed':
+                    document.getElementById('ErrorTag').innerHTML = 'Failed to Initialize Database';
                     break;
             }
 
             function insertDatabaseTables() {
                 return confirm(
-                    "This button should only need to be pressed once, as a convenience of creating the database tables. It is assumed that the database itself already exists. This action will not effect current tables if they already exist."
+                    'This button should only need to be pressed once, as a convenience of creating the database tables. It is assumed that the database itself already exists. This action will not effect current tables if they already exist.'
                 );
             }
             function confirmDelete() {
-                return confirm("ARE YOU SURE YOU WANT TO DELETE THIS GAME?");
+                return confirm('ARE YOU SURE YOU WANT TO DELETE THIS GAME?');
             }
 
             function confirmSetAdminPassword() {
-                return confirm("ARE YOU SURE YOU WANT TO UPDATE ADMIN PASSWORD?");
+                return confirm('ARE YOU SURE YOU WANT TO UPDATE ADMIN PASSWORD?');
             }
 
-            var password = document.getElementById("adminPassword");
-            var confirm_password = document.getElementById("adminPasswordConfirm");
+            var password = document.getElementById('adminPassword');
+            var confirm_password = document.getElementById('adminPasswordConfirm');
             function validatePassword() {
                 if (password.value != confirm_password.value) {
                     confirm_password.setCustomValidity("Passwords Don't Match");
                 } else {
-                    confirm_password.setCustomValidity("");
+                    confirm_password.setCustomValidity('');
                 }
             }
             password.onchange = validatePassword;
