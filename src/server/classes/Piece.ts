@@ -1,8 +1,8 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_MOVES, VISIBILITY_MATRIX, NUKE_RANGE } from '../../constants';
-import { AtcScrambleType, BiologicalWeaponsType, GoldenEyeType, PieceType, RemoteSensingType, NukeType } from '../../types';
+import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
+import { AtcScrambleType, BiologicalWeaponsType, GoldenEyeType, NukeType, PieceType, RemoteSensingType } from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
 
@@ -455,5 +455,28 @@ export class Piece implements PieceType {
             ];
             await pool.query(testquery, inserts);
         }
+    }
+
+    static async ableToPlaceRadar(gameId: number, gameTeam: number, selectedPositionId: number) {
+        // TODO: could make this into 1 request instead of 2
+        const queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ? AND pieceTypeId in (?)';
+        const inserts = [gameId, gameTeam, selectedPositionId, TYPE_GROUND_PIECES];
+        const [results] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts);
+
+        // At least 1 friendly ground piece is there
+        if (results.length === 0) {
+            return false;
+        }
+
+        // TODO: should we consider the difference between hidden pieces and visible pieces affecting the placement (placing pieces next to each other when not knowing about it is weird)
+        const queryString2 = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ?';
+        const inserts2 = [gameId, gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID, selectedPositionId];
+        const [results2] = await pool.query<RowDataPacket[] & PieceType[]>(queryString2, inserts2);
+
+        if (results2.length !== 0) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -1,5 +1,5 @@
 // prettier-ignore
-import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, RED_TEAM_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_FUEL, TYPE_MOVES, C_130_TYPE_ID } from '../../constants';
+import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, RED_TEAM_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_FUEL, TYPE_MOVES, C_130_TYPE_ID, RADAR_TYPE_ID } from '../../constants';
 import { pool } from '../database';
 
 // prettier-ignore
@@ -65,7 +65,11 @@ export const gameInitialPieces = async (gameId: number) => {
 
         // C130 to test drone swarms
         piece(gameId, RED_TEAM_ID, C_130_TYPE_ID, 21),
-        piece(gameId, BLUE_TEAM_ID, C_130_TYPE_ID, 22)
+        piece(gameId, BLUE_TEAM_ID, C_130_TYPE_ID, 22),
+
+        // Testing Battles
+        piece(gameId, BLUE_TEAM_ID, STEALTH_BOMBER_TYPE_ID, 315),
+        piece(gameId, RED_TEAM_ID, RADAR_TYPE_ID, 316)
     ];
 
     const queryString = 'INSERT INTO pieces (pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel) VALUES ?';

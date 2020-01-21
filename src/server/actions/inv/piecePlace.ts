@@ -1,7 +1,7 @@
 // prettier-ignore
-import { ALL_AIRFIELD_LOCATIONS, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, MISSILE_TYPE_ID, PIECE_PLACE, PLACE_PHASE_ID, RADAR_TYPE_ID, TEAM_MAIN_ISLAND_STARTING_POSITIONS, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { ALL_AIRFIELD_LOCATIONS, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, ISLAND_POSITIONS, MISSILE_TYPE_ID, PIECE_PLACE, PLACE_PHASE_ID, RADAR_TYPE_ID, TEAM_MAIN_ISLAND_STARTING_POSITIONS, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN, DRAGON_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, MONTAVILLE_ISLAND_ID, LION_ISLAND_ID, NOYARC_ISLAND_ID, FULLER_ISLAND_ID, RICO_ISLAND_ID, TAMU_ISLAND_ID, SHOR_ISLAND_ID, KEONI_ISLAND_ID, EAGLE_ISLAND_ID } from '../../../constants';
 import { InvItemPlaceAction, InvItemPlaceRequestAction, SocketSession } from '../../../types';
-import { Game, InvItem } from '../../classes';
+import { Game, InvItem, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
 /**
@@ -83,8 +83,6 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
     }
 
     // TODO: could also check that they own the airfield? already check that this is on the main island...
-    // TODO: does placing them in the airfield start them as 'landed' or 'airborn'? -> probably should make them landed to start....
-    // TODO: does this include helicopters? they can be on land, so probably not...
     if (TYPE_AIR_PIECES.includes(invItemTypeId)) {
         if (!ALL_AIRFIELD_LOCATIONS.includes(selectedPosition)) {
             sendUserFeedback(socketId, 'Must place air unit on airfield.');
@@ -92,11 +90,94 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
         }
     }
 
-    // TODO: need to make sure pieces are put onto main island (or surrounding waters)
+    if (invItemTypeId === RADAR_TYPE_ID) {
+        // at least 1 ground and no enemies there
+        const ableToPlaceRadar = await Piece.ableToPlaceRadar(gameId, gameTeam, selectedPosition);
+        if (!ableToPlaceRadar) {
+            sendUserFeedback(socketId, 'Radar must be placed next to ground unit with no enemies.');
+            return;
+        }
 
-    // for radars (and possibly other units)
-    // need to verify that island is owned by us
-    // need to verify that there is another ground unit on the hex (and no other enemy units)
+        let completelyOwnsIsland = false;
+        let islandNum = -1;
+
+        const allKeys = Object.keys(ISLAND_POSITIONS);
+        for (let x = 0; x < allKeys.length; x++) {
+            const currentKey = parseInt(allKeys[x]);
+            const thisIslandPositions = ISLAND_POSITIONS[currentKey];
+            if (thisIslandPositions.includes(selectedPosition)) {
+                islandNum = currentKey;
+                break;
+            }
+        }
+
+        // probably better way of doing this, but double flag main islands make it a pain
+        switch (islandNum) {
+            case DRAGON_ISLAND_ID:
+                if (thisGame.flag0 === gameTeam && thisGame.flag1 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case HR_REPUBLIC_ISLAND_ID:
+                if (thisGame.flag2 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case MONTAVILLE_ISLAND_ID:
+                if (thisGame.flag3 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case LION_ISLAND_ID:
+                if (thisGame.flag4 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case NOYARC_ISLAND_ID:
+                if (thisGame.flag5 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case FULLER_ISLAND_ID:
+                if (thisGame.flag6 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case RICO_ISLAND_ID:
+                if (thisGame.flag7 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case TAMU_ISLAND_ID:
+                if (thisGame.flag8 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case SHOR_ISLAND_ID:
+                if (thisGame.flag9 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case KEONI_ISLAND_ID:
+                if (thisGame.flag10 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case EAGLE_ISLAND_ID:
+                if (thisGame.flag11 === gameTeam && thisGame.flag12 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            default:
+                sendUserFeedback(socketId, 'Was not on a known island position.');
+                return;
+        }
+
+        if (!completelyOwnsIsland) {
+            sendUserFeedback(socketId, 'Radar must be on completely owned island.');
+            return;
+        }
+    }
 
     const newPiece = await thisInvItem.placeOnBoard(selectedPosition); // should also check that this piece actually got created, could return null (should return null if it failed...TODO: return null if failed...)
 
