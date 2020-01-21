@@ -253,11 +253,13 @@ export class Event implements EventQueueType {
                     // figure out needed value for success
                     const neededValue = ATTACK_MATRIX[pieceTypeId][tpieceTypeId];
                     const diceRolledResult1 = Math.floor(Math.random() * 6) + 1;
+                    // const diceRolledResult1 = 1;
                     const diceRolledResult2 = Math.floor(Math.random() * 6) + 1;
+                    // const diceRolledResult2 = 1;
                     const diceRollValue = diceRolledResult1 + diceRolledResult2;
 
                     // > or >=?
-                    if (diceRollValue >= neededValue) {
+                    if (diceRollValue >= neededValue && neededValue !== 0) {
                         // something happens!, show dice, highlight probably
                         // bulk update add? //bulk delete?
                         piecesToDelete.push(tpieceId);
