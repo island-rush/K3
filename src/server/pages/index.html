@@ -4,7 +4,7 @@
         <meta charset="UTF-8" />
         <title>Island Rush</title>
         <script>
-            console.log("Home Page Javascript");
+            console.log('Home Page Javascript');
         </script>
         <style>
             body {
@@ -94,7 +94,7 @@
     <body>
         <h1>Island Rush V3.3.0</h1>
         <nav>
-            <a class="active" href="index.html">Home</a>
+            <a class="active" href="./">Home</a>
             <a href="troubleshoot.html">Troubleshoot</a>
             <a href="credits.html">Credits</a>
             <a href="https://gitreports.com/issue/island-rush/K3" target="_blank" style="float: right">Report an Issue</a>
@@ -201,17 +201,17 @@
         let getDatabaseStatus = new XMLHttpRequest();
         getDatabaseStatus.onreadystatechange = function() {
             if (this.readyState == 4) {
-                document.getElementById("DatabaseConnectionTag").innerHTML = "Database: " + this.response;
+                document.getElementById('DatabaseConnectionTag').innerHTML = 'Database: ' + this.response;
 
                 //TODO: fade this out slowly
                 setTimeout(() => {
-                    if (this.response == "Connected") {
-                        document.getElementById("DatabaseConnectionTag").innerHTML = "";
+                    if (this.response == 'Connected') {
+                        document.getElementById('DatabaseConnectionTag').innerHTML = '';
                     }
                 }, 1500);
             }
         };
-        getDatabaseStatus.open("GET", "/databaseStatus", true);
+        getDatabaseStatus.open('GET', '/databaseStatus', true);
         getDatabaseStatus.send();
 
         function getUrlVars() {
@@ -230,33 +230,33 @@
             return urlparameter;
         }
 
-        switch (getUrlParam("error")) {
-            case "loginFail":
-                document.getElementById("formFeedback").innerHTML = "Login Credentials Failed";
+        switch (getUrlParam('error')) {
+            case 'loginFail':
+                document.getElementById('formFeedback').innerHTML = 'Login Credentials Failed';
                 break;
-            case "access":
-                document.getElementById("formFeedback").innerHTML = "Unauthenticated/Unauthorized Access";
+            case 'access':
+                document.getElementById('formFeedback').innerHTML = 'Unauthenticated/Unauthorized Access';
                 break;
-            case "badRequest":
-                document.getElementById("formFeedback").innerHTML = "Bad Request was Given";
+            case 'badRequest':
+                document.getElementById('formFeedback').innerHTML = 'Bad Request was Given';
                 break;
-            case "gameNotActive":
-                document.getElementById("formFeedback").innerHTML = "Teacher has Disabled the Game";
+            case 'gameNotActive':
+                document.getElementById('formFeedback').innerHTML = 'Teacher has Disabled the Game';
                 break;
-            case "alreadyLoggedIn":
-                document.getElementById("formFeedback").innerHTML = "That controller is already logged in.";
+            case 'alreadyLoggedIn':
+                document.getElementById('formFeedback').innerHTML = 'That controller is already logged in.';
                 break;
-            case "notLoggedIn":
-                document.getElementById("formFeedback").innerHTML = "Must be logged in to play. (session didn't match db)";
+            case 'notLoggedIn':
+                document.getElementById('formFeedback').innerHTML = "Must be logged in to play. (session didn't match db)";
                 break;
-            case "database":
-                document.getElementById("formFeedback").innerHTML = "Database had a failure.";
+            case 'database':
+                document.getElementById('formFeedback').innerHTML = 'Database had a failure.';
                 break;
-            case "badSession":
-                document.getElementById("formFeedback").innerHTML = "Server Lost the Session.";
+            case 'badSession':
+                document.getElementById('formFeedback').innerHTML = 'Server Lost the Session.';
                 break;
-            case "gameDoesNotExist":
-                document.getElementById("formFeedback").innerHTML = "Game does not exist.";
+            case 'gameDoesNotExist':
+                document.getElementById('formFeedback').innerHTML = 'Game does not exist.';
                 break;
         }
     </script>
