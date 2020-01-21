@@ -100,117 +100,117 @@ router.get('/game.html', (req: Request, res: Response) => {
 // Admin Functions (forms, logins, ajax)
 // --------------------------------------
 
-router.get('/databaseStatus', (req: Request, res: Response) => {
+router.get('/databaseStatus', async (req: Request, res: Response) => {
     try {
-        dbStatus(req, res);
+        await dbStatus(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.status(500).send(error.code);
     }
 });
 
-router.post('/adminLoginVerify', (req: Request, res: Response) => {
+router.post('/adminLoginVerify', async (req: Request, res: Response) => {
     try {
-        adminLogin(req, res);
+        await adminLogin(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.status(500).redirect(`/index.html?error=${DATABASE_TAG}`);
     }
 });
 
-router.post('/gameLoginVerify', (req: Request, res: Response) => {
+router.post('/gameLoginVerify', async (req: Request, res: Response) => {
     try {
-        gameLogin(req, res);
+        await gameLogin(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.status(500).redirect(`./index.html?error=${DATABASE_TAG}`);
     }
 });
 
-router.post('/gameAdd', (req: Request, res: Response) => {
+router.post('/gameAdd', async (req: Request, res: Response) => {
     try {
-        gameAdd(req, res);
+        await gameAdd(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.redirect(500, '/courseDirector.html?gameAdd=failed');
     }
 });
 
-router.post('/gameDelete', (req: Request, res: Response) => {
+router.post('/gameDelete', async (req: Request, res: Response) => {
     try {
-        gameDelete(req, res);
+        await gameDelete(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.status(500).redirect('/courseDirector.html?gameDelete=failed');
     }
 });
 
-router.post('/setAdminPassword', (req: Request, res: Response) => {
+router.post('/setAdminPassword', async (req: Request, res: Response) => {
     try {
-        setAdminPassword(req, res);
+        await setAdminPassword(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.status(500).redirect('/courseDirector.html?setAdminPassword=failed');
     }
 });
 
-router.post('/setTeamPasswords', (req: Request, res: Response) => {
+router.post('/setTeamPasswords', async (req: Request, res: Response) => {
     try {
-        setTeamPasswords(req, res);
+        await setTeamPasswords(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.status(500).redirect('/teacher.html?setTeamPasswords=failed');
     }
 });
 
-router.post('/insertDatabaseTables', (req: Request, res: Response) => {
+router.post('/insertDatabaseTables', async (req: Request, res: Response) => {
     try {
-        insertDatabaseTables(req, res);
+        await insertDatabaseTables(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.redirect('/courseDirector.html?initializeDatabase=failed');
     }
 });
 
-router.get('/getGames', (req: Request, res: Response) => {
+router.get('/getGames', async (req: Request, res: Response) => {
     try {
-        getGames(req, res);
+        await getGames(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
     }
 });
 
-router.get('/getNews', (req: Request, res: Response) => {
+router.get('/getNews', async (req: Request, res: Response) => {
     try {
-        getNews(req, res);
+        await getNews(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
     }
 });
 
-router.get('/getGameActive', (req: Request, res: Response) => {
+router.get('/getGameActive', async (req: Request, res: Response) => {
     try {
-        getGameActive(req, res);
+        await getGameActive(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.sendStatus(500);
     }
 });
 
-router.post('/toggleGameActive', (req: Request, res: Response) => {
+router.post('/toggleGameActive', async (req: Request, res: Response) => {
     try {
-        toggleGameActive(req, res);
+        await toggleGameActive(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.status(500).redirect('/teacher.html?gameReset=failed');
     }
 });
 
-router.post('/gameReset', (req: Request, res: Response) => {
+router.post('/gameReset', async (req: Request, res: Response) => {
     try {
-        gameReset(req, res);
+        await gameReset(req, res);
     } catch (error) {
-        console.error(error);
+        console.error(error.code);
         res.status(500).redirect('/teacher.html?gameReset=failed');
     }
 });
