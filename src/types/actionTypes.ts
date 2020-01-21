@@ -321,8 +321,8 @@ export type SliceChangeAction = {
         confirmedCommInterrupt: CapabilitiesState['confirmedCommInterrupt'];
         confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
         confirmedNukes: CapabilitiesState['confirmedNukes'];
-        confirmedInsurgencyPos: any;
-        confirmedInsurgencyPieces: any;
+        confirmedInsurgencyPos: number[];
+        confirmedInsurgencyPieces: PieceType[];
         gameboardPieces: GameboardPiecesDataType;
     };
 };
@@ -411,7 +411,6 @@ export type GameInitialStateAction = {
         planning: {
             confirmedPlans: PlanningState['confirmedPlans'];
         };
-        // TODO: fix these to not be 'any'
         news?: {
             newsTitle: NewsState['newsTitle'];
             newsInfo: NewsState['newsInfo'];
