@@ -57,9 +57,7 @@ app.use((req: Request, res: Response) => {
 });
 
 // Socket Setup
-export const io: SocketIO.Server = require('socket.io')(server, {
-    transports: ['websocket', 'polling']
-});
+export const io: SocketIO.Server = require('socket.io')(server);
 
 io.use(sharedsession(fullSession)); // Socket has access to sessions
 io.sockets.on('connection', (socket: Socket) => {
