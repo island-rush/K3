@@ -3,9 +3,7 @@ import io from 'socket.io-client';
 import { SOCKET_CLIENT_SENDING_ACTION, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../constants';
 import { ALL_ERROR_TYPES } from '../../../server/';
 
-const socket: SocketIOClient.Socket = io(window.location.hostname, {
-    transports: ['websocket', 'polling']
-});
+const socket: SocketIOClient.Socket = io(window.location.hostname);
 
 /**
  * Web Sockets connected to the store are listening for Redux Actions and Redirects.
