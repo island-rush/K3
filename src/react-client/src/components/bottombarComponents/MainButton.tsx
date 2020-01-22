@@ -5,7 +5,7 @@ import { GameInfoState } from '../../../../types';
 const mainButtonStyle: any = {
     backgroundColor: 'grey',
     height: '80%',
-    width: '20%',
+    width: '16%',
     margin: '.5%',
     float: 'left'
 };

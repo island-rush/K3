@@ -4,7 +4,7 @@ import { UserfeedbackState } from '../../../../types';
 const userfeedbackStyle: any = {
     background: 'grey',
     height: '80%',
-    width: '40%',
+    width: '60%',
     position: 'relative',
     float: 'left',
     margin: '.5%'

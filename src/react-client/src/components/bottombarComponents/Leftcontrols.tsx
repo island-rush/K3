@@ -6,7 +6,7 @@ import { LEFT_CONTROLS_IMAGES } from '../styleConstants';
 const leftcontrolsStyle: any = {
     background: 'grey',
     height: '80%',
-    width: '25%',
+    width: '19%',
     position: 'relative',
     float: 'left',
     margin: '.5%'
@@ -15,7 +15,7 @@ const leftcontrolsStyle: any = {
 const buttonStyle: any = {
     background: 'white',
     height: '80%',
-    width: '18%',
+    width: '23%',
     float: 'left',
     margin: '1%',
     marginTop: '2%',
