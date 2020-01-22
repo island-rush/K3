@@ -44,6 +44,11 @@ export const socketSetup = async (socket: Socket) => {
     socket.join(`game${gameId}`);
     socket.join(`game${gameId}team${gameTeam}`);
 
+    // Socket Room for individual controllers (in case need to force logout)
+    for (const gameController of gameControllers) {
+        socket.join(`game${gameId}team${gameTeam}controller${gameController}`);
+    }
+
     // Add socketId to session information
     socket.handshake.session.socketId = socket.id;
 
