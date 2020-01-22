@@ -2,7 +2,7 @@ import { Request, Response, Router } from 'express';
 import path from 'path';
 import { DATABASE_TAG, LOGIN_TAG } from '../constants';
 // prettier-ignore
-import { adminLogin, dbStatus, gameAdd, gameDelete, gameLogin, gameReset, getGameActive, getGames, getNews, insertDatabaseTables, setAdminPassword, setTeamPasswords, toggleGameActive, logout } from './admin';
+import { adminLogin, dbStatus, gameAdd, gameDelete, gameLogin, gameReset, getGameActive, getGames, getNews, insertDatabaseTables, logout, logoutPlayer, setAdminPassword, setTeamPasswords, toggleGameActive } from './admin';
 
 /**
  * Express Router to handle different routes on the server.
@@ -212,5 +212,14 @@ router.post('/gameReset', async (req: Request, res: Response) => {
     } catch (error) {
         console.error(error.code);
         res.status(500).redirect('/teacher.html?gameReset=failed');
+    }
+});
+
+router.post('/logoutPlayer', async (req: Request, res: Response) => {
+    try {
+        await logoutPlayer(req, res);
+    } catch (error) {
+        console.error(error.code);
+        res.status(500).redirect('/teacher.html?playerLogout=failed');
     }
 });

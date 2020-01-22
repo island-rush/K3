@@ -14,3 +14,4 @@ export * from './setAdminPassword';
 export * from './setTeamPasswords';
 export * from './toggleGameActive';
 export * from './logout';
+export * from './logoutPlayer';

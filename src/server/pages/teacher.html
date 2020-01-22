@@ -108,6 +108,15 @@
                 text-decoration: none;
                 user-select: none;
             }
+            Red {
+                color: red;
+            }
+            Green {
+                color: green;
+            }
+            Blue {
+                color: blue;
+            }
         </style>
     </head>
     <body>
@@ -166,6 +175,96 @@
 
         <hr />
 
+        <h3>Manually Logout Players</h3>
+        <table>
+            <tr>
+                <td><Blue>Blue Team</Blue></td>
+                <td><Red>Red Team</Red></td>
+            </tr>
+            <tr>
+                <td>
+                    <form name="logoutPlayer" method="post" onsubmit="return confirmLogout(0, 0)" action="/logoutPlayer">
+                        <input type="hidden" name="gameTeam" value="0" />
+                        <input type="hidden" name="gameController" value="0" />
+                        <input type="submit" name="Submit" value="COCOM" />
+                    </form>
+                </td>
+                <td>
+                    <form name="logoutPlayer" method="post" onsubmit="return confirmLogout(1, 0)" action="/logoutPlayer">
+                        <input type="hidden" name="gameTeam" value="1" />
+                        <input type="hidden" name="gameController" value="0" />
+                        <input type="submit" name="Submit" value="COCOM" />
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form name="logoutPlayer" method="post" onsubmit="return confirmLogout(0, 1)" action="/logoutPlayer">
+                        <input type="hidden" name="gameTeam" value="0" />
+                        <input type="hidden" name="gameController" value="1" />
+                        <input type="submit" name="Submit" value="JFACC" />
+                    </form>
+                </td>
+                <td>
+                    <form name="logoutPlayer" method="post" onsubmit="return confirmLogout(1, 1)" action="/logoutPlayer">
+                        <input type="hidden" name="gameTeam" value="1" />
+                        <input type="hidden" name="gameController" value="1" />
+                        <input type="submit" name="Submit" value="JFACC" />
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form name="logoutPlayer" method="post" onsubmit="return confirmLogout(0, 2)" action="/logoutPlayer">
+                        <input type="hidden" name="gameTeam" value="0" />
+                        <input type="hidden" name="gameController" value="2" />
+                        <input type="submit" name="Submit" value="JFLCC" />
+                    </form>
+                </td>
+                <td>
+                    <form name="logoutPlayer" method="post" onsubmit="return confirmLogout(1, 2)" action="/logoutPlayer">
+                        <input type="hidden" name="gameTeam" value="1" />
+                        <input type="hidden" name="gameController" value="2" />
+                        <input type="submit" name="Submit" value="JFLCC" />
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form name="logoutPlayer" method="post" onsubmit="return confirmLogout(0, 3)" action="/logoutPlayer">
+                        <input type="hidden" name="gameTeam" value="0" />
+                        <input type="hidden" name="gameController" value="3" />
+                        <input type="submit" name="Submit" value="JFMCC" />
+                    </form>
+                </td>
+                <td>
+                    <form name="logoutPlayer" method="post" onsubmit="return confirmLogout(1, 3)" action="/logoutPlayer">
+                        <input type="hidden" name="gameTeam" value="1" />
+                        <input type="hidden" name="gameController" value="3" />
+                        <input type="submit" name="Submit" value="JFMCC" />
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form name="logoutPlayer" method="post" onsubmit="return confirmLogout(0, 4)" action="/logoutPlayer">
+                        <input type="hidden" name="gameTeam" value="0" />
+                        <input type="hidden" name="gameController" value="4" />
+                        <input type="submit" name="Submit" value="JFSOC" />
+                    </form>
+                </td>
+                <td>
+                    <form name="logoutPlayer" method="post" onsubmit="return confirmLogout(1, 4)" action="/logoutPlayer">
+                        <input type="hidden" name="gameTeam" value="1" />
+                        <input type="hidden" name="gameController" value="4" />
+                        <input type="submit" name="Submit" value="JFSOC" />
+                    </form>
+                </td>
+            </tr>
+        </table>
+
+        <hr />
+
         <h3>News Alerts for this game:</h3>
 
         <table id="newsTable" border="1">
@@ -176,6 +275,27 @@
         </table>
 
         <script>
+            // function logout(gameTeamNumber, gameControllerNumber) {
+            //     const controllerTexts = ['COCOM', 'JFACC', 'JFLCC', 'JFMCC', 'JFSOC'];
+            //     const teamText = gameTeamNumber === 0 ? 'Blue' : 'Red';
+            //     const message = `Are you sure you want to logout ${teamText} ${controllerTexts[gameControllerNumber]}`;
+            //     if (confirm(message)) {
+            //         let logoutPlayer = new XMLHttpRequest();
+            //         logoutPlayer.open('POST', `/logoutPlayer?gameTeam=${gameTeamNumber}&gameController=${gameControllerNumber}`, true);
+            //         logoutPlayer.send();
+            //     }
+            // }
+
+            function confirmLogout(gameTeam, gameController) {
+                const controllerTexts = ['COCOM', 'JFACC', 'JFLCC', 'JFMCC', 'JFSOC'];
+                const teamText = gameTeam === 0 ? 'Blue' : 'Red';
+                const message = `Are you sure you want to logout ${teamText} ${controllerTexts[gameController]}`;
+                if (confirm(message)) {
+                    return true;
+                }
+                return false;
+            }
+
             function gameReset() {
                 if (confirm('ARE YOU SURE YOU WANT TO RESET THIS GAME?')) {
                     return confirm('ARE YOU EXTRA SURE? THIS WILL DELETE ALL DATA FOR THIS GAME...');
@@ -252,6 +372,15 @@
                     break;
                 case 'failed':
                     document.getElementById('ErrorTag').innerHTML = 'Failed to Update Passwords';
+                    break;
+            }
+
+            switch (getUrlParam('logoutPlayer')) {
+                case 'success':
+                    document.getElementById('SuccessTag').innerHTML = 'Successfully logged out player';
+                    break;
+                case 'failed':
+                    document.getElementById('ErrorTag').innerHTML = 'Failed to log out player';
                     break;
             }
         </script>
