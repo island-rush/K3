@@ -1,6 +1,7 @@
 import { Request, Response, Router } from 'express';
 import path from 'path';
 import { DATABASE_TAG, LOGIN_TAG } from '../constants';
+import { TeacherSession } from '../types';
 // prettier-ignore
 import { adminLogin, dbStatus, gameAdd, gameDelete, gameLogin, gameReset, getGameActive, getGames, getNews, insertDatabaseTables, logout, logoutPlayer, setAdminPassword, setTeamPasswords, toggleGameActive } from './admin';
 
@@ -222,4 +223,13 @@ router.post('/logoutPlayer', async (req: Request, res: Response) => {
         console.error(error.code);
         res.status(500).redirect('/teacher.html?playerLogout=failed');
     }
+});
+
+router.get('/getSessionInfo', (req: Request, res: Response) => {
+    if (!req.session.ir3teacher) {
+        res.redirect(`/index.html?error=${LOGIN_TAG}`);
+        return;
+    }
+    const sessionInfo: TeacherSession = req.session.ir3teacher;
+    res.send(JSON.stringify(sessionInfo));
 });
