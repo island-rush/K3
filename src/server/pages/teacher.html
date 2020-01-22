@@ -131,8 +131,8 @@
         <h2>Teacher Tools</h2>
         <div id="SuccessTag" style="color: green"></div>
         <div id="ErrorTag" style="color: red"></div>
-        <span class="important" id="section">Section: TODO</span>
-        <span class="important" id="instructor">Instructor: TODO</span>
+        <span class="important" id="section">Section: Loading...</span>
+        <span class="important" id="instructor">Instructor: Loading...</span>
         <br />
         <hr />
         <h3>Activate / Deactivate Game</h3>
@@ -275,17 +275,6 @@
         </table>
 
         <script>
-            // function logout(gameTeamNumber, gameControllerNumber) {
-            //     const controllerTexts = ['COCOM', 'JFACC', 'JFLCC', 'JFMCC', 'JFSOC'];
-            //     const teamText = gameTeamNumber === 0 ? 'Blue' : 'Red';
-            //     const message = `Are you sure you want to logout ${teamText} ${controllerTexts[gameControllerNumber]}`;
-            //     if (confirm(message)) {
-            //         let logoutPlayer = new XMLHttpRequest();
-            //         logoutPlayer.open('POST', `/logoutPlayer?gameTeam=${gameTeamNumber}&gameController=${gameControllerNumber}`, true);
-            //         logoutPlayer.send();
-            //     }
-            // }
-
             function confirmLogout(gameTeam, gameController) {
                 const controllerTexts = ['COCOM', 'JFACC', 'JFLCC', 'JFMCC', 'JFSOC'];
                 const teamText = gameTeam === 0 ? 'Blue' : 'Red';
@@ -330,6 +319,17 @@
             };
             getNewsTable.open('GET', '/getNews', true);
             getNewsTable.send();
+
+            let getSessionInfo = new XMLHttpRequest();
+            getSessionInfo.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    const sessionInfo = JSON.parse(this.response);
+                    document.getElementById('section').innerHTML = `Section: ${sessionInfo.gameSection}`;
+                    document.getElementById('instructor').innerHTML = `Instructor: ${sessionInfo.gameInstructor}`;
+                }
+            };
+            getSessionInfo.open('GET', '/getSessionInfo', true);
+            getSessionInfo.send();
 
             function toggleActive() {
                 let toggleGameActive = new XMLHttpRequest();
