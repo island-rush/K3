@@ -58,8 +58,17 @@ app.use((req: Request, res: Response) => {
 
 // Socket Setup
 export const io: SocketIO.Server = require('socket.io')(server);
+// const redisAdapter = require('socket.io-redis');
 
-io.use(sharedsession(fullSession)); // Socket has access to sessions
+// This adapter allows socket.io to run centrally between multiple instances, processes, or servers (not needed for local dev)
+// if (process.env.REDIS === 'production') {
+// io.adapter(redisAdapter({ host: 'localhost', port: 6379 })); // TODO: setup azure redis cache
+// }
+
+// Socket has access to sessions
+io.use(sharedsession(fullSession));
+
+// Client-Server setup
 io.sockets.on('connection', (socket: Socket) => {
     socketSetup(socket);
 });
