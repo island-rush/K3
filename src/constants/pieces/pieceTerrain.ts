@@ -1,11 +1,16 @@
 import * as ID from './pieceId';
 
-// TODO: refactor these to be constants
-export const ALL_TERRAIN = ['land', 'water', 'airfield', 'missile', 'flag'];
+const LAND_TERRAIN_TYPE = 'land';
+const WATER_TERRAIN_TYPE = 'water';
+const AIRFIELD_TERRAIN_TYPE = 'airfield';
+const MISSILE_TERRAIN_TYPE = 'missile';
+const FLAG_TERRAIN_TYPE = 'flag';
 
-export const GROUND_TERRAIN = ['land', 'airfield', 'missile', 'flag'];
+export const ALL_TERRAIN = [LAND_TERRAIN_TYPE, WATER_TERRAIN_TYPE, AIRFIELD_TERRAIN_TYPE, MISSILE_TERRAIN_TYPE, FLAG_TERRAIN_TYPE];
 
-export const WATER_TERRAIN = ['water'];
+export const GROUND_TERRAIN = [LAND_TERRAIN_TYPE, AIRFIELD_TERRAIN_TYPE, MISSILE_TERRAIN_TYPE, FLAG_TERRAIN_TYPE];
+
+export const WATER_TERRAIN = [WATER_TERRAIN_TYPE];
 
 // TODO: figure out a way to enforce that all piece types are used? (typescript) or that non-valid piece types not used.
 export const TYPE_TERRAIN: { [id: number]: string[] } = {};
@@ -30,4 +35,4 @@ TYPE_TERRAIN[ID.MC_12_TYPE_ID] = [...ALL_TERRAIN];
 TYPE_TERRAIN[ID.C_130_TYPE_ID] = [...ALL_TERRAIN];
 TYPE_TERRAIN[ID.SOF_TEAM_TYPE_ID] = [...GROUND_TERRAIN];
 TYPE_TERRAIN[ID.RADAR_TYPE_ID] = [...GROUND_TERRAIN];
-TYPE_TERRAIN[ID.MISSILE_TYPE_ID] = [...GROUND_TERRAIN];
+TYPE_TERRAIN[ID.MISSILE_TYPE_ID] = [MISSILE_TERRAIN_TYPE];
