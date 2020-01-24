@@ -1,7 +1,7 @@
 // prettier-ignore
-import { ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, DRONE_SWARM_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, NEW_ROUND, NO_MORE_EVENTS, NUKE_SELECTED, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SLICE_CHANGE } from '../../../../constants';
+import { ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, DRONE_SWARM_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, NEW_ROUND, NO_MORE_EVENTS, NUKE_SELECTED, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SLICE_CHANGE, MISSILE_SELECTED } from '../../../../constants';
 // prettier-ignore
-import { AtcScrambleAction, BioWeaponsAction, CapabilitiesState, ClearDroneSwarmMineNotifyAction, ClearSeaMineNotifyAction, CommInterruptAction, DroneSwarmAction, DroneSwarmHitNotifyAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, NewRoundAction, NoMoreEventsAction, NukeAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, SeaMineHitNotifyAction, SliceChangeAction } from '../../../../types';
+import { AtcScrambleAction, BioWeaponsAction, CapabilitiesState, ClearDroneSwarmMineNotifyAction, ClearSeaMineNotifyAction, CommInterruptAction, DroneSwarmAction, DroneSwarmHitNotifyAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, NewRoundAction, NoMoreEventsAction, NukeAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, SeaMineHitNotifyAction, SliceChangeAction, MissileAction } from '../../../../types';
 
 type CapabilityReducerActions =
     | GameInitialStateAction
@@ -11,6 +11,7 @@ type CapabilityReducerActions =
     | RodsFromGodAction
     | CommInterruptAction
     | InsurgencyAction
+    | MissileAction
     | RemoteSensingAction
     | GoldenEyeAction
     | SliceChangeAction
@@ -40,7 +41,8 @@ const initialCapabilitiesState: CapabilitiesState = {
     confirmedDroneSwarms: [],
     droneSwarmHits: [],
     confirmedAtcScramble: [],
-    confirmedNukes: []
+    confirmedNukes: [],
+    confirmedMissileAttacks: []
 };
 
 export function capabilitiesReducer(state = initialCapabilitiesState, action: CapabilityReducerActions) {
@@ -81,6 +83,14 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
 
         case RODS_FROM_GOD_SELECTED:
             stateCopy.confirmedRods.push((action as RodsFromGodAction).payload.selectedPositionId);
+            return stateCopy;
+
+        case MISSILE_SELECTED:
+            // TODO: make sure this logic works correctly (it's okay if start undefined? (check that it's not already there...))
+            stateCopy.confirmedMissileAttacks.push({
+                missileId: (action as MissileAction).payload.selectedPiece.pieceId,
+                targetId: (action as MissileAction).payload.selectedTargetPiece.pieceId
+            });
             return stateCopy;
 
         case NUKE_SELECTED:

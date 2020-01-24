@@ -218,3 +218,11 @@ export type NukeType = {
     positionId: number;
     activated: number;
 };
+
+export type MissileAttackType = {
+    missileAttackId: number;
+    gameId: number;
+    teamId: number;
+    missileId: number;
+    targetId: number;
+};

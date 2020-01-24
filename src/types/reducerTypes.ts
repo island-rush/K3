@@ -72,6 +72,7 @@ export type CapabilitiesState = {
     droneSwarmHits: number[];
     confirmedAtcScramble: number[];
     confirmedNukes: number[];
+    confirmedMissileAttacks: { missileId: number; targetId: number }[];
 };
 
 export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };
