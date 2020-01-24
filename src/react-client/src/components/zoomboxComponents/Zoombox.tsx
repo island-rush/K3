@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { GameboardMetaState, GameboardState, PieceType, GameInfoState, CapabilitiesState } from '../../../../types';
-import { clearPieceSelection, pieceClose, pieceOpen, selectPiece } from '../../redux';
+import { clearPieceSelection, pieceClose, pieceOpen, selectPiece, missileAttack } from '../../redux';
 import { ZOOMBOX_BACKGROUNDS, TYPE_IMAGES } from '../styleConstants';
 import { Piece } from './Piece';
 import { SEA_MINES_TYPE_ID, DRONE_SWARMS_TYPE_ID } from '../../../../constants';
@@ -52,6 +52,7 @@ interface Props {
     selectPiece: any;
     clearPieceSelection: any;
     pieceOpen: any;
+    missileAttack: any;
     gameInfo: GameInfoState;
     confirmedSeaMines: CapabilitiesState['confirmedSeaMines'];
     confirmedDroneSwarms: CapabilitiesState['confirmedDroneSwarms'];
@@ -70,7 +71,8 @@ class Zoombox extends Component<Props> {
             gameInfo,
             confirmedSeaMines,
             confirmedDroneSwarms,
-            confirmedAtcScramble
+            confirmedAtcScramble,
+            missileAttack
         } = this.props;
 
         const isVisible = selectedPos !== -1;
@@ -87,6 +89,8 @@ class Zoombox extends Component<Props> {
                       piece={piece}
                       gameInfo={gameInfo}
                       confirmedAtcScramble={confirmedAtcScramble}
+                      // Shouldn't send this to all Piece components, only missiles (figure it out up here, not down there for everyone)
+                      missileAttack={missileAttack}
                   />
               ));
 
@@ -135,7 +139,8 @@ const mapActionsToProps = {
     selectPiece: selectPiece,
     clearPieceSelection: clearPieceSelection,
     pieceOpen,
-    pieceClose
+    pieceClose,
+    missileAttack
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Zoombox);

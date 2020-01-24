@@ -1,9 +1,12 @@
+import { PieceType } from '../../../types';
+import { Piece } from '../Piece';
 import { decreaseAtcScramble, getAtcScramble, insertAtcScramble, useAtcScramble } from './atcScramble';
 import { decreaseBiologicalWeapons, getBiologicalWeapons, insertBiologicalWeapons, useBiologicalWeapons } from './biologicalWeapons';
 import { decreaseCommInterrupt, getCommInterrupt, insertCommInterrupt, useCommInterrupt } from './commInterrupt';
 import { checkDroneSwarmHit, decreaseDroneSwarms, getDroneSwarms, insertDroneSwarm } from './droneSwarms';
 import { decreaseGoldenEye, getGoldenEye, insertGoldenEye, useGoldenEye } from './goldenEye';
 import { getInsurgency, insurgencyInsert, useInsurgency } from './insurgency';
+import { insertMissileAttack } from './missileAttack';
 import { getNukes, insertNuke, useNukes } from './nuclearStrike';
 import { decreaseRaiseMorale, getRaiseMorale, insertRaiseMorale } from './raiseMorale';
 import { decreaseRemoteSensing, getRemoteSensing, remoteSensingInsert } from './remoteSensing';
@@ -14,6 +17,10 @@ import { checkSeaMineHit, getSeaMines, insertSeaMine } from './seaMines';
  * List of static functions for handling capabilities. (Groups all functions inside a single static class)
  */
 export class Capability {
+    static async insertMissileAttack(gameId: number, missilePiece: Piece, targetPiece: PieceType) {
+        return insertMissileAttack(gameId, missilePiece, targetPiece);
+    }
+
     static async getNukes(gameId: number, gameTeam: number) {
         return getNukes(gameId, gameTeam);
     }

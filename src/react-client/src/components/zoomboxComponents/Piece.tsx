@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { TYPE_MOVES, TYPE_NAMES, LIST_ALL_AIRFIELD_PIECES, ALL_AIRFIELD_LOCATIONS } from '../../../../constants';
-import { PieceType, GameInfoState, CapabilitiesState } from '../../../../types';
+import { ALL_AIRFIELD_LOCATIONS, LIST_ALL_AIRFIELD_PIECES, MISSILE_TYPE_ID, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
+import { CapabilitiesState, GameInfoState, PieceType } from '../../../../types';
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../styleConstants';
 
 const pieceStyle = {
@@ -34,6 +34,7 @@ const zIndexLevels = [{ zIndex: 5 }, { zIndex: 10 }];
 
 interface Props {
     piece: PieceType;
+    missileAttack: any;
     topLevel: boolean;
     selected: boolean;
     pieceClick: any;
@@ -44,7 +45,7 @@ interface Props {
 
 export class Piece extends Component<Props> {
     render() {
-        const { piece, topLevel, selected, pieceClick, pieceOpen, gameInfo, confirmedAtcScramble } = this.props;
+        const { piece, topLevel, selected, pieceClick, pieceOpen, gameInfo, confirmedAtcScramble, missileAttack } = this.props;
 
         // TODO: top level probably not used anymore now that containers are their own popup
         const pieceCombinedStyle = {
@@ -83,11 +84,19 @@ export class Piece extends Component<Props> {
             event.stopPropagation();
         };
 
-        const onDoubleClick = (event: any) => {
+        const pieceOpenDoubleClick = (event: any) => {
             event.preventDefault();
             pieceOpen(piece);
             event.stopPropagation();
         };
+
+        const missileAttackDoubleClick = (event: any) => {
+            event.preventDefault();
+            missileAttack(piece);
+            event.stopPropagation();
+        };
+
+        const onDoubleClick = piece.pieceTypeId === MISSILE_TYPE_ID ? missileAttackDoubleClick : pieceOpenDoubleClick;
 
         return <div style={pieceCombinedStyle} title={title} onClick={onClick} onDoubleClick={onDoubleClick}></div>;
     }

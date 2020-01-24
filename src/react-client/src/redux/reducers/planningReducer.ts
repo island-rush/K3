@@ -52,6 +52,7 @@ type SelectingAction =
 const initialPlanningState: PlanningState = {
     active: false,
     capability: false,
+    missileSelecting: null,
     raiseMoralePopupActive: false,
     invItem: null,
     moves: [],
@@ -71,6 +72,10 @@ export function planningReducer(state = initialPlanningState, action: PlanningRe
             return stateCopy;
 
         case MISSILE_SELECTING:
+            stateCopy.active = true;
+            stateCopy.missileSelecting = (action as MissileSelectingAction).payload.selectedPiece;
+            return stateCopy;
+
         case START_PLAN:
             stateCopy.active = true;
             return stateCopy;
@@ -118,6 +123,7 @@ export function planningReducer(state = initialPlanningState, action: PlanningRe
             stateCopy.capability = false;
             stateCopy.invItem = null;
             stateCopy.active = false;
+            stateCopy.missileSelecting = null;
             return stateCopy;
 
         case CANCEL_PLAN:
