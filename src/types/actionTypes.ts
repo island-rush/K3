@@ -322,6 +322,7 @@ export type SliceChangeAction = {
         confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
         confirmedNukes: CapabilitiesState['confirmedNukes'];
         confirmedMissileHitPos: CapabilitiesState['confirmedMissileHitPos'];
+        confirmedBombardmentHitPos: CapabilitiesState['confirmedBombardmentHitPos'];
         confirmedInsurgencyPos: number[];
         confirmedInsurgencyPieces: PieceType[];
         gameboardPieces: GameboardPiecesDataType;

@@ -233,3 +233,11 @@ router.get('/getSessionInfo', (req: Request, res: Response) => {
     const sessionInfo: TeacherSession = req.session.ir3teacher;
     res.send(JSON.stringify(sessionInfo));
 });
+
+router.post('/tryLogout', (req: Request, res: Response) => {
+    if (req.session.ir3) {
+        logout(req.session.ir3);
+        delete req.session.ir3;
+    }
+    res.sendStatus(200);
+});

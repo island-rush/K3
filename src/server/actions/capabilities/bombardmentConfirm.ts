@@ -1,13 +1,13 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, MISSILE_SELECTED, MISSILE_TYPE_ID, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL, MISSILE_ATTACK_RANGE_CHANGE, distanceMatrix } from '../../../constants';
-import { MissileAction, MissileRequestAction, SocketSession } from '../../../types';
+import { BOMBARDMENT_SELECTED, COMBAT_PHASE_ID, DESTROYER_ATTACK_RANGE_CHANCE, DESTROYER_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, TYPE_LAND, TYPE_OWNERS, TYPE_SEA } from '../../../constants';
+import { BombardmentAction, BombardmentRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
 /**
- * User request to use missile (in silo)
+ * User request to use bombardment.
  */
-export const missileAttackConfirm = async (session: SocketSession, action: MissileRequestAction) => {
+export const bombardmentConfirm = async (session: SocketSession, action: BombardmentRequestAction) => {
     // Grab the Session
     const { ir3, socketId } = session;
     const { gameId, gameTeam, gameControllers } = ir3;
@@ -33,28 +33,28 @@ export const missileAttackConfirm = async (session: SocketSession, action: Missi
         return;
     }
 
-    // gamePhase 2 is only phase for missile attack
+    // gamePhase 2 is only phase for bombardment attack
     if (gamePhase !== COMBAT_PHASE_ID) {
         sendUserFeedback(socketId, 'Not the right phase...');
         return;
     }
 
-    // gameSlice 0 is only slice for missile attack
+    // gameSlice 0 is only slice for bombardment attack
     if (gameSlice !== SLICE_PLANNING_ID) {
         sendUserFeedback(socketId, 'Not the right slice (must be planning)...');
         return;
     }
 
     // Only the SOF controller
-    if (!gameControllers.includes(TYPE_SPECIAL)) {
-        sendUserFeedback(socketId, 'Not the sof controller (3)...');
+    if (!gameControllers.includes(TYPE_SEA)) {
+        sendUserFeedback(socketId, 'Not the sea controller...');
         return;
     }
 
     // Does the invItem exist for it?
-    const missilePiece = await new Piece(selectedPiece.pieceId).init();
-    if (!missilePiece) {
-        sendUserFeedback(socketId, 'Did not have the missile piece to complete this request.');
+    const destroyerPiece = await new Piece(selectedPiece.pieceId).init();
+    if (!destroyerPiece) {
+        sendUserFeedback(socketId, 'Did not have the destroyer piece to complete this request.');
         return;
     }
 
@@ -65,47 +65,48 @@ export const missileAttackConfirm = async (session: SocketSession, action: Missi
     }
 
     // TODO: tons more of checks that could happen here to verify that piece's belong to correct teams and things make sense for this action
-    if (missilePiece.pieceTeamId !== gameTeam) {
+    if (destroyerPiece.pieceTeamId !== gameTeam) {
         sendUserFeedback(socketId, 'Selected piece did not belong to your team.');
         return;
     }
 
-    // verify correct type of missile
-    if (missilePiece.pieceTypeId !== MISSILE_TYPE_ID) {
-        sendUserFeedback(socketId, 'selected piece was not a missile type.');
+    // verify correct type of piece (destroyer)
+    if (destroyerPiece.pieceTypeId !== DESTROYER_TYPE_ID) {
+        sendUserFeedback(socketId, 'selected piece was not a destroyer type.');
         return;
     }
 
     if (targetPiece.pieceTeamId === gameTeam) {
-        sendUserFeedback(socketId, 'selected same team to hit, please dont');
+        sendUserFeedback(socketId, 'selected your own team to bombard, please dont.');
         return;
     }
 
     // verify correct type of target
     // TODO: what are the ranges / capabilities of what targets are available (does distance factor into % hit?)
-    if (!TYPE_OWNERS[TYPE_SEA].includes(targetPiece.pieceTypeId)) {
-        sendUserFeedback(socketId, 'selected piece was not a sea type.');
+    // TODO: should we include a more specific set? (ability to bombard helicopters?)
+    if (!TYPE_OWNERS[TYPE_LAND].includes(targetPiece.pieceTypeId)) {
+        sendUserFeedback(socketId, 'selected piece was not a land type.');
         return;
     }
 
     // within range
-    const distance = distanceMatrix[missilePiece.piecePositionId][targetPiece.piecePositionId];
-    if (!MISSILE_ATTACK_RANGE_CHANGE[distance]) {
+    const distance = distanceMatrix[destroyerPiece.piecePositionId][targetPiece.piecePositionId];
+    if (!DESTROYER_ATTACK_RANGE_CHANCE[distance]) {
         sendUserFeedback(socketId, 'selected target was out of range');
         return;
     }
 
     // insert the 'plan' for bio weapon into the db for later use
     // let the client(team) know that this plan was accepted
-    if (!(await Capability.insertMissileAttack(gameId, missilePiece, targetPiece))) {
-        sendUserFeedback(socketId, 'db failed to insert missile attack, likely already an entry for that position.');
+    if (!(await Capability.insertBombardmentAttack(gameId, destroyerPiece, targetPiece))) {
+        sendUserFeedback(socketId, 'db failed to insert bombardment attack, likely already an entry for that position.');
         return;
     }
 
-    const serverAction: MissileAction = {
-        type: MISSILE_SELECTED,
+    const serverAction: BombardmentAction = {
+        type: BOMBARDMENT_SELECTED,
         payload: {
-            selectedPiece: missilePiece,
+            selectedPiece: destroyerPiece,
             selectedTargetPiece: targetPiece
         }
     };

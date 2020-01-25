@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { GameboardMetaState, GameboardState, PieceType, GameInfoState, CapabilitiesState } from '../../../../types';
-import { clearPieceSelection, pieceClose, pieceOpen, selectPiece, missileAttack } from '../../redux';
-import { ZOOMBOX_BACKGROUNDS, TYPE_IMAGES } from '../styleConstants';
+import { DRONE_SWARMS_TYPE_ID, SEA_MINES_TYPE_ID } from '../../../../constants';
+import { CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, PieceType } from '../../../../types';
+import { bombardment, clearPieceSelection, missileAttack, pieceClose, pieceOpen, selectPiece } from '../../redux';
+import { TYPE_IMAGES, ZOOMBOX_BACKGROUNDS } from '../styleConstants';
 import { Piece } from './Piece';
-import { SEA_MINES_TYPE_ID, DRONE_SWARMS_TYPE_ID } from '../../../../constants';
 
 const zoomboxStyle = {
     position: 'absolute',
@@ -52,12 +52,14 @@ interface Props {
     selectPiece: any;
     clearPieceSelection: any;
     pieceOpen: any;
-    missileAttack: any;
+    missileAttack: any; // TODO: make these actual function types (import the types? (like typeof: missileAttack?))
+    bombardment: any;
     gameInfo: GameInfoState;
     confirmedSeaMines: CapabilitiesState['confirmedSeaMines'];
     confirmedDroneSwarms: CapabilitiesState['confirmedDroneSwarms'];
     confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
     confirmedMissileAttacks: CapabilitiesState['confirmedMissileAttacks'];
+    confirmedBombardments: CapabilitiesState['confirmedBombardments'];
 }
 
 class Zoombox extends Component<Props> {
@@ -74,7 +76,9 @@ class Zoombox extends Component<Props> {
             confirmedDroneSwarms,
             confirmedAtcScramble,
             confirmedMissileAttacks,
-            missileAttack
+            missileAttack,
+            confirmedBombardments,
+            bombardment
         } = this.props;
 
         const isVisible = selectedPos !== -1;
@@ -94,6 +98,8 @@ class Zoombox extends Component<Props> {
                       confirmedAtcScramble={confirmedAtcScramble}
                       // Shouldn't send this to all Piece components, only missiles (figure it out up here, not down there for everyone)
                       missileAttack={missileAttack}
+                      confirmedBombardments={confirmedBombardments}
+                      bombardment={bombardment}
                   />
               ));
 
@@ -136,7 +142,8 @@ const mapStateToProps = ({
     confirmedSeaMines: capabilities.confirmedSeaMines,
     confirmedDroneSwarms: capabilities.confirmedDroneSwarms,
     confirmedAtcScramble: capabilities.confirmedAtcScramble,
-    confirmedMissileAttacks: capabilities.confirmedMissileAttacks
+    confirmedMissileAttacks: capabilities.confirmedMissileAttacks,
+    confirmedBombardments: capabilities.confirmedBombardments
 });
 
 const mapActionsToProps = {
@@ -144,7 +151,8 @@ const mapActionsToProps = {
     clearPieceSelection: clearPieceSelection,
     pieceOpen,
     pieceClose,
-    missileAttack
+    missileAttack,
+    bombardment
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Zoombox);

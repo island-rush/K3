@@ -208,7 +208,7 @@ export const selectPosition = (selectedPositionId: number) => {
             return;
         }
 
-        if (planning.missileSelecting) {
+        if (planning.missileSelecting || planning.bombardmentSelecting) {
             //select the position anyway
             const positionSelectAction: PositionSelectAction = {
                 type: POSITION_SELECT,

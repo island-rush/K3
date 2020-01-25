@@ -74,6 +74,8 @@ export type CapabilitiesState = {
     confirmedNukes: number[];
     confirmedMissileAttacks: { missileId: number; targetId: number }[];
     confirmedMissileHitPos: number[];
+    confirmedBombardments: { destroyerId: number; targetId: number }[];
+    confirmedBombardmentHitPos: number[];
 };
 
 export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };
@@ -82,6 +84,7 @@ export type PlanningState = {
     active: boolean;
     capability: boolean;
     missileSelecting: PieceType | null;
+    bombardmentSelecting: PieceType | null;
     raiseMoralePopupActive: boolean;
     invItem: InvItemType | null;
     moves: singlePlan[];

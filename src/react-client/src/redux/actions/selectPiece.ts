@@ -1,8 +1,9 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
 // prettier-ignore
-import { DRONE_SWARMS_TYPE_ID, PIECE_CLICK, SEA_MINES_TYPE_ID, SERVER_DRONE_SWARM_CONFIRM, SERVER_MISSILE_CONFIRM, SERVER_SEA_MINE_CONFIRM } from '../../../../constants';
-import { DroneSwarmRequestAction, MissileRequestAction, PieceClickAction, PieceType, SeaMineRequestAction } from '../../../../types';
+import { DRONE_SWARMS_TYPE_ID, PIECE_CLICK, SEA_MINES_TYPE_ID, SERVER_BOMBARDMENT_CONFIRM, SERVER_DRONE_SWARM_CONFIRM, SERVER_MISSILE_CONFIRM, SERVER_SEA_MINE_CONFIRM } from '../../../../constants';
+// prettier-ignore
+import { BombardmentRequestAction, DroneSwarmRequestAction, MissileRequestAction, PieceClickAction, PieceType, SeaMineRequestAction } from '../../../../types';
 
 /**
  * Change the state based on the piece that the user selected.
@@ -38,6 +39,23 @@ export const selectPiece = (selectedPiece: PieceType) => {
                 // TODO: client side checks
 
                 sendToServer(clientAction);
+            }
+        }
+
+        if (planning.bombardmentSelecting) {
+            if (window.confirm('Are you sure you want to bombard this piece?')) {
+                const clientAction: BombardmentRequestAction = {
+                    type: SERVER_BOMBARDMENT_CONFIRM,
+                    payload: {
+                        selectedPiece: planning.bombardmentSelecting,
+                        selectedTargetPiece: selectedPiece
+                    }
+                };
+
+                // TODO: other client side checks
+
+                sendToServer(clientAction);
+                // TODO: should we just return from these? (be consistent between these if statements...don't let the file get too large (like selectPosition.....))
             }
         }
 
