@@ -214,6 +214,10 @@
         getDatabaseStatus.open('GET', '/databaseStatus', true);
         getDatabaseStatus.send();
 
+        let tryLogout = new XMLHttpRequest();
+        tryLogout.open('POST', '/tryLogout', true);
+        tryLogout.send();
+
         function getUrlVars() {
             var vars = {};
             var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
