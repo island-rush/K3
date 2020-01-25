@@ -2,11 +2,12 @@ import { PieceType } from '../../../types';
 import { Piece } from '../Piece';
 import { decreaseAtcScramble, getAtcScramble, insertAtcScramble, useAtcScramble } from './atcScramble';
 import { decreaseBiologicalWeapons, getBiologicalWeapons, insertBiologicalWeapons, useBiologicalWeapons } from './biologicalWeapons';
+import { getBombardmentAttack, insertBombardmentAttack, useBombardmentAttack } from './bombardment';
 import { decreaseCommInterrupt, getCommInterrupt, insertCommInterrupt, useCommInterrupt } from './commInterrupt';
 import { checkDroneSwarmHit, decreaseDroneSwarms, getDroneSwarms, insertDroneSwarm } from './droneSwarms';
 import { decreaseGoldenEye, getGoldenEye, insertGoldenEye, useGoldenEye } from './goldenEye';
 import { getInsurgency, insurgencyInsert, useInsurgency } from './insurgency';
-import { insertMissileAttack, getMissileAttack, useMissileAttack } from './missileAttack';
+import { getMissileAttack, insertMissileAttack, useMissileAttack } from './missileAttack';
 import { getNukes, insertNuke, useNukes } from './nuclearStrike';
 import { decreaseRaiseMorale, getRaiseMorale, insertRaiseMorale } from './raiseMorale';
 import { decreaseRemoteSensing, getRemoteSensing, remoteSensingInsert } from './remoteSensing';
@@ -17,6 +18,18 @@ import { checkSeaMineHit, getSeaMines, insertSeaMine } from './seaMines';
  * List of static functions for handling capabilities. (Groups all functions inside a single static class)
  */
 export class Capability {
+    static async insertBombardmentAttack(gameId: number, destroyerPiece: PieceType, targetPiece: PieceType) {
+        return insertBombardmentAttack(gameId, destroyerPiece, targetPiece);
+    }
+
+    static async getBombardmentAttack(gameId: number, gameTeam: number) {
+        return getBombardmentAttack(gameId, gameTeam);
+    }
+
+    static async useBombardmentattack(gameId: number) {
+        return useBombardmentAttack(gameId);
+    }
+
     static async insertMissileAttack(gameId: number, missilePiece: Piece, targetPiece: PieceType) {
         return insertMissileAttack(gameId, missilePiece, targetPiece);
     }

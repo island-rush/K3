@@ -8,3 +8,8 @@ export const MISSILE_ATTACK_RANGE_CHANGE: { [number: number]: number } = {
     2: 65,
     3: 20
 };
+
+export const DESTROYER_ATTACK_RANGE_CHANCE: { [number: number]: number } = {
+    1: 75,
+    2: 25
+};
