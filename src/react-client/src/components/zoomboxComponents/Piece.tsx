@@ -107,11 +107,11 @@ export class Piece extends Component<Props> {
         let targettingByBombardmentText = '';
         for (let x = 0; x < confirmedBombardments.length; x++) {
             const currentBombardmentObj = confirmedBombardments[x];
-            const { targetId, destoyerId } = currentBombardmentObj;
+            const { targetId, destroyerId } = currentBombardmentObj;
             if (targetId === piece.pieceId) {
                 targettedByMissileText = '\nTargetted By Bombardment';
             }
-            if (destoyerId === piece.pieceId) {
+            if (destroyerId === piece.pieceId) {
                 targettedByMissileText = '\nTargetting an enemy piece.';
             }
         }

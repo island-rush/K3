@@ -75,7 +75,7 @@ export const useMissileAttack = async (gameId: number) => {
             percentHit = MISSILE_ATTACK_RANGE_CHANGE[distance];
         }
 
-        const randomNumber = Math.floor(Math.random() * 100);
+        const randomNumber = Math.floor(Math.random() * 100) + 1;
         if (randomNumber <= percentHit) {
             listOfTargetsToDelete.push(targetId);
             listOfPositionsHit.push(targetPositionId);

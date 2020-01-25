@@ -31,7 +31,7 @@ export const getBombardmentAttack = async (gameId: number, teamId: number) => {
     for (let x = 0; x < results.length; x++) {
         const thisBombardment = results[x];
         confirmedBombardments.push({
-            destoyerId: thisBombardment.destroyerId,
+            destroyerId: thisBombardment.destroyerId,
             targetId: thisBombardment.targetId
         });
     }
@@ -44,14 +44,14 @@ export const useBombardmentAttack = async (gameId: number) => {
 
     // start with big join selection that grabs all piece data (mostly just the target piece typeId / position to calculate hit %)
     const queryString =
-        'SELECT a.pieceId as targetId, a.pieceTypeId as targetTypeId, a.piecePositionId as targetPositionId, b.piecePositionId as destroyerPositionId FROM bombardments JOIN pieces a ON targetId = a.pieceId JOIN pieces b ON destoyerId = b.pieceId WHERE gameId = ?';
+        'SELECT a.pieceId as targetId, a.pieceTypeId as targetTypeId, a.piecePositionId as targetPositionId, b.piecePositionId as destroyerPositionId FROM bombardments JOIN pieces a ON targetId = a.pieceId JOIN pieces b ON destroyerId = b.pieceId WHERE gameId = ?';
     const inserts = [gameId];
 
     type QueryResultType = {
         targetId: number;
         targetPositionId: number;
         targetTypeId: number;
-        destoyerPositionId: number;
+        destroyerPositionId: number;
     };
 
     const [results] = await pool.query<RowDataPacket[] & QueryResultType[]>(queryString, inserts);
@@ -60,10 +60,10 @@ export const useBombardmentAttack = async (gameId: number) => {
     const listOfPositionsHit = [];
 
     for (let x = 0; x < results.length; x++) {
-        const { targetId, targetPositionId, destoyerPositionId } = results[x];
+        const { targetId, targetPositionId, destroyerPositionId } = results[x];
         // TODO: consider type as part of bombardment?
         // type is also part of the query, but not used here (yet)
-        const distance = distanceMatrix[destoyerPositionId][targetPositionId];
+        const distance = distanceMatrix[destroyerPositionId][targetPositionId];
         let percentHit: number;
 
         if (!DESTROYER_ATTACK_RANGE_CHANCE[distance]) {
@@ -72,7 +72,7 @@ export const useBombardmentAttack = async (gameId: number) => {
             percentHit = DESTROYER_ATTACK_RANGE_CHANCE[distance];
         }
 
-        const randomNumber = Math.floor(Math.random() * 100);
+        const randomNumber = Math.floor(Math.random() * 100) + 1;
         if (randomNumber <= percentHit) {
             listOfTargetsToDelete.push(targetId);
             listOfPositionsHit.push(targetPositionId);

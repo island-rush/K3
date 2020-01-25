@@ -101,7 +101,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
 
         case BOMBARDMENT_SELECTED:
             stateCopy.confirmedBombardments.push({
-                destoyerId: (action as BombardmentAction).payload.selectedPiece.pieceId,
+                destroyerId: (action as BombardmentAction).payload.selectedPiece.pieceId,
                 targetId: (action as BombardmentAction).payload.selectedTargetPiece.pieceId
             });
             return stateCopy;

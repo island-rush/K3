@@ -53,8 +53,15 @@ export const socketSetup = async (socket: Socket) => {
     socket.handshake.session.socketId = socket.id;
 
     // Send the client intial game state data
-    const serverAction: GameInitialStateAction = await thisGame.initialStateAction(gameTeam, gameControllers);
-    sendToClient(socket.id, serverAction);
+    try {
+        const serverAction: GameInitialStateAction = await thisGame.initialStateAction(gameTeam, gameControllers);
+        sendToClient(socket.id, serverAction);
+    } catch (error) {
+        console.error('Was not able to send initial game state data, possibly due to missing db tables (usually the case but idk');
+        console.error(error.code);
+        console.error(error.message);
+        console.error('recommend resetting the db, or reading the error posted above to be sure.');
+    }
 
     // Setup the socket functions to respond to client requests
     // TODO: combine all possible payloads into a type and use that instead of any, could also combine other types and use instead of string

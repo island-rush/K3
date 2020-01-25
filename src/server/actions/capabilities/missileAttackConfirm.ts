@@ -76,6 +76,11 @@ export const missileAttackConfirm = async (session: SocketSession, action: Missi
         return;
     }
 
+    if (targetPiece.pieceTeamId === gameTeam) {
+        sendUserFeedback(socketId, 'selected same team to hit, please dont');
+        return;
+    }
+
     // verify correct type of target
     // TODO: what are the ranges / capabilities of what targets are available (does distance factor into % hit?)
     if (!TYPE_OWNERS[TYPE_SEA].includes(targetPiece.pieceTypeId)) {

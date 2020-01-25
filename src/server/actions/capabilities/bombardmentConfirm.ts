@@ -76,6 +76,11 @@ export const bombardmentConfirm = async (session: SocketSession, action: Bombard
         return;
     }
 
+    if (targetPiece.pieceTeamId === gameTeam) {
+        sendUserFeedback(socketId, 'selected your own team to bombard, please dont.');
+        return;
+    }
+
     // verify correct type of target
     // TODO: what are the ranges / capabilities of what targets are available (does distance factor into % hit?)
     // TODO: should we include a more specific set? (ability to bombard helicopters?)
