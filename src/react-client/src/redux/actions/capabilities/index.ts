@@ -6,6 +6,7 @@ export * from './cyberDominance';
 export * from './droneSwarms';
 export * from './goldenEye';
 export * from './insurgency';
+export * from './missileAttack';
 export * from './missileLaunchDisruption';
 export * from './nuclearStrike';
 export * from './raiseMorale';

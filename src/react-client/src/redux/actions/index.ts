@@ -5,7 +5,6 @@ export * from './container';
 export * from './inv';
 export * from './mainButtonClick';
 export * from './menuSelect';
-export * from './missileAttack';
 export * from './newsPopupMinimizeToggle';
 export * from './planning';
 export * from './refuel';

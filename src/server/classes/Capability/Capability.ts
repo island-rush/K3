@@ -6,7 +6,7 @@ import { decreaseCommInterrupt, getCommInterrupt, insertCommInterrupt, useCommIn
 import { checkDroneSwarmHit, decreaseDroneSwarms, getDroneSwarms, insertDroneSwarm } from './droneSwarms';
 import { decreaseGoldenEye, getGoldenEye, insertGoldenEye, useGoldenEye } from './goldenEye';
 import { getInsurgency, insurgencyInsert, useInsurgency } from './insurgency';
-import { insertMissileAttack } from './missileAttack';
+import { insertMissileAttack, getMissileAttack, useMissileAttack } from './missileAttack';
 import { getNukes, insertNuke, useNukes } from './nuclearStrike';
 import { decreaseRaiseMorale, getRaiseMorale, insertRaiseMorale } from './raiseMorale';
 import { decreaseRemoteSensing, getRemoteSensing, remoteSensingInsert } from './remoteSensing';
@@ -19,6 +19,14 @@ import { checkSeaMineHit, getSeaMines, insertSeaMine } from './seaMines';
 export class Capability {
     static async insertMissileAttack(gameId: number, missilePiece: Piece, targetPiece: PieceType) {
         return insertMissileAttack(gameId, missilePiece, targetPiece);
+    }
+
+    static async getMissileAttack(gameId: number, gameTeam: number) {
+        return getMissileAttack(gameId, gameTeam); // TODO: could be consistent with 'gameTeam' vs 'teamId' -> even in the database
+    }
+
+    static async useMissileAttack(gameId: number) {
+        return useMissileAttack(gameId);
     }
 
     static async getNukes(gameId: number, gameTeam: number) {

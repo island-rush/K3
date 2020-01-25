@@ -41,11 +41,22 @@ interface Props {
     pieceOpen: any;
     gameInfo: GameInfoState;
     confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
+    confirmedMissileAttacks: CapabilitiesState['confirmedMissileAttacks'];
 }
 
 export class Piece extends Component<Props> {
     render() {
-        const { piece, topLevel, selected, pieceClick, pieceOpen, gameInfo, confirmedAtcScramble, missileAttack } = this.props;
+        const {
+            piece,
+            topLevel,
+            selected,
+            pieceClick,
+            pieceOpen,
+            confirmedMissileAttacks,
+            gameInfo,
+            confirmedAtcScramble,
+            missileAttack
+        } = this.props;
 
         // TODO: top level probably not used anymore now that containers are their own popup
         const pieceCombinedStyle = {
@@ -76,7 +87,20 @@ export class Piece extends Component<Props> {
             }
         }
 
-        const title = `${TYPE_NAMES[piece.pieceTypeId]}${movesText}${fuelText}${disabledText}${landedText}`;
+        let targettedByMissileText = '';
+
+        for (let x = 0; x < confirmedMissileAttacks.length; x++) {
+            const currentMissileAttackObj = confirmedMissileAttacks[x];
+            const { targetId, missileId } = currentMissileAttackObj;
+            if (targetId === piece.pieceId) {
+                targettedByMissileText = '\nTargetted By Missile';
+            }
+            if (missileId === piece.pieceId) {
+                targettedByMissileText = '\nTargetting an enemy piece.';
+            }
+        }
+
+        const title = `${TYPE_NAMES[piece.pieceTypeId]}${movesText}${fuelText}${disabledText}${landedText}${targettedByMissileText}`;
 
         const onClick = (event: any) => {
             event.preventDefault();

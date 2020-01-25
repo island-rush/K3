@@ -217,7 +217,7 @@ class Gameboard extends Component<Props> {
         //prettier-ignore
         const { selectedPosition, selectedPiece, highlightedPositions } = gameboardMeta;
         //prettier-ignore
-        const { confirmedAtcScramble, confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines, seaMineHits, confirmedDroneSwarms, droneSwarmHits, confirmedNukes } = capabilities;
+        const { confirmedMissileHitPos, confirmedAtcScramble, confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines, seaMineHits, confirmedDroneSwarms, droneSwarmHits, confirmedNukes } = capabilities;
 
         const { confirmedPlans } = planning;
 
@@ -336,6 +336,8 @@ class Gameboard extends Component<Props> {
                         ? 'goldenEyePos' // TODO: change to different style for sea mine indication
                         : droneSwarmHits.includes(parseInt(positionIndex))
                         ? 'goldenEyePos' // TODO: change to different style for drone swarm indication
+                        : confirmedMissileHitPos.includes(parseInt(positionIndex))
+                        ? 'goldenEyePos' // TODO: change to different style for missile attack (success)
                         : ''
                 }
                 //TODO: pass down what the highlighting means into the title

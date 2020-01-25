@@ -42,7 +42,8 @@ const initialCapabilitiesState: CapabilitiesState = {
     droneSwarmHits: [],
     confirmedAtcScramble: [],
     confirmedNukes: [],
-    confirmedMissileAttacks: []
+    confirmedMissileAttacks: [],
+    confirmedMissileHitPos: []
 };
 
 export function capabilitiesReducer(state = initialCapabilitiesState, action: CapabilityReducerActions) {
@@ -58,6 +59,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
         case NEW_ROUND:
             stateCopy.confirmedRods = [];
             stateCopy.confirmedInsurgency = [];
+            stateCopy.confirmedMissileHitPos = [];
             stateCopy.confirmedRemoteSense = (action as NewRoundAction).payload.confirmedRemoteSense;
             stateCopy.confirmedGoldenEye = (action as NewRoundAction).payload.confirmedGoldenEye;
             stateCopy.confirmedBioWeapons = (action as NewRoundAction).payload.confirmedBioWeapons;
@@ -159,6 +161,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedGoldenEye = (action as SliceChangeAction).payload.confirmedGoldenEye;
             stateCopy.confirmedAtcScramble = (action as SliceChangeAction).payload.confirmedAtcScramble;
             stateCopy.confirmedNukes = (action as SliceChangeAction).payload.confirmedNukes;
+            stateCopy.confirmedMissileHitPos = (action as SliceChangeAction).payload.confirmedMissileHitPos;
             return stateCopy;
 
         case EVENT_BATTLE:

@@ -78,7 +78,7 @@ export const missileAttackConfirm = async (session: SocketSession, action: Missi
 
     // verify correct type of target
     // TODO: what are the ranges / capabilities of what targets are available (does distance factor into % hit?)
-    if (TYPE_OWNERS[TYPE_SEA].includes(targetPiece.pieceTypeId)) {
+    if (!TYPE_OWNERS[TYPE_SEA].includes(targetPiece.pieceTypeId)) {
         sendUserFeedback(socketId, 'selected piece was not a sea type.');
         return;
     }
