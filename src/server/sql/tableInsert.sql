@@ -276,3 +276,14 @@ CREATE TABLE IF NOT EXISTS missileAttacks(
     FOREIGN KEY (targetId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
     FOREIGN KEY (gameId) REFERENCES games (gameId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS bombardments(
+	bombardmentId INT(8) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    gameId INT(8) NOT NULL,
+    teamId INT(2) NOT NULL,
+    destroyerId INT(8) NOT NULL,
+    targetId INT(8) NOT NULL,
+    FOREIGN KEY (destroyerId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
+    FOREIGN KEY (targetId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
+    FOREIGN KEY (gameId) REFERENCES games (gameId) ON DELETE CASCADE
+) AUTO_INCREMENT=1;
