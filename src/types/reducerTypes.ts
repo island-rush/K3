@@ -76,6 +76,7 @@ export type CapabilitiesState = {
     confirmedMissileHitPos: number[];
     confirmedBombardments: { destroyerId: number; targetId: number }[];
     confirmedBombardmentHitPos: number[];
+    confirmedAntiSat: number[];
 };
 
 export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };
