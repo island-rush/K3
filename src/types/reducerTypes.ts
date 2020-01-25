@@ -84,6 +84,7 @@ export type PlanningState = {
     active: boolean;
     capability: boolean;
     missileSelecting: PieceType | null;
+    bombardmentSelecting: PieceType | null;
     raiseMoralePopupActive: boolean;
     invItem: InvItemType | null;
     moves: singlePlan[];

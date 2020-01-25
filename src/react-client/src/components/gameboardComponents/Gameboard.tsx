@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
-import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW, ALL_AIRFIELD_LOCATIONS, NUKE_RANGE } from '../../../../constants';
+import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, NUKE_RANGE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from '../../../../constants';
 // prettier-ignore
 import { BattleState, CapabilitiesState, ContainerState, GameboardMetaState, GameboardState, GameInfoState, NewsState, PlanningState } from '../../../../types';
 //prettier-ignore
@@ -217,7 +217,7 @@ class Gameboard extends Component<Props> {
         //prettier-ignore
         const { selectedPosition, selectedPiece, highlightedPositions } = gameboardMeta;
         //prettier-ignore
-        const { confirmedMissileHitPos, confirmedAtcScramble, confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines, seaMineHits, confirmedDroneSwarms, droneSwarmHits, confirmedNukes } = capabilities;
+        const { confirmedBombardmentHitPos, confirmedMissileHitPos, confirmedAtcScramble, confirmedBioWeapons, confirmedCommInterrupt, confirmedGoldenEye, confirmedInsurgency, confirmedRemoteSense, confirmedRods, confirmedSeaMines, seaMineHits, confirmedDroneSwarms, droneSwarmHits, confirmedNukes } = capabilities;
 
         const { confirmedPlans } = planning;
 
@@ -338,6 +338,8 @@ class Gameboard extends Component<Props> {
                         ? 'goldenEyePos' // TODO: change to different style for drone swarm indication
                         : confirmedMissileHitPos.includes(parseInt(positionIndex))
                         ? 'goldenEyePos' // TODO: change to different style for missile attack (success)
+                        : confirmedBombardmentHitPos.includes(parseInt(positionIndex))
+                        ? 'goldenEyePos' // TODO: it's own position highlight style
                         : ''
                 }
                 //TODO: pass down what the highlighting means into the title
