@@ -81,6 +81,10 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedDroneSwarms = (action as PlacePhaseAction).payload.confirmedDroneSwarms;
             stateCopy.confirmedAtcScramble = (action as PlacePhaseAction).payload.confirmedAtcScramble;
             stateCopy.confirmedNukes = (action as PlacePhaseAction).payload.confirmedNukes;
+            stateCopy.confirmedRods = [];
+            stateCopy.confirmedInsurgency = [];
+            stateCopy.confirmedMissileHitPos = [];
+            stateCopy.confirmedBombardmentHitPos = [];
             return stateCopy;
 
         case RAISE_MORALE_SELECTED:
@@ -181,6 +185,8 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
         case EVENT_REFUEL:
             stateCopy.confirmedRods = [];
             stateCopy.confirmedInsurgency = [];
+            stateCopy.confirmedBombardmentHitPos = [];
+            stateCopy.confirmedMissileHitPos = [];
             return stateCopy;
 
         default:
