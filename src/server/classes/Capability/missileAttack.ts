@@ -44,7 +44,7 @@ export const useMissileAttack = async (gameId: number) => {
 
     // start with big join selection that grabs all piece data (mostly just the target piece typeId / position to calculate hit %)
     const queryString =
-        'SELECT a.pieceId as targetId, a.pieceTypeId as targetTypeId, a.piecePositionId as targetPositionId, b.piecePositionId as missilePositionId FROM missileAttacks JOIN pieces a ON targetId = a.pieceId JOIN pieces b ON missileId = b.pieceId WHERE gameId = ?';
+        'SELECT a.pieceId as targetId, a.pieceTypeId as targetTypeId, a.piecePositionId as targetPositionId, b.piecePositionId as missilePositionId, b.pieceId as missileId FROM missileAttacks JOIN pieces a ON targetId = a.pieceId JOIN pieces b ON missileId = b.pieceId WHERE gameId = ?';
     const inserts = [gameId];
 
     type QueryResultType = {
@@ -52,15 +52,18 @@ export const useMissileAttack = async (gameId: number) => {
         targetPositionId: number;
         targetTypeId: number;
         missilePositionId: number;
+        missileId: number;
     };
 
     const [results] = await pool.query<RowDataPacket[] & QueryResultType[]>(queryString, inserts);
 
+    const listOfMissilesToDelete = [];
     const listOfTargetsToDelete = [];
     const listOfPositionsHit = [];
 
     for (let x = 0; x < results.length; x++) {
-        const { targetId, targetPositionId, missilePositionId } = results[x];
+        const { targetId, targetPositionId, missilePositionId, missileId } = results[x];
+        listOfMissilesToDelete.push(missileId);
         // TODO: determine hit based on distance / type? (shouldn't work from too far away but probably has at least 2 hex range? (only a few hexes around the missile site 1 hex away...))
         // type is also part of the query, but not used here (yet)
         const distance = distanceMatrix[missilePositionId][targetPositionId];
@@ -89,6 +92,12 @@ export const useMissileAttack = async (gameId: number) => {
         const deleteAll = 'DELETE FROM missileAttacks WHERE gameId = ?';
         const deleteAllInserts = [gameId];
         await pool.query(deleteAll, deleteAllInserts);
+    }
+
+    if (listOfMissilesToDelete.length > 0) {
+        const deleteMissiles = 'DELETE FROM pieces WHERE pieceId in (?)';
+        const deleteMissileInserts = [listOfMissilesToDelete];
+        await pool.query(deleteMissiles, deleteMissileInserts);
     }
 
     return listOfPositionsHit;
