@@ -1,5 +1,5 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { distanceMatrix } from '../../../constants';
+import { distanceMatrix, MISSILE_ATTACK_RANGE_CHANGE } from '../../../constants';
 import { CapabilitiesState, MissileAttackType, PieceType } from '../../../types';
 import { pool } from '../../database';
 
@@ -65,15 +65,11 @@ export const useMissileAttack = async (gameId: number) => {
         // type is also part of the query, but not used here (yet)
         const distance = distanceMatrix[missilePositionId][targetPositionId];
         let percentHit: number;
-        switch (distance) {
-            case 1:
-                percentHit = 85;
-                break;
-            case 2:
-                percentHit = 65;
-                break;
-            default:
-            // doesn't hit
+
+        if (!MISSILE_ATTACK_RANGE_CHANGE[distance]) {
+            percentHit = 0;
+        } else {
+            percentHit = MISSILE_ATTACK_RANGE_CHANGE[distance];
         }
 
         const randomNumber = Math.floor(Math.random() * 100);

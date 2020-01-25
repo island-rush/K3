@@ -24,6 +24,10 @@ export const missileAttack = (piece: PieceType) => {
 
         // TODO: could check that attack doesn't already exist for this piece (stored in capabilities)
 
+        // TODO: should highlight the range of missile (max value in the ranges constant)
+
+        // TODO: need a way to de-select this capability (currently can only refresh to exit)
+
         //dispatch that the player is currently selecting which position to select
         const missileSelecingAction: MissileSelectingAction = {
             type: MISSILE_SELECTING,
