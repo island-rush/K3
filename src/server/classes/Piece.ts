@@ -1,7 +1,7 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
+import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
 import { AtcScrambleType, BiologicalWeaponsType, GoldenEyeType, NukeType, PieceType, RemoteSensingType } from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
@@ -457,10 +457,10 @@ export class Piece implements PieceType {
         }
     }
 
-    static async ableToPlaceRadar(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async ableToPlaceRadar(thisGame: Game, gameTeam: number, selectedPositionId: number) {
         // TODO: could make this into 1 request instead of 2
         const queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ? AND pieceTypeId in (?)';
-        const inserts = [gameId, gameTeam, selectedPositionId, TYPE_GROUND_PIECES];
+        const inserts = [thisGame.gameId, gameTeam, selectedPositionId, TYPE_GROUND_PIECES];
         const [results] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts);
 
         // At least 1 friendly ground piece is there
@@ -470,13 +470,186 @@ export class Piece implements PieceType {
 
         // TODO: should we consider the difference between hidden pieces and visible pieces affecting the placement (placing pieces next to each other when not knowing about it is weird)
         const queryString2 = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ?';
-        const inserts2 = [gameId, gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID, selectedPositionId];
+        const inserts2 = [thisGame.gameId, gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID, selectedPositionId];
         const [results2] = await pool.query<RowDataPacket[] & PieceType[]>(queryString2, inserts2);
 
         if (results2.length !== 0) {
             return false;
         }
 
-        return true;
+        let completelyOwnsIsland = false;
+        let islandNum = -1;
+
+        const allKeys = Object.keys(ISLAND_POSITIONS);
+        for (let x = 0; x < allKeys.length; x++) {
+            const currentKey = parseInt(allKeys[x]);
+            const thisIslandPositions = ISLAND_POSITIONS[currentKey];
+            if (thisIslandPositions.includes(selectedPositionId)) {
+                islandNum = currentKey;
+                break;
+            }
+        }
+
+        // probably better way of doing this, but double flag main islands make it a pain
+        switch (islandNum) {
+            case DRAGON_ISLAND_ID:
+                if (thisGame.flag0 === gameTeam && thisGame.flag1 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case HR_REPUBLIC_ISLAND_ID:
+                if (thisGame.flag2 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case MONTAVILLE_ISLAND_ID:
+                if (thisGame.flag3 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case LION_ISLAND_ID:
+                if (thisGame.flag4 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case NOYARC_ISLAND_ID:
+                if (thisGame.flag5 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case FULLER_ISLAND_ID:
+                if (thisGame.flag6 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case RICO_ISLAND_ID:
+                if (thisGame.flag7 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case TAMU_ISLAND_ID:
+                if (thisGame.flag8 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case SHOR_ISLAND_ID:
+                if (thisGame.flag9 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case KEONI_ISLAND_ID:
+                if (thisGame.flag10 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case EAGLE_ISLAND_ID:
+                if (thisGame.flag11 === gameTeam && thisGame.flag12 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            default:
+        }
+
+        return completelyOwnsIsland;
+    }
+
+    static async ableToPlaceMissile(thisGame: Game, gameTeam: number, selectedPositionId: number) {
+        // what are the rules for placement with missiles (does it need to have friendly pieces there?)
+
+        // TODO: could make this into 1 request instead of 2
+        const queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ? AND pieceTypeId = ?';
+        const inserts = [thisGame.gameId, gameTeam, selectedPositionId, MISSILE_TYPE_ID];
+        const [results] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts);
+
+        // At most 0 missiles
+        if (results.length !== 0) {
+            return false;
+        }
+
+        // check for enemies in the hex
+        // TODO: should we consider the difference between hidden pieces and visible pieces affecting the placement (placing pieces next to each other when not knowing about it is weird)
+        const queryString2 = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ?';
+        const inserts2 = [thisGame.gameId, gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID, selectedPositionId];
+        const [results2] = await pool.query<RowDataPacket[] & PieceType[]>(queryString2, inserts2);
+
+        if (results2.length !== 0) {
+            return false;
+        }
+
+        // need to check position is a missile silo and they completely own the island...
+        let completelyOwnsIsland = false;
+        let islandNum = -1;
+
+        const allKeys = Object.keys(ISLAND_POSITIONS);
+        for (let x = 0; x < allKeys.length; x++) {
+            const currentKey = parseInt(allKeys[x]);
+            const thisIslandPositions = ISLAND_POSITIONS[currentKey];
+            if (thisIslandPositions.includes(selectedPositionId)) {
+                islandNum = currentKey;
+                break;
+            }
+        }
+
+        // probably better way of doing this, but double flag main islands make it a pain
+        switch (islandNum) {
+            case DRAGON_ISLAND_ID:
+                if (thisGame.flag0 === gameTeam && thisGame.flag1 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case HR_REPUBLIC_ISLAND_ID:
+                if (thisGame.flag2 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case MONTAVILLE_ISLAND_ID:
+                if (thisGame.flag3 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case LION_ISLAND_ID:
+                if (thisGame.flag4 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case NOYARC_ISLAND_ID:
+                if (thisGame.flag5 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case FULLER_ISLAND_ID:
+                if (thisGame.flag6 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case RICO_ISLAND_ID:
+                if (thisGame.flag7 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case TAMU_ISLAND_ID:
+                if (thisGame.flag8 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case SHOR_ISLAND_ID:
+                if (thisGame.flag9 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case KEONI_ISLAND_ID:
+                if (thisGame.flag10 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            case EAGLE_ISLAND_ID:
+                if (thisGame.flag11 === gameTeam && thisGame.flag12 === gameTeam) {
+                    completelyOwnsIsland = true;
+                }
+                break;
+            default:
+        }
+
+        return completelyOwnsIsland;
     }
 }

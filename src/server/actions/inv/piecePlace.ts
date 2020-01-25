@@ -1,5 +1,5 @@
 // prettier-ignore
-import { ALL_AIRFIELD_LOCATIONS, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, ISLAND_POSITIONS, MISSILE_TYPE_ID, PIECE_PLACE, PLACE_PHASE_ID, RADAR_TYPE_ID, TEAM_MAIN_ISLAND_STARTING_POSITIONS, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN, DRAGON_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, MONTAVILLE_ISLAND_ID, LION_ISLAND_ID, NOYARC_ISLAND_ID, FULLER_ISLAND_ID, RICO_ISLAND_ID, TAMU_ISLAND_ID, SHOR_ISLAND_ID, KEONI_ISLAND_ID, EAGLE_ISLAND_ID } from '../../../constants';
+import { ALL_AIRFIELD_LOCATIONS, ALL_POSITIONS, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, MISSILE_TYPE_ID, PIECE_PLACE, PLACE_PHASE_ID, RADAR_TYPE_ID, TEAM_MAIN_ISLAND_STARTING_POSITIONS, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
 import { InvItemPlaceAction, InvItemPlaceRequestAction, SocketSession } from '../../../types';
 import { Game, InvItem, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -64,8 +64,8 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
     }
 
     // valid position on the board?
-    if (selectedPosition < 0) {
-        sendUserFeedback(socketId, 'Not a valid position on the board (negative)');
+    if (!ALL_POSITIONS.includes(selectedPosition)) {
+        sendUserFeedback(socketId, 'Not a valid position on the board.');
         return;
     }
 
@@ -92,89 +92,17 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
 
     if (invItemTypeId === RADAR_TYPE_ID) {
         // at least 1 ground and no enemies there
-        const ableToPlaceRadar = await Piece.ableToPlaceRadar(gameId, gameTeam, selectedPosition);
+        const ableToPlaceRadar = await Piece.ableToPlaceRadar(thisGame, gameTeam, selectedPosition);
         if (!ableToPlaceRadar) {
-            sendUserFeedback(socketId, 'Radar must be placed next to ground unit with no enemies.');
+            sendUserFeedback(socketId, 'Radar must be placed next to ground unit with no enemies. Must also own the island.');
             return;
         }
+    }
 
-        let completelyOwnsIsland = false;
-        let islandNum = -1;
-
-        const allKeys = Object.keys(ISLAND_POSITIONS);
-        for (let x = 0; x < allKeys.length; x++) {
-            const currentKey = parseInt(allKeys[x]);
-            const thisIslandPositions = ISLAND_POSITIONS[currentKey];
-            if (thisIslandPositions.includes(selectedPosition)) {
-                islandNum = currentKey;
-                break;
-            }
-        }
-
-        // probably better way of doing this, but double flag main islands make it a pain
-        switch (islandNum) {
-            case DRAGON_ISLAND_ID:
-                if (thisGame.flag0 === gameTeam && thisGame.flag1 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            case HR_REPUBLIC_ISLAND_ID:
-                if (thisGame.flag2 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            case MONTAVILLE_ISLAND_ID:
-                if (thisGame.flag3 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            case LION_ISLAND_ID:
-                if (thisGame.flag4 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            case NOYARC_ISLAND_ID:
-                if (thisGame.flag5 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            case FULLER_ISLAND_ID:
-                if (thisGame.flag6 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            case RICO_ISLAND_ID:
-                if (thisGame.flag7 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            case TAMU_ISLAND_ID:
-                if (thisGame.flag8 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            case SHOR_ISLAND_ID:
-                if (thisGame.flag9 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            case KEONI_ISLAND_ID:
-                if (thisGame.flag10 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            case EAGLE_ISLAND_ID:
-                if (thisGame.flag11 === gameTeam && thisGame.flag12 === gameTeam) {
-                    completelyOwnsIsland = true;
-                }
-                break;
-            default:
-                sendUserFeedback(socketId, 'Was not on a known island position.');
-                return;
-        }
-
-        if (!completelyOwnsIsland) {
-            sendUserFeedback(socketId, 'Radar must be on completely owned island.');
+    if (invItemTypeId === MISSILE_TYPE_ID) {
+        const ableToPlaceMissile = await Piece.ableToPlaceMissile(thisGame, gameTeam, selectedPosition);
+        if (!ableToPlaceMissile) {
+            sendUserFeedback(socketId, 'Missile must be placed according to rules. Must ownt the island...etc');
             return;
         }
     }

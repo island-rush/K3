@@ -12,6 +12,7 @@ export const raiseMorale = (invItem: InvItemType) => {
         const { gamePhase, gameSlice } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
+            // TODO: a lot of these were copy paste, should go through all userfeedbacks and make sure they make sense (and are professional?) and better formatted
             dispatch(setUserfeedbackAction('wrong phase for raise morale dude.'));
             return;
         }
