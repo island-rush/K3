@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, MISSILE_SELECTED, MISSILE_TYPE_ID, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL, MISSILE_ATTACK_RANGE_CHANGE, distanceMatrix } from '../../../constants';
+import { ALL_SURFACE_SHIP_TYPES, COMBAT_PHASE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, MISSILE_ATTACK_RANGE_CHANGE, MISSILE_SELECTED, MISSILE_TYPE_ID, SLICE_PLANNING_ID, TYPE_SPECIAL } from '../../../constants';
 import { MissileAction, MissileRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -82,8 +82,7 @@ export const missileAttackConfirm = async (session: SocketSession, action: Missi
     }
 
     // verify correct type of target
-    // TODO: what are the ranges / capabilities of what targets are available (does distance factor into % hit?)
-    if (!TYPE_OWNERS[TYPE_SEA].includes(targetPiece.pieceTypeId)) {
+    if (!ALL_SURFACE_SHIP_TYPES.includes(targetPiece.pieceTypeId)) {
         sendUserFeedback(socketId, 'selected piece was not a sea type.');
         return;
     }
