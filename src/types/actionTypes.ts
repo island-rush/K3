@@ -274,6 +274,7 @@ export type PlacePhaseAction = {
         confirmedDroneSwarms: CapabilitiesState['confirmedDroneSwarms'];
         confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
         confirmedNukes: CapabilitiesState['confirmedNukes'];
+        confirmedAntiSat: CapabilitiesState['confirmedAntiSat'];
     };
 };
 
@@ -291,6 +292,7 @@ export type NewRoundAction = {
         confirmedDroneSwarms: CapabilitiesState['confirmedDroneSwarms'];
         confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
         confirmedNukes: CapabilitiesState['confirmedNukes'];
+        confirmedAntiSat: CapabilitiesState['confirmedAntiSat'];
     };
 };
 

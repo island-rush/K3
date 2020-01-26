@@ -16,7 +16,7 @@
         "buildClient": "cd ./src/react-client && npm run build && cd ../..",
         "moveFrontend": "copyfiles -u 1 ./src/react-client/build/**/*.* ./dist",
         "compileBackend": "tsc -p . && copyfiles -u 3 ./src/server/pages/**/*.html ./dist/server/pages",
-        "devBackend:debug": "ts-node-dev --no-notify -r dotenv/config --inspect ./src/server.ts",
+        "devBackend:debug": "ts-node-dev --no-notify -r dotenv/config --inspect -- ./src/server.ts",
         "typecheckFrontend": "cd ./src/react-client && tsc"
     },
     "repository": {

@@ -76,6 +76,11 @@ export type CapabilitiesState = {
     confirmedMissileHitPos: number[];
     confirmedBombardments: { destroyerId: number; targetId: number }[];
     confirmedBombardmentHitPos: number[];
+    /**
+     * each number in this array is an antisat, and the number represents number of rounds left
+     */
+    confirmedAntiSat: number[];
+    confirmedAntiSatHitPos: number[]; // TODO: there's a lot of weird timing situations with keeping track of positions (of remote sensing) hit if multiple used rapidly
 };
 
 export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };

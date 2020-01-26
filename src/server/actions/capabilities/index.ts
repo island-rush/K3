@@ -1,3 +1,4 @@
+export * from './antiSatConfirm';
 export * from './atcScrambleConfirm';
 export * from './biologicalWeaponsConfirm';
 export * from './bombardmentConfirm';

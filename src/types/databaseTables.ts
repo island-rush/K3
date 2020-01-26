@@ -234,3 +234,10 @@ export type BombardmentType = {
     destroyerId: number;
     targetId: number;
 };
+
+export type AntiSatMissileType = {
+    antiSatId: number;
+    gameId: number;
+    teamId: number;
+    roundsLeft: number;
+};

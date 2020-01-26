@@ -1,12 +1,13 @@
 // prettier-ignore
-import { ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, BOMBARDMENT_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, DRONE_SWARM_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, MISSILE_SELECTED, NEW_ROUND, NO_MORE_EVENTS, NUKE_SELECTED, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SLICE_CHANGE } from '../../../../constants';
+import { ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, BOMBARDMENT_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, DRONE_SWARM_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, MISSILE_SELECTED, NEW_ROUND, NO_MORE_EVENTS, NUKE_SELECTED, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SLICE_CHANGE, ANTISAT_SELECTED, ANTI_SAT_MISSILE_ROUNDS, ANTISAT_HIT_ACTION, REMOTE_SENSING_HIT_ACTION } from '../../../../constants';
 // prettier-ignore
-import { AtcScrambleAction, BioWeaponsAction, BombardmentAction, CapabilitiesState, ClearDroneSwarmMineNotifyAction, ClearSeaMineNotifyAction, CommInterruptAction, DroneSwarmAction, DroneSwarmHitNotifyAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, MissileAction, NewRoundAction, NoMoreEventsAction, NukeAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, SeaMineHitNotifyAction, SliceChangeAction } from '../../../../types';
+import { AtcScrambleAction, BioWeaponsAction, BombardmentAction, CapabilitiesState, ClearDroneSwarmMineNotifyAction, ClearSeaMineNotifyAction, CommInterruptAction, DroneSwarmAction, DroneSwarmHitNotifyAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, MissileAction, NewRoundAction, NoMoreEventsAction, NukeAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, SeaMineHitNotifyAction, SliceChangeAction, AntiSatAction, AntiSatHitAction, RemoteSensingHitAction } from '../../../../types';
 
 type CapabilityReducerActions =
     | GameInitialStateAction
     | NewRoundAction
     | PlacePhaseAction
+    | AntiSatAction
     | RaiseMoraleAction
     | RodsFromGodAction
     | CommInterruptAction
@@ -16,6 +17,8 @@ type CapabilityReducerActions =
     | RemoteSensingAction
     | GoldenEyeAction
     | SliceChangeAction
+    | RemoteSensingHitAction
+    | AntiSatHitAction
     | EventBattleAction
     | SeaMineAction
     | AtcScrambleAction
@@ -46,7 +49,9 @@ const initialCapabilitiesState: CapabilitiesState = {
     confirmedMissileAttacks: [],
     confirmedMissileHitPos: [],
     confirmedBombardments: [],
-    confirmedBombardmentHitPos: []
+    confirmedBombardmentHitPos: [],
+    confirmedAntiSat: [],
+    confirmedAntiSatHitPos: []
 };
 
 export function capabilitiesReducer(state = initialCapabilitiesState, action: CapabilityReducerActions) {
@@ -71,6 +76,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedDroneSwarms = (action as NewRoundAction).payload.confirmedDroneSwarms;
             stateCopy.confirmedAtcScramble = (action as NewRoundAction).payload.confirmedAtcScramble;
             stateCopy.confirmedNukes = (action as NewRoundAction).payload.confirmedNukes;
+            stateCopy.confirmedAntiSat = (action as NewRoundAction).payload.confirmedAntiSat;
             return stateCopy;
 
         case PLACE_PHASE:
@@ -81,6 +87,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedDroneSwarms = (action as PlacePhaseAction).payload.confirmedDroneSwarms;
             stateCopy.confirmedAtcScramble = (action as PlacePhaseAction).payload.confirmedAtcScramble;
             stateCopy.confirmedNukes = (action as PlacePhaseAction).payload.confirmedNukes;
+            stateCopy.confirmedAntiSat = (action as PlacePhaseAction).payload.confirmedAntiSat;
             stateCopy.confirmedRods = [];
             stateCopy.confirmedInsurgency = [];
             stateCopy.confirmedMissileHitPos = [];
@@ -93,6 +100,24 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
 
         case RODS_FROM_GOD_SELECTED:
             stateCopy.confirmedRods.push((action as RodsFromGodAction).payload.selectedPositionId);
+            return stateCopy;
+
+        case ANTISAT_SELECTED:
+            stateCopy.confirmedAntiSat.push(ANTI_SAT_MISSILE_ROUNDS);
+            return stateCopy;
+
+        case ANTISAT_HIT_ACTION:
+            // remove the smallest antisat round in the array
+            const minValue = Math.min(...stateCopy.confirmedAntiSat);
+            stateCopy.confirmedAntiSat = stateCopy.confirmedAntiSat.filter(e => e !== minValue);
+            stateCopy.confirmedAntiSatHitPos.push((action as AntiSatHitAction).payload.positionOfRemoteHit);
+            return stateCopy;
+
+        case REMOTE_SENSING_HIT_ACTION:
+            stateCopy.confirmedAntiSatHitPos.push((action as RemoteSensingHitAction).payload.positionOfRemoteHit);
+            stateCopy.confirmedRemoteSense = stateCopy.confirmedRemoteSense.filter(pos => {
+                return pos !== (action as RemoteSensingHitAction).payload.positionOfRemoteHit;
+            });
             return stateCopy;
 
         case MISSILE_SELECTED:
@@ -178,6 +203,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedNukes = (action as SliceChangeAction).payload.confirmedNukes;
             stateCopy.confirmedMissileHitPos = (action as SliceChangeAction).payload.confirmedMissileHitPos;
             stateCopy.confirmedBombardmentHitPos = (action as SliceChangeAction).payload.confirmedBombardmentHitPos;
+            stateCopy.confirmedAntiSatHitPos = [];
             return stateCopy;
 
         case EVENT_BATTLE:
@@ -187,6 +213,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedInsurgency = [];
             stateCopy.confirmedBombardmentHitPos = [];
             stateCopy.confirmedMissileHitPos = [];
+            stateCopy.confirmedAntiSatHitPos = [];
             return stateCopy;
 
         default:

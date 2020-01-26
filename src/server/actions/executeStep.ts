@@ -32,6 +32,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         await Capability.decreaseRaiseMorale(gameId);
         await Capability.decreaseDroneSwarms(gameId);
         await Capability.decreaseAtcScramble(gameId);
+        await Capability.decreaseAntiSat(gameId);
 
         if (gameRound === ROUNDS_PER_COMBAT_PHASE) {
             // Combat -> Place Phase
@@ -50,7 +51,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                     confirmedSeaMines: await Capability.getSeaMines(gameId, BLUE_TEAM_ID),
                     confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, BLUE_TEAM_ID),
                     confirmedAtcScramble: await Capability.getAtcScramble(gameId, BLUE_TEAM_ID),
-                    confirmedNukes: await Capability.getNukes(gameId, BLUE_TEAM_ID)
+                    confirmedNukes: await Capability.getNukes(gameId, BLUE_TEAM_ID),
+                    confirmedAntiSat: await Capability.getAntiSat(gameId, BLUE_TEAM_ID)
                 }
             };
             const placePhaseActionRed: PlacePhaseAction = {
@@ -65,7 +67,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                     confirmedSeaMines: await Capability.getSeaMines(gameId, RED_TEAM_ID),
                     confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, RED_TEAM_ID),
                     confirmedAtcScramble: await Capability.getAtcScramble(gameId, RED_TEAM_ID),
-                    confirmedNukes: await Capability.getNukes(gameId, RED_TEAM_ID)
+                    confirmedNukes: await Capability.getNukes(gameId, RED_TEAM_ID),
+                    confirmedAntiSat: await Capability.getAntiSat(gameId, RED_TEAM_ID)
                 }
             };
 
@@ -89,7 +92,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                 confirmedSeaMines: await Capability.getSeaMines(gameId, BLUE_TEAM_ID),
                 confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, BLUE_TEAM_ID),
                 confirmedAtcScramble: await Capability.getAtcScramble(gameId, BLUE_TEAM_ID),
-                confirmedNukes: await Capability.getNukes(gameId, BLUE_TEAM_ID)
+                confirmedNukes: await Capability.getNukes(gameId, BLUE_TEAM_ID),
+                confirmedAntiSat: await Capability.getAntiSat(gameId, BLUE_TEAM_ID)
             }
         };
         const newRoundActionRed: NewRoundAction = {
@@ -105,7 +109,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                 confirmedSeaMines: await Capability.getSeaMines(gameId, RED_TEAM_ID),
                 confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, RED_TEAM_ID),
                 confirmedAtcScramble: await Capability.getAtcScramble(gameId, RED_TEAM_ID),
-                confirmedNukes: await Capability.getNukes(gameId, RED_TEAM_ID)
+                confirmedNukes: await Capability.getNukes(gameId, RED_TEAM_ID),
+                confirmedAntiSat: await Capability.getAntiSat(gameId, RED_TEAM_ID)
             }
         };
 
