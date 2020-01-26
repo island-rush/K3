@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REMOTE_SENSING_SELECTED, REMOTE_SENSING_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
-import { RemoteSensingAction, RemoteSensingRequestAction, SocketSession } from '../../../types';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REMOTE_SENSING_SELECTED, REMOTE_SENSING_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN, BLUE_TEAM_ID, RED_TEAM_ID, ANTISAT_HIT_ACTION, REMOTE_SENSING_HIT_ACTION, ANTISAT_TIME_TO_HIT } from '../../../constants';
+import { RemoteSensingAction, RemoteSensingRequestAction, SocketSession, AntiSatHitAction, RemoteSensingHitAction } from '../../../types';
 import { Capability, Game, InvItem, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -75,7 +75,9 @@ export const remoteSensingConfirm = async (session: SocketSession, action: Remot
 
     // insert the 'plan' for remote sensing into the db for later use
 
-    if (!(await Capability.remoteSensingInsert(gameId, gameTeam, selectedPositionId))) {
+    const remoteSensingId = await Capability.remoteSensingInsert(gameId, gameTeam, selectedPositionId);
+
+    if (!remoteSensingId) {
         sendUserFeedback(socketId, 'db failed to insert remote sensing, likely already an entry for that position.');
         return;
     }
@@ -98,4 +100,31 @@ export const remoteSensingConfirm = async (session: SocketSession, action: Remot
 
     // Send the update to the client(s)
     sendToTeam(gameId, gameTeam, serverAction);
+
+    const otherTeam = gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
+
+    setTimeout(async () => {
+        const remoteSensingPosHit = await Capability.checkRemoteSensingHit(gameId, gameTeam, remoteSensingId, selectedPositionId);
+        if (remoteSensingPosHit !== -1) {
+            // TODO: use constant instead of -1 (NEGATIVE_RESULT...idk)
+            const antiSatSuccessAction: AntiSatHitAction = {
+                type: ANTISAT_HIT_ACTION,
+                payload: {
+                    positionOfRemoteHit: remoteSensingPosHit
+                }
+            };
+
+            sendToTeam(gameId, otherTeam, antiSatSuccessAction);
+
+            const remoteSensingHitAction: RemoteSensingHitAction = {
+                type: REMOTE_SENSING_HIT_ACTION,
+                payload: {
+                    gameboardPieces: await Piece.getVisiblePieces(gameId, otherTeam),
+                    positionOfRemoteHit: remoteSensingPosHit
+                }
+            };
+
+            sendToTeam(gameId, gameTeam, remoteSensingHitAction);
+        }
+    }, ANTISAT_TIME_TO_HIT);
 };

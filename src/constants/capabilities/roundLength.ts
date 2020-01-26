@@ -8,3 +8,5 @@ export const MISSILE_LAUNCH_DISRUPTION_ROUNDS = 3;
 export const ATC_SCRAMBLE_ROUNDS = 3;
 export const ANTI_SAT_MISSILE_ROUNDS = 6;
 export const DRONE_SWARM_ROUNDS = 12;
+
+export const ANTISAT_TIME_TO_HIT = 3000; // time in ms (3000 = 3 seconds probably)

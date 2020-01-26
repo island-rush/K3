@@ -1,4 +1,4 @@
-import { RowDataPacket } from 'mysql2/promise';
+import { RowDataPacket, OkPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { REMOTE_SENSING_ROUNDS } from '../../../constants';
 import { RemoteSensingType } from '../../../types';
@@ -15,8 +15,8 @@ export const remoteSensingInsert = async (gameId: number, gameTeam: number, sele
 
     queryString = 'INSERT INTO remoteSensing (gameId, teamId, positionId, roundsLeft) VALUES (?, ?, ?, ?)';
     inserts = [gameId, gameTeam, selectedPositionId, REMOTE_SENSING_ROUNDS];
-    await pool.query(queryString, inserts);
-    return true;
+    const [results2] = await pool.query<OkPacket>(queryString, inserts);
+    return results2.insertId;
 };
 
 export const getRemoteSensing = async (gameId: number, gameTeam: number) => {

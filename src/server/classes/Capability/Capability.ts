@@ -1,5 +1,5 @@
 import { PieceType } from '../../../types';
-import { Piece } from '../Piece';
+import { checkAntiSatHit, decreaseAntiSat, getAntiSat, insertAntiSat, checkRemoteSensingHit } from './antiSat';
 import { decreaseAtcScramble, getAtcScramble, insertAtcScramble, useAtcScramble } from './atcScramble';
 import { decreaseBiologicalWeapons, getBiologicalWeapons, insertBiologicalWeapons, useBiologicalWeapons } from './biologicalWeapons';
 import { getBombardmentAttack, insertBombardmentAttack, useBombardmentAttack } from './bombardment';
@@ -18,6 +18,26 @@ import { checkSeaMineHit, getSeaMines, insertSeaMine } from './seaMines';
  * List of static functions for handling capabilities. (Groups all functions inside a single static class)
  */
 export class Capability {
+    static async insertAntiSat(gameId: number, gameTeam: number) {
+        return insertAntiSat(gameId, gameTeam);
+    }
+
+    static async decreaseAntiSat(gameId: number) {
+        return decreaseAntiSat(gameId);
+    }
+
+    static async getAntiSat(gameId: number, gameTeam: number) {
+        return getAntiSat(gameId, gameTeam);
+    }
+
+    static async checkAntiSatHit(gameId: number, gameTeam: number, antiSatId: number) {
+        return checkAntiSatHit(gameId, gameTeam, antiSatId);
+    }
+
+    static async checkRemoteSensingHit(gameId: number, gameTeam: number, remoteSensingId: number, remoteSensingPosId: number) {
+        return checkRemoteSensingHit(gameId, gameTeam, remoteSensingId, remoteSensingPosId);
+    }
+
     static async insertBombardmentAttack(gameId: number, destroyerPiece: PieceType, targetPiece: PieceType) {
         return insertBombardmentAttack(gameId, destroyerPiece, targetPiece);
     }
@@ -30,7 +50,8 @@ export class Capability {
         return useBombardmentAttack(gameId);
     }
 
-    static async insertMissileAttack(gameId: number, missilePiece: Piece, targetPiece: PieceType) {
+    // TODO: could pass around the Piece class directly instead of the PieceType (since i think methods would still work...and it's probably what we're sending anyway)
+    static async insertMissileAttack(gameId: number, missilePiece: PieceType, targetPiece: PieceType) {
         return insertMissileAttack(gameId, missilePiece, targetPiece);
     }
 

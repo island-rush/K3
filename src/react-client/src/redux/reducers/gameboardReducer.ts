@@ -1,7 +1,7 @@
 // prettier-ignore
-import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from '../../../../constants';
+import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_SELECTED, SLICE_CHANGE, REMOTE_SENSING_HIT_ACTION } from '../../../../constants';
 // prettier-ignore
-import { ClearBattleAction, CombatPhaseAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, InvItemPlaceAction, NewRoundAction, NoMoreEventsAction, PieceType, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, SliceChangeAction } from '../../../../types';
+import { ClearBattleAction, CombatPhaseAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, InvItemPlaceAction, NewRoundAction, NoMoreEventsAction, PieceType, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, SliceChangeAction, RemoteSensingHitAction } from '../../../../types';
 
 type GameboardReducerActions =
     | GameInitialStateAction
@@ -11,6 +11,7 @@ type GameboardReducerActions =
     | NoMoreEventsAction
     | RemoteSensingAction
     | RaiseMoraleAction
+    | RemoteSensingHitAction
     | EventBattleAction
     | CombatPhaseAction
     | EnterContainerAction
@@ -29,6 +30,7 @@ type GameboardPiecesUpdateAction =
     | PlacePhaseAction
     | SliceChangeAction
     | NoMoreEventsAction
+    | RemoteSensingHitAction
     | RemoteSensingAction
     | RaiseMoraleAction
     | EventBattleAction
@@ -50,6 +52,7 @@ export function gameboardReducer(state = initialGameboardEmpty, action: Gameboar
         case SLICE_CHANGE:
         case NO_MORE_EVENTS:
         case REMOTE_SENSING_SELECTED:
+        case REMOTE_SENSING_HIT_ACTION:
         case RAISE_MORALE_SELECTED:
         case EVENT_BATTLE:
         case COMBAT_PHASE:
