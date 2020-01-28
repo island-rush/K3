@@ -63,7 +63,7 @@ export const enterContainer = async (session: SocketSession, action: EnterContai
         case TACTICAL_AIRLIFT_SQUADRON_TYPE_ID:
             // TacticalAirLift = 1 marine infantry OR 1 army infantry
             // also need to make sure we are on an airfield spot
-            // TODO: make sure we are 'landed' (same as the C130...)
+            // TODO: make sure we are 'landed' (same as the C130...) (involves seeing that we own the airfield as well as are on it)
 
             if (thisContainerPiece.piecePositionId !== thisSelectedPiece.piecePositionId) {
                 sendUserFeedback(socketId, 'Selected piece must be in same hex for tactial airlift.');
