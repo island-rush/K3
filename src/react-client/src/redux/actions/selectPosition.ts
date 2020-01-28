@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
 // prettier-ignore
-import { ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, NUKE_RANGE, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SERVER_ATC_SCRAMBLE_CONFIRM, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_NUKE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, TYPE_TERRAIN } from '../../../../constants';
+import { ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, NUKE_RANGE, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SERVER_ATC_SCRAMBLE_CONFIRM, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_NUKE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, TYPE_TERRAIN, MISSILE_LAUNCH_DISRUPTION_TYPE_ID } from '../../../../constants';
 //prettier-ignore
 import { AtcScrambleRequestAction, BioWeaponsRequestAction, CommInterruptRequestAction, ExitTransportContainerRequestAction, GoldenEyeRequestAction, HighlightPositionsAction, InsurgencyRequestAction, NukeRequestAction, PlanningSelectAction, PositionSelectAction, RemoteSensingRequestAction, RodsFromGodRequestAction } from "../../../../types";
 import { setUserfeedbackAction } from './setUserfeedbackAction';
@@ -58,7 +58,7 @@ export const selectPosition = (selectedPositionId: number) => {
             return;
         }
 
-        //is actively planning
+        //is actively planning // TODO: this file and comment doesn't make much sense, refactor
         if (selectedPositionId === -1 && !planning.capability) {
             dispatch(setUserfeedbackAction('Must select a position for the plan...'));
             return;
@@ -140,6 +140,7 @@ export const selectPosition = (selectedPositionId: number) => {
             if (
                 planning.invItem &&
                 planning.invItem.invItemTypeId !== SEA_MINES_TYPE_ID &&
+                planning.invItem.invItemTypeId !== MISSILE_LAUNCH_DISRUPTION_TYPE_ID &&
                 planning.invItem.invItemTypeId !== DRONE_SWARMS_TYPE_ID &&
                 window.confirm('Are you sure you want to use capability on this position?')
             ) {

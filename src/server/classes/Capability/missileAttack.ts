@@ -1,9 +1,10 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { distanceMatrix, MISSILE_ATTACK_RANGE_CHANGE } from '../../../constants';
-import { CapabilitiesState, MissileAttackType, PieceType } from '../../../types';
+import { ACTIVATED, distanceMatrix, MISSILE_ATTACK_RANGE_CHANGE } from '../../../constants';
+import { CapabilitiesState, MissileAttackType, MissileDisruptType } from '../../../types';
 import { pool } from '../../database';
+import { Piece } from '../Piece';
 
-export const insertMissileAttack = async (gameId: number, missilePiece: PieceType, targetPiece: PieceType) => {
+export const insertMissileAttack = async (gameId: number, missilePiece: Piece, targetPiece: Piece) => {
     // assume we know everything is setup by missileAttackConfirm (pieces exist, within range...)
 
     const queryString = 'SELECT * FROM missileAttacks WHERE gameId = ? AND missileId = ?';
@@ -57,12 +58,24 @@ export const useMissileAttack = async (gameId: number) => {
 
     const [results] = await pool.query<RowDataPacket[] & QueryResultType[]>(queryString, inserts);
 
+    const disruptQuery = 'SELECT * FROM missileDisrupts WHERE gameId = ? AND activated = ?';
+    const disruptInserts = [gameId, ACTIVATED];
+    const [disrupts] = await pool.query<RowDataPacket[] & MissileDisruptType[]>(disruptQuery, disruptInserts);
+
+    const disruptedMissileIds = [];
+    for (let x = 0; x < disrupts.length; x++) {
+        disruptedMissileIds.push(disrupts[x].missileId);
+    }
+
     const listOfMissilesToDelete = [];
     const listOfTargetsToDelete = [];
     const listOfPositionsHit = [];
 
     for (let x = 0; x < results.length; x++) {
         const { targetId, targetPositionId, missilePositionId, missileId } = results[x];
+
+        if (disruptedMissileIds.includes(missileId)) continue; // skip if missile is disrupted...
+
         listOfMissilesToDelete.push(missileId);
         // TODO: determine hit based on distance / type? (shouldn't work from too far away but probably has at least 2 hex range? (only a few hexes around the missile site 1 hex away...))
         // type is also part of the query, but not used here (yet)

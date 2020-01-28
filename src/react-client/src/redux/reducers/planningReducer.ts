@@ -1,7 +1,7 @@
 // prettier-ignore
-import { ATC_SCRAMBLE_SELECTED, ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, DRONE_SWARM_SELECTED, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MISSILE_SELECTED, MISSILE_SELECTING, NUKE_SELECTED, NUKE_SELECTING, PLANNING_SELECT, PLAN_WAS_CONFIRMED, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SLICE_CHANGE, START_PLAN, UNDO_MOVE, BOMBARDMENT_SELECTED, BOMBARDMENT_SELECTING } from '../../../../constants';
+import { ATC_SCRAMBLE_SELECTED, ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, BOMBARDMENT_SELECTED, BOMBARDMENT_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, DRONE_SWARM_SELECTED, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MISSILE_DISRUPT_SELECTED, MISSILE_DISRUPT_SELECTING, MISSILE_SELECTED, MISSILE_SELECTING, NUKE_SELECTED, NUKE_SELECTING, PLANNING_SELECT, PLAN_WAS_CONFIRMED, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SLICE_CHANGE, START_PLAN, UNDO_MOVE } from '../../../../constants';
 // prettier-ignore
-import { AtcScrambleAction, AtcScrambleSelectingAction, BioWeaponsAction, BioWeaponSelectingAction, CommInterruptAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, DroneSwarmAction, DroneSwarmSelectingAction, GameInitialStateAction, GoldenEyeAction, GoldenEyeSelectingAction, InsurgencyAction, InsurgencySelectingAction, MissileAction, MissileSelectingAction, NukeAction, NukeSelectingAction, PlanningSelectAction, PlanningState, PreventPlanAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RemoteSensingAction, RodsFromGodAction, RodsFromGodSelectingAction, SeaMineAction, SeaMineSelectingAction, SliceChangeAction, StartPlanAction, UndoMoveAction, BombardmentSelectingAction, BombardmentAction } from '../../../../types';
+import { AtcScrambleAction, AtcScrambleSelectingAction, BioWeaponsAction, BioWeaponSelectingAction, BombardmentAction, BombardmentSelectingAction, CommInterruptAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, DroneSwarmAction, DroneSwarmSelectingAction, GameInitialStateAction, GoldenEyeAction, GoldenEyeSelectingAction, InsurgencyAction, InsurgencySelectingAction, MissileAction, MissileDisruptAction, MissileDisruptSelectingAction, MissileSelectingAction, NukeAction, NukeSelectingAction, PlanningSelectAction, PlanningState, PreventPlanAction, RaiseMoraleAction, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RemoteSensingAction, RodsFromGodAction, RodsFromGodSelectingAction, SeaMineAction, SeaMineSelectingAction, SliceChangeAction, StartPlanAction, UndoMoveAction } from '../../../../types';
 
 type PlanningReducerActions =
     | GameInitialStateAction
@@ -19,6 +19,8 @@ type PlanningReducerActions =
     | SeaMineAction
     | DroneSwarmAction
     | DroneSwarmSelectingAction
+    | MissileDisruptSelectingAction
+    | MissileDisruptAction
     | AtcScrambleAction
     | AtcScrambleSelectingAction
     | NukeAction
@@ -44,6 +46,7 @@ type SelectingAction =
     | BioWeaponSelectingAction
     | SeaMineSelectingAction
     | AtcScrambleSelectingAction
+    | MissileDisruptSelectingAction
     | NukeSelectingAction
     | DroneSwarmSelectingAction
     | CommInterruptSelectingAction
@@ -109,6 +112,7 @@ export function planningReducer(state = initialPlanningState, action: PlanningRe
         case SEA_MINE_SELECTING:
         case DRONE_SWARM_SELECTING:
         case NUKE_SELECTING:
+        case MISSILE_DISRUPT_SELECTING:
         case ATC_SCRAMBLE_SELECTING:
         case GOLDEN_EYE_SELECTING:
         case REMOTE_SENSING_SELECTING:
@@ -126,6 +130,7 @@ export function planningReducer(state = initialPlanningState, action: PlanningRe
         case SEA_MINE_SELECTED:
         case DRONE_SWARM_SELECTED:
         case NUKE_SELECTED:
+        case MISSILE_DISRUPT_SELECTED:
         case ATC_SCRAMBLE_SELECTED:
         case REMOTE_SENSING_SELECTED:
         case GOLDEN_EYE_SELECTED:
