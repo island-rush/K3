@@ -241,3 +241,11 @@ export type AntiSatMissileType = {
     teamId: number;
     roundsLeft: number;
 };
+
+export type MissileDisruptType = {
+    missileDisruptId: number;
+    gameId: number;
+    teamId: number;
+    roundsLeft: number;
+    activated: number;
+};
