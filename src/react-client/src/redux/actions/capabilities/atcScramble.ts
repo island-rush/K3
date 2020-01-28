@@ -10,12 +10,12 @@ export const atcScramble = (invItem: InvItemType) => {
         const { gamePhase, gameSlice } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
-            dispatch(setUserfeedbackAction('wrong phase for drone swarm dude.'));
+            dispatch(setUserfeedbackAction('wrong phase for atc scramble dude.')); // TODO: this accidentally had 'drone swarm' from copy / paste, make sure similar functions aren't wrong
             return;
         }
 
         if (gameSlice !== SLICE_PLANNING_ID) {
-            dispatch(setUserfeedbackAction('must be in planning to use drone swarm.'));
+            dispatch(setUserfeedbackAction('must be in planning to use atc scramble.'));
             return;
         }
 

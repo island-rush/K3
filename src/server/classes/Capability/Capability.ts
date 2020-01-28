@@ -1,4 +1,3 @@
-import { PieceType } from '../../../types';
 import { Piece } from '../Piece';
 import { checkAntiSatHit, checkRemoteSensingHit, decreaseAntiSat, getAntiSat, insertAntiSat } from './antiSat';
 import { decreaseAtcScramble, getAtcScramble, insertAtcScramble, useAtcScramble } from './atcScramble';

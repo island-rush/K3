@@ -60,6 +60,7 @@ interface Props {
     confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
     confirmedMissileAttacks: CapabilitiesState['confirmedMissileAttacks'];
     confirmedBombardments: CapabilitiesState['confirmedBombardments'];
+    confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
 }
 
 class Zoombox extends Component<Props> {
@@ -76,6 +77,7 @@ class Zoombox extends Component<Props> {
             confirmedDroneSwarms,
             confirmedAtcScramble,
             confirmedMissileAttacks,
+            confirmedMissileDisrupts,
             missileAttack,
             confirmedBombardments,
             bombardment
@@ -94,6 +96,7 @@ class Zoombox extends Component<Props> {
                       key={index}
                       piece={piece}
                       confirmedMissileAttacks={confirmedMissileAttacks} // TODO: probably better way of figuring this out (instead of passing the whole list down below)
+                      confirmedMissileDisrupts={confirmedMissileDisrupts}
                       gameInfo={gameInfo}
                       confirmedAtcScramble={confirmedAtcScramble}
                       // Shouldn't send this to all Piece components, only missiles (figure it out up here, not down there for everyone)
@@ -143,7 +146,8 @@ const mapStateToProps = ({
     confirmedDroneSwarms: capabilities.confirmedDroneSwarms,
     confirmedAtcScramble: capabilities.confirmedAtcScramble,
     confirmedMissileAttacks: capabilities.confirmedMissileAttacks,
-    confirmedBombardments: capabilities.confirmedBombardments
+    confirmedBombardments: capabilities.confirmedBombardments,
+    confirmedMissileDisrupts: capabilities.confirmedMissileDisrupts
 });
 
 const mapActionsToProps = {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ALL_AIRFIELD_LOCATIONS, LIST_ALL_AIRFIELD_PIECES, MISSILE_TYPE_ID, TYPE_MOVES, TYPE_NAMES, DESTROYER_TYPE_ID } from '../../../../constants';
+import { ALL_AIRFIELD_LOCATIONS, DESTROYER_TYPE_ID, LIST_ALL_AIRFIELD_PIECES, MISSILE_TYPE_ID, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { CapabilitiesState, GameInfoState, PieceType } from '../../../../types';
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../styleConstants';
 
@@ -43,6 +43,7 @@ interface Props {
     confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
     confirmedMissileAttacks: CapabilitiesState['confirmedMissileAttacks'];
     confirmedBombardments: CapabilitiesState['confirmedBombardments'];
+    confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
     bombardment: any;
 }
 
@@ -59,6 +60,7 @@ export class Piece extends Component<Props> {
             confirmedAtcScramble,
             missileAttack,
             confirmedBombardments,
+            confirmedMissileDisrupts,
             bombardment
         } = this.props;
 
@@ -91,6 +93,11 @@ export class Piece extends Component<Props> {
             }
         }
 
+        let missileDisruptText = '';
+        if (confirmedMissileDisrupts.includes(piece.pieceId)) {
+            missileDisruptText = '\nDisrupted by Cyber Attack!';
+        }
+
         let targettedByMissileText = '';
 
         for (let x = 0; x < confirmedMissileAttacks.length; x++) {
@@ -118,7 +125,7 @@ export class Piece extends Component<Props> {
 
         const title = `${
             TYPE_NAMES[piece.pieceTypeId]
-        }${movesText}${fuelText}${disabledText}${landedText}${targettedByMissileText}${targettingByBombardmentText}`;
+        }${movesText}${fuelText}${disabledText}${landedText}${targettedByMissileText}${targettingByBombardmentText}${missileDisruptText}`;
 
         const onClick = (event: any) => {
             event.preventDefault();
