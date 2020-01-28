@@ -7,6 +7,7 @@ export * from './droneSwarmConfirm';
 export * from './goldenEyeConfirm';
 export * from './insurgencyConfirm';
 export * from './missileAttackConfirm';
+export * from './missileDisruptConfirm';
 export * from './nukeConfirm';
 export * from './raiseMoraleConfirm';
 export * from './remoteSensingConfirm';

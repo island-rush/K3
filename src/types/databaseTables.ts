@@ -246,6 +246,7 @@ export type MissileDisruptType = {
     missileDisruptId: number;
     gameId: number;
     teamId: number;
+    missileId: number;
     roundsLeft: number;
     activated: number;
 };

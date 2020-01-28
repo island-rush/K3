@@ -83,9 +83,9 @@ export type CapabilitiesState = {
     confirmedAntiSatHitPos: number[]; // TODO: there's a lot of weird timing situations with keeping track of positions (of remote sensing) hit if multiple used rapidly
 
     /**
-     * Contains list of PieceTypes (missiles that are disrupted...)
+     * Contains list of missile pieceId's (missiles that are disrupted...)
      */
-    confirmedMissileDisrupts: PieceType[];
+    confirmedMissileDisrupts: number[];
 };
 
 export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };

@@ -300,7 +300,9 @@ CREATE TABLE IF NOT EXISTS missileDisrupts(
 	missileDisruptId INT(8) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     gameId INT(8) NOT NULL,
     teamId INT(2) NOT NULL,
+    missileId INT(8) NOT NULL,
     roundsLeft INT(4) NOT NULL,
     activated INT(1) NOT NULL,
+    FOREIGN KEY (missileId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
     FOREIGN KEY (gameId) REFERENCES games (gameId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;

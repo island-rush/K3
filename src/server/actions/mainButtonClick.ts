@@ -114,6 +114,7 @@ export const mainButtonClick = async (session: SocketSession) => {
                 confirmedNukes: await Capability.useNukes(gameId),
                 confirmedMissileHitPos: await Capability.useMissileAttack(gameId),
                 confirmedBombardmentHitPos: await Capability.useBombardmentattack(gameId),
+                confirmedMissileDisrupts: await Capability.useMissileDisrupt(gameId),
                 confirmedInsurgencyPos: listOfEffectedPositions,
                 confirmedInsurgencyPieces: listOfPiecesToKill,
                 gameboardPieces: []
