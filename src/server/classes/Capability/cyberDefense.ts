@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
-import { ACTIVATED, CYBER_DOMINANCE_ROUNDS, BLUE_TEAM_ID, RED_TEAM_ID } from '../../../constants';
+import { ACTIVATED, CYBER_DOMINANCE_ROUNDS, BLUE_TEAM_ID, RED_TEAM_ID, DEACTIVATED } from '../../../constants';
 import { CyberDefenseType } from '../../../types';
 
 export const getCyberDefense = async (gameId: number, gameTeam: number) => {
@@ -26,14 +26,14 @@ export const useCyberDefense = async (gameId: number) => {
         return;
     }
 
-    let deleteQuery = 'DELETE FROM atcScramble WHERE gameId = ? AND teamId in (?)';
-    const deleteInserts = [gameId, teamsAffected];
+    let deleteQuery = 'DELETE FROM atcScramble WHERE gameId = ? AND teamId in (?) AND activated = ?';
+    const deleteInserts = [gameId, teamsAffected, DEACTIVATED];
     await pool.query(deleteQuery, deleteInserts);
 
-    deleteQuery = 'DELETE FROM missileDisrupts WHERE gameId = ? AND teamId in (?)';
+    deleteQuery = 'DELETE FROM missileDisrupts WHERE gameId = ? AND teamId in (?) AND activated = ?';
     await pool.query(deleteQuery, deleteInserts);
 
-    deleteQuery = 'DELETE FROM commInterrupt WHERE gameId = ? AND teamId in (?)';
+    deleteQuery = 'DELETE FROM commInterrupt WHERE gameId = ? AND teamId in (?) AND activated = ?';
     await pool.query(deleteQuery, deleteInserts);
 };
 
