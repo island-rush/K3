@@ -18,7 +18,11 @@ router.get('/', (req: Request, res: Response) => {
     // Being on the homepage(s) ensures a user is logged out / no session
     if (req.session.ir3) {
         // log them out
-        logout(req.session.ir3);
+        try {
+            logout(req.session.ir3);
+        } catch (error) {
+            console.error(error.code);
+        }
         delete req.session.ir3;
     }
     delete req.session.ir3; // Game Session
@@ -29,7 +33,11 @@ router.get('/', (req: Request, res: Response) => {
 
 router.get('/index.html', (req: Request, res: Response) => {
     if (req.session.ir3) {
-        logout(req.session.ir3);
+        try {
+            logout(req.session.ir3);
+        } catch (error) {
+            console.error(error.code);
+        }
         delete req.session.ir3;
     }
     delete req.session.ir3teacher;
@@ -39,7 +47,11 @@ router.get('/index.html', (req: Request, res: Response) => {
 
 router.get('/troubleshoot.html', (req: Request, res: Response) => {
     if (req.session.ir3) {
-        logout(req.session.ir3);
+        try {
+            logout(req.session.ir3);
+        } catch (error) {
+            console.error(error.code);
+        }
         delete req.session.ir3;
     }
     delete req.session.ir3teacher;
@@ -49,7 +61,11 @@ router.get('/troubleshoot.html', (req: Request, res: Response) => {
 
 router.get('/credits.html', (req: Request, res: Response) => {
     if (req.session.ir3) {
-        logout(req.session.ir3);
+        try {
+            logout(req.session.ir3);
+        } catch (error) {
+            console.error(error.code);
+        }
         delete req.session.ir3;
     }
     delete req.session.ir3teacher;
@@ -59,7 +75,11 @@ router.get('/credits.html', (req: Request, res: Response) => {
 
 router.get('/teacher.html', (req: Request, res: Response) => {
     if (req.session.ir3) {
-        logout(req.session.ir3);
+        try {
+            logout(req.session.ir3);
+        } catch (error) {
+            console.error(error.code);
+        }
         delete req.session.ir3;
     }
     delete req.session.ir3coursedirector;
@@ -72,7 +92,11 @@ router.get('/teacher.html', (req: Request, res: Response) => {
 
 router.get('/courseDirector.html', (req: Request, res: Response) => {
     if (req.session.ir3) {
-        logout(req.session.ir3);
+        try {
+            logout(req.session.ir3);
+        } catch (error) {
+            console.error(error.code);
+        }
         delete req.session.ir3;
     }
     delete req.session.ir3teacher;
