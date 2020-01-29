@@ -3,6 +3,7 @@ export * from './atcScrambleConfirm';
 export * from './biologicalWeaponsConfirm';
 export * from './bombardmentConfirm';
 export * from './commInterruptionConfirm';
+export * from './cyberDefenseConfirm';
 export * from './droneSwarmConfirm';
 export * from './goldenEyeConfirm';
 export * from './insurgencyConfirm';

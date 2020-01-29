@@ -99,6 +99,8 @@ export const mainButtonClick = async (session: SocketSession) => {
 
         await thisGame.setSlice(SLICE_EXECUTING_ID);
 
+        await Capability.useCyberDefense(gameId);
+
         await Piece.removeFuelForLoitering(gameId);
 
         const { listOfPiecesToKill, listOfEffectedPositions } = await Capability.useInsurgency(gameId);
