@@ -276,6 +276,7 @@ export type PlacePhaseAction = {
         confirmedNukes: CapabilitiesState['confirmedNukes'];
         confirmedAntiSat: CapabilitiesState['confirmedAntiSat'];
         confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
+        cyberDefenseIsActive: CapabilitiesState['cyberDefenseIsActive'];
     };
 };
 
@@ -295,6 +296,7 @@ export type NewRoundAction = {
         confirmedNukes: CapabilitiesState['confirmedNukes'];
         confirmedAntiSat: CapabilitiesState['confirmedAntiSat'];
         confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
+        cyberDefenseIsActive: CapabilitiesState['cyberDefenseIsActive'];
     };
 };
 

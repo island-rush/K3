@@ -5,8 +5,8 @@ import { ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES
 import { GameType, NewsState, PieceType } from '../../../types';
 import { gameInitialNews, gameInitialPieces } from '../../admin';
 import { pool } from '../../database';
-import { initialStateAction } from './initialStateAction';
 import { GameProperties } from './GameProperties';
+import { initialStateAction } from './initialStateAction';
 
 /**
  * Represents a row in the games table in the database.

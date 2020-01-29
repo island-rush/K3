@@ -4,6 +4,9 @@ import { ACTIVATED, DEACTIVATED, MISSILE_LAUNCH_DISRUPTION_ROUNDS } from '../../
 import { MissileDisruptType } from '../../../types';
 import { Piece } from '../Piece';
 
+/**
+ * Returns list of missile ids that are known to be disrupted at this time.
+ */
 export const getMissileDisrupt = async (gameId: number, gameTeam: number) => {
     const queryString = 'SELECT * FROM missileDisrupts WHERE gameId = ? AND (teamId = ? OR activated = ?)';
     const inserts = [gameId, gameTeam, ACTIVATED];

@@ -250,3 +250,10 @@ export type MissileDisruptType = {
     roundsLeft: number;
     activated: number;
 };
+
+export type CyberDefenseType = {
+    cyberDefenseId: number;
+    gameId: number;
+    teamId: number;
+    roundsLeft: number;
+};

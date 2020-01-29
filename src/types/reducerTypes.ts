@@ -86,6 +86,7 @@ export type CapabilitiesState = {
      * Contains list of missile pieceId's (missiles that are disrupted...)
      */
     confirmedMissileDisrupts: number[];
+    cyberDefenseIsActive: boolean;
 };
 
 export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };
