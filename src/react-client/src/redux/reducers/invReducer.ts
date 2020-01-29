@@ -1,7 +1,7 @@
 //prettier-ignore
-import { ANTISAT_SELECTED, ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, DRONE_SWARM_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, MISSILE_DISRUPT_SELECTED, NUKE_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_SELECTED, SHOP_TRANSFER, CYBER_DEFENSE_SELECTED } from "../../../../constants";
+import { ANTISAT_SELECTED, ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, CYBER_DEFENSE_CHECK, CYBER_DEFENSE_SELECTED, DRONE_SWARM_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, MISSILE_DISRUPT_SELECTED, NUKE_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_SELECTED, SHOP_TRANSFER } from "../../../../constants";
 // prettier-ignore
-import { AntiSatAction, AtcScrambleAction, BioWeaponsAction, CommInterruptAction, DroneSwarmAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, InvItemPlaceAction, InvItemType, InvState, MissileDisruptAction, NukeAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, ShopConfirmPurchaseAction, CyberDefenseAction } from '../../../../types';
+import { AntiSatAction, AtcScrambleAction, BioWeaponsAction, CommInterruptAction, CyberDefenseAction, CyberDefenseCheckAction, DroneSwarmAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, InvItemPlaceAction, InvItemType, InvState, MissileDisruptAction, NukeAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, ShopConfirmPurchaseAction } from '../../../../types';
 
 type InvReducerActions =
     | GameInitialStateAction
@@ -13,6 +13,7 @@ type InvReducerActions =
     | BioWeaponsAction
     | CyberDefenseAction
     | SeaMineAction
+    | CyberDefenseCheckAction
     | DroneSwarmAction
     | AntiSatAction
     | MissileDisruptAction
@@ -31,6 +32,7 @@ type InvItemCapabilityAction =
     | BioWeaponsAction
     | RaiseMoraleAction
     | CyberDefenseAction
+    | CyberDefenseCheckAction
     | MissileDisruptAction
     | SeaMineAction
     | AntiSatAction
@@ -67,6 +69,7 @@ export function invReducer(state = initialInvState, action: InvReducerActions) {
         case NUKE_SELECTED:
         case CYBER_DEFENSE_SELECTED:
         case MISSILE_DISRUPT_SELECTED:
+        case CYBER_DEFENSE_CHECK:
         case ANTISAT_SELECTED:
         case GOLDEN_EYE_SELECTED:
         case ATC_SCRAMBLE_SELECTED:
