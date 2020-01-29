@@ -2,6 +2,7 @@ export * from './antiSatConfirm';
 export * from './atcScrambleConfirm';
 export * from './biologicalWeaponsConfirm';
 export * from './bombardmentConfirm';
+export * from './checkCyberDefense';
 export * from './commInterruptionConfirm';
 export * from './cyberDefenseConfirm';
 export * from './droneSwarmConfirm';
