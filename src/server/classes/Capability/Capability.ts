@@ -1,3 +1,4 @@
+import { Game } from '../Game';
 import { Piece } from '../Piece';
 import { checkAntiSatHit, checkRemoteSensingHit, decreaseAntiSat, getAntiSat, insertAntiSat } from './antiSat';
 import { decreaseAtcScramble, getAtcScramble, insertAtcScramble, useAtcScramble } from './atcScramble';
@@ -15,11 +16,17 @@ import { decreaseRaiseMorale, getRaiseMorale, insertRaiseMorale } from './raiseM
 import { decreaseRemoteSensing, getRemoteSensing, remoteSensingInsert } from './remoteSensing';
 import { getRodsFromGod, rodsFromGodInsert, useRodsFromGod } from './rodsFromGod';
 import { checkSeaMineHit, getSeaMines, insertSeaMine } from './seaMines';
+import { sofTakeoutAirfieldsAndSilos } from './sofTeam';
 
 /**
  * List of static functions for handling capabilities. (Groups all functions inside a single static class)
  */
 export class Capability {
+    static async sofTakeoutAirfieldsAndSilos(game: Game) {
+        // need the entire game, and not just gameId, to check airfield ownerships
+        return sofTakeoutAirfieldsAndSilos(game);
+    }
+
     static async useCyberDefense(gameId: number) {
         return useCyberDefense(gameId);
     }

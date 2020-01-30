@@ -41,6 +41,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
             await thisGame.setRound(0);
             await thisGame.setPhase(PLACE_PHASE_ID);
 
+            await Piece.deletePlanesWithoutFuel(gameId);
+
             const placePhaseActionBlue: PlacePhaseAction = {
                 type: PLACE_PHASE,
                 payload: {
@@ -84,6 +86,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         }
         // Next Round of Combat
         await thisGame.setRound(gameRound + 1);
+
+        await Piece.deletePlanesWithoutFuel(gameId);
 
         const newRoundActionBlue: NewRoundAction = {
             type: NEW_ROUND,
@@ -219,6 +223,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
     }
 
     await Piece.move(gameId, currentMovementOrder); // changes the piecePositionId, deletes the plan, all for specialflag = 0
+
+    await Capability.sofTakeoutAirfieldsAndSilos(thisGame);
 
     await Piece.deletePlanesWithoutFuel(gameId);
 
