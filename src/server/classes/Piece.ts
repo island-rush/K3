@@ -229,7 +229,8 @@ export class Piece implements PieceType {
     }
 
     static async deletePlanesWithoutFuel(gameId: number) {
-        const queryString = 'DELETE FROM pieces WHERE pieceGameId = ? AND pieceFuel < 0 AND pieceTypeId in (?)';
+        // TODO: 0 fuel should possibly be a constant, since it used to be -1 but changed
+        const queryString = 'DELETE FROM pieces WHERE pieceGameId = ? AND pieceFuel < 1 AND pieceTypeId in (?)';
         const inserts = [gameId, PIECES_WITH_FUEL];
         await pool.query(queryString, inserts);
     }
@@ -415,6 +416,7 @@ export class Piece implements PieceType {
      * Removing fuel from pieces that don't have any plans (and already have some amount of fuel (not -1))
      */
     static async removeFuelForLoitering(gameId: number) {
+        // TODO: don't remove fuel for planes over airfields? (or cover it with another refuel call)
         const queryString =
             'UPDATE pieces LEFT JOIN plans ON pieceId = planPieceId SET pieceFuel = pieceFuel - 1 WHERE planPieceId IS NULL AND pieceFuel != -1 AND pieceGameId = 1;';
         const inserts = [gameId];
