@@ -99,7 +99,10 @@ export const mainButtonClick = async (session: SocketSession) => {
 
         await thisGame.setSlice(SLICE_EXECUTING_ID);
 
+        await Capability.useCyberDefense(gameId);
+
         await Piece.removeFuelForLoitering(gameId);
+        await Piece.refuelPlanesOverAirfields(thisGame);
 
         const { listOfPiecesToKill, listOfEffectedPositions } = await Capability.useInsurgency(gameId);
 
@@ -112,6 +115,7 @@ export const mainButtonClick = async (session: SocketSession) => {
                 confirmedCommInterrupt: await Capability.useCommInterrupt(gameId),
                 confirmedAtcScramble: await Capability.useAtcScramble(gameId),
                 confirmedNukes: await Capability.useNukes(gameId),
+                confirmedMissileDisrupts: await Capability.useMissileDisrupt(gameId), // TODO: extemely important that disrupt happens before attack, should maybe combine?
                 confirmedMissileHitPos: await Capability.useMissileAttack(gameId),
                 confirmedBombardmentHitPos: await Capability.useBombardmentattack(gameId),
                 confirmedInsurgencyPos: listOfEffectedPositions,

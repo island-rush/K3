@@ -1,23 +1,64 @@
-import { PieceType } from '../../../types';
-import { checkAntiSatHit, decreaseAntiSat, getAntiSat, insertAntiSat, checkRemoteSensingHit } from './antiSat';
+import { Game } from '../Game';
+import { Piece } from '../Piece';
+import { checkAntiSatHit, checkRemoteSensingHit, decreaseAntiSat, getAntiSat, insertAntiSat } from './antiSat';
 import { decreaseAtcScramble, getAtcScramble, insertAtcScramble, useAtcScramble } from './atcScramble';
 import { decreaseBiologicalWeapons, getBiologicalWeapons, insertBiologicalWeapons, useBiologicalWeapons } from './biologicalWeapons';
 import { getBombardmentAttack, insertBombardmentAttack, useBombardmentAttack } from './bombardment';
 import { decreaseCommInterrupt, getCommInterrupt, insertCommInterrupt, useCommInterrupt } from './commInterrupt';
+import { decreaseCyberDefense, getCyberDefense, insertCyberDefense, useCyberDefense } from './cyberDefense';
 import { checkDroneSwarmHit, decreaseDroneSwarms, getDroneSwarms, insertDroneSwarm } from './droneSwarms';
 import { decreaseGoldenEye, getGoldenEye, insertGoldenEye, useGoldenEye } from './goldenEye';
 import { getInsurgency, insurgencyInsert, useInsurgency } from './insurgency';
 import { getMissileAttack, insertMissileAttack, useMissileAttack } from './missileAttack';
+import { decreaseMissileDisrupt, getMissileDisrupt, insertMissileDisrupt, useMissileDisrupt } from './missileDisrupt';
 import { getNukes, insertNuke, useNukes } from './nuclearStrike';
 import { decreaseRaiseMorale, getRaiseMorale, insertRaiseMorale } from './raiseMorale';
 import { decreaseRemoteSensing, getRemoteSensing, remoteSensingInsert } from './remoteSensing';
 import { getRodsFromGod, rodsFromGodInsert, useRodsFromGod } from './rodsFromGod';
 import { checkSeaMineHit, getSeaMines, insertSeaMine } from './seaMines';
+import { sofTakeoutAirfieldsAndSilos } from './sofTeam';
 
 /**
  * List of static functions for handling capabilities. (Groups all functions inside a single static class)
  */
 export class Capability {
+    static async sofTakeoutAirfieldsAndSilos(game: Game) {
+        // need the entire game, and not just gameId, to check airfield ownerships
+        return sofTakeoutAirfieldsAndSilos(game);
+    }
+
+    static async useCyberDefense(gameId: number) {
+        return useCyberDefense(gameId);
+    }
+
+    static async decreaseCyberDefense(gameId: number) {
+        return decreaseCyberDefense(gameId);
+    }
+
+    static async getCyberDefense(gameId: number, gameTeam: number) {
+        return getCyberDefense(gameId, gameTeam);
+    }
+
+    static async insertCyberDefense(gameId: number, gameTeam: number) {
+        return insertCyberDefense(gameId, gameTeam);
+    }
+
+    static async insertMissileDisrupt(gameId: number, gameTeam: number, selectedPiece: Piece) {
+        return insertMissileDisrupt(gameId, gameTeam, selectedPiece);
+    }
+
+    static async getMissileDisrupt(gameId: number, gameTeam: number) {
+        return getMissileDisrupt(gameId, gameTeam);
+    }
+
+    static async decreaseMissileDisrupt(gameId: number) {
+        return decreaseMissileDisrupt(gameId);
+    }
+
+    static async useMissileDisrupt(gameId: number) {
+        return useMissileDisrupt(gameId);
+    }
+
     static async insertAntiSat(gameId: number, gameTeam: number) {
         return insertAntiSat(gameId, gameTeam);
     }
@@ -38,7 +79,7 @@ export class Capability {
         return checkRemoteSensingHit(gameId, gameTeam, remoteSensingId, remoteSensingPosId);
     }
 
-    static async insertBombardmentAttack(gameId: number, destroyerPiece: PieceType, targetPiece: PieceType) {
+    static async insertBombardmentAttack(gameId: number, destroyerPiece: Piece, targetPiece: Piece) {
         return insertBombardmentAttack(gameId, destroyerPiece, targetPiece);
     }
 
@@ -51,7 +92,7 @@ export class Capability {
     }
 
     // TODO: could pass around the Piece class directly instead of the PieceType (since i think methods would still work...and it's probably what we're sending anyway)
-    static async insertMissileAttack(gameId: number, missilePiece: PieceType, targetPiece: PieceType) {
+    static async insertMissileAttack(gameId: number, missilePiece: Piece, targetPiece: Piece) {
         return insertMissileAttack(gameId, missilePiece, targetPiece);
     }
 

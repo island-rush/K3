@@ -25,6 +25,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         await Piece.resetMoves(gameId); // TODO: could move this functionality to Game (no need to pass in the gameId)
 
         // Decrease game effects that last for x rounds
+        await Capability.decreaseCyberDefense(gameId);
         await Capability.decreaseRemoteSensing(gameId);
         await Capability.decreaseBiologicalWeapons(gameId);
         await Capability.decreaseGoldenEye(gameId);
@@ -33,11 +34,14 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         await Capability.decreaseDroneSwarms(gameId);
         await Capability.decreaseAtcScramble(gameId);
         await Capability.decreaseAntiSat(gameId);
+        await Capability.decreaseMissileDisrupt(gameId);
 
         if (gameRound === ROUNDS_PER_COMBAT_PHASE) {
             // Combat -> Place Phase
             await thisGame.setRound(0);
             await thisGame.setPhase(PLACE_PHASE_ID);
+
+            await Piece.deletePlanesWithoutFuel(gameId);
 
             const placePhaseActionBlue: PlacePhaseAction = {
                 type: PLACE_PHASE,
@@ -52,7 +56,9 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                     confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, BLUE_TEAM_ID),
                     confirmedAtcScramble: await Capability.getAtcScramble(gameId, BLUE_TEAM_ID),
                     confirmedNukes: await Capability.getNukes(gameId, BLUE_TEAM_ID),
-                    confirmedAntiSat: await Capability.getAntiSat(gameId, BLUE_TEAM_ID)
+                    confirmedAntiSat: await Capability.getAntiSat(gameId, BLUE_TEAM_ID),
+                    confirmedMissileDisrupts: await Capability.getMissileDisrupt(gameId, BLUE_TEAM_ID),
+                    cyberDefenseIsActive: await Capability.getCyberDefense(gameId, BLUE_TEAM_ID)
                 }
             };
             const placePhaseActionRed: PlacePhaseAction = {
@@ -68,7 +74,9 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                     confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, RED_TEAM_ID),
                     confirmedAtcScramble: await Capability.getAtcScramble(gameId, RED_TEAM_ID),
                     confirmedNukes: await Capability.getNukes(gameId, RED_TEAM_ID),
-                    confirmedAntiSat: await Capability.getAntiSat(gameId, RED_TEAM_ID)
+                    confirmedAntiSat: await Capability.getAntiSat(gameId, RED_TEAM_ID),
+                    confirmedMissileDisrupts: await Capability.getMissileDisrupt(gameId, RED_TEAM_ID),
+                    cyberDefenseIsActive: await Capability.getCyberDefense(gameId, RED_TEAM_ID)
                 }
             };
 
@@ -78,6 +86,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         }
         // Next Round of Combat
         await thisGame.setRound(gameRound + 1);
+
+        await Piece.deletePlanesWithoutFuel(gameId);
 
         const newRoundActionBlue: NewRoundAction = {
             type: NEW_ROUND,
@@ -93,7 +103,9 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                 confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, BLUE_TEAM_ID),
                 confirmedAtcScramble: await Capability.getAtcScramble(gameId, BLUE_TEAM_ID),
                 confirmedNukes: await Capability.getNukes(gameId, BLUE_TEAM_ID),
-                confirmedAntiSat: await Capability.getAntiSat(gameId, BLUE_TEAM_ID)
+                confirmedAntiSat: await Capability.getAntiSat(gameId, BLUE_TEAM_ID),
+                confirmedMissileDisrupts: await Capability.getMissileDisrupt(gameId, BLUE_TEAM_ID),
+                cyberDefenseIsActive: await Capability.getCyberDefense(gameId, BLUE_TEAM_ID)
             }
         };
         const newRoundActionRed: NewRoundAction = {
@@ -110,7 +122,9 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
                 confirmedDroneSwarms: await Capability.getDroneSwarms(gameId, RED_TEAM_ID),
                 confirmedAtcScramble: await Capability.getAtcScramble(gameId, RED_TEAM_ID),
                 confirmedNukes: await Capability.getNukes(gameId, RED_TEAM_ID),
-                confirmedAntiSat: await Capability.getAntiSat(gameId, RED_TEAM_ID)
+                confirmedAntiSat: await Capability.getAntiSat(gameId, RED_TEAM_ID),
+                confirmedMissileDisrupts: await Capability.getMissileDisrupt(gameId, RED_TEAM_ID),
+                cyberDefenseIsActive: await Capability.getCyberDefense(gameId, RED_TEAM_ID)
             }
         };
 
@@ -209,6 +223,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
     }
 
     await Piece.move(gameId, currentMovementOrder); // changes the piecePositionId, deletes the plan, all for specialflag = 0
+
+    await Capability.sofTakeoutAirfieldsAndSilos(thisGame);
 
     await Piece.deletePlanesWithoutFuel(gameId);
 

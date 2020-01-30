@@ -275,6 +275,8 @@ export type PlacePhaseAction = {
         confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
         confirmedNukes: CapabilitiesState['confirmedNukes'];
         confirmedAntiSat: CapabilitiesState['confirmedAntiSat'];
+        confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
+        cyberDefenseIsActive: CapabilitiesState['cyberDefenseIsActive'];
     };
 };
 
@@ -293,6 +295,8 @@ export type NewRoundAction = {
         confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
         confirmedNukes: CapabilitiesState['confirmedNukes'];
         confirmedAntiSat: CapabilitiesState['confirmedAntiSat'];
+        confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
+        cyberDefenseIsActive: CapabilitiesState['cyberDefenseIsActive'];
     };
 };
 
@@ -322,6 +326,7 @@ export type SliceChangeAction = {
         confirmedGoldenEye: CapabilitiesState['confirmedGoldenEye'];
         confirmedCommInterrupt: CapabilitiesState['confirmedCommInterrupt'];
         confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
+        confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
         confirmedNukes: CapabilitiesState['confirmedNukes'];
         confirmedMissileHitPos: CapabilitiesState['confirmedMissileHitPos'];
         confirmedBombardmentHitPos: CapabilitiesState['confirmedBombardmentHitPos'];

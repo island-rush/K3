@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
-import { ANTI_SATELLITE_MISSILES_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, CYBER_DOMINANCE_TYPE_ID, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, LIST_ALL_CAPABILITIES, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, RAISE_MORALE_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SOF_TEAM_TYPE_ID, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from "../../../../constants";
+import { ANTI_SATELLITE_MISSILES_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, CYBER_DOMINANCE_TYPE_ID, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, LIST_ALL_CAPABILITIES, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, RAISE_MORALE_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SOF_TEAM_TYPE_ID, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL, CYBER_DOM_CHECK_TYPE_ID } from "../../../../constants";
 import { CapabilitiesState, InvItemType, InvState } from '../../../../types';
 //prettier-ignore
-import { airPieceClick, antiSatelliteMissiles, atcScramble, biologicalWeapons, communicationsInterruption, cyberDominance, droneSwarms, goldenEye, insurgency, landPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines, seaPieceClick } from "../../redux";
+import { cyberDefenseCheck, airPieceClick, antiSatelliteMissiles, atcScramble, biologicalWeapons, communicationsInterruption, cyberDominance, droneSwarms, goldenEye, insurgency, landPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines, seaPieceClick } from "../../redux";
 import { InvItem } from './InvItem';
 
 const inventoryStyle: any = {
@@ -91,13 +91,14 @@ interface Props {
     droneSwarms: any;
     insurgency: any;
     raiseMorale: any;
+    cyberDefenseCheck: any;
 }
 
 class InvMenu extends Component<Props> {
     render() {
         //TODO: selected is a poorly chosen variable name, change to MenuIsVisible or something (since selected is used for other components too)
         //prettier-ignore
-        const { confirmedRaiseMorale, selected, invItems, airPieceClick, landPieceClick, seaPieceClick, atcScramble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } = this.props;
+        const { cyberDefenseCheck, confirmedRaiseMorale, selected, invItems, airPieceClick, landPieceClick, seaPieceClick, atcScramble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } = this.props;
 
         let capabilityFunctions: any = {};
         capabilityFunctions[ATC_SCRAMBLE_TYPE_ID] = atcScramble;
@@ -114,6 +115,7 @@ class InvMenu extends Component<Props> {
         capabilityFunctions[DRONE_SWARMS_TYPE_ID] = droneSwarms;
         capabilityFunctions[INSURGENCY_TYPE_ID] = insurgency;
         capabilityFunctions[RAISE_MORALE_TYPE_ID] = raiseMorale;
+        capabilityFunctions[CYBER_DOM_CHECK_TYPE_ID] = cyberDefenseCheck;
 
         const airItems = invItems.filter((invItem: InvItemType) => {
             return TYPE_OWNERS[TYPE_AIR].includes(invItem.invItemTypeId);
@@ -210,7 +212,8 @@ const mapActionsToProps = {
     seaMines,
     droneSwarms,
     insurgency,
-    raiseMorale
+    raiseMorale,
+    cyberDefenseCheck
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(InvMenu);

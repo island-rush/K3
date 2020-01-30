@@ -1,7 +1,8 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { ATTACK_MATRIX } from '../../constants';
+import { ATTACK_MATRIX, PIECES_WITH_FUEL } from '../../constants';
 import { EventItemType, EventQueueType, PieceType } from '../../types';
 import { pool } from '../database';
+import { Piece } from './Piece';
 
 /**
  * Represents event row in eventqueue table in the database.
@@ -44,6 +45,26 @@ export class Event implements EventQueueType {
      * Delete this event from the database.
      */
     async delete() {
+        // update the planes from this event to subtract fuel
+        // TODO: this selection could probably be combined with the update
+        const queryString3 = 'SELECT pieceId FROM eventItems JOIN pieces ON pieceId = eventPieceId WHERE pieceTypeId IN (?) AND eventId = ?';
+        const inserts3 = [PIECES_WITH_FUEL, this.eventId];
+        const [piecesWithFuel] = await pool.query<RowDataPacket[] & { pieceId: number }[]>(queryString3, inserts3);
+
+        const listOfPieceIds = [];
+        for (let x = 0; x < piecesWithFuel.length; x++) {
+            listOfPieceIds.push(piecesWithFuel[x].pieceId);
+            console.log(listOfPieceIds);
+        }
+
+        if (listOfPieceIds.length !== 0) {
+            const queryString2 = 'UPDATE pieces SET pieceFuel = pieceFuel - 1 WHERE pieceId IN (?)';
+            const inserts2 = [listOfPieceIds];
+            await pool.query(queryString2, inserts2);
+
+            await Piece.deletePlanesWithoutFuel(this.eventGameId);
+        }
+
         const queryString = 'DELETE FROM eventQueue WHERE eventId = ?';
         const inserts = [this.eventId];
         await pool.query(queryString, inserts);

@@ -1,9 +1,10 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { DESTROYER_ATTACK_RANGE_CHANCE, distanceMatrix } from '../../../constants';
-import { BombardmentType, CapabilitiesState, PieceType } from '../../../types';
+import { BombardmentType, CapabilitiesState } from '../../../types';
 import { pool } from '../../database';
+import { Piece } from '../Piece';
 
-export const insertBombardmentAttack = async (gameId: number, destroyerPiece: PieceType, targetPiece: PieceType) => {
+export const insertBombardmentAttack = async (gameId: number, destroyerPiece: Piece, targetPiece: Piece) => {
     // assume we know everything is setup by bombardmentConfirm (pieces exist, within range...)
 
     const queryString = 'SELECT * FROM bombardments WHERE gameId = ? AND destroyerId = ?';

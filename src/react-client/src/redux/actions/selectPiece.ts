@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
 // prettier-ignore
-import { DRONE_SWARMS_TYPE_ID, PIECE_CLICK, SEA_MINES_TYPE_ID, SERVER_BOMBARDMENT_CONFIRM, SERVER_DRONE_SWARM_CONFIRM, SERVER_MISSILE_CONFIRM, SERVER_SEA_MINE_CONFIRM } from '../../../../constants';
+import { DRONE_SWARMS_TYPE_ID, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, PIECE_CLICK, SEA_MINES_TYPE_ID, SERVER_BOMBARDMENT_CONFIRM, SERVER_DRONE_SWARM_CONFIRM, SERVER_MISSILE_CONFIRM, SERVER_MISSILE_DISRUPT_CONFIRM, SERVER_SEA_MINE_CONFIRM } from '../../../../constants';
 // prettier-ignore
-import { BombardmentRequestAction, DroneSwarmRequestAction, MissileRequestAction, PieceClickAction, PieceType, SeaMineRequestAction } from '../../../../types';
+import { BombardmentRequestAction, DroneSwarmRequestAction, MissileDisruptRequestAction, MissileRequestAction, PieceClickAction, PieceType, SeaMineRequestAction } from '../../../../types';
 
 /**
  * Change the state based on the piece that the user selected.
@@ -79,6 +79,20 @@ export const selectPiece = (selectedPiece: PieceType) => {
             if (window.confirm('Are you sure you want to place your drone swarm here?')) {
                 const clientAction: DroneSwarmRequestAction = {
                     type: SERVER_DRONE_SWARM_CONFIRM,
+                    payload: {
+                        selectedPiece,
+                        invItem: planning.invItem
+                    }
+                };
+
+                sendToServer(clientAction);
+            }
+        }
+
+        if (planning.invItem && planning.invItem.invItemTypeId === MISSILE_LAUNCH_DISRUPTION_TYPE_ID) {
+            if (window.confirm('Are you sure you want to disrupt this missile?')) {
+                const clientAction: MissileDisruptRequestAction = {
+                    type: SERVER_MISSILE_DISRUPT_CONFIRM,
                     payload: {
                         selectedPiece,
                         invItem: planning.invItem
