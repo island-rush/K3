@@ -220,6 +220,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
 
     await Piece.move(gameId, currentMovementOrder); // changes the piecePositionId, deletes the plan, all for specialflag = 0
 
+    await Capability.sofTakeoutAirfieldsAndSilos(thisGame);
+
     await Piece.deletePlanesWithoutFuel(gameId);
 
     await Piece.giveFuelToHelisOverLand(gameId);
