@@ -54,7 +54,6 @@ export class Event implements EventQueueType {
         const listOfPieceIds = [];
         for (let x = 0; x < piecesWithFuel.length; x++) {
             listOfPieceIds.push(piecesWithFuel[x].pieceId);
-            console.log(listOfPieceIds);
         }
 
         if (listOfPieceIds.length !== 0) {

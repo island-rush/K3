@@ -87,6 +87,7 @@ export type CapabilitiesState = {
      */
     confirmedMissileDisrupts: number[];
     cyberDefenseIsActive: boolean;
+    samHitPos: number[];
 };
 
 export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };
