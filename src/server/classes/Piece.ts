@@ -1,7 +1,7 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
+import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID } from '../../constants';
 import { AtcScrambleType, BiologicalWeaponsType, GoldenEyeType, NukeType, PieceType, RemoteSensingType } from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
@@ -654,5 +654,168 @@ export class Piece implements PieceType {
         }
 
         return completelyOwnsIsland;
+    }
+
+    static async samFire(thisGame: Game) {
+        // need to try and hit planes within range for sams
+        // different ranges / visibilities
+        // all the same chance hit?
+        // prioritize closer things, but still random which one is hit?
+        // don't hit 'landed' planes when they are over airfields they control...
+
+        // TODO: a lot of this could be refactored (could use sub functions to make it cleaner...)
+
+        // TODO: this is a very expensive operation, consider possible refactors----look into selecting all pieces from the game (maybe specific selection) and just looping through it (less requests, but bigger data)
+        // keeping it expensive for simplicity for now
+
+        const samQuery = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTypeId = ?';
+        const samInserts = [thisGame.gameId, SAM_SITE_TYPE_ID];
+        const [samResults] = await pool.query<RowDataPacket[] & PieceType[]>(samQuery, samInserts);
+
+        const listOfDeletedPieces: PieceType[] = [];
+
+        // for each sam
+        for (let x = 0; x < samResults.length; x++) {
+            const thisSam = samResults[x];
+
+            // what positions are within range?
+            const listOfInRangePositions = [];
+            for (let z = 0; z < distanceMatrix[thisSam.piecePositionId].length; z++) {
+                if (
+                    distanceMatrix[thisSam.piecePositionId][z] === 0 ||
+                    distanceMatrix[thisSam.piecePositionId][z] === 1 ||
+                    distanceMatrix[thisSam.piecePositionId][z] === 2 ||
+                    distanceMatrix[thisSam.piecePositionId][z] === 3
+                ) {
+                    listOfInRangePositions.push(z);
+                }
+            }
+
+            // find the area around the sam that it could target...
+            // TODO: make a constant for visible / invisible values (1, 0)
+            const queryString =
+                'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND pieceTypeId IN (?) AND piecePositionId IN (?) AND pieceVisible = 1';
+            const inserts = [
+                thisGame.gameId,
+                thisSam.pieceTeamId === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID,
+                PIECES_WITH_FUEL,
+                listOfInRangePositions
+            ];
+            const [enemyPlanes] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts); // TODO: bad to do queries within for loop.....(more reason to just accept bigger data, fewer requests... (or find a sql trick (unlikely)))
+
+            const listOfRange0Enemies = [];
+            const listOfRange1Enemies = [];
+            const listOfRange2Enemies = [];
+            const listOfRange3Enemies = [];
+
+            for (let b = 0; b < enemyPlanes.length; b++) {
+                const thisEnemyPlane = enemyPlanes[b];
+                // duplicate code here and below..
+                if (distanceMatrix[thisSam.piecePositionId][thisEnemyPlane.piecePositionId] === 0) {
+                    if (ALL_AIRFIELD_LOCATIONS.includes(thisEnemyPlane.piecePositionId)) {
+                        const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisEnemyPlane.piecePositionId);
+                        const airfieldOwner = thisGame[`airfield${airfieldNum}`];
+                        if (airfieldOwner !== thisEnemyPlane.pieceTeamId) {
+                            listOfRange0Enemies.push(thisEnemyPlane);
+                        }
+                    } else {
+                        // not over an airfield
+                        listOfRange0Enemies.push(thisEnemyPlane);
+                    }
+                } else if (distanceMatrix[thisSam.piecePositionId][thisEnemyPlane.piecePositionId] === 1) {
+                    // don't add if over it's own airfield
+                    if (ALL_AIRFIELD_LOCATIONS.includes(thisEnemyPlane.piecePositionId)) {
+                        const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisEnemyPlane.piecePositionId);
+                        const airfieldOwner = thisGame[`airfield${airfieldNum}`];
+                        if (airfieldOwner !== thisEnemyPlane.pieceTeamId) {
+                            listOfRange1Enemies.push(thisEnemyPlane);
+                        }
+                    } else {
+                        // not over an airfield
+                        listOfRange1Enemies.push(thisEnemyPlane);
+                    }
+                } else if (
+                    distanceMatrix[thisSam.piecePositionId][thisEnemyPlane.piecePositionId] === 2 &&
+                    ![STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID].includes(thisEnemyPlane.pieceTypeId)
+                ) {
+                    if (ALL_AIRFIELD_LOCATIONS.includes(thisEnemyPlane.piecePositionId)) {
+                        const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisEnemyPlane.piecePositionId);
+                        const airfieldOwner = thisGame[`airfield${airfieldNum}`];
+                        if (airfieldOwner !== thisEnemyPlane.pieceTeamId) {
+                            listOfRange2Enemies.push(thisEnemyPlane);
+                        }
+                    } else {
+                        listOfRange2Enemies.push(thisEnemyPlane);
+                    }
+                } else if (
+                    distanceMatrix[thisSam.piecePositionId][thisEnemyPlane.piecePositionId] === 3 &&
+                    ![STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID].includes(thisEnemyPlane.pieceTypeId)
+                ) {
+                    if (ALL_AIRFIELD_LOCATIONS.includes(thisEnemyPlane.piecePositionId)) {
+                        const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisEnemyPlane.piecePositionId);
+                        const airfieldOwner = thisGame[`airfield${airfieldNum}`];
+                        if (airfieldOwner !== thisEnemyPlane.pieceTeamId) {
+                            listOfRange3Enemies.push(thisEnemyPlane);
+                        }
+                    } else {
+                        listOfRange3Enemies.push(thisEnemyPlane);
+                    }
+                }
+            }
+
+            // first check things that are within range 1? (skip range 0 due to battles already handling it)
+            if (listOfRange0Enemies.length !== 0) {
+                // pick a random enemy in this list to hit with x chance
+                const randomIndex = Math.floor(Math.random() * listOfRange0Enemies.length);
+                const randomEnemy = listOfRange0Enemies[randomIndex];
+                const randomChance = Math.floor(Math.random() * 100) + 1;
+                if (randomChance < 75) {
+                    // need to delete the piece
+                    listOfDeletedPieces.push(randomEnemy);
+                }
+            } else if (listOfRange1Enemies.length !== 0) {
+                // pick a random enemy in this list to hit with x chance
+                const randomIndex = Math.floor(Math.random() * listOfRange1Enemies.length);
+                const randomEnemy = listOfRange1Enemies[randomIndex];
+                const randomChance = Math.floor(Math.random() * 100) + 1;
+                if (randomChance < 50) {
+                    // need to delete the piece
+                    listOfDeletedPieces.push(randomEnemy);
+                }
+            } else if (listOfRange2Enemies.length !== 0) {
+                // pick a random enemy in this list to hit with x chance
+                const randomIndex = Math.floor(Math.random() * listOfRange2Enemies.length);
+                const randomEnemy = listOfRange2Enemies[randomIndex];
+                const randomChance = Math.floor(Math.random() * 100) + 1;
+                if (randomChance < 25) {
+                    // need to delete the piece
+                    listOfDeletedPieces.push(randomEnemy);
+                }
+            } else if (listOfRange3Enemies.length !== 0) {
+                // pick a random enemy in this list to hit with x chance
+                const randomIndex = Math.floor(Math.random() * listOfRange3Enemies.length);
+                const randomEnemy = listOfRange3Enemies[randomIndex];
+                const randomChance = Math.floor(Math.random() * 100) + 1;
+                if (randomChance < 13) {
+                    // TODO: better constants and refactoring, but should make it clear that at range 3 it's half the attack value
+                    // need to delete the piece
+                    listOfDeletedPieces.push(randomEnemy);
+                }
+            }
+        }
+
+        if (listOfDeletedPieces.length !== 0) {
+            const listOfDeletedPieceIds: number[] = [];
+            for (const deletedPiece of listOfDeletedPieces) {
+                if (!listOfDeletedPieceIds.includes(deletedPiece.pieceId)) {
+                    listOfDeletedPieceIds.push(deletedPiece.pieceId);
+                }
+            }
+            const deleteQuery = 'DELETE FROM pieces WHERE pieceId IN (?)';
+            const deleteInserts = [listOfDeletedPieceIds];
+            await pool.query(deleteQuery, deleteInserts);
+        }
+
+        return listOfDeletedPieces;
     }
 }

@@ -39,7 +39,8 @@ export const initialStateAction = async (game: Game, gameTeam: number, gameContr
                 confirmedAntiSat: await Capability.getAntiSat(game.gameId, gameTeam),
                 confirmedAntiSatHitPos: [],
                 confirmedMissileDisrupts: await Capability.getMissileDisrupt(game.gameId, gameTeam),
-                cyberDefenseIsActive: await Capability.getCyberDefense(game.gameId, gameTeam)
+                cyberDefenseIsActive: await Capability.getCyberDefense(game.gameId, gameTeam),
+                samHitPos: []
             },
             gameInfo: {
                 gameSection: game.gameSection,
