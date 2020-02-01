@@ -47,7 +47,7 @@ export const gameLogin = async (req: Request, res: Response) => {
 
     // Are any of the controllers already logged in?
     for (const gameController of gameControllers) {
-        if (thisGame.getLoggedIn(gameTeam, gameController) !== 0) {
+        if (thisGame.getLoggedIn(gameTeam, gameController)) {
             const gameControllerTexts = ['COCOM', 'JFACC', 'JFLCC', 'JFMCC', 'JFSOC'];
             res.redirect(`/index.html?error=${ALREADY_IN_TAG}&playerType=${gameControllerTexts[gameController]}`);
             return;
