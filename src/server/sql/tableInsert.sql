@@ -93,7 +93,6 @@ CREATE TABLE IF NOT EXISTS plans(
     planPieceId INT(8) NOT NULL,
     planMovementOrder INT(2) NOT NULL,
     planPositionId INT(4) NOT NULL,
-    planSpecialFlag INT(1) NOT NULL DEFAULT 0,
     FOREIGN KEY (planGameId) REFERENCES games (gameId) ON DELETE CASCADE,
     FOREIGN KEY (planPieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
     PRIMARY KEY (planPieceId, planMovementOrder)

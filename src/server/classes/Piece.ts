@@ -175,13 +175,13 @@ export class Piece implements PieceType {
 
         const inserts = [gameId, movementOrder];
         const movePiecesQuery =
-            'UPDATE pieces, plans SET pieces.piecePositionId = plans.planPositionId, pieces.pieceMoves = pieces.pieceMoves - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ? AND plans.planSpecialFlag = 0';
+            'UPDATE pieces, plans SET pieces.piecePositionId = plans.planPositionId, pieces.pieceMoves = pieces.pieceMoves - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ?';
         await conn.query(movePiecesQuery, inserts);
 
         // update fuel (only for pieces that are restricted by fuel (air pieces))
         const inserts2 = [gameId, movementOrder, TYPE_AIR_PIECES];
         const removeFuel =
-            'UPDATE pieces, plans SET pieces.pieceFuel = pieces.pieceFuel - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ? AND plans.planSpecialFlag = 0 AND pieces.pieceTypeId in (?)';
+            'UPDATE pieces, plans SET pieces.pieceFuel = pieces.pieceFuel - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ? AND pieces.pieceTypeId in (?)';
         await conn.query(removeFuel, inserts2);
 
         const updateContents =
@@ -191,7 +191,7 @@ export class Piece implements PieceType {
         await conn.query(updateContents, newinserts); // do it twice for containers within containers contained pieces to get updated (GENIUS LEVEL CODING RIGHT HERE)
 
         // TODO: referencing another table here...(could change to put into the plans class)
-        const deletePlansQuery = 'DELETE FROM plans WHERE planGameId = ? AND planMovementOrder = ? AND planSpecialFlag = 0';
+        const deletePlansQuery = 'DELETE FROM plans WHERE planGameId = ? AND planMovementOrder = ?';
         await conn.query(deletePlansQuery, inserts);
 
         // handle if the pieces moved into a bio / nuclear place

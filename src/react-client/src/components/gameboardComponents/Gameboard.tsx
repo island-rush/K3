@@ -222,34 +222,24 @@ class Gameboard extends Component<Props> {
         const { confirmedPlans } = planning;
 
         let planningPositions: any = []; //all of the positions part of a plan
-        let containerPositions: any = []; //specific positions part of a plan of type container
         let battlePositions: any = []; //position(s) involved in a battle
         let remoteSensedPositions: any = [];
         let commInterruptPositions: any = [];
         let goldenEyePositions: any = [];
 
         for (let x = 0; x < planning.moves.length; x++) {
-            const { type, positionId } = planning.moves[x];
+            const positionId = planning.moves[x];
 
             if (!planningPositions.includes(positionId)) {
                 planningPositions.push(positionId);
-            }
-
-            if (type === 'container' && !containerPositions.includes(positionId)) {
-                containerPositions.push(positionId);
             }
         }
 
         if (selectedPiece !== null) {
             if (selectedPiece.pieceId in confirmedPlans) {
                 for (let z = 0; z < confirmedPlans[selectedPiece.pieceId].length; z++) {
-                    const { type, positionId } = confirmedPlans[selectedPiece.pieceId][z];
-                    if (type === 'move') {
-                        planningPositions.push(positionId);
-                    }
-                    if (type === 'container') {
-                        containerPositions.push(positionId);
-                    }
+                    const positionId = confirmedPlans[selectedPiece.pieceId][z];
+                    planningPositions.push(positionId);
                 }
             }
         }
@@ -312,8 +302,6 @@ class Gameboard extends Component<Props> {
                 className={
                     selectedPosition === parseInt(positionIndex)
                         ? 'selectedPos'
-                        : containerPositions.includes(parseInt(positionIndex))
-                        ? 'containerPos'
                         : planningPositions.includes(parseInt(positionIndex))
                         ? 'plannedPos'
                         : highlightedPositions.includes(parseInt(positionIndex))

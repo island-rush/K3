@@ -102,11 +102,7 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
             return stateCopy;
 
         case PLANNING_SELECT:
-            //TODO: move this to userActions to have more checks there within the thunk
-            stateCopy.moves.push({
-                type: 'move',
-                positionId: (action as PlanningSelectAction).payload.selectedPositionId
-            });
+            stateCopy.moves.push((action as PlanningSelectAction).payload.selectedPositionId);
             return stateCopy;
 
         case PLAN_WAS_CONFIRMED:

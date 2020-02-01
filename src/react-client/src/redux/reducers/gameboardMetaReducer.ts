@@ -1,39 +1,17 @@
+import { AnyAction } from 'redux';
 // prettier-ignore
 import { ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INSURGENCY_SELECTING, MENU_SELECT, MISSILE_DISRUPT_SELECTING, NUKE_SELECTING, PIECE_CLEAR_SELECTION, PIECE_CLICK, PLAN_WAS_CONFIRMED, POSITION_SELECT, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING } from '../../../../constants';
-// prettier-ignore
-import { AtcScrambleSelectingAction, BioWeaponSelectingAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, DroneSwarmSelectingAction, GameboardMetaState, GoldenEyeSelectingAction, HighlightPositionsAction, InsurgencySelectingAction, MenuSelectAction, MissileDisruptSelectingAction, NukeSelectingAction, PieceClearAction, PieceClickAction, PositionSelectAction, PreventPlanAction, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RodsFromGodSelectingAction, SeaMineSelectingAction } from '../../../../types';
-
-type GameboardMetaReducerActions =
-    | HighlightPositionsAction
-    | MenuSelectAction
-    | PositionSelectAction
-    | PieceClickAction
-    | PieceClearAction
-    | RaiseMoraleSelectingAction
-    | InsurgencySelectingAction
-    | BioWeaponSelectingAction
-    | NukeSelectingAction
-    | CommInterruptSelectingAction
-    | MissileDisruptSelectingAction
-    | RodsFromGodSelectingAction
-    | GoldenEyeSelectingAction
-    | RemoteSenseSelectingAction
-    | PreventPlanAction
-    | ConfirmPlanAction
-    | SeaMineSelectingAction
-    | DroneSwarmSelectingAction
-    | AtcScrambleSelectingAction
-    | DeletePlanAction;
+import { GameboardMetaState, HighlightPositionsAction, MenuSelectAction, PieceClickAction, PositionSelectAction } from '../../../../types';
 
 const initialGameboardMeta: GameboardMetaState = {
     //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
     selectedPosition: -1, //TODO: constant for 'NOTHING_SELECTED_VALUE' = -1
     highlightedPositions: [],
     selectedPiece: null,
-    selectedMenuId: 0 //TODO: should probably 0 index this instead of 1 index (make -1 == no menu open)
+    selectedMenuId: 0 //TODO: should probably 0 index this instead of 1 index (make -1 == no menu open) // TODO: make constants for each menu value
 };
 
-export function gameboardMetaReducer(state = initialGameboardMeta, action: GameboardMetaReducerActions) {
+export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: GameboardMetaState = JSON.parse(JSON.stringify(state));

@@ -99,7 +99,6 @@ export type PlanType = {
     planPieceId: number;
     planMovementOrder: number;
     planPositionId: number;
-    planSpecialFlag: number;
 };
 
 export type NewsType = {

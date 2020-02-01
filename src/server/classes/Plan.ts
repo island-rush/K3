@@ -1,5 +1,5 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { ConfirmedPlansType, PlanType } from '../../types';
+import { PlanType } from '../../types';
 import { pool } from '../database';
 
 /**
@@ -11,7 +11,6 @@ export class Plan implements PlanType {
     planPieceId: number;
     planMovementOrder: number;
     planPositionId: number;
-    planSpecialFlag: number;
 
     constructor(planPieceId: number, planMovementOrder: number) {
         this.planPieceId = planPieceId;
@@ -37,7 +36,7 @@ export class Plan implements PlanType {
      * Insert Plans into the database.
      */
     static async insert(plansToInsert: any) {
-        const queryString = 'INSERT INTO plans (planGameId, planTeamId, planPieceId, planMovementOrder, planPositionId, planSpecialFlag) VALUES ?';
+        const queryString = 'INSERT INTO plans (planGameId, planTeamId, planPieceId, planMovementOrder, planPositionId) VALUES ?';
         const inserts = [plansToInsert];
         await pool.query(queryString, inserts);
     }
@@ -92,19 +91,15 @@ export class Plan implements PlanType {
         const [resultPlans] = await pool.query<RowDataPacket[] & PlanType[]>(queryString, inserts);
 
         // formatting for the client, needs it in this object kinda way
-        const confirmedPlans: ConfirmedPlansType = {};
+        const confirmedPlans: { [pieceId: number]: number[] } = {};
         for (let x = 0; x < resultPlans.length; x++) {
-            const { planPieceId, planPositionId, planSpecialFlag } = resultPlans[x];
-            const type = planSpecialFlag === 0 ? 'move' : planSpecialFlag === 1 ? 'container' : 'NULL_SPECIAL';
+            const { planPieceId, planPositionId } = resultPlans[x];
 
             if (!(planPieceId in confirmedPlans)) {
                 confirmedPlans[planPieceId] = [];
             }
 
-            confirmedPlans[planPieceId].push({
-                type,
-                positionId: planPositionId
-            });
+            confirmedPlans[planPieceId].push(planPositionId);
         }
 
         return confirmedPlans;

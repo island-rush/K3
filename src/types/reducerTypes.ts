@@ -1,6 +1,5 @@
 import { AIRFIELD_TYPE, FLAG_TYPE, LAND_TYPE, MISSILE_SILO_TYPE, WATER_TYPE } from '../constants';
-import { GameType, InvItemType, PieceType, ShopItemType, NewsType, EventItemType } from './databaseTables';
-import { singlePlan } from './actionTypes';
+import { EventItemType, GameType, InvItemType, NewsType, PieceType, ShopItemType } from './databaseTables';
 import { GameSession } from './sessionTypes';
 
 export type ShopState = ShopItemType[];
@@ -47,16 +46,46 @@ export type GameInfoState = {
     airfield9: GameType['airfield9'];
 };
 export type GameboardMetaState = {
+    /**
+     * Position most recently clicked by player. -1 => stop selecting positions.
+     */
     selectedPosition: number;
+
+    /**
+     * List of positions to highlight on the board.
+     */
     highlightedPositions: number[];
+
+    /**
+     * Piece most recently clicked by the user.
+     */
     selectedPiece: PieceType | null;
+
+    /**
+     * Id of menu that should be open.
+     */
     selectedMenuId: number;
 };
 
 export type CapabilitiesState = {
+    /**
+     * List of positions that were hit by rods from god.
+     */
     confirmedRods: number[];
+
+    /**
+     * List of center positions for remote sensing active.
+     */
     confirmedRemoteSense: number[];
+
+    /**
+     * List of positions that were hit by insurgency.
+     */
     confirmedInsurgency: number[];
+
+    /**
+     * List of positions that were hit by biological weapons.
+     */
     confirmedBioWeapons: number[];
 
     /**
@@ -64,43 +93,126 @@ export type CapabilitiesState = {
      * ex: [3, 3, 4] => 2 move boost for type 3 commander, 1 move boost for type 4 commander
      */
     confirmedRaiseMorale: number[];
-    confirmedCommInterrupt: number[];
-    confirmedGoldenEye: number[];
-    confirmedSeaMines: number[];
-    seaMineHits: number[];
-    confirmedDroneSwarms: number[];
-    droneSwarmHits: number[];
-    confirmedAtcScramble: number[];
-    confirmedNukes: number[];
-    confirmedMissileAttacks: { missileId: number; targetId: number }[];
-    confirmedMissileHitPos: number[];
-    confirmedBombardments: { destroyerId: number; targetId: number }[];
-    confirmedBombardmentHitPos: number[];
+
     /**
-     * each number in this array is an antisat, and the number represents number of rounds left
+     * List of center positions getting comm interrupted.
+     */
+    confirmedCommInterrupt: number[];
+
+    /**
+     * List of positions hit by golden eye.
+     */
+    confirmedGoldenEye: number[];
+
+    /**
+     * List of positions with a sea mine in it.
+     */
+    confirmedSeaMines: number[];
+
+    /**
+     * List of positions that had a sea mine successfully hit something.
+     */
+    seaMineHits: number[];
+
+    /**
+     * List of positions with drone swarms in them.
+     */
+    confirmedDroneSwarms: number[];
+
+    /**
+     * List of positions that had a drone swarm successfully hit something.
+     */
+    droneSwarmHits: number[];
+
+    /**
+     * List of positions with an atc scramble active on it.
+     */
+    confirmedAtcScramble: number[];
+
+    /**
+     * List of center positions for nukes.
+     */
+    confirmedNukes: number[];
+
+    /**
+     * List of confirmed plans for missile attack(s) against enemy piece(s).
+     */
+    confirmedMissileAttacks: { missileId: number; targetId: number }[];
+
+    /**
+     * List of positions that had a piece get hit by missile attack.
+     */
+    confirmedMissileHitPos: number[];
+
+    /**
+     * List of confirmed plans for bombardment attack(s) against enemy pieces(s).
+     */
+    confirmedBombardments: { destroyerId: number; targetId: number }[];
+
+    /**
+     * List of positions that had a piece get hit by bombardment.
+     */
+    confirmedBombardmentHitPos: number[];
+
+    /**
+     * Each number in this array is an antisat, and the number represents number of rounds left.
      */
     confirmedAntiSat: number[];
+
+    /**
+     * List of positions that were the center positions for a remote sensing, to show that it was taken out.
+     */
     confirmedAntiSatHitPos: number[]; // TODO: there's a lot of weird timing situations with keeping track of positions (of remote sensing) hit if multiple used rapidly
 
     /**
-     * Contains list of missile pieceId's (missiles that are disrupted...)
+     * Contains list of missile pieceId's that are currently disrupted.
      */
     confirmedMissileDisrupts: number[];
+
+    /**
+     * Indicates if this team has a cyber defense currently in effect.
+     */
     cyberDefenseIsActive: boolean;
+
+    /**
+     * List of positions that had a piece get hit by a sam's auto fire.
+     */
     samHitPos: number[];
 };
 
-export type ConfirmedPlansType = { [pieceId: number]: singlePlan[] };
-
 export type PlanningState = {
     active: boolean;
-    capability: boolean;
-    missileSelecting: PieceType | null;
-    bombardmentSelecting: PieceType | null;
     raiseMoralePopupActive: boolean;
+
+    /**
+     * If the player is planning to use a capability.
+     */
+    capability: boolean;
+
+    /**
+     * Contains the missile piece that was selected to use.
+     */
+    missileSelecting: PieceType | null;
+
+    /**
+     * Contains the destroyer piece that was selected to use.
+     */
+    bombardmentSelecting: PieceType | null;
+
+    /**
+     * Contains the inv item (capability) that was selected to use.
+     */
     invItem: InvItemType | null;
-    moves: singlePlan[];
-    confirmedPlans: ConfirmedPlansType;
+
+    /**
+     * List of adjacent positions, in order, to be visited.
+     */
+    moves: number[];
+
+    /**
+     * List of all piece plans.
+     */
+    confirmedPlans: { [pieceId: number]: number[] };
 };
 
 export type ContainerState = {

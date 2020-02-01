@@ -2,7 +2,7 @@ import { AnyAction } from 'redux';
 // prettier-ignore
 import { ALL_GROUND_TYPES, distanceMatrix, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, OUTER_PIECE_CLICK_ACTION, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, TRANSPORT_TYPE_ID } from '../../../../constants';
 // prettier-ignore
-import { ContainerState, EnterContainerAction, ExitContainerAction, ExitTransportContainerAction, PieceCloseAction, PieceOpenAction, PieceType } from '../../../../types';
+import { ContainerState, EnterContainerAction, ExitContainerAction, ExitTransportContainerAction, PieceOpenAction, PieceType } from '../../../../types';
 
 const initialContainerState: ContainerState = {
     active: false,

@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
 // prettier-ignore
-import { ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, NUKE_RANGE, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SERVER_ATC_SCRAMBLE_CONFIRM, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_NUKE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, TYPE_TERRAIN, MISSILE_LAUNCH_DISRUPTION_TYPE_ID } from '../../../../constants';
+import { ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, NUKE_RANGE, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SERVER_ATC_SCRAMBLE_CONFIRM, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_NUKE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, TYPE_TERRAIN } from '../../../../constants';
 //prettier-ignore
 import { AtcScrambleRequestAction, BioWeaponsRequestAction, CommInterruptRequestAction, ExitTransportContainerRequestAction, GoldenEyeRequestAction, HighlightPositionsAction, InsurgencyRequestAction, NukeRequestAction, PlanningSelectAction, PositionSelectAction, RemoteSensingRequestAction, RodsFromGodRequestAction } from "../../../../types";
 import { setUserfeedbackAction } from './setUserfeedbackAction';
@@ -224,10 +224,7 @@ export const selectPosition = (selectedPositionId: number) => {
 
         let trueMoveCount = 0;
         for (var i = 0; i < planning.moves.length; i++) {
-            const { type } = planning.moves[i];
-            if (type === 'move') {
-                trueMoveCount++;
-            }
+            trueMoveCount++;
         }
 
         if (gameboardMeta.selectedPiece && trueMoveCount >= gameboardMeta.selectedPiece.pieceMoves) {
@@ -236,8 +233,7 @@ export const selectPosition = (selectedPositionId: number) => {
         }
 
         //from the selected position or the last move in the plan?
-        const lastSelectedPosition =
-            planning.moves.length > 0 ? planning.moves[planning.moves.length - 1].positionId : gameboardMeta.selectedPosition;
+        const lastSelectedPosition = planning.moves.length > 0 ? planning.moves[planning.moves.length - 1] : gameboardMeta.selectedPosition;
 
         if (distanceMatrix[lastSelectedPosition][selectedPositionId] !== 1) {
             dispatch(setUserfeedbackAction('Must select adjacent position...'));

@@ -387,18 +387,15 @@ export type ConfirmPlanRequestAction = {
     type: typeof SERVER_CONFIRM_PLAN;
     payload: {
         pieceId: PieceType['pieceId'];
-        plan: singlePlan[];
+        plan: number[];
     };
 };
-
-// TODO: what are the different move types (right now only 'move' -> could remove this entirely but was preparing for different moves)
-export type singlePlan = { type: string; positionId: number };
 
 export type ConfirmPlanAction = {
     type: typeof PLAN_WAS_CONFIRMED;
     payload: {
         pieceId: PieceType['pieceId'];
-        plan: singlePlan[];
+        plan: number[];
     };
 };
 
