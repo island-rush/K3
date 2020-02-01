@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { ATTACK_MATRIX, PIECES_WITH_FUEL } from '../../constants';
-import { EventItemType, EventQueueType, PieceType } from '../../types';
+import { EventItemType, EventQueueType, PieceType, GameType } from '../../types';
 import { pool } from '../database';
 import { Piece } from './Piece';
 
@@ -108,7 +108,7 @@ export class Event implements EventQueueType {
     /**
      * Get the next event from the eventQueue.
      */
-    static async getNext(gameId: number, gameTeam: number) {
+    static async getNext(gameId: GameType['gameId'], gameTeam: number) {
         const queryString = 'SELECT * FROM eventQueue WHERE eventGameId = ? AND (eventTeamId = ? OR eventTeamId = 2) ORDER BY eventId ASC LIMIT 1';
         const inserts = [gameId, gameTeam];
         const [events] = await pool.query<RowDataPacket[] & EventQueueType[]>(queryString, inserts);
@@ -125,7 +125,7 @@ export class Event implements EventQueueType {
     /**
      * Get the next event in the queue regardless of team.
      */
-    static async getNextAnyteam(gameId: number) {
+    static async getNextAnyteam(gameId: GameType['gameId']) {
         const queryString = 'SELECT * FROM eventQueue WHERE eventGameId = ? ORDER BY eventId ASC LIMIT 1';
         const inserts = [gameId];
         const [events] = await pool.query<RowDataPacket[] & EventQueueType[]>(queryString, inserts);
@@ -149,7 +149,7 @@ export class Event implements EventQueueType {
     /**
      * Insert eventItems as a bulk insert sql query.
      */
-    static async bulkInsertItems(gameId: number, allInserts: any) {
+    static async bulkInsertItems(gameId: GameType['gameId'], allInserts: any) {
         const conn = await pool.getConnection();
 
         let queryString = 'INSERT INTO eventItemsTemp (eventPieceId, eventItemGameId, eventPosA, eventPosB) VALUES ?';

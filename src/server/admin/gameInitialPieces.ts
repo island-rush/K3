@@ -1,5 +1,6 @@
 // prettier-ignore
-import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, RED_TEAM_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_FUEL, TYPE_MOVES, C_130_TYPE_ID, RADAR_TYPE_ID, DESTROYER_TYPE_ID, SOF_TEAM_TYPE_ID, SAM_SITE_TYPE_ID } from '../../constants';
+import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, RADAR_TYPE_ID, RED_TEAM_ID, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_FUEL, TYPE_MOVES } from '../../constants';
+import { GameType } from '../../types';
 import { pool } from '../database';
 
 // prettier-ignore
@@ -30,7 +31,7 @@ const piece = (pieceGameId: number, pieceTeamId: number, pieceTypeId: number, pi
 /**
  * Inserts a list of pre-defined pieces into a game.
  */
-export const gameInitialPieces = async (gameId: number) => {
+export const gameInitialPieces = async (gameId: GameType['gameId']) => {
     // TODO: create an excel doc to help facilitate game creation, read it like a csv to generate values (future idea = game creator interface (right click insert piece))
     const firstPieces: number[][] = [
         // typical battle setup (top left corner meet up on cross-over)

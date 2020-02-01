@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { ACTIVATED, ATC_SCRAMBLE_ROUNDS, DEACTIVATED } from '../../../constants';
-import { AtcScrambleType } from '../../../types';
+import { AtcScrambleType, GameType } from '../../../types';
 
-export const getAtcScramble = async (gameId: number, gameTeam: number) => {
+export const getAtcScramble = async (gameId: GameType['gameId'], gameTeam: number) => {
     const queryString = 'SELECT * FROM atcScramble WHERE gameId = ? AND (teamId = ? OR activated = ?)';
     const inserts = [gameId, gameTeam, ACTIVATED];
     const [results] = await pool.query<RowDataPacket[] & AtcScrambleType[]>(queryString, inserts);
@@ -16,7 +16,7 @@ export const getAtcScramble = async (gameId: number, gameTeam: number) => {
     return listOfAtcScramble;
 };
 
-export const insertAtcScramble = async (gameId: number, gameTeam: number, selectedPositionId: number) => {
+export const insertAtcScramble = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
     const insertQuery = 'SELECT * FROM atcScramble WHERE gameId = ? AND positionId = ? AND (teamId = ? OR activated = ?)';
     const inserts = [gameId, selectedPositionId, gameTeam, ACTIVATED];
     const [results] = await pool.query<RowDataPacket[] & AtcScrambleType[]>(insertQuery, inserts);
@@ -32,7 +32,7 @@ export const insertAtcScramble = async (gameId: number, gameTeam: number, select
     return true;
 };
 
-export const decreaseAtcScramble = async (gameId: number) => {
+export const decreaseAtcScramble = async (gameId: GameType['gameId']) => {
     let queryString = 'UPDATE atcScramble SET roundsLeft = roundsLeft - 1 WHERE gameId = ? AND activated = ?';
     const inserts = [gameId, ACTIVATED];
     await pool.query(queryString, inserts);
@@ -41,7 +41,7 @@ export const decreaseAtcScramble = async (gameId: number) => {
     await pool.query(queryString);
 };
 
-export const useAtcScramble = async (gameId: number) => {
+export const useAtcScramble = async (gameId: GameType['gameId']) => {
     let queryString = 'UPDATE atcScramble SET activated = ? WHERE gameId = ?';
     let inserts = [ACTIVATED, gameId];
     await pool.query(queryString, inserts);

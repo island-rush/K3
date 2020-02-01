@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { ACTIVATED, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, distanceMatrix } from '../../../constants';
-import { CommInterruptType } from '../../../types';
+import { CommInterruptType, GameType } from '../../../types';
 
-export const insertCommInterrupt = async (gameId: number, gameTeam: number, selectedPositionId: number) => {
+export const insertCommInterrupt = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
     let queryString = 'SELECT * FROM commInterrupt WHERE gameId = ? AND teamId = ? AND positionId = ?';
     let inserts = [gameId, gameTeam, selectedPositionId];
     const [results] = await pool.query<RowDataPacket[] & CommInterruptType[]>(queryString, inserts);
@@ -19,7 +19,7 @@ export const insertCommInterrupt = async (gameId: number, gameTeam: number, sele
     return true;
 };
 
-export const getCommInterrupt = async (gameId: number, gameTeam: number) => {
+export const getCommInterrupt = async (gameId: GameType['gameId'], gameTeam: number) => {
     const queryString = 'SELECT * FROM commInterrupt WHERE gameId = ? AND (activated = ? OR teamId = ?)';
     const inserts = [gameId, ACTIVATED, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & CommInterruptType[]>(queryString, inserts);
@@ -32,7 +32,7 @@ export const getCommInterrupt = async (gameId: number, gameTeam: number) => {
     return listOfCommInterrupt;
 };
 
-export const useCommInterrupt = async (gameId: number) => {
+export const useCommInterrupt = async (gameId: GameType['gameId']) => {
     // take inactivated comm interrupt and activate them, let clients know which positions are disrupted
     let queryString = 'UPDATE commInterrupt SET activated = ? WHERE gameId = ?';
     let inserts = [ACTIVATED, gameId];
@@ -94,7 +94,7 @@ export const useCommInterrupt = async (gameId: number) => {
     return masterListOfAllPositions;
 };
 
-export const decreaseCommInterrupt = async (gameId: any) => {
+export const decreaseCommInterrupt = async (gameId: GameType['gameId']) => {
     let queryString = 'UPDATE commInterrupt SET roundsLeft = roundsLeft - 1 WHERE gameId = ? AND activated = ?';
     const inserts = [gameId, ACTIVATED];
     await pool.query(queryString, inserts);

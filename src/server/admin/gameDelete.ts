@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { ACCESS_TAG, GAME_DOES_NOT_EXIST, SOCKET_SERVER_REDIRECT } from '../../constants';
 import { io } from '../../server';
+import { GameType } from '../../types';
 import { Game } from '../classes';
 
 /**
@@ -39,5 +40,5 @@ export const gameDelete = async (req: Request, res: Response) => {
  * All the values needed for a gameDelete request.
  */
 type GameDeleteRequest = {
-    gameId: number;
+    gameId: GameType['gameId'];
 };

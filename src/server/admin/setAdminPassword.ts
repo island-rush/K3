@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
 import { ACCESS_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST } from '../../constants';
+import { GameType } from '../../types';
 import { Game } from '../classes';
 
 /**
@@ -38,6 +39,6 @@ export const setAdminPassword = async (req: Request, res: Response) => {
  * All the values that should be part of a setAdminPassword attempt.
  */
 type SetAdminPassRequest = {
-    gameId: number;
+    gameId: GameType['gameId'];
     adminPassword: string;
 };

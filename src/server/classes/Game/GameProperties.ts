@@ -1,8 +1,8 @@
-import { BLUE_TEAM_ID } from '../../../constants';
+import { BLUE_TEAM_ID, LOGGED_IN_VALUE } from '../../../constants';
 import { GameType } from '../../../types';
 
 export class GameProperties {
-    readonly gameId: number;
+    readonly gameId: GameType['gameId'];
     readonly gameSection: string;
     readonly gameInstructor: string;
     gameAdminPassword: string;
@@ -69,7 +69,7 @@ export class GameProperties {
         return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Password`];
     }
 
-    getLoggedIn(gameTeam: number, gameController: number): number {
-        return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Controller${gameController}`];
+    getLoggedIn(gameTeam: number, gameController: number): boolean {
+        return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Controller${gameController}`] === LOGGED_IN_VALUE;
     }
 }

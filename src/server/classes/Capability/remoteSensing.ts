@@ -1,9 +1,9 @@
 import { RowDataPacket, OkPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { REMOTE_SENSING_ROUNDS } from '../../../constants';
-import { RemoteSensingType } from '../../../types';
+import { RemoteSensingType, GameType } from '../../../types';
 
-export const remoteSensingInsert = async (gameId: number, gameTeam: number, selectedPositionId: number) => {
+export const remoteSensingInsert = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
     let queryString = 'SELECT * FROM remoteSensing WHERE gameId = ? AND teamId = ? AND positionId = ?';
     let inserts = [gameId, gameTeam, selectedPositionId];
     const [results] = await pool.query<RowDataPacket[] & RemoteSensingType[]>(queryString, inserts);
@@ -19,7 +19,7 @@ export const remoteSensingInsert = async (gameId: number, gameTeam: number, sele
     return results2.insertId;
 };
 
-export const getRemoteSensing = async (gameId: number, gameTeam: number) => {
+export const getRemoteSensing = async (gameId: GameType['gameId'], gameTeam: number) => {
     const queryString = 'SELECT * FROM remoteSensing WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & RemoteSensingType[]>(queryString, inserts);
@@ -32,7 +32,7 @@ export const getRemoteSensing = async (gameId: number, gameTeam: number) => {
     return listOfPositions;
 };
 
-export const decreaseRemoteSensing = async (gameId: number) => {
+export const decreaseRemoteSensing = async (gameId: GameType['gameId']) => {
     // TODO: probably a more efficient way of doing this (single request...)
     let queryString = 'UPDATE remoteSensing SET roundsLeft = roundsLeft - 1 WHERE gameId = ?;';
     const inserts = [gameId];

@@ -126,14 +126,14 @@ export type EventItemType = {
 
 export type RodsFromGodType = {
     rodsFromGodId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     positionId: number;
 };
 
 export type RemoteSensingType = {
     remoteSensingId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     positionId: number;
     roundsLeft: number;
@@ -141,14 +141,14 @@ export type RemoteSensingType = {
 
 export type InsurgencyType = {
     insurgencyId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     positionId: number;
 };
 
 export type BiologicalWeaponsType = {
     biologicalweaponsId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     positionId: number;
     roundsLeft: number;
@@ -157,7 +157,7 @@ export type BiologicalWeaponsType = {
 
 export type RaiseMoraleType = {
     raiseMoraleId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     commanderType: number;
     roundsLeft: number;
@@ -165,7 +165,7 @@ export type RaiseMoraleType = {
 
 export type CommInterruptType = {
     commInterruptId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     positionId: number;
     roundsLeft: number;
@@ -174,9 +174,9 @@ export type CommInterruptType = {
 
 export type GoldenEyeType = {
     goldenEyeId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
-    positionId: number; // TODO: make sure this number is always within the range
+    positionId: number;
     roundsLeft: number;
     activated: number;
 };
@@ -188,14 +188,14 @@ export type GoldenEyePieceType = {
 
 export type SeaMineType = {
     seaMineId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     gameTeam: number;
     positionId: number;
 };
 
 export type DroneSwarmType = {
     droneSwarmId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     gameTeam: number;
     positionId: number;
     roundsLeft: number;
@@ -203,7 +203,7 @@ export type DroneSwarmType = {
 
 export type AtcScrambleType = {
     atcScrambleId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     positionId: number;
     roundsLeft: number;
@@ -212,7 +212,7 @@ export type AtcScrambleType = {
 
 export type NukeType = {
     nukeId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     positionId: number;
     activated: number;
@@ -220,7 +220,7 @@ export type NukeType = {
 
 export type MissileAttackType = {
     missileAttackId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     missileId: number;
     targetId: number;
@@ -228,7 +228,7 @@ export type MissileAttackType = {
 
 export type BombardmentType = {
     bombardmentId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     destroyerId: number;
     targetId: number;
@@ -236,14 +236,14 @@ export type BombardmentType = {
 
 export type AntiSatMissileType = {
     antiSatId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     roundsLeft: number;
 };
 
 export type MissileDisruptType = {
     missileDisruptId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     missileId: number;
     roundsLeft: number;
@@ -252,7 +252,7 @@ export type MissileDisruptType = {
 
 export type CyberDefenseType = {
     cyberDefenseId: number;
-    gameId: number;
+    gameId: GameType['gameId'];
     teamId: number;
     roundsLeft: number;
 };

@@ -1,8 +1,8 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
-import { RodsFromGodType } from '../../../types';
+import { RodsFromGodType, GameType } from '../../../types';
 
-export const rodsFromGodInsert = async (gameId: number, gameTeam: number, selectedPositionId: number) => {
+export const rodsFromGodInsert = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
     // TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
     let queryString = 'SELECT * FROM rodsFromGod WHERE gameId = ? AND teamId = ? AND positionId = ?';
     const inserts = [gameId, gameTeam, selectedPositionId];
@@ -18,7 +18,7 @@ export const rodsFromGodInsert = async (gameId: number, gameTeam: number, select
     return true;
 };
 
-export const getRodsFromGod = async (gameId: number, gameTeam: number) => {
+export const getRodsFromGod = async (gameId: GameType['gameId'], gameTeam: number) => {
     const queryString = 'SELECT * FROM rodsFromGod WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & RodsFromGodType[]>(queryString, inserts);
@@ -31,7 +31,7 @@ export const getRodsFromGod = async (gameId: number, gameTeam: number) => {
     return listOfPositions;
 };
 
-export const useRodsFromGod = async (gameId: number) => {
+export const useRodsFromGod = async (gameId: GameType['gameId']) => {
     let queryString = 'SELECT * FROM rodsFromGod WHERE gameId = ?';
     let inserts = [gameId];
     const [results] = await pool.query<RowDataPacket[] & RodsFromGodType[]>(queryString, inserts);

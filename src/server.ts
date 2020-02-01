@@ -70,7 +70,11 @@ io.use(sharedsession(fullSession));
 
 // Client-Server setup
 io.sockets.on('connection', (socket: Socket) => {
-    socketSetup(socket);
+    try {
+        socketSetup(socket);
+    } catch (error) {
+        console.error('Unable to setup sockets.');
+    }
 });
 
 // Start the server

@@ -1,3 +1,4 @@
+import { GameType } from '../../../types';
 import { Game } from '../Game';
 import { Piece } from '../Piece';
 import { checkAntiSatHit, checkRemoteSensingHit, decreaseAntiSat, getAntiSat, insertAntiSat } from './antiSat';
@@ -27,232 +28,232 @@ export class Capability {
         return sofTakeoutAirfieldsAndSilos(game);
     }
 
-    static async useCyberDefense(gameId: number) {
+    static async useCyberDefense(gameId: GameType['gameId']) {
         return useCyberDefense(gameId);
     }
 
-    static async decreaseCyberDefense(gameId: number) {
+    static async decreaseCyberDefense(gameId: GameType['gameId']) {
         return decreaseCyberDefense(gameId);
     }
 
-    static async getCyberDefense(gameId: number, gameTeam: number) {
+    static async getCyberDefense(gameId: GameType['gameId'], gameTeam: number) {
         return getCyberDefense(gameId, gameTeam);
     }
 
-    static async insertCyberDefense(gameId: number, gameTeam: number) {
+    static async insertCyberDefense(gameId: GameType['gameId'], gameTeam: number) {
         return insertCyberDefense(gameId, gameTeam);
     }
 
-    static async insertMissileDisrupt(gameId: number, gameTeam: number, selectedPiece: Piece) {
+    static async insertMissileDisrupt(gameId: GameType['gameId'], gameTeam: number, selectedPiece: Piece) {
         return insertMissileDisrupt(gameId, gameTeam, selectedPiece);
     }
 
-    static async getMissileDisrupt(gameId: number, gameTeam: number) {
+    static async getMissileDisrupt(gameId: GameType['gameId'], gameTeam: number) {
         return getMissileDisrupt(gameId, gameTeam);
     }
 
-    static async decreaseMissileDisrupt(gameId: number) {
+    static async decreaseMissileDisrupt(gameId: GameType['gameId']) {
         return decreaseMissileDisrupt(gameId);
     }
 
-    static async useMissileDisrupt(gameId: number) {
+    static async useMissileDisrupt(gameId: GameType['gameId']) {
         return useMissileDisrupt(gameId);
     }
 
-    static async insertAntiSat(gameId: number, gameTeam: number) {
+    static async insertAntiSat(gameId: GameType['gameId'], gameTeam: number) {
         return insertAntiSat(gameId, gameTeam);
     }
 
-    static async decreaseAntiSat(gameId: number) {
+    static async decreaseAntiSat(gameId: GameType['gameId']) {
         return decreaseAntiSat(gameId);
     }
 
-    static async getAntiSat(gameId: number, gameTeam: number) {
+    static async getAntiSat(gameId: GameType['gameId'], gameTeam: number) {
         return getAntiSat(gameId, gameTeam);
     }
 
-    static async checkAntiSatHit(gameId: number, gameTeam: number, antiSatId: number) {
+    static async checkAntiSatHit(gameId: GameType['gameId'], gameTeam: number, antiSatId: number) {
         return checkAntiSatHit(gameId, gameTeam, antiSatId);
     }
 
-    static async checkRemoteSensingHit(gameId: number, gameTeam: number, remoteSensingId: number, remoteSensingPosId: number) {
+    static async checkRemoteSensingHit(gameId: GameType['gameId'], gameTeam: number, remoteSensingId: number, remoteSensingPosId: number) {
         return checkRemoteSensingHit(gameId, gameTeam, remoteSensingId, remoteSensingPosId);
     }
 
-    static async insertBombardmentAttack(gameId: number, destroyerPiece: Piece, targetPiece: Piece) {
+    static async insertBombardmentAttack(gameId: GameType['gameId'], destroyerPiece: Piece, targetPiece: Piece) {
         return insertBombardmentAttack(gameId, destroyerPiece, targetPiece);
     }
 
-    static async getBombardmentAttack(gameId: number, gameTeam: number) {
+    static async getBombardmentAttack(gameId: GameType['gameId'], gameTeam: number) {
         return getBombardmentAttack(gameId, gameTeam);
     }
 
-    static async useBombardmentattack(gameId: number) {
+    static async useBombardmentattack(gameId: GameType['gameId']) {
         return useBombardmentAttack(gameId);
     }
 
     // TODO: could pass around the Piece class directly instead of the PieceType (since i think methods would still work...and it's probably what we're sending anyway)
-    static async insertMissileAttack(gameId: number, missilePiece: Piece, targetPiece: Piece) {
+    static async insertMissileAttack(gameId: GameType['gameId'], missilePiece: Piece, targetPiece: Piece) {
         return insertMissileAttack(gameId, missilePiece, targetPiece);
     }
 
-    static async getMissileAttack(gameId: number, gameTeam: number) {
+    static async getMissileAttack(gameId: GameType['gameId'], gameTeam: number) {
         return getMissileAttack(gameId, gameTeam); // TODO: could be consistent with 'gameTeam' vs 'teamId' -> even in the database
     }
 
-    static async useMissileAttack(gameId: number) {
+    static async useMissileAttack(gameId: GameType['gameId']) {
         return useMissileAttack(gameId);
     }
 
-    static async getNukes(gameId: number, gameTeam: number) {
+    static async getNukes(gameId: GameType['gameId'], gameTeam: number) {
         return getNukes(gameId, gameTeam);
     }
 
-    static async insertNuke(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async insertNuke(gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) {
         return insertNuke(gameId, gameTeam, selectedPositionId);
     }
 
-    static async useNukes(gameId: number) {
+    static async useNukes(gameId: GameType['gameId']) {
         return useNukes(gameId);
     }
 
-    static async rodsFromGodInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async rodsFromGodInsert(gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) {
         return rodsFromGodInsert(gameId, gameTeam, selectedPositionId);
     }
 
-    static async getRodsFromGod(gameId: number, gameTeam: number) {
+    static async getRodsFromGod(gameId: GameType['gameId'], gameTeam: number) {
         return getRodsFromGod(gameId, gameTeam);
     }
 
-    static async useRodsFromGod(gameId: number) {
+    static async useRodsFromGod(gameId: GameType['gameId']) {
         return useRodsFromGod(gameId);
     }
 
-    static async insurgencyInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async insurgencyInsert(gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) {
         return insurgencyInsert(gameId, gameTeam, selectedPositionId);
     }
 
-    static async getInsurgency(gameId: number, gameTeam: number) {
+    static async getInsurgency(gameId: GameType['gameId'], gameTeam: number) {
         return getInsurgency(gameId, gameTeam);
     }
 
-    static async useInsurgency(gameId: number) {
+    static async useInsurgency(gameId: GameType['gameId']) {
         return useInsurgency(gameId);
     }
 
-    static async remoteSensingInsert(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async remoteSensingInsert(gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) {
         return remoteSensingInsert(gameId, gameTeam, selectedPositionId);
     }
 
-    static async getRemoteSensing(gameId: number, gameTeam: number) {
+    static async getRemoteSensing(gameId: GameType['gameId'], gameTeam: number) {
         return getRemoteSensing(gameId, gameTeam);
     }
 
-    static async decreaseRemoteSensing(gameId: number) {
+    static async decreaseRemoteSensing(gameId: GameType['gameId']) {
         return decreaseRemoteSensing(gameId);
     }
 
-    static async insertBiologicalWeapons(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async insertBiologicalWeapons(gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) {
         return insertBiologicalWeapons(gameId, gameTeam, selectedPositionId);
     }
 
-    static async getBiologicalWeapons(gameId: number, gameTeam: number) {
+    static async getBiologicalWeapons(gameId: GameType['gameId'], gameTeam: number) {
         return getBiologicalWeapons(gameId, gameTeam);
     }
 
-    static async useBiologicalWeapons(gameId: number) {
+    static async useBiologicalWeapons(gameId: GameType['gameId']) {
         return useBiologicalWeapons(gameId);
     }
 
-    static async decreaseBiologicalWeapons(gameId: number) {
+    static async decreaseBiologicalWeapons(gameId: GameType['gameId']) {
         return decreaseBiologicalWeapons(gameId);
     }
 
-    static async insertRaiseMorale(gameId: number, gameTeam: number, selectedCommanderType: number) {
+    static async insertRaiseMorale(gameId: GameType['gameId'], gameTeam: number, selectedCommanderType: number) {
         return insertRaiseMorale(gameId, gameTeam, selectedCommanderType);
     }
 
-    static async decreaseRaiseMorale(gameId: number) {
+    static async decreaseRaiseMorale(gameId: GameType['gameId']) {
         return decreaseRaiseMorale(gameId);
     }
 
-    static async getRaiseMorale(gameId: number, gameTeam: number) {
+    static async getRaiseMorale(gameId: GameType['gameId'], gameTeam: number) {
         return getRaiseMorale(gameId, gameTeam);
     }
 
-    static async insertCommInterrupt(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async insertCommInterrupt(gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) {
         return insertCommInterrupt(gameId, gameTeam, selectedPositionId);
     }
 
-    static async getCommInterrupt(gameId: number, gameTeam: number) {
+    static async getCommInterrupt(gameId: GameType['gameId'], gameTeam: number) {
         return getCommInterrupt(gameId, gameTeam);
     }
 
-    static async useCommInterrupt(gameId: number) {
+    static async useCommInterrupt(gameId: GameType['gameId']) {
         return useCommInterrupt(gameId);
     }
 
-    static async decreaseCommInterrupt(gameId: any) {
+    static async decreaseCommInterrupt(gameId: GameType['gameId']) {
         return decreaseCommInterrupt(gameId);
     }
 
-    static async getGoldenEye(gameId: any, gameTeam: any) {
+    static async getGoldenEye(gameId: GameType['gameId'], gameTeam: number) {
         return getGoldenEye(gameId, gameTeam);
     }
 
-    static async insertGoldenEye(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async insertGoldenEye(gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) {
         return insertGoldenEye(gameId, gameTeam, selectedPositionId);
     }
 
-    static async useGoldenEye(gameId: number) {
+    static async useGoldenEye(gameId: GameType['gameId']) {
         return useGoldenEye(gameId);
     }
 
-    static async decreaseGoldenEye(gameId: number) {
+    static async decreaseGoldenEye(gameId: GameType['gameId']) {
         return decreaseGoldenEye(gameId);
     }
 
-    static async insertSeaMine(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async insertSeaMine(gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) {
         return insertSeaMine(gameId, gameTeam, selectedPositionId);
     }
 
-    static async getSeaMines(gameId: number, gameTeam: number) {
+    static async getSeaMines(gameId: GameType['gameId'], gameTeam: number) {
         return getSeaMines(gameId, gameTeam);
     }
 
-    static async checkSeaMineHit(gameId: number) {
+    static async checkSeaMineHit(gameId: GameType['gameId']) {
         return checkSeaMineHit(gameId);
     }
 
-    static async getDroneSwarms(gameId: number, gameTeam: number) {
+    static async getDroneSwarms(gameId: GameType['gameId'], gameTeam: number) {
         return getDroneSwarms(gameId, gameTeam);
     }
 
-    static async insertDroneSwarm(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async insertDroneSwarm(gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) {
         return insertDroneSwarm(gameId, gameTeam, selectedPositionId);
     }
 
-    static async checkDroneSwarmHit(gameId: number) {
+    static async checkDroneSwarmHit(gameId: GameType['gameId']) {
         return checkDroneSwarmHit(gameId);
     }
 
-    static async decreaseDroneSwarms(gameId: number) {
+    static async decreaseDroneSwarms(gameId: GameType['gameId']) {
         return decreaseDroneSwarms(gameId);
     }
 
-    static async getAtcScramble(gameId: number, gameTeam: number) {
+    static async getAtcScramble(gameId: GameType['gameId'], gameTeam: number) {
         return getAtcScramble(gameId, gameTeam);
     }
 
-    static async insertAtcScramble(gameId: number, gameTeam: number, selectedPositionId: number) {
+    static async insertAtcScramble(gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) {
         return insertAtcScramble(gameId, gameTeam, selectedPositionId);
     }
 
-    static async decreaseAtcScramble(gameId: number) {
+    static async decreaseAtcScramble(gameId: GameType['gameId']) {
         return decreaseAtcScramble(gameId);
     }
 
-    static async useAtcScramble(gameId: number) {
+    static async useAtcScramble(gameId: GameType['gameId']) {
         return useAtcScramble(gameId);
     }
 }
