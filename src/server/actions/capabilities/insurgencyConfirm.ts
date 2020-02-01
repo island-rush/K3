@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, INSURGENCY_SELECTED, INSURGENCY_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { ALL_POSITIONS, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, INSURGENCY_SELECTED, INSURGENCY_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
 import { InsurgencyAction, InsurgencyRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -68,8 +68,8 @@ export const insurgencyConfirm = async (session: SocketSession, action: Insurgen
     }
 
     // does the position make sense?
-    if (selectedPositionId < 0) {
-        sendUserFeedback(socketId, 'got a negative position for insurgency.');
+    if (!ALL_POSITIONS.includes(selectedPositionId)) {
+        sendUserFeedback(socketId, 'got a bad position for insurgency.');
         return;
     }
 
