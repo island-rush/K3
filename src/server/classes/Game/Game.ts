@@ -65,7 +65,7 @@ export class Game extends GameProperties implements GameType {
 
         return {
             isMinimized: false,
-            active: true,
+            isActive: true,
             newsTitle,
             newsInfo
         } as NewsState;

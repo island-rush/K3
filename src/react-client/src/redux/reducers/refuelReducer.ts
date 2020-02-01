@@ -5,8 +5,8 @@ import { AIRCRAFT_CLICK, EVENT_REFUEL, INITIAL_GAMESTATE, NO_MORE_EVENTS, REFUEL
 import { AircraftClickAction, EventRefuelAction, GameInitialStateAction, RefuelState, TankerClickAction, UndoFuelSelectionAction } from '../../../../types';
 
 const initialRefuelState: RefuelState = {
+    isActive: false,
     isMinimized: false,
-    active: false,
     selectedTankerPieceId: -1,
     selectedTankerPieceIndex: -1,
     tankers: [],
@@ -23,7 +23,7 @@ export function refuelReducer(state = initialRefuelState, action: AnyAction) {
             if ((action as GameInitialStateAction).payload.refuel) {
                 stateCopy.aircraft = (action as GameInitialStateAction).payload.refuel!.aircraft;
                 stateCopy.tankers = (action as GameInitialStateAction).payload.refuel!.tankers;
-                stateCopy.active = true;
+                stateCopy.isActive = true;
             }
             return stateCopy;
 
@@ -73,11 +73,8 @@ export function refuelReducer(state = initialRefuelState, action: AnyAction) {
             stateCopy.tankers[tankerPieceIndex2!].removedFuel! -= fuelThatWasGoingToGetAdded;
             return stateCopy;
 
-        case REFUEL_RESULTS:
-            return initialRefuelState;
-
         case EVENT_REFUEL:
-            stateCopy.active = true;
+            stateCopy.isActive = true;
             stateCopy.tankers = (action as EventRefuelAction).payload.tankers;
             stateCopy.aircraft = (action as EventRefuelAction).payload.aircraft;
             stateCopy.selectedTankerPieceId = -1;
@@ -89,15 +86,8 @@ export function refuelReducer(state = initialRefuelState, action: AnyAction) {
             return stateCopy;
 
         case NO_MORE_EVENTS:
-            stateCopy = {
-                isMinimized: false,
-                active: false,
-                selectedTankerPieceId: -1,
-                selectedTankerPieceIndex: -1,
-                tankers: [],
-                aircraft: []
-            };
-            return stateCopy;
+        case REFUEL_RESULTS:
+            return initialRefuelState;
 
         default:
             // Do nothing

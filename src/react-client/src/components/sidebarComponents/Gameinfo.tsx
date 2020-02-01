@@ -16,11 +16,11 @@ const invisibleStyle = {
 };
 
 interface Props {
-    selected: boolean;
+    isSelected: boolean;
     gameInfo: GameInfoState;
 }
 
-export const Gameinfo = ({ selected, gameInfo }: Props) => {
+export const Gameinfo = ({ isSelected, gameInfo }: Props) => {
     const { gameSection, gameInstructor, gameControllers, gamePhase, gameRound, gameSlice } = gameInfo;
     let gameControllerText = '';
     for (let x = 0; x < gameControllers.length; x++) {
@@ -31,7 +31,7 @@ export const Gameinfo = ({ selected, gameInfo }: Props) => {
     }
 
     return (
-        <div style={selected ? gameinfoStyle : invisibleStyle}>
+        <div style={isSelected ? gameinfoStyle : invisibleStyle}>
             Gameinfo
             <div>GameSection: {gameSection}</div>
             <div>GameInstructor: {gameInstructor}</div>

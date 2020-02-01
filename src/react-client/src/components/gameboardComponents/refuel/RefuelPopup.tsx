@@ -103,7 +103,7 @@ class RefuelPopup extends Component<Props> {
         ));
 
         return (
-            <div style={refuel.active ? null : invisibleStyle}>
+            <div style={refuel.isActive ? null : invisibleStyle}>
                 <div style={!refuel.isMinimized ? refuelPopupStyle : invisibleStyle}>
                     <div style={leftSectionStyle}>Aircraft{aircraftPieces}</div>
                     <div style={rightSectionStyle}>Tankers{tankerPieces}</div>

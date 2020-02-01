@@ -12,7 +12,7 @@ export const selectPiece = (selectedPiece: PieceType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { planning } = getState();
 
-        if (!planning.active) {
+        if (!planning.isActive) {
             const clientAction: PieceClickAction = {
                 type: PIECE_CLICK,
                 payload: {

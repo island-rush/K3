@@ -72,7 +72,7 @@ const itemCount = (array: any, value: any) => {
 
 interface Props {
     confirmedRaiseMorale: number[];
-    selected: boolean;
+    isSelected: boolean;
     invItems: InvState;
     airPieceClick: any;
     landPieceClick: any;
@@ -96,9 +96,8 @@ interface Props {
 
 class InvMenu extends Component<Props> {
     render() {
-        //TODO: selected is a poorly chosen variable name, change to MenuIsVisible or something (since selected is used for other components too)
         //prettier-ignore
-        const { cyberDefenseCheck, confirmedRaiseMorale, selected, invItems, airPieceClick, landPieceClick, seaPieceClick, atcScramble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } = this.props;
+        const { cyberDefenseCheck, confirmedRaiseMorale, isSelected, invItems, airPieceClick, landPieceClick, seaPieceClick, atcScramble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } = this.props;
 
         let capabilityFunctions: any = {};
         capabilityFunctions[ATC_SCRAMBLE_TYPE_ID] = atcScramble;
@@ -159,7 +158,7 @@ class InvMenu extends Component<Props> {
         const specialItemMoveBoost = itemCount(confirmedRaiseMorale, TYPE_SPECIAL);
 
         return (
-            <div style={selected ? inventoryStyle : invisibleStyle}>
+            <div style={isSelected ? inventoryStyle : invisibleStyle}>
                 <div>Inventory Section for Purchased Items</div>
                 <div style={airpieceItemsContainerStyle}>
                     <div> Air Pieces</div>

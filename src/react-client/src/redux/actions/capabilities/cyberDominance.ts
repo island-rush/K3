@@ -20,8 +20,8 @@ export const cyberDominance = (invItem: InvItemType) => {
             return;
         }
 
-        const { cyberDefenseIsActive } = capabilities;
-        if (cyberDefenseIsActive) {
+        const { isCyberDefenseActive } = capabilities;
+        if (isCyberDefenseActive) {
             dispatch(setUserfeedbackAction('already active bro........'));
             return;
         }

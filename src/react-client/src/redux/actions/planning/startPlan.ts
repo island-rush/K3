@@ -43,12 +43,12 @@ export const startPlan = () => {
             return;
         }
 
-        if (selectedPiece.pieceDisabled) {
+        if (selectedPiece.isPieceDisabled) {
             dispatch(setUserfeedbackAction('Piece is disabled from something (probably goldeneye)'));
             return;
         }
 
-        if (planning.active) {
+        if (planning.isActive) {
             dispatch(setUserfeedbackAction('Already planning a move...'));
             return;
         }

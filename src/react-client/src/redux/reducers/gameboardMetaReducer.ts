@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INSURGENCY_SELECTING, MENU_SELECT, MISSILE_DISRUPT_SELECTING, NUKE_SELECTING, PIECE_CLEAR_SELECTION, PIECE_CLICK, PLAN_WAS_CONFIRMED, POSITION_SELECT, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING } from '../../../../constants';
+import { ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INSURGENCY_SELECTING, MENU_SELECT, MISSILE_DISRUPT_SELECTING, NUKE_SELECTING, PIECE_CLEAR_SELECTION, PIECE_CLICK, PLAN_WAS_CONFIRMED, POSITION_SELECT, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING, NO_MENU_INDEX } from '../../../../constants';
 import { GameboardMetaState, HighlightPositionsAction, MenuSelectAction, PieceClickAction, PositionSelectAction } from '../../../../types';
 
 const initialGameboardMeta: GameboardMetaState = {
@@ -8,7 +8,7 @@ const initialGameboardMeta: GameboardMetaState = {
     selectedPosition: -1, //TODO: constant for 'NOTHING_SELECTED_VALUE' = -1
     highlightedPositions: [],
     selectedPiece: null,
-    selectedMenuId: 0 //TODO: should probably 0 index this instead of 1 index (make -1 == no menu open) // TODO: make constants for each menu value
+    selectedMenuId: NO_MENU_INDEX
 };
 
 export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
@@ -49,7 +49,7 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
         case DRONE_SWARM_SELECTING:
         case ATC_SCRAMBLE_SELECTING:
         case REMOTE_SENSING_SELECTING:
-            stateCopy.selectedMenuId = 0;
+            stateCopy.selectedMenuId = NO_MENU_INDEX;
             return stateCopy;
 
         case PIECE_CLEAR_SELECTION:

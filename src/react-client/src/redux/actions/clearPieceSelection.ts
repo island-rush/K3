@@ -12,7 +12,7 @@ export const clearPieceSelection = () => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { planning } = getState();
 
-        if (!planning.active) {
+        if (!planning.isActive) {
             const pieceClearAction: PieceClearAction = {
                 type: PIECE_CLEAR_SELECTION,
                 payload: {}

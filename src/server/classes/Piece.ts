@@ -20,7 +20,7 @@ export class Piece implements PieceType {
     pieceMoves: number;
     pieceFuel: number;
     pieceContents?: { pieces: PieceType[] };
-    pieceDisabled?: boolean;
+    isPieceDisabled?: boolean;
 
     constructor(pieceId: number) {
         this.pieceId = pieceId;
@@ -44,7 +44,7 @@ export class Piece implements PieceType {
         inserts = [this.pieceId];
         const [goldenRows] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
 
-        this.pieceDisabled = goldenRows.length !== 0;
+        this.isPieceDisabled = goldenRows.length !== 0;
 
         return this;
     }
@@ -267,9 +267,9 @@ export class Piece implements PieceType {
         for (let x = 0; x < results.length; x++) {
             const currentPiece = results[x];
             if (allPieceIdsStuck.includes(currentPiece.pieceId)) {
-                currentPiece.pieceDisabled = true;
+                currentPiece.isPieceDisabled = true;
             } else {
-                currentPiece.pieceDisabled = false;
+                currentPiece.isPieceDisabled = false;
             }
             currentPiece.pieceContents = { pieces: [] };
             if (!allPieces[currentPiece.piecePositionId]) {

@@ -44,7 +44,7 @@ export const selectPosition = (selectedPositionId: number) => {
             return;
         }
 
-        if (!planning.active) {
+        if (!planning.isActive) {
             //select anything and highlight, looking at the position
 
             const thisAction: PositionSelectAction = {
@@ -59,13 +59,13 @@ export const selectPosition = (selectedPositionId: number) => {
         }
 
         //is actively planning // TODO: this file and comment doesn't make much sense, refactor
-        if (selectedPositionId === -1 && !planning.capability) {
+        if (selectedPositionId === -1 && !planning.isUsingCapability) {
             dispatch(setUserfeedbackAction('Must select a position for the plan...'));
             return;
         }
 
         //Currently for 'rods from god' but will likely be used for other capabilities (non-piece selections on the board (with planning))
-        if (planning.capability) {
+        if (planning.isUsingCapability) {
             //highlight if needed
             if (planning.invItem && planning.invItem.invItemTypeId === REMOTE_SENSING_TYPE_ID) {
                 let clickedPosition = selectedPositionId !== -1 ? selectedPositionId : gameboardMeta.selectedPosition;

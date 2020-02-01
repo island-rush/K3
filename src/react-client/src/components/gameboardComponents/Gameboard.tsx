@@ -244,7 +244,7 @@ class Gameboard extends Component<Props> {
             }
         }
 
-        if (battle.active) {
+        if (battle.isActive) {
             if (battle.friendlyPieces.length > 0) {
                 let { piecePositionId } = battle.friendlyPieces[0].piece;
                 battlePositions.push(piecePositionId);

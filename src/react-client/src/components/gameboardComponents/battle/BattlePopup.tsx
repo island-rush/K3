@@ -118,7 +118,7 @@ class BattlePopup extends Component<Props> {
         ));
 
         return (
-            <div style={battle.active ? null : invisibleStyle}>
+            <div style={battle.isActive ? null : invisibleStyle}>
                 <div style={!battle.isMinimized ? battlePopupStyle : invisibleStyle}>
                     <div style={leftBattleStyle}>Friend{friendlyBattlePieces}</div>
                     <div style={rightBattleStyle}>Foe{enemyBattlePieces}</div>

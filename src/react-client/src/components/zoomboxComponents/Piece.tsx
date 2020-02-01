@@ -17,11 +17,6 @@ const topLevelStyle = {
     height: '24%'
 };
 
-const bottomLevelStyle = {
-    width: '48%',
-    height: '48%'
-};
-
 const selectedStyle = {
     boxShadow: '0px 0px 0px 2px rgba(255, 255, 255, 0.8) inset'
 };
@@ -35,8 +30,7 @@ const zIndexLevels = [{ zIndex: 5 }, { zIndex: 10 }];
 interface Props {
     piece: PieceType;
     missileAttack: any;
-    topLevel: boolean;
-    selected: boolean;
+    isSelected: boolean;
     pieceClick: any;
     pieceOpen: any;
     gameInfo: GameInfoState;
@@ -51,8 +45,7 @@ export class Piece extends Component<Props> {
     render() {
         const {
             piece,
-            topLevel,
-            selected,
+            isSelected,
             pieceClick,
             pieceOpen,
             confirmedMissileAttacks,
@@ -67,15 +60,15 @@ export class Piece extends Component<Props> {
         // TODO: top level probably not used anymore now that containers are their own popup
         const pieceCombinedStyle = {
             ...pieceStyle,
-            ...(topLevel ? topLevelStyle : bottomLevelStyle),
-            ...zIndexLevels[selected ? 1 : 0],
+            ...topLevelStyle,
+            ...zIndexLevels[isSelected ? 1 : 0],
             ...TYPE_IMAGES[piece.pieceTypeId],
             ...TYPE_TEAM_BORDERS[piece.pieceTeamId],
-            ...(selected ? selectedStyle : ''),
-            ...(piece.pieceDisabled ? disabledStyle : '')
+            ...(isSelected ? selectedStyle : ''),
+            ...(piece.isPieceDisabled ? disabledStyle : '')
         };
 
-        const disabledText = piece.pieceDisabled ? `\nDisabled` : '';
+        const disabledText = piece.isPieceDisabled ? `\nDisabled` : '';
         const fuelText = piece.pieceFuel >= 0 ? `\nFuel: ${piece.pieceFuel}` : '';
         const movesText = TYPE_MOVES[piece.pieceTypeId] !== 0 ? `\nMoves: ${piece.pieceMoves}` : '';
 

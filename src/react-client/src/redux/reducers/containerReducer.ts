@@ -5,7 +5,7 @@ import { ALL_GROUND_TYPES, distanceMatrix, initialGameboardEmpty, INNER_PIECE_CL
 import { ContainerState, EnterContainerAction, ExitContainerAction, ExitTransportContainerAction, PieceOpenAction, PieceType } from '../../../../types';
 
 const initialContainerState: ContainerState = {
-    active: false,
+    isActive: false,
     isSelectingHex: false,
     innerPieceToDrop: null,
     containerPiece: null,
@@ -19,7 +19,7 @@ export function containerReducer(state = initialContainerState, action: AnyActio
 
     switch (type) {
         case PIECE_OPEN_ACTION:
-            stateCopy.active = true;
+            stateCopy.isActive = true;
             stateCopy.containerPiece = (action as PieceOpenAction).payload.selectedPiece;
             let selectedPiecePosition = (action as PieceOpenAction).payload.selectedPiece.piecePositionId;
             let selectedPieceTypeId = (action as PieceOpenAction).payload.selectedPiece.pieceTypeId;
@@ -56,7 +56,7 @@ export function containerReducer(state = initialContainerState, action: AnyActio
             return stateCopy;
 
         case PIECE_CLOSE_ACTION:
-            stateCopy.active = false;
+            stateCopy.isActive = false;
             stateCopy.containerPiece = null;
             stateCopy.outerPieces = [];
             stateCopy.isSelectingHex = false;

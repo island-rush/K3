@@ -91,8 +91,7 @@ class Zoombox extends Component<Props> {
                   <Piece
                       pieceOpen={pieceOpen}
                       pieceClick={selectPiece}
-                      selected={selectedPiece !== null && selectedPiece.pieceId === piece.pieceId}
-                      topLevel={true}
+                      isSelected={selectedPiece !== null && selectedPiece.pieceId === piece.pieceId}
                       key={index}
                       piece={piece}
                       confirmedMissileAttacks={confirmedMissileAttacks} // TODO: probably better way of figuring this out (instead of passing the whole list down below)

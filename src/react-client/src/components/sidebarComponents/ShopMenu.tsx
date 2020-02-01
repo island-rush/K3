@@ -40,7 +40,7 @@ const purchaseableItemsContainerStyle: any = {
 
 interface Props {
     shopItems: ShopState;
-    selected: boolean;
+    isSelected: boolean;
     purchase: any;
     refund: any;
     points: number;
@@ -49,7 +49,7 @@ interface Props {
 
 class ShopMenu extends Component<Props> {
     render() {
-        const { shopItems, selected, purchase, refund, points, confirmPurchase } = this.props;
+        const { shopItems, isSelected, purchase, refund, points, confirmPurchase } = this.props;
 
         const airShopComponents = TYPE_OWNERS[TYPE_AIR].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
@@ -72,7 +72,7 @@ class ShopMenu extends Component<Props> {
         ));
 
         return (
-            <div style={selected ? shopStyle : invisibleStyle}>
+            <div style={isSelected ? shopStyle : invisibleStyle}>
                 <div>Shop Menu</div>
                 <div>Points: {points}</div>
                 <div style={purchaseableItemsContainerStyle}>

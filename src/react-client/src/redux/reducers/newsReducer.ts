@@ -3,8 +3,8 @@ import { INITIAL_GAMESTATE, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, PURCHASE_PHAS
 import { GameInitialStateAction, NewsPhaseAction, NewsState } from '../../../../types';
 
 const initialNewsState: NewsState = {
+    isActive: false,
     isMinimized: false,
-    active: false,
     newsTitle: 'Loading Title...',
     newsInfo: 'Loading Info...'
 };
@@ -19,7 +19,7 @@ export function newsReducer(state = initialNewsState, action: AnyAction) {
             if ((action as GameInitialStateAction).payload.news) {
                 stateCopy.newsTitle = (action as GameInitialStateAction).payload.news!.newsTitle;
                 stateCopy.newsInfo = (action as GameInitialStateAction).payload.news!.newsInfo;
-                stateCopy.active = true;
+                stateCopy.isActive = true;
                 stateCopy.isMinimized = false;
             }
             return stateCopy;
@@ -28,7 +28,7 @@ export function newsReducer(state = initialNewsState, action: AnyAction) {
             return (action as NewsPhaseAction).payload.news;
 
         case PURCHASE_PHASE:
-            stateCopy.active = false;
+            stateCopy.isActive = false;
             return stateCopy;
 
         case NEWSPOPUP_MINIMIZE_TOGGLE:

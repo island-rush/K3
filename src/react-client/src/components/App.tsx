@@ -34,7 +34,7 @@ class App extends Component<Props> {
             <div
                 style={{
                     ...appStyle,
-                    ...(planning.active ? isPlanningStyle : '')
+                    ...(planning.isActive ? isPlanningStyle : '')
                 }}
                 onClick={event => {
                     event.preventDefault();

@@ -39,24 +39,24 @@ const invisibleStyle = {
 };
 
 interface Props {
-    selected: boolean;
+    isSelected: boolean;
     capabilities: CapabilitiesState;
 }
 
 class SpaceArea extends Component<Props> {
     render() {
-        const { selected, capabilities } = this.props;
+        const { isSelected, capabilities } = this.props;
 
-        const { cyberDefenseIsActive } = capabilities;
+        const { isCyberDefenseActive } = capabilities;
 
         const antiSatelliteMissilesItemItemComponents = capabilities.confirmedAntiSat.map((antiSatRoundsLeft: number, index: number) => (
             <div style={{ ...antiSatBoxStyle, ...TYPE_IMAGES[ANTI_SATELLITE_MISSILES_TYPE_ID] }}>{antiSatRoundsLeft}</div>
         ));
 
-        const cyberDefenseDiv = cyberDefenseIsActive ? <div>Cyber defense is active.</div> : null;
+        const cyberDefenseDiv = isCyberDefenseActive ? <div>Cyber defense is active.</div> : null;
 
         return (
-            <div style={selected ? spaceAreaStyle : invisibleStyle}>
+            <div style={isSelected ? spaceAreaStyle : invisibleStyle}>
                 <div>Space Area Capabilities</div>
                 {cyberDefenseDiv}
                 <div style={antiSatelliteMissilesContainerStyle}>

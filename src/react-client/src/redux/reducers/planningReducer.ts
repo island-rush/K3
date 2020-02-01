@@ -5,11 +5,11 @@ import { ATC_SCRAMBLE_SELECTED, ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTED, BIO
 import { AtcScrambleSelectingAction, BioWeaponSelectingAction, BombardmentSelectingAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, DroneSwarmSelectingAction, GameInitialStateAction, GoldenEyeSelectingAction, InsurgencySelectingAction, MissileDisruptSelectingAction, MissileSelectingAction, NukeSelectingAction, PlanningSelectAction, PlanningState, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RodsFromGodSelectingAction, SeaMineSelectingAction } from '../../../../types';
 
 const initialPlanningState: PlanningState = {
-    active: false,
-    capability: false,
+    isActive: false,
+    isSelectingCommander: false,
+    isUsingCapability: false,
     bombardmentSelecting: null,
     missileSelecting: null,
-    raiseMoralePopupActive: false,
     invItem: null,
     moves: [],
     confirmedPlans: {}
@@ -28,31 +28,31 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
             return stateCopy;
 
         case MISSILE_SELECTING:
-            stateCopy.active = true;
+            stateCopy.isActive = true;
             stateCopy.missileSelecting = (action as MissileSelectingAction).payload.selectedPiece;
             return stateCopy;
 
         case BOMBARDMENT_SELECTING:
-            stateCopy.active = true;
+            stateCopy.isActive = true;
             stateCopy.bombardmentSelecting = (action as BombardmentSelectingAction).payload.selectedPiece;
             return stateCopy;
 
         case START_PLAN:
-            stateCopy.active = true;
+            stateCopy.isActive = true;
             return stateCopy;
 
         case RAISE_MORALE_SELECTING:
-            stateCopy.active = true;
-            stateCopy.capability = true;
+            stateCopy.isActive = true;
+            stateCopy.isUsingCapability = true;
             stateCopy.invItem = (action as RaiseMoraleSelectingAction).payload.invItem;
-            stateCopy.raiseMoralePopupActive = true;
+            stateCopy.isSelectingCommander = true;
             return stateCopy;
 
         case RAISE_MORALE_SELECTED:
-            stateCopy.capability = false;
+            stateCopy.isUsingCapability = false;
             stateCopy.invItem = null;
-            stateCopy.active = false;
-            stateCopy.raiseMoralePopupActive = false;
+            stateCopy.isActive = false;
+            stateCopy.isSelectingCommander = false;
             return stateCopy;
 
         case INSURGENCY_SELECTING:
@@ -66,8 +66,8 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
         case ATC_SCRAMBLE_SELECTING:
         case GOLDEN_EYE_SELECTING:
         case REMOTE_SENSING_SELECTING:
-            stateCopy.active = true;
-            stateCopy.capability = true;
+            stateCopy.isActive = true;
+            stateCopy.isUsingCapability = true;
             stateCopy.invItem = (action as SelectingActions).payload.invItem;
             return stateCopy;
 
@@ -84,16 +84,16 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
         case ATC_SCRAMBLE_SELECTED:
         case REMOTE_SENSING_SELECTED:
         case GOLDEN_EYE_SELECTED:
-            stateCopy.capability = false;
+            stateCopy.isUsingCapability = false;
             stateCopy.invItem = null;
-            stateCopy.active = false;
+            stateCopy.isActive = false;
             stateCopy.missileSelecting = null;
             stateCopy.bombardmentSelecting = null;
             return stateCopy;
 
         case CANCEL_PLAN:
-            stateCopy.active = false;
-            stateCopy.capability = false;
+            stateCopy.isActive = false;
+            stateCopy.isUsingCapability = false;
             stateCopy.moves = [];
             return stateCopy;
 
@@ -108,7 +108,7 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
         case PLAN_WAS_CONFIRMED:
             const { pieceId, plan } = (action as ConfirmPlanAction).payload;
             stateCopy.confirmedPlans[pieceId] = plan;
-            stateCopy.active = false;
+            stateCopy.isActive = false;
             stateCopy.moves = [];
             return stateCopy;
 

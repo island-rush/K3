@@ -12,7 +12,7 @@ export const cancelPlan = () => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, planning } = getState();
 
-        if (planning.active) {
+        if (planning.isActive) {
             const preventPlanAction: PreventPlanAction = {
                 type: CANCEL_PLAN,
                 payload: {}

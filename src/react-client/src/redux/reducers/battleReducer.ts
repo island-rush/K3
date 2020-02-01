@@ -6,7 +6,7 @@ import { BattlePieceSelectAction, BattleResultsAction, BattleState, EnemyPieceSe
 
 const initialBattleState: BattleState = {
     isMinimized: false,
-    active: false,
+    isActive: false,
     selectedBattlePiece: -1,
     selectedBattlePieceIndex: -1, //helper to find the piece within the array
     masterRecord: null,
@@ -24,7 +24,7 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
             if ((action as GameInitialStateAction).payload.battle) {
                 stateCopy.friendlyPieces = (action as GameInitialStateAction).payload.battle!.friendlyPieces;
                 stateCopy.enemyPieces = (action as GameInitialStateAction).payload.battle!.enemyPieces;
-                stateCopy.active = true;
+                stateCopy.isActive = true;
             }
             return stateCopy;
 
@@ -62,7 +62,7 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
 
         case EVENT_BATTLE:
             stateCopy = initialBattleState;
-            stateCopy.active = true;
+            stateCopy.isActive = true;
             stateCopy.friendlyPieces = (action as EventBattleAction).payload.friendlyPieces;
             stateCopy.enemyPieces = (action as EventBattleAction).payload.enemyPieces;
             return stateCopy;

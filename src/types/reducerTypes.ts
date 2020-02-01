@@ -172,7 +172,7 @@ export type CapabilitiesState = {
     /**
      * Indicates if this team has a cyber defense currently in effect.
      */
-    cyberDefenseIsActive: boolean;
+    isCyberDefenseActive: boolean;
 
     /**
      * List of positions that had a piece get hit by a sam's auto fire.
@@ -181,13 +181,13 @@ export type CapabilitiesState = {
 };
 
 export type PlanningState = {
-    active: boolean;
-    raiseMoralePopupActive: boolean;
+    isActive: boolean;
+    isSelectingCommander: boolean;
 
     /**
      * If the player is planning to use a capability.
      */
-    capability: boolean;
+    isUsingCapability: boolean;
 
     /**
      * Contains the missile piece that was selected to use.
@@ -216,7 +216,7 @@ export type PlanningState = {
 };
 
 export type ContainerState = {
-    active: boolean;
+    isActive: boolean;
     isSelectingHex: boolean;
     innerPieceToDrop: PieceType | null;
     containerPiece: PieceType | null;
@@ -224,8 +224,8 @@ export type ContainerState = {
 };
 
 export type BattleState = {
+    isActive: boolean;
     isMinimized: boolean;
-    active: boolean;
     selectedBattlePiece: any;
     selectedBattlePieceIndex: number; // helper to find the piece within the array
     masterRecord: any | null;
@@ -251,15 +251,15 @@ export type BattleState = {
 };
 
 export type NewsState = {
+    isActive: boolean;
     isMinimized: boolean;
-    active: boolean;
     newsTitle: NewsType['newsTitle'];
     newsInfo: NewsType['newsInfo'];
 };
 
 export type RefuelState = {
+    isActive: boolean;
     isMinimized: boolean;
-    active: boolean;
     selectedTankerPieceId: number;
     selectedTankerPieceIndex: number;
     tankers: (EventItemType &

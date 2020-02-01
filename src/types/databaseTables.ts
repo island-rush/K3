@@ -90,7 +90,7 @@ export type PieceType = {
     /**
      * True = Stuck in place, False = Free to move/make plans
      */
-    pieceDisabled?: boolean; // TODO: store in the database, don't calculate (store by storing the event id that is disabling it? (the one with longest rounds left? (could be multiple things....)))
+    isPieceDisabled?: boolean; // TODO: store in the database, don't calculate (store by storing the event id that is disabling it? (the one with longest rounds left? (could be multiple things....)))
 };
 
 export type PlanType = {

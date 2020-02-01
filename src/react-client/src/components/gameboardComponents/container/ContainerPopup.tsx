@@ -85,7 +85,7 @@ export class ContainerPopup extends Component<Props> {
                   ));
 
         return (
-            <div style={container.active && !container.isSelectingHex ? containerPopupStyle : invisibleStyle}>
+            <div style={container.isActive && !container.isSelectingHex ? containerPopupStyle : invisibleStyle}>
                 <div style={leftSectionStyle}>
                     <div>Outer Pieces</div>
                     {outsidePieces}

@@ -25,7 +25,7 @@ const initialCapabilitiesState: CapabilitiesState = {
     confirmedAntiSat: [],
     confirmedAntiSatHitPos: [],
     confirmedMissileDisrupts: [],
-    cyberDefenseIsActive: false,
+    isCyberDefenseActive: false,
     samHitPos: []
 };
 
@@ -53,7 +53,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: An
             stateCopy.confirmedNukes = (action as NewRoundAction).payload.confirmedNukes;
             stateCopy.confirmedAntiSat = (action as NewRoundAction).payload.confirmedAntiSat;
             stateCopy.confirmedMissileDisrupts = (action as NewRoundAction).payload.confirmedMissileDisrupts;
-            stateCopy.cyberDefenseIsActive = (action as NewRoundAction).payload.cyberDefenseIsActive;
+            stateCopy.isCyberDefenseActive = (action as NewRoundAction).payload.cyberDefenseIsActive;
             return stateCopy;
 
         case PLACE_PHASE:
@@ -66,7 +66,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: An
             stateCopy.confirmedNukes = (action as PlacePhaseAction).payload.confirmedNukes;
             stateCopy.confirmedAntiSat = (action as PlacePhaseAction).payload.confirmedAntiSat;
             stateCopy.confirmedMissileDisrupts = (action as PlacePhaseAction).payload.confirmedMissileDisrupts;
-            stateCopy.cyberDefenseIsActive = (action as PlacePhaseAction).payload.cyberDefenseIsActive;
+            stateCopy.isCyberDefenseActive = (action as PlacePhaseAction).payload.cyberDefenseIsActive;
             stateCopy.confirmedRods = [];
             stateCopy.confirmedInsurgency = [];
             stateCopy.confirmedMissileHitPos = [];
@@ -143,7 +143,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: An
             return stateCopy;
 
         case CYBER_DEFENSE_SELECTED:
-            stateCopy.cyberDefenseIsActive = true;
+            stateCopy.isCyberDefenseActive = true;
             return stateCopy;
 
         case DRONE_SWARM_SELECTED:

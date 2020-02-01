@@ -64,7 +64,7 @@ export const NewsPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
     };
 
     return (
-        <div style={news.active ? null : invisibleStyle}>
+        <div style={news.isActive ? null : invisibleStyle}>
             <div style={!news.isMinimized ? newsPopupStyle : invisibleStyle}>
                 <div style={popupTitleStyle}>NEWS ALERT!</div>
                 <br />

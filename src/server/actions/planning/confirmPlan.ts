@@ -41,7 +41,7 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
         return;
     }
 
-    const { piecePositionId, pieceTypeId, pieceGameId, pieceTeamId, pieceMoves, pieceDisabled } = thisPiece;
+    const { piecePositionId, pieceTypeId, pieceGameId, pieceTeamId, pieceMoves, isPieceDisabled } = thisPiece;
 
     // Is this piece ours? (TODO: could also check pieceType with gameControllers)
     if (pieceGameId !== gameId || pieceTeamId !== gameTeam) {
@@ -63,7 +63,7 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
         return;
     }
 
-    if (pieceDisabled) {
+    if (isPieceDisabled) {
         sendUserFeedback(socketId, 'Piece is disabled from game effect (probably golden eye)');
         return;
     }

@@ -32,10 +32,10 @@ interface Props {
 }
 
 export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, planning }: Props) => {
-    const { raiseMoralePopupActive } = planning;
+    const { isSelectingCommander } = planning;
 
     return (
-        <div style={raiseMoralePopupActive ? popupStyle : invisibleStyle}>
+        <div style={isSelectingCommander ? popupStyle : invisibleStyle}>
             <div style={titleStyle}>Select a commander type to boost.</div>
             <div
                 style={buttonStyle}
