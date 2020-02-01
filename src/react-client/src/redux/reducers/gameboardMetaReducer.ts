@@ -59,14 +59,7 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: Gameb
             stateCopy.selectedPiece = (action as PieceClickAction).payload.selectedPiece;
             return stateCopy;
 
-        case PIECE_CLEAR_SELECTION:
-            stateCopy.selectedPiece = null;
-            return stateCopy;
-
         case RAISE_MORALE_SELECTING:
-            stateCopy.selectedMenuId = 0;
-            return stateCopy;
-
         case INSURGENCY_SELECTING:
         case BIO_WEAPON_SELECTING:
         case COMM_INTERRUPT_SELECTING:
@@ -81,19 +74,15 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: Gameb
             stateCopy.selectedMenuId = 0;
             return stateCopy;
 
+        case PIECE_CLEAR_SELECTION:
         case CANCEL_PLAN:
-            stateCopy.selectedPiece = null;
-            return stateCopy;
-
         case PLAN_WAS_CONFIRMED:
-            stateCopy.selectedPiece = null;
-            return stateCopy;
-
         case DELETE_PLAN:
             stateCopy.selectedPiece = null;
             return stateCopy;
 
         default:
+            // Do nothing
             return state;
     }
 }

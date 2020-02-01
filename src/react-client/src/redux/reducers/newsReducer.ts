@@ -1,7 +1,6 @@
+import { AnyAction } from 'redux';
 import { INITIAL_GAMESTATE, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, PURCHASE_PHASE } from '../../../../constants';
-import { GameInitialStateAction, NewsPhaseAction, NewsPopupToggleAction, NewsState, PurchasePhaseAction } from '../../../../types';
-
-type NewsReducerActions = GameInitialStateAction | NewsPhaseAction | PurchasePhaseAction | NewsPopupToggleAction;
+import { GameInitialStateAction, NewsPhaseAction, NewsState } from '../../../../types';
 
 const initialNewsState: NewsState = {
     isMinimized: false,
@@ -10,7 +9,7 @@ const initialNewsState: NewsState = {
     newsInfo: 'Loading Info...'
 };
 
-export function newsReducer(state = initialNewsState, action: NewsReducerActions) {
+export function newsReducer(state = initialNewsState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: NewsState = JSON.parse(JSON.stringify(state));
@@ -29,7 +28,7 @@ export function newsReducer(state = initialNewsState, action: NewsReducerActions
             return (action as NewsPhaseAction).payload.news;
 
         case PURCHASE_PHASE:
-            stateCopy.active = false; //hide the popup
+            stateCopy.active = false;
             return stateCopy;
 
         case NEWSPOPUP_MINIMIZE_TOGGLE:
@@ -37,6 +36,7 @@ export function newsReducer(state = initialNewsState, action: NewsReducerActions
             return stateCopy;
 
         default:
+            // Do nothing
             return state;
     }
 }

@@ -1,40 +1,8 @@
+import { AnyAction } from 'redux';
 // prettier-ignore
-import { ANTISAT_HIT_ACTION, ANTISAT_SELECTED, ANTI_SAT_MISSILE_ROUNDS, ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, BOMBARDMENT_SELECTED, COMM_INTERRUP_SELECTED, CYBER_DEFENSE_SELECTED, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, DRONE_SWARM_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, MISSILE_DISRUPT_SELECTED, MISSILE_SELECTED, NEW_ROUND, NO_MORE_EVENTS, NUKE_SELECTED, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SLICE_CHANGE, CLEAR_SAM_DELETE, SAM_DELETED_PIECES } from '../../../../constants';
+import { ANTISAT_HIT_ACTION, ANTISAT_SELECTED, ANTI_SAT_MISSILE_ROUNDS, ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, BOMBARDMENT_SELECTED, CLEAR_SAM_DELETE, COMM_INTERRUP_SELECTED, CYBER_DEFENSE_SELECTED, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, DRONE_SWARM_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, MISSILE_DISRUPT_SELECTED, MISSILE_SELECTED, NEW_ROUND, NO_MORE_EVENTS, NUKE_SELECTED, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SAM_DELETED_PIECES, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SLICE_CHANGE } from '../../../../constants';
 // prettier-ignore
-import { AntiSatAction, AntiSatHitAction, AtcScrambleAction, BioWeaponsAction, BombardmentAction, CapabilitiesState, ClearDroneSwarmMineNotifyAction, ClearSeaMineNotifyAction, CommInterruptAction, CyberDefenseAction, DroneSwarmAction, DroneSwarmHitNotifyAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, MissileAction, MissileDisruptAction, NewRoundAction, NoMoreEventsAction, NukeAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RemoteSensingHitAction, RodsFromGodAction, SeaMineAction, SeaMineHitNotifyAction, SliceChangeAction, SamDeletedPiecesAction, ClearSamDeleteAction } from '../../../../types';
-
-type CapabilityReducerActions =
-    | GameInitialStateAction
-    | NewRoundAction
-    | PlacePhaseAction
-    | AntiSatAction
-    | RaiseMoraleAction
-    | RodsFromGodAction
-    | CommInterruptAction
-    | InsurgencyAction
-    | MissileAction
-    | BombardmentAction
-    | MissileDisruptAction
-    | RemoteSensingAction
-    | GoldenEyeAction
-    | CyberDefenseAction
-    | SliceChangeAction
-    | RemoteSensingHitAction
-    | AntiSatHitAction
-    | EventBattleAction
-    | SeaMineAction
-    | AtcScrambleAction
-    | NukeAction
-    | DroneSwarmAction
-    | ClearSeaMineNotifyAction
-    | SeaMineHitNotifyAction
-    | DroneSwarmHitNotifyAction
-    | ClearDroneSwarmMineNotifyAction
-    | SamDeletedPiecesAction
-    | ClearSamDeleteAction
-    | NoMoreEventsAction
-    | EventRefuelAction
-    | BioWeaponsAction;
+import { AntiSatHitAction, AtcScrambleAction, BioWeaponsAction, BombardmentAction, CapabilitiesState, ClearSamDeleteAction, CommInterruptAction, DroneSwarmAction, DroneSwarmHitNotifyAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, MissileAction, MissileDisruptAction, NewRoundAction, NukeAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RemoteSensingHitAction, RodsFromGodAction, SamDeletedPiecesAction, SeaMineAction, SeaMineHitNotifyAction, SliceChangeAction } from '../../../../types';
 
 const initialCapabilitiesState: CapabilitiesState = {
     confirmedRods: [],
@@ -61,7 +29,7 @@ const initialCapabilitiesState: CapabilitiesState = {
     samHitPos: []
 };
 
-export function capabilitiesReducer(state = initialCapabilitiesState, action: CapabilityReducerActions) {
+export function capabilitiesReducer(state = initialCapabilitiesState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: CapabilitiesState = JSON.parse(JSON.stringify(state));
@@ -258,6 +226,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             return stateCopy;
 
         default:
+            // Do nothing
             return state;
     }
 }

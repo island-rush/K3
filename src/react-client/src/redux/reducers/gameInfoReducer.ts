@@ -1,60 +1,45 @@
+import { AnyAction } from 'redux';
 // prettier-ignore
-import { COMBAT_PHASE, COMBAT_PHASE_ID, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEWS_PHASE, NEWS_PHASE_ID, NEW_ROUND, NOT_WAITING_STATUS, NO_MORE_EVENTS, PLACE_PHASE, PLACE_PHASE_ID, PURCHASE_PHASE, PURCHASE_PHASE_ID, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, UPDATE_FLAGS, WAITING_STATUS, UPDATE_AIRFIELDS } from '../../../../constants';
+import { COMBAT_PHASE, COMBAT_PHASE_ID, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEUTRAL_TEAM_ID, NEWS_PHASE, NEWS_PHASE_ID, NEW_ROUND, NOT_WAITING_STATUS, NO_MORE_EVENTS, PLACE_PHASE, PLACE_PHASE_ID, PURCHASE_PHASE, PURCHASE_PHASE_ID, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../../../constants';
 // prettier-ignore
-import { CombatPhaseAction, EventBattleAction, GameInfoState, GameInitialStateAction, MainButtonClickAction, NewRoundAction, NewsPhaseAction, NoMoreEventsAction, PlacePhaseAction, PurchasePhaseAction, ShopPurchaseAction, ShopRefundAction, SliceChangeAction, UpdateFlagAction, UpdateAirfieldAction } from '../../../../types';
-
-type GameInfoReducerActions =
-    | GameInitialStateAction
-    | ShopPurchaseAction
-    | NoMoreEventsAction
-    | ShopRefundAction
-    | PurchasePhaseAction
-    | UpdateFlagAction
-    | MainButtonClickAction
-    | CombatPhaseAction
-    | SliceChangeAction
-    | PlacePhaseAction
-    | EventBattleAction
-    | NewRoundAction
-    | UpdateAirfieldAction
-    | NewsPhaseAction;
+import { EventBattleAction, GameInfoState, GameInitialStateAction, NewRoundAction, NewsPhaseAction, NoMoreEventsAction, ShopPurchaseAction, ShopRefundAction, UpdateAirfieldAction, UpdateFlagAction } from '../../../../types';
 
 const initialGameInfoState: GameInfoState = {
     gameSection: 'Loading...',
     gameInstructor: 'Loading...',
-    gameTeam: -1,
+    gameTeam: NEUTRAL_TEAM_ID,
     gameControllers: [],
     gamePhase: -1,
     gameRound: -1,
     gameSlice: -1,
     gameStatus: -1,
     gamePoints: -1,
-    flag0: -1,
-    flag1: -1,
-    flag2: -1,
-    flag3: -1,
-    flag4: -1,
-    flag5: -1,
-    flag6: -1,
-    flag7: -1,
-    flag8: -1,
-    flag9: -1,
-    flag10: -1,
-    flag11: -1,
-    flag12: -1,
-    airfield0: -1,
-    airfield1: -1,
-    airfield2: -1,
-    airfield3: -1,
-    airfield4: -1,
-    airfield5: -1,
-    airfield6: -1,
-    airfield7: -1,
-    airfield8: -1,
-    airfield9: -1
+    flag0: NEUTRAL_TEAM_ID,
+    flag1: NEUTRAL_TEAM_ID,
+    flag2: NEUTRAL_TEAM_ID,
+    flag3: NEUTRAL_TEAM_ID,
+    flag4: NEUTRAL_TEAM_ID,
+    flag5: NEUTRAL_TEAM_ID,
+    flag6: NEUTRAL_TEAM_ID,
+    flag7: NEUTRAL_TEAM_ID,
+    flag8: NEUTRAL_TEAM_ID,
+    flag9: NEUTRAL_TEAM_ID,
+    flag10: NEUTRAL_TEAM_ID,
+    flag11: NEUTRAL_TEAM_ID,
+    flag12: NEUTRAL_TEAM_ID,
+    airfield0: NEUTRAL_TEAM_ID,
+    airfield1: NEUTRAL_TEAM_ID,
+    airfield2: NEUTRAL_TEAM_ID,
+    airfield3: NEUTRAL_TEAM_ID,
+    airfield4: NEUTRAL_TEAM_ID,
+    airfield5: NEUTRAL_TEAM_ID,
+    airfield6: NEUTRAL_TEAM_ID,
+    airfield7: NEUTRAL_TEAM_ID,
+    airfield8: NEUTRAL_TEAM_ID,
+    airfield9: NEUTRAL_TEAM_ID
 };
 
-export function gameInfoReducer(state = initialGameInfoState, action: GameInfoReducerActions) {
+export function gameInfoReducer(state = initialGameInfoState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: GameInfoState = JSON.parse(JSON.stringify(state));
@@ -128,6 +113,7 @@ export function gameInfoReducer(state = initialGameInfoState, action: GameInfoRe
             return stateCopy;
 
         default:
+            // Do Nothing
             return state;
     }
 }

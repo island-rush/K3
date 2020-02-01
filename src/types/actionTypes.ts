@@ -184,7 +184,7 @@ export type InvItemPlaceRequestAction = {
 export type InvItemPlaceAction = {
     type: typeof PIECE_PLACE;
     payload: {
-        invItemId: InvItemType['invItemId'];
+        invItem: InvItemType;
         positionId: number;
         newPiece: PieceType;
     };

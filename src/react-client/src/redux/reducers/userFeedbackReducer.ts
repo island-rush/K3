@@ -203,6 +203,7 @@ export function userFeedbackReducer(state = initialUserFeedback, action: AnyActi
             return 'clicked inner piece';
 
         default:
+            // Do nothing
             return state;
     }
 }
