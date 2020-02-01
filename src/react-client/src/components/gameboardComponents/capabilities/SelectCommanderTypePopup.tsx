@@ -37,6 +37,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
     return (
         <div style={isSelectingCommander ? popupStyle : invisibleStyle}>
             <div style={titleStyle}>Select a commander type to boost.</div>
+
             <div
                 style={buttonStyle}
                 onClick={event => {
@@ -47,6 +48,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
             >
                 Air
             </div>
+
             <div
                 style={buttonStyle}
                 onClick={event => {
@@ -57,6 +59,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
             >
                 Land
             </div>
+
             <div
                 style={buttonStyle}
                 onClick={event => {
@@ -67,6 +70,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
             >
                 Sea
             </div>
+
             <div
                 style={buttonStyle}
                 onClick={event => {

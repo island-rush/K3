@@ -58,7 +58,9 @@ class SpaceArea extends Component<Props> {
         return (
             <div style={isSelected ? spaceAreaStyle : invisibleStyle}>
                 <div>Space Area Capabilities</div>
+
                 {cyberDefenseDiv}
+
                 <div style={antiSatelliteMissilesContainerStyle}>
                     <div>Anti Satellite Missiles</div>
                     {antiSatelliteMissilesItemItemComponents}

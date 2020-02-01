@@ -25,7 +25,7 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
             stateCopy.selectedMenuId =
                 (action as MenuSelectAction).payload.selectedMenuId !== stateCopy.selectedMenuId
                     ? (action as MenuSelectAction).payload.selectedMenuId
-                    : 0;
+                    : NO_MENU_INDEX;
             return stateCopy;
 
         case POSITION_SELECT:

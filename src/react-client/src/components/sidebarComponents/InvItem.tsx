@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { InvItemType } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
@@ -36,7 +36,7 @@ export const InvItem = ({ invItem, invItemClick }: Props) => {
 
     const title = `${name}${movesText}${fuelText}`;
 
-    const onClick = (event: any) => {
+    const onClick = (event: MouseEvent) => {
         event.preventDefault();
         invItemClick(invItem);
         event.stopPropagation();

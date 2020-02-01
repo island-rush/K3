@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { SELECTED_BORDERS, TYPE_IMAGES } from '../../styleConstants';
+import { NOT_SELECTED_INDEX, SELECTED_BORDERS, SELECTED_INDEX, TYPE_IMAGES } from '../../styleConstants';
 
 const tankerPieceStyle = {
     backgroundColor: 'white',
@@ -43,7 +43,7 @@ export class TankerPiece extends Component<Props> {
                     style={{
                         ...boxStyle,
                         ...TYPE_IMAGES[tankerPiece.pieceTypeId],
-                        ...SELECTED_BORDERS[isSelected ? 0 : 1]
+                        ...SELECTED_BORDERS[isSelected ? SELECTED_INDEX : NOT_SELECTED_INDEX]
                     }}
                     onClick={event => {
                         event.preventDefault();
@@ -53,6 +53,7 @@ export class TankerPiece extends Component<Props> {
                 >
                     {tankerPieceIndex}
                 </div>
+
                 <p>CurrentFuel=[{tankerPiece.pieceFuel}] </p>
                 <p>Removing=[{removingFuel}] </p>
                 <p>NewTotal=[{newTotalFuel}]</p>

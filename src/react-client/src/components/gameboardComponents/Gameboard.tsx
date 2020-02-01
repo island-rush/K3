@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
 import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, NUKE_RANGE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from '../../../../constants';
@@ -292,7 +292,7 @@ class Gameboard extends Component<Props> {
                 s={-999}
                 fill={patternSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex), confirmedAtcScramble, confirmedNukes)}
                 //TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
-                onClick={(event: any) => {
+                onClick={(event: MouseEvent) => {
                     event.preventDefault();
                     selectPosition(parseInt(positionIndex));
                     event.stopPropagation();

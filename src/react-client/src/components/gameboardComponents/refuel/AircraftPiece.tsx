@@ -38,6 +38,7 @@ interface Props {
 export class AircraftPiece extends Component<Props> {
     render() {
         const { aircraftPiece, aircraftPieceIndex, aircraftClick, undoFuelSelection } = this.props;
+
         const { pieceFuel, pieceTypeId } = aircraftPiece;
 
         const tankerDisplay =

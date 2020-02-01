@@ -39,11 +39,11 @@ const purchaseableItemsContainerStyle: any = {
 };
 
 interface Props {
-    shopItems: ShopState;
     isSelected: boolean;
+    points: number;
+    shopItems: ShopState;
     purchase: any;
     refund: any;
-    points: number;
     confirmPurchase: any;
 }
 
@@ -75,30 +75,37 @@ class ShopMenu extends Component<Props> {
             <div style={isSelected ? shopStyle : invisibleStyle}>
                 <div>Shop Menu</div>
                 <div>Points: {points}</div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Air</div>
                     {airShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Land</div>
                     {landShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Maritime</div>
                     {seaShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>SOF</div>
                     {specialShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Capabilities</div>
                     {capabilityShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Cart</div>
                     {shopItemComponents}
                 </div>
+
                 <div
                     style={purchaseButtonStyle}
                     onClick={event => {

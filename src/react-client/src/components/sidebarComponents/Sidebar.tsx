@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { INV_MENU_INDEX, SHOP_MENU_INDEX, SPACE_MENU_INDEX, GAME_INFO_MENU_INDEX } from '../../../../constants';
 import { GameInfoState } from '../../../../types';
@@ -52,8 +52,8 @@ const selectedButtonStyle = {
 };
 
 interface Props {
-    gameInfo: GameInfoState;
     selectedMenu: number;
+    gameInfo: GameInfoState;
     menuSelect: any;
 }
 
@@ -61,18 +61,19 @@ class Sidebar extends Component<Props> {
     render() {
         const { gameInfo, selectedMenu, menuSelect } = this.props;
 
+        const sidebarOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div
-                style={sidebarStyle}
-                onClick={event => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }}
-            >
+            <div style={sidebarStyle} onClick={sidebarOnClick}>
                 <ShopMenu isSelected={selectedMenu === SHOP_MENU_INDEX} />
                 <InvMenu isSelected={selectedMenu === INV_MENU_INDEX} />
                 <SpaceArea isSelected={selectedMenu === SPACE_MENU_INDEX} />
                 <Gameinfo gameInfo={gameInfo} isSelected={selectedMenu === GAME_INFO_MENU_INDEX} />
+
+                {/* Shop Menu Button */}
                 <div
                     onClick={event => {
                         event.preventDefault();
@@ -85,6 +86,8 @@ class Sidebar extends Component<Props> {
                         ...(selectedMenu === SHOP_MENU_INDEX ? selectedButtonStyle : '')
                     }}
                 />
+
+                {/* Inv Menu Button */}
                 <div
                     onClick={event => {
                         event.preventDefault();
@@ -98,6 +101,7 @@ class Sidebar extends Component<Props> {
                     }}
                 />
 
+                {/* Space Menu Button */}
                 <div
                     onClick={event => {
                         event.preventDefault();
@@ -110,6 +114,8 @@ class Sidebar extends Component<Props> {
                         ...(selectedMenu === SPACE_MENU_INDEX ? selectedButtonStyle : '')
                     }}
                 />
+
+                {/* Game Info Menu Button */}
                 <div
                     onClick={event => {
                         event.preventDefault();

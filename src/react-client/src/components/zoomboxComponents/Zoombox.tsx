@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { DRONE_SWARMS_TYPE_ID, SEA_MINES_TYPE_ID } from '../../../../constants';
 import { CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, PieceType } from '../../../../types';
@@ -65,52 +65,37 @@ interface Props {
 
 class Zoombox extends Component<Props> {
     render() {
-        const {
-            selectedPos,
-            selectedPiece,
-            gameboard,
-            selectPiece,
-            clearPieceSelection,
-            pieceOpen,
-            gameInfo,
-            confirmedSeaMines,
-            confirmedDroneSwarms,
-            confirmedAtcScramble,
-            confirmedMissileAttacks,
-            confirmedMissileDisrupts,
-            missileAttack,
-            confirmedBombardments,
-            bombardment
-        } = this.props;
+        // prettier-ignore
+        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, gameInfo, confirmedSeaMines, confirmedDroneSwarms, confirmedAtcScramble, confirmedMissileAttacks, confirmedMissileDisrupts, missileAttack, confirmedBombardments, bombardment } = this.props;
 
         const isVisible = selectedPos !== -1;
 
-        const pieces = !isVisible
+        const pieceComponents = !isVisible
             ? null
             : gameboard[selectedPos].pieces.map((piece: PieceType, index: number) => (
                   <Piece
-                      pieceOpen={pieceOpen}
-                      pieceClick={selectPiece}
-                      isSelected={selectedPiece !== null && selectedPiece.pieceId === piece.pieceId}
                       key={index}
                       piece={piece}
+                      isSelected={selectedPiece !== null && selectedPiece.pieceId === piece.pieceId}
+                      pieceClick={selectPiece}
+                      pieceOpen={pieceOpen}
                       confirmedMissileAttacks={confirmedMissileAttacks} // TODO: probably better way of figuring this out (instead of passing the whole list down below)
                       confirmedMissileDisrupts={confirmedMissileDisrupts}
                       gameInfo={gameInfo}
                       confirmedAtcScramble={confirmedAtcScramble}
-                      // Shouldn't send this to all Piece components, only missiles (figure it out up here, not down there for everyone)
-                      missileAttack={missileAttack}
+                      missileAttack={missileAttack} // TODO: Shouldn't send this to all Piece components, only missiles (figure it out up here, not down there for everyone)
                       confirmedBombardments={confirmedBombardments}
                       bombardment={bombardment}
                   />
               ));
 
-        const seaMine = confirmedSeaMines.includes(selectedPos) ? <div style={seaMineStyle} title={'Sea Mine'} /> : null;
-        const droneSwarm = confirmedDroneSwarms.includes(selectedPos) ? <div style={droneSwarmStyle} title={'Drone Swarm'} /> : null;
+        const seaMineDiv = confirmedSeaMines.includes(selectedPos) ? <div style={seaMineStyle} title={'Sea Mine'} /> : null;
+
+        const droneSwarmDiv = confirmedDroneSwarms.includes(selectedPos) ? <div style={droneSwarmStyle} title={'Drone Swarm'} /> : null;
 
         const style = isVisible ? { ...zoomboxStyle, ...ZOOMBOX_BACKGROUNDS[gameboard[selectedPos].type] } : invisibleStyle;
 
-        const onClick = (event: any) => {
+        const onClick = (event: MouseEvent) => {
             event.preventDefault();
             clearPieceSelection();
             event.stopPropagation();
@@ -118,25 +103,16 @@ class Zoombox extends Component<Props> {
 
         return (
             <div style={style} onClick={onClick}>
-                {pieces}
-                {seaMine}
-                {droneSwarm}
+                {pieceComponents}
+                {seaMineDiv}
+                {droneSwarmDiv}
             </div>
         );
     }
 }
 
-const mapStateToProps = ({
-    gameboard,
-    gameboardMeta,
-    gameInfo,
-    capabilities
-}: {
-    gameboard: GameboardState;
-    gameboardMeta: GameboardMetaState;
-    gameInfo: GameInfoState;
-    capabilities: CapabilitiesState;
-}) => ({
+// prettier-ignore
+const mapStateToProps = ({ gameboard, gameboardMeta, gameInfo, capabilities }: { gameboard: GameboardState; gameboardMeta: GameboardMetaState; gameInfo: GameInfoState; capabilities: CapabilitiesState; }) => ({
     selectedPos: gameboardMeta.selectedPosition,
     selectedPiece: gameboardMeta.selectedPiece,
     gameboard,

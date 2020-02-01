@@ -1,14 +1,9 @@
 //prettier-ignore
-import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ANTI_SATELLITE_MISSILES_TYPE_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, CYBER_DOMINANCE_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, MISSILE_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, RADAR_TYPE_ID, RAISE_MORALE_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SAM_SITE_TYPE_ID, SEA_MINES_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, CYBER_DOM_CHECK_TYPE_ID } from "../../../constants";
+import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ANTI_SATELLITE_MISSILES_TYPE_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, CYBER_DOMINANCE_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, MISSILE_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, RADAR_TYPE_ID, RAISE_MORALE_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SAM_SITE_TYPE_ID, SEA_MINES_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, CYBER_DOM_CHECK_TYPE_ID, LAND_TYPE, WATER_TYPE, AIRFIELD_TYPE, FLAG_TYPE, MISSILE_SILO_TYPE } from "../../../constants";
 
-//These paths are relative to the ./public directory
 const unitImagesPath = './images/unitImages';
-const diceImagePath = './images/diceImages';
-// const diceImagesPath = "./images/diceImages";
-const graphicsPath = './images/graphics';
-const buttonImagesPath = './images/buttonImages';
 
-let TYPE_IMAGES: any = {};
+export const TYPE_IMAGES: any = {};
 TYPE_IMAGES[BOMBER_TYPE_ID] = { backgroundImage: `url("${unitImagesPath}/bomber.png")` };
 TYPE_IMAGES[STEALTH_BOMBER_TYPE_ID] = { backgroundImage: `url("${unitImagesPath}/stealthBomber.png")` };
 TYPE_IMAGES[STEALTH_FIGHTER_TYPE_ID] = { backgroundImage: `url("${unitImagesPath}/fighter.png")` };
@@ -47,7 +42,9 @@ TYPE_IMAGES[INSURGENCY_TYPE_ID] = { backgroundImage: `url("${unitImagesPath}/ins
 TYPE_IMAGES[RAISE_MORALE_TYPE_ID] = { backgroundImage: `url("${unitImagesPath}/raiseMorale.png")` };
 TYPE_IMAGES[CYBER_DOM_CHECK_TYPE_ID] = { backgroundImage: `url("${unitImagesPath}/cyberDominanceCheck.png")` };
 
-const DICE_IMAGES: any = {
+const diceImagePath = './images/diceImages';
+
+export const DICE_IMAGES: any = {
     1: { backgroundImage: `url("${diceImagePath}/1.png")` },
     2: { backgroundImage: `url("${diceImagePath}/2.png")` },
     3: { backgroundImage: `url("${diceImagePath}/3.png")` },
@@ -56,62 +53,51 @@ const DICE_IMAGES: any = {
     6: { backgroundImage: `url("${diceImagePath}/6.png")` }
 };
 
-const ARROW_IMAGE: any = {
+const graphicsPath = './images/graphics';
+
+export const ARROW_IMAGE: any = {
     backgroundImage: `url("${graphicsPath}/arrow.png")`
 };
 
-const LEFT_CONTROLS_IMAGES: any = {
-    start: { backgroundImage: `url("${buttonImagesPath}/iconPlanning.png")` },
-    undo: { backgroundImage: `url("${buttonImagesPath}/iconUndo.png")` },
-    cancel: { backgroundImage: `url("${buttonImagesPath}/iconCancel.png")` },
-    confirm: { backgroundImage: `url("${buttonImagesPath}/iconConfirm.png")` },
-    container: {
-        backgroundImage: `url("${buttonImagesPath}/iconContainer.png")`
-    }
-};
-
-const BATTLE_POPUP_IMAGES: any = {
+export const BATTLE_POPUP_IMAGES: any = {
     minIcon: { backgroundImage: `url("${graphicsPath}/battleIcon.png")` }
 };
 
-const NEWS_POPUP_IMAGES: any = {
+export const NEWS_POPUP_IMAGES: any = {
     minIcon: { backgroundImage: `url("${graphicsPath}/newsIcon.png")` }
 };
 
-const REFUEL_POPUP_IMAGES: any = {
+export const REFUEL_POPUP_IMAGES: any = {
     minIcon: { backgroundImage: `url("${graphicsPath}/refuelIcon.png")` }
 };
 
-//TODO: change to be based on gameboardConstants
-const ZOOMBOX_BACKGROUNDS: any = {
-    land: { backgroundColor: 'green' },
-    water: { backgroundColor: '#52edff' },
-    airfield: { backgroundColor: 'green' },
-    flag: { backgroundColor: 'green' },
-    missile: { backgroundColor: 'green' },
-    red: { backgroundColor: 'green' },
-    blue: { backgroundColor: 'green' },
-    remoteSensing: { backgroundColor: 'LightGray' }
+const buttonImagesPath = './images/buttonImages';
+
+export const LEFT_CONTROLS_IMAGES: any = {
+    start: { backgroundImage: `url("${buttonImagesPath}/iconPlanning.png")` },
+    undo: { backgroundImage: `url("${buttonImagesPath}/iconUndo.png")` },
+    cancel: { backgroundImage: `url("${buttonImagesPath}/iconCancel.png")` },
+    confirm: { backgroundImage: `url("${buttonImagesPath}/iconConfirm.png")` }
 };
 
-let TYPE_TEAM_BORDERS: any = {};
+export const ZOOMBOX_BACKGROUNDS: any = {
+    // These are all 'land'
+    [LAND_TYPE]: { backgroundColor: 'green' },
+    [AIRFIELD_TYPE]: { backgroundColor: 'green' },
+    [FLAG_TYPE]: { backgroundColor: 'green' },
+    [MISSILE_SILO_TYPE]: { backgroundColor: 'green' },
+
+    // water
+    [WATER_TYPE]: { backgroundColor: '#52edff' }
+};
+
+export const TYPE_TEAM_BORDERS: any = {};
 TYPE_TEAM_BORDERS[BLUE_TEAM_ID] = { boxShadow: '0px 0px 0px 2px rgba(0, 111, 255, 0.67) inset' };
 TYPE_TEAM_BORDERS[RED_TEAM_ID] = { boxShadow: '0px 0px 0px 2px rgba(255, 0, 0, 0.55) inset' };
 
-const SELECTED_BORDERS: any = [
-    { border: '2px solid red' }, //selected
-    { border: '2px solid black' } //not selected
+export const SELECTED_INDEX = 0;
+export const NOT_SELECTED_INDEX = 1;
+export const SELECTED_BORDERS: any = [
+    { border: '2px solid red' }, // selected
+    { border: '2px solid black' } // not selected
 ];
-
-export {
-    SELECTED_BORDERS,
-    TYPE_TEAM_BORDERS,
-    ZOOMBOX_BACKGROUNDS,
-    REFUEL_POPUP_IMAGES,
-    NEWS_POPUP_IMAGES,
-    BATTLE_POPUP_IMAGES,
-    LEFT_CONTROLS_IMAGES,
-    ARROW_IMAGE,
-    DICE_IMAGES,
-    TYPE_IMAGES
-};

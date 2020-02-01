@@ -85,28 +85,37 @@ class RefuelPopup extends Component<Props> {
 
         const tankerPieces = tankers.map((tankerPiece: any, index: number) => (
             <TankerPiece
-                tankerClick={tankerClick}
                 key={index}
                 tankerPiece={tankerPiece}
                 tankerPieceIndex={index}
                 isSelected={selectedTankerPieceId === tankerPiece.pieceId}
+                tankerClick={tankerClick}
             />
         ));
+
         const aircraftPieces = aircraft.map((aircraftPiece: any, index: number) => (
             <AircraftPiece
-                undoFuelSelection={undoFuelSelection}
-                aircraftClick={aircraftClick}
                 key={index}
                 aircraftPiece={aircraftPiece}
                 aircraftPieceIndex={index}
+                undoFuelSelection={undoFuelSelection}
+                aircraftClick={aircraftClick}
             />
         ));
 
         return (
+            // Overall Component
             <div style={refuel.isActive ? null : invisibleStyle}>
+                {/* Popup */}
                 <div style={!refuel.isMinimized ? refuelPopupStyle : invisibleStyle}>
-                    <div style={leftSectionStyle}>Aircraft{aircraftPieces}</div>
-                    <div style={rightSectionStyle}>Tankers{tankerPieces}</div>
+                    <div style={leftSectionStyle}>
+                        Aircraft
+                        {aircraftPieces}
+                    </div>
+                    <div style={rightSectionStyle}>
+                        Tankers
+                        {tankerPieces}
+                    </div>
                     <button
                         onClick={event => {
                             event.preventDefault();
@@ -126,6 +135,8 @@ class RefuelPopup extends Component<Props> {
                         style={{ ...refuelPopupMinimizeStyle, ...REFUEL_POPUP_IMAGES.minIcon }}
                     />
                 </div>
+
+                {/* Minimize Button on the Left */}
                 <div
                     style={{
                         ...(refuel.isMinimized ? refuelPopupMinimizeStyle : invisibleStyle),
