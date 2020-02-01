@@ -22,5 +22,6 @@ export const targetPieceClick = (battlePiece: any, battlePieceIndex: number) => 
         };
 
         dispatch(targetPieceSelectAction);
+        return;
     };
 };

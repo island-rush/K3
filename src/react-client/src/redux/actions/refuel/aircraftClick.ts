@@ -4,7 +4,7 @@ import { AIRCRAFT_CLICK } from '../../../../../constants';
 import { AircraftClickAction, PieceType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
-//TODO: could have more checks for current game event / phase / slice / other easy stuff that should be obvious
+// TODO: could have more checks for current game event / phase / slice / other easy stuff that should be obvious
 /**
  * Action to select aircraft to receive fuel from tanker.
  */
@@ -23,7 +23,7 @@ export const aircraftClick = (aircraftPiece: PieceType, aircraftPieceIndex: numb
             return;
         }
 
-        //TODO: determine if it has enough fuel to give for this piece...
+        // TODO: determine if it has enough fuel to give for this piece...
 
         const aircraftClickAction: AircraftClickAction = {
             type: AIRCRAFT_CLICK,

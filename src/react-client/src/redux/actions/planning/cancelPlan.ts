@@ -4,7 +4,7 @@ import { CANCEL_PLAN, SERVER_DELETE_PLAN } from '../../../../../constants';
 import { DeletePlanRequestAction, PreventPlanAction } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
-//TODO: rename cancelPlan to deletePlan to match the server side function (possibly match all client/server functions with each other...)
+// TODO: rename cancelPlan to deletePlan to match the server side function (possibly match all client/server functions with each other...)
 /**
  * Action to cancel a plan for a piece.
  */
@@ -19,21 +19,24 @@ export const cancelPlan = () => {
             };
 
             dispatch(preventPlanAction);
-        } else {
-            //check to see if there is a piece selected and if that piece has a confirmed plan
-            if (gameboardMeta.selectedPiece !== null && gameboardMeta.selectedPiece.pieceId in planning.confirmedPlans) {
-                //delete the plans from the database request
-                const clientAction: DeletePlanRequestAction = {
-                    type: SERVER_DELETE_PLAN,
-                    payload: {
-                        pieceId: gameboardMeta.selectedPiece.pieceId
-                    }
-                };
-
-                sendToServer(clientAction);
-            } else {
-                dispatch(setUserfeedbackAction('Must select a piece to delete + already have a plan for it to cancel/delete'));
-            }
+            return;
         }
+
+        //check to see if there is a piece selected and if that piece has a confirmed plan
+        if (gameboardMeta.selectedPiece !== null && gameboardMeta.selectedPiece.pieceId in planning.confirmedPlans) {
+            //delete the plans from the database request
+            const clientAction: DeletePlanRequestAction = {
+                type: SERVER_DELETE_PLAN,
+                payload: {
+                    pieceId: gameboardMeta.selectedPiece.pieceId
+                }
+            };
+
+            sendToServer(clientAction);
+            return;
+        }
+
+        dispatch(setUserfeedbackAction('Must select a piece to delete + already have a plan for it to cancel/delete'));
+        return;
     };
 };

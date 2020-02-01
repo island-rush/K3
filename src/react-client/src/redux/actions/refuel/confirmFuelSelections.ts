@@ -29,5 +29,6 @@ export const confirmFuelSelections = () => {
         };
 
         sendToServer(clientAction);
+        return;
     };
 };

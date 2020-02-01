@@ -28,5 +28,6 @@ export const atcScramble = (invItem: InvItemType) => {
         };
 
         dispatch(atcScrambleSelectingAction);
+        return;
     };
 };

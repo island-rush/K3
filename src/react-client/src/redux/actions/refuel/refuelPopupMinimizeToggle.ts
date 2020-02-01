@@ -14,5 +14,6 @@ export const refuelPopupMinimizeToggle = () => {
         };
 
         dispatch(refuelPopupMinimizeAction);
+        return;
     };
 };

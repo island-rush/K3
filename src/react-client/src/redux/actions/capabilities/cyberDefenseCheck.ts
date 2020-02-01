@@ -32,5 +32,6 @@ export const cyberDefenseCheck = (invItem: InvItemType) => {
         };
 
         sendToServer(cyberDefenseCheckRequestAction);
+        return;
     };
 };

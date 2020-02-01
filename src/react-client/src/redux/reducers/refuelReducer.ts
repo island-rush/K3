@@ -59,7 +59,7 @@ export function refuelReducer(state = initialRefuelState, action: AnyAction) {
             return stateCopy;
 
         case UNDO_FUEL_SELECTION:
-            //TODO: needs some good refactoring
+            // TODO: needs some good refactoring
             // let airPiece = payload.aircraftPiece;
             let airPieceIndex = (action as UndoFuelSelectionAction).payload.aircraftPieceIndex;
             let tankerPieceIndex2 = stateCopy.aircraft[airPieceIndex].tankerPieceIndex;

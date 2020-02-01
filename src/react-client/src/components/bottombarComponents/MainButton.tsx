@@ -21,7 +21,7 @@ export class MainButton extends Component<Props> {
 
         const { gameStatus, gamePhase, gameSlice } = gameInfo;
 
-        //TODO: this seems messy
+        // TODO: this seems messy
         let buttonText;
         if (gameStatus === WAITING_STATUS) {
             buttonText = 'Waiting on other Team...';

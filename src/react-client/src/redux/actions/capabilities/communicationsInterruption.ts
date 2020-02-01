@@ -30,5 +30,6 @@ export const communicationsInterruption = (invItem: InvItemType) => {
         };
 
         dispatch(commInterruptSelectingAction);
+        return;
     };
 };

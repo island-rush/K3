@@ -38,5 +38,6 @@ export const cyberDominance = (invItem: InvItemType) => {
         };
 
         sendToServer(cyberDefenseRequestAction);
+        return;
     };
 };

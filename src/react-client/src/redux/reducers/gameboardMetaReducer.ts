@@ -4,8 +4,8 @@ import { ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRU
 import { GameboardMetaState, HighlightPositionsAction, MenuSelectAction, PieceClickAction, PositionSelectAction } from '../../../../types';
 
 const initialGameboardMeta: GameboardMetaState = {
-    //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
-    selectedPosition: -1, //TODO: constant for 'NOTHING_SELECTED_VALUE' = -1
+    // TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
+    selectedPosition: -1, // TODO: constant for 'NOTHING_SELECTED_VALUE' = -1
     highlightedPositions: [],
     selectedPiece: null,
     selectedMenuId: NO_MENU_INDEX

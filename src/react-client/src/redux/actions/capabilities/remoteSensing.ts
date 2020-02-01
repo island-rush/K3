@@ -30,5 +30,6 @@ export const remoteSensing = (invItem: InvItemType) => {
         };
 
         dispatch(remoteSenseSelectingAction);
+        return;
     };
 };

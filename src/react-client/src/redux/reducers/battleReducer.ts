@@ -105,7 +105,7 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
 
                 if (targetId) {
                     //get the target information from the friendlyPieces
-                    //TODO: could refactor this to be better, lots of lookups probably not good
+                    // TODO: could refactor this to be better, lots of lookups probably not good
                     let friendlyPieceIndex = stateCopy.friendlyPieces.findIndex(
                         (friendlyBattlePiece: any) => friendlyBattlePiece.piece.pieceId === targetId
                     );

@@ -102,5 +102,7 @@ export const selectPiece = (selectedPiece: PieceType) => {
                 sendToServer(clientAction);
             }
         }
+
+        return;
     };
 };

@@ -28,5 +28,6 @@ export const droneSwarms = (invItem: InvItemType) => {
         };
 
         dispatch(droneSwarmSelectingAction);
+        return;
     };
 };

@@ -28,5 +28,6 @@ export const seaMines = (invItem: InvItemType) => {
         };
 
         dispatch(seaMineSelectingAction);
+        return;
     };
 };

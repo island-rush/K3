@@ -30,5 +30,6 @@ export const biologicalWeapons = (invItem: InvItemType) => {
         };
 
         dispatch(bioWeaponSelectingAction);
+        return;
     };
 };

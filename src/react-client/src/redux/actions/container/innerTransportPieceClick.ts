@@ -8,8 +8,8 @@ import { ExitTransportContainerAction, PieceType } from '../../../../../types';
  */
 export const innerTransportPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
-        //TODO: figure out if inner piece click is allowed
-        //TODO: could probably see if there is even land next to where this piece is (don't allow if in the open ocean?)
+        // TODO: figure out if inner piece click is allowed
+        // TODO: could probably see if there is even land next to where this piece is (don't allow if in the open ocean?)
 
         const clientAction: ExitTransportContainerAction = {
             type: INNER_TRANSPORT_PIECE_CLICK_ACTION,
@@ -20,5 +20,6 @@ export const innerTransportPieceClick = (selectedPiece: PieceType, containerPiec
         };
 
         dispatch(clientAction);
+        return;
     };
 };

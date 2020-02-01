@@ -11,7 +11,7 @@ const battlePieceStyle: any = {
     borderRadius: '2%'
 };
 
-//TODO: could probably refactor how this is called to a cleaner way...
+// TODO: could probably refactor how this is called to a cleaner way...
 const battlePieceWonStyle: any = [
     {},
     {

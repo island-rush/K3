@@ -31,5 +31,6 @@ export const rodsFromGod = (invItem: InvItemType) => {
         };
 
         dispatch(rodsFromGodSelectingAction);
+        return;
     };
 };

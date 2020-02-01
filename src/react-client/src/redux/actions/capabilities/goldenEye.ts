@@ -30,5 +30,6 @@ export const goldenEye = (invItem: InvItemType) => {
         };
 
         dispatch(goldenEyeSelectingAction);
+        return;
     };
 };

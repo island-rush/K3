@@ -28,5 +28,6 @@ export const nuclearStrike = (invItem: InvItemType) => {
         };
 
         dispatch(nukeSelectingAction);
+        return;
     };
 };

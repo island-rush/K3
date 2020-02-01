@@ -4,7 +4,7 @@ import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, START_PLAN, TYPE_OWNERS } from '../
 import { StartPlanAction } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
-//TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)
+// TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)
 /**
  * Action to set gamestate in a planning state to click positions for a plan for a piece.
  */
@@ -59,5 +59,6 @@ export const startPlan = () => {
         };
 
         dispatch(startPlanAction);
+        return;
     };
 };

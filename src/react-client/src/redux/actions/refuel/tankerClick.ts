@@ -8,7 +8,7 @@ import { PieceType, TankerClickAction } from '../../../../../types';
  */
 export const tankerClick = (tankerPiece: PieceType, tankerPieceIndex: number) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
-        //TODO: check for bad state (wrong phase? ...use userFeedback...)
+        // TODO: check for bad state (wrong phase? ...use userFeedback...)
 
         const tankerClickAction: TankerClickAction = {
             type: TANKER_CLICK,

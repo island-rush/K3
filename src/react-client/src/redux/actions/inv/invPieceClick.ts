@@ -25,7 +25,7 @@ export const invPieceClick = (invItem: InvItemType) => {
             return;
         }
 
-        //TODO: Client side checks
+        // TODO: Client side checks
 
         const { invItemId } = invItem; // TODO: send the whole item anyway to be consistent...
 
@@ -38,5 +38,6 @@ export const invPieceClick = (invItem: InvItemType) => {
         };
 
         sendToServer(clientAction);
+        return;
     };
 };

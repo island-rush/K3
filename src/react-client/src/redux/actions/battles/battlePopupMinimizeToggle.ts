@@ -11,5 +11,6 @@ export const battlePopupMinimizeToggle = () => {
         };
 
         dispatch(battlePopupToggleAction);
+        return;
     };
 };

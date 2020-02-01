@@ -18,16 +18,18 @@ export const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number
 
         if (selectedBattlePiece === -1 || selectedBattlePieceIndex === -1) {
             dispatch(setUserfeedbackAction('Must select piece to attack with..'));
-        } else {
-            const enemyPieceSelectAction: EnemyPieceSelectAction = {
-                type: ENEMY_PIECE_SELECT,
-                payload: {
-                    battlePiece,
-                    battlePieceIndex
-                }
-            };
-
-            dispatch(enemyPieceSelectAction);
+            return;
         }
+
+        const enemyPieceSelectAction: EnemyPieceSelectAction = {
+            type: ENEMY_PIECE_SELECT,
+            payload: {
+                battlePiece,
+                battlePieceIndex
+            }
+        };
+
+        dispatch(enemyPieceSelectAction);
+        return;
     };
 };

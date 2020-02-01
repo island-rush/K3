@@ -4,7 +4,7 @@ import { COMBAT_PHASE_ID, RAISE_MORALE_SELECTING, SLICE_PLANNING_ID } from '../.
 import { InvItemType, RaiseMoraleSelectingAction } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
-//TODO: need to get rid of boost = x from the component when the raise morale is expired
+// TODO: need to get rid of boost = x from the component when the raise morale is expired
 
 export const raiseMorale = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
@@ -33,5 +33,6 @@ export const raiseMorale = (invItem: InvItemType) => {
         };
 
         dispatch(raiseMoraleSelectingAction);
+        return;
     };
 };

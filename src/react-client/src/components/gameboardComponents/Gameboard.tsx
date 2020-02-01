@@ -12,7 +12,7 @@ import { ContainerPopup } from './container/ContainerPopup';
 import { NewsPopup } from './NewsPopup';
 import RefuelPopup from './refuel/RefuelPopup';
 // import AirfieldPopup from './airfield/AirfieldPopup';
-const { HexGrid, Layout, Hexagon, Pattern } = require('react-hexgrid'); //TODO: create type declaration for react-hexgrid
+const { HexGrid, Layout, Hexagon, Pattern } = require('react-hexgrid'); // TODO: create type declaration for react-hexgrid
 
 const imageSize = { x: 3.4, y: 2.75 };
 const positionImagesPath = './images/positionImages/';
@@ -291,14 +291,14 @@ class Gameboard extends Component<Props> {
                 r={rIndexSolver(parseInt(positionIndex))}
                 s={-999}
                 fill={patternSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex), confirmedAtcScramble, confirmedNukes)}
-                //TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
+                // TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
                 onClick={(event: MouseEvent) => {
                     event.preventDefault();
                     selectPosition(parseInt(positionIndex));
                     event.stopPropagation();
                 }}
                 //These are found in the Game.css
-                //TODO: highlight according to some priority list
+                // TODO: highlight according to some priority list
                 className={
                     selectedPosition === parseInt(positionIndex)
                         ? 'selectedPos'
@@ -334,7 +334,7 @@ class Gameboard extends Component<Props> {
                         ? 'goldenEyePos' // TODO: make it different
                         : ''
                 }
-                //TODO: pass down what the highlighting means into the title
+                // TODO: pass down what the highlighting means into the title
                 title={titleSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex))}
                 topBlue={hasPieceType(
                     gameboard[parseInt(positionIndex)],

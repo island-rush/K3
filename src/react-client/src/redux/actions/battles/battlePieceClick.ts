@@ -23,5 +23,6 @@ export const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => 
         };
 
         dispatch(battlePieceSelectAction);
+        return;
     };
 };

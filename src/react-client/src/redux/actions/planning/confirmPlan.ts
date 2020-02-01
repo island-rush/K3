@@ -13,17 +13,19 @@ export const confirmPlan = () => {
 
         if (planning.moves.length === 0 || !gameboardMeta.selectedPiece) {
             dispatch(setUserfeedbackAction("Can't submit an empty plan...or unselected piece."));
-        } else {
-            const clientAction: ConfirmPlanRequestAction = {
-                type: SERVER_CONFIRM_PLAN,
-                payload: {
-                    // TODO: send the piece, not just the id (even though only using the id on the server side anyway)
-                    pieceId: gameboardMeta.selectedPiece.pieceId,
-                    plan: planning.moves
-                }
-            };
-
-            sendToServer(clientAction);
+            return;
         }
+
+        const clientAction: ConfirmPlanRequestAction = {
+            type: SERVER_CONFIRM_PLAN,
+            payload: {
+                // TODO: send the piece, not just the id (even though only using the id on the server side anyway)
+                pieceId: gameboardMeta.selectedPiece.pieceId,
+                plan: planning.moves
+            }
+        };
+
+        sendToServer(clientAction);
+        return;
     };
 };

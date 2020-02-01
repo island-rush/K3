@@ -28,5 +28,6 @@ export const missileLaunchDisruption = (invItem: InvItemType) => {
         };
 
         dispatch(missileDisruptSelectingAction);
+        return;
     };
 };
