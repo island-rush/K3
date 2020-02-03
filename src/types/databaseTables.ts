@@ -2,6 +2,17 @@
 import { ACTIVATED, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, COMBAT_PHASE_ID, DEACTIVATED, LIST_ALL_TYPES_ENUM, LOGGED_IN_VALUE, NEUTRAL_TEAM_ID, NEWS_PHASE_ID, NOT_LOGGED_IN_VALUE, NOT_WAITING_STATUS, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, PURCHASE_PHASE_ID, RED_TEAM_ID, REFUEL_EVENT_TYPE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, WAITING_STATUS } from '../constants';
 import { ControllerType } from './sessionTypes';
 
+export type BlueOrRedTeamId = typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+export type BlueRedNeutralTypes = BlueOrRedTeamId | typeof NEUTRAL_TEAM_ID;
+
+export type ActivatedTypes = typeof ACTIVATED | typeof DEACTIVATED;
+export type LoggedInValueTypes = typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE;
+
+export type StatusTypes = typeof WAITING_STATUS | typeof NOT_WAITING_STATUS;
+
+export type PhaseTypes = typeof NEWS_PHASE_ID | typeof PURCHASE_PHASE_ID | typeof COMBAT_PHASE_ID | typeof PLACE_PHASE_ID;
+export type SliceTypes = typeof SLICE_EXECUTING_ID | typeof SLICE_PLANNING_ID;
+
 export type GameType = {
     gameId: number;
     gameSection: string;
@@ -9,80 +20,82 @@ export type GameType = {
 
     gameAdminPassword: string;
 
-    gameActive: typeof ACTIVATED | typeof DEACTIVATED;
+    gameActive: ActivatedTypes;
 
     gameBluePassword: string;
     gameRedPassword: string;
 
-    gameBlueController0: typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE; // TODO: used as boolean, should be consistent with how these are used
-    gameBlueController1: typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE;
-    gameBlueController2: typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE;
-    gameBlueController3: typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE;
-    gameBlueController4: typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE;
-    gameRedController0: typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE;
-    gameRedController1: typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE;
-    gameRedController2: typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE;
-    gameRedController3: typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE;
-    gameRedController4: typeof LOGGED_IN_VALUE | typeof NOT_LOGGED_IN_VALUE;
+    gameBlueController0: LoggedInValueTypes; // TODO: used as boolean, should be consistent with how these are used
+    gameBlueController1: LoggedInValueTypes;
+    gameBlueController2: LoggedInValueTypes;
+    gameBlueController3: LoggedInValueTypes;
+    gameBlueController4: LoggedInValueTypes;
+    gameRedController0: LoggedInValueTypes;
+    gameRedController1: LoggedInValueTypes;
+    gameRedController2: LoggedInValueTypes;
+    gameRedController3: LoggedInValueTypes;
+    gameRedController4: LoggedInValueTypes;
 
-    gameBlueStatus: typeof WAITING_STATUS | typeof NOT_WAITING_STATUS;
-    gameRedStatus: typeof WAITING_STATUS | typeof NOT_WAITING_STATUS;
+    gameBlueStatus: StatusTypes;
+    gameRedStatus: StatusTypes;
 
     gameBluePoints: number;
     gameRedPoints: number;
 
-    gamePhase: typeof NEWS_PHASE_ID | typeof PURCHASE_PHASE_ID | typeof COMBAT_PHASE_ID | typeof PLACE_PHASE_ID;
+    gamePhase: PhaseTypes;
     gameRound: number;
-    gameSlice: typeof SLICE_PLANNING_ID | typeof SLICE_EXECUTING_ID;
+    gameSlice: SliceTypes;
 
-    flag0: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag1: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag2: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag3: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag4: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag5: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag6: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag7: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag8: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag9: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag10: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag11: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    flag12: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
+    flag0: BlueRedNeutralTypes;
+    flag1: BlueRedNeutralTypes;
+    flag2: BlueRedNeutralTypes;
+    flag3: BlueRedNeutralTypes;
+    flag4: BlueRedNeutralTypes;
+    flag5: BlueRedNeutralTypes;
+    flag6: BlueRedNeutralTypes;
+    flag7: BlueRedNeutralTypes;
+    flag8: BlueRedNeutralTypes;
+    flag9: BlueRedNeutralTypes;
+    flag10: BlueRedNeutralTypes;
+    flag11: BlueRedNeutralTypes;
+    flag12: BlueRedNeutralTypes;
 
-    airfield0: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    airfield1: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    airfield2: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    airfield3: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    airfield4: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    airfield5: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    airfield6: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    airfield7: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    airfield8: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
-    airfield9: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID;
+    airfield0: BlueRedNeutralTypes;
+    airfield1: BlueRedNeutralTypes;
+    airfield2: BlueRedNeutralTypes;
+    airfield3: BlueRedNeutralTypes;
+    airfield4: BlueRedNeutralTypes;
+    airfield5: BlueRedNeutralTypes;
+    airfield6: BlueRedNeutralTypes;
+    airfield7: BlueRedNeutralTypes;
+    airfield8: BlueRedNeutralTypes;
+    airfield9: BlueRedNeutralTypes;
 };
 
 export type ShopItemType = {
     shopItemId: number;
     shopItemGameId: GameType['gameId'];
-    shopItemTeamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    shopItemTeamId: BlueOrRedTeamId;
     shopItemTypeId: LIST_ALL_TYPES_ENUM;
 };
 
 export type InvItemType = {
     invItemId: number;
     invItemGameId: GameType['gameId'];
-    invItemTeamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    invItemTeamId: BlueOrRedTeamId;
     invItemTypeId: LIST_ALL_TYPES_ENUM;
 };
+
+export type PieceVisibleTypes = 0 | 1; // TODO: constant for this
 
 export type PieceType = {
     pieceId: number;
     pieceGameId: GameType['gameId'];
-    pieceTeamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    pieceTeamId: BlueOrRedTeamId;
     pieceTypeId: LIST_ALL_TYPES_ENUM;
     piecePositionId: number;
     pieceContainerId: PieceType['pieceId'];
-    pieceVisible: 0 | 1; // TODO: constant for this
+    pieceVisible: PieceVisibleTypes;
     pieceMoves: number;
     pieceFuel: number;
 
@@ -99,7 +112,7 @@ export type PieceType = {
 
 export type PlanType = {
     planGameId: GameType['gameId'];
-    planTeamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    planTeamId: BlueOrRedTeamId;
     planPieceId: PieceType['pieceId'];
     planMovementOrder: number;
     planPositionId: number;
@@ -113,11 +126,13 @@ export type NewsType = {
     newsInfo: string;
 };
 
+export type EventTypes = typeof POS_BATTLE_EVENT_TYPE | typeof COL_BATTLE_EVENT_TYPE | typeof REFUEL_EVENT_TYPE;
+
 export type EventQueueType = {
     eventId: number;
     eventGameId: GameType['gameId'];
-    eventTeamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
-    eventTypeId: typeof POS_BATTLE_EVENT_TYPE | typeof COL_BATTLE_EVENT_TYPE | typeof REFUEL_EVENT_TYPE;
+    eventTeamId: BlueOrRedTeamId;
+    eventTypeId: EventTypes;
     eventPosA: number;
     eventPosB: number;
 };
@@ -131,14 +146,14 @@ export type EventItemType = {
 export type RodsFromGodType = {
     rodsFromGodId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     positionId: number;
 };
 
 export type RemoteSensingType = {
     remoteSensingId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     positionId: number;
     roundsLeft: number;
 };
@@ -146,23 +161,23 @@ export type RemoteSensingType = {
 export type InsurgencyType = {
     insurgencyId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     positionId: number;
 };
 
 export type BiologicalWeaponsType = {
     biologicalweaponsId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     positionId: number; // TODO: create enum for list of all possible positions
     roundsLeft: number;
-    activated: typeof ACTIVATED | typeof DEACTIVATED;
+    activated: ActivatedTypes;
 };
 
 export type RaiseMoraleType = {
     raiseMoraleId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     commanderType: ControllerType;
     roundsLeft: number;
 };
@@ -170,19 +185,19 @@ export type RaiseMoraleType = {
 export type CommInterruptType = {
     commInterruptId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     positionId: number;
     roundsLeft: number;
-    activated: typeof ACTIVATED | typeof DEACTIVATED;
+    activated: ActivatedTypes;
 };
 
 export type GoldenEyeType = {
     goldenEyeId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     positionId: number;
     roundsLeft: number;
-    activated: typeof ACTIVATED | typeof DEACTIVATED;
+    activated: ActivatedTypes;
 };
 
 export type GoldenEyePieceType = {
@@ -193,14 +208,14 @@ export type GoldenEyePieceType = {
 export type SeaMineType = {
     seaMineId: number;
     gameId: GameType['gameId'];
-    gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    gameTeam: BlueOrRedTeamId;
     positionId: number;
 };
 
 export type DroneSwarmType = {
     droneSwarmId: number;
     gameId: GameType['gameId'];
-    gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    gameTeam: BlueOrRedTeamId;
     positionId: number;
     roundsLeft: number;
 };
@@ -208,24 +223,24 @@ export type DroneSwarmType = {
 export type AtcScrambleType = {
     atcScrambleId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     positionId: number; // TODO: could even do enum for sub position lists
     roundsLeft: number;
-    activated: typeof ACTIVATED | typeof DEACTIVATED;
+    activated: ActivatedTypes;
 };
 
 export type NukeType = {
     nukeId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     positionId: number;
-    activated: typeof ACTIVATED | typeof DEACTIVATED;
+    activated: ActivatedTypes;
 };
 
 export type MissileAttackType = {
     missileAttackId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     missileId: PieceType['pieceId'];
     targetId: PieceType['pieceId'];
 };
@@ -233,7 +248,7 @@ export type MissileAttackType = {
 export type BombardmentType = {
     bombardmentId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     destroyerId: PieceType['pieceId'];
     targetId: PieceType['pieceId'];
 };
@@ -241,22 +256,22 @@ export type BombardmentType = {
 export type AntiSatMissileType = {
     antiSatId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     roundsLeft: number;
 };
 
 export type MissileDisruptType = {
     missileDisruptId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     missileId: PieceType['pieceId'];
     roundsLeft: number;
-    activated: typeof ACTIVATED | typeof DEACTIVATED;
+    activated: ActivatedTypes;
 };
 
 export type CyberDefenseType = {
     cyberDefenseId: number;
     gameId: GameType['gameId'];
-    teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    teamId: BlueOrRedTeamId;
     roundsLeft: number;
 };
