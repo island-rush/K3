@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { ACTIVATED, BIO_WEAPONS_ROUNDS, DEACTIVATED } from '../../../constants';
-import { BiologicalWeaponsType, GameType } from '../../../types';
+import { BiologicalWeaponsType, BlueOrRedTeamId, GameType } from '../../../types';
 
-export const insertBiologicalWeapons = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
+export const insertBiologicalWeapons = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
     // TODO: Humanitarian assistance is restricted for the duration of this effect.
     let queryString = 'SELECT * FROM biologicalWeapons WHERE gameId = ? AND teamId = ? AND positionId = ?';
     let inserts = [gameId, gameTeam, selectedPositionId];
@@ -20,7 +20,7 @@ export const insertBiologicalWeapons = async (gameId: GameType['gameId'], gameTe
     return true;
 };
 
-export const getBiologicalWeapons = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const getBiologicalWeapons = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     // get this team's bio weapons, and all team's activated bio weapons
     // what positions are currently toxic (planned to be toxic?)
     // happens in the same timeframe as rods from god, but sticks around...could be complicated with separating from plannedBio and activeBio

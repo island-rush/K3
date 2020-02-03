@@ -1,10 +1,10 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { BLUE_TEAM_ID, RED_TEAM_ID } from '../../../constants';
-import { GameType, InsurgencyType, PieceType } from '../../../types';
+import { GameType, InsurgencyType, PieceType, BlueOrRedTeamId } from '../../../types';
 
 // TODO: better naming convention for these methods
-export const insurgencyInsert = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
+export const insurgencyInsert = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
     // TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
     let queryString = 'SELECT * FROM insurgency WHERE gameId = ? AND teamId = ? AND positionId = ?';
     const inserts = [gameId, gameTeam, selectedPositionId];
@@ -20,7 +20,7 @@ export const insurgencyInsert = async (gameId: GameType['gameId'], gameTeam: num
     return true;
 };
 
-export const getInsurgency = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const getInsurgency = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM insurgency WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & InsurgencyType[]>(queryString, inserts);

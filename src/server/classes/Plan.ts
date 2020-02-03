@@ -1,5 +1,5 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { PlanType, GameType } from '../../types';
+import { PlanType, GameType, BlueOrRedTeamId } from '../../types';
 import { pool } from '../database';
 
 /**
@@ -53,7 +53,7 @@ export class Plan implements PlanType {
     /**
      * Get current movement order for this game's team.
      */
-    static async getCurrentMovementOrder(gameId: GameType['gameId'], gameTeam: number) {
+    static async getCurrentMovementOrder(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         const queryString = 'SELECT planMovementOrder FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planMovementOrder ASC LIMIT 1';
         const inserts = [gameId, gameTeam];
         const [results] = await pool.query<RowDataPacket[] & PlanType[]>(queryString, inserts);
@@ -85,7 +85,7 @@ export class Plan implements PlanType {
     /**
      * Get all confirmed plans for this game's team.
      */
-    static async getConfirmedPlans(gameId: GameType['gameId'], gameTeam: number) {
+    static async getConfirmedPlans(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         const queryString = 'SELECT * FROM plans WHERE planGameId = ? AND planTeamId = ? ORDER BY planPieceId, planMovementOrder ASC';
         const inserts = [gameId, gameTeam];
         const [resultPlans] = await pool.query<RowDataPacket[] & PlanType[]>(queryString, inserts);

@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { Piece, pool } from '../../';
 import { TYPE_OWNERS, TYPE_SEA } from '../../../constants';
-import { SeaMineType, GameType } from '../../../types';
+import { SeaMineType, GameType, BlueOrRedTeamId } from '../../../types';
 
-export const insertSeaMine = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
+export const insertSeaMine = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
     // TODO: could make it unique within the database by doing double primary key, instead of single key id, other database tricks and best practices
     let queryString = 'SELECT * FROM seaMines WHERE gameId = ? AND positionId = ? AND gameTeam = ?';
     let inserts = [gameId, selectedPositionId, gameTeam];
@@ -20,7 +20,7 @@ export const insertSeaMine = async (gameId: GameType['gameId'], gameTeam: number
     return true;
 };
 
-export const getSeaMines = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const getSeaMines = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM seaMines WHERE gameId = ? AND gameTeam = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & SeaMineType[]>(queryString, inserts);

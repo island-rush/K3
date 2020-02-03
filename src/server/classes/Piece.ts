@@ -2,7 +2,16 @@
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
 import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID } from '../../constants';
-import { AtcScrambleType, BiologicalWeaponsType, GoldenEyeType, NukeType, PieceType, RemoteSensingType, GameType } from '../../types';
+import {
+    AtcScrambleType,
+    BiologicalWeaponsType,
+    GoldenEyeType,
+    NukeType,
+    PieceType,
+    RemoteSensingType,
+    GameType,
+    BlueOrRedTeamId
+} from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
 
@@ -246,7 +255,7 @@ export class Piece implements PieceType {
     /**
      * Get dictionary of positions and the pieces those positions contain.
      */
-    static async getVisiblePieces(gameId: GameType['gameId'], gameTeam: number) {
+    static async getVisiblePieces(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         let queryString =
             'SELECT * FROM pieces WHERE pieceGameId = ? AND (pieceTeamId = ? OR pieceVisible = 1) ORDER BY pieceContainerId, pieceTeamId ASC';
         let inserts = [gameId, gameTeam];
@@ -309,7 +318,7 @@ export class Piece implements PieceType {
      * Get sql results querying positions that should cause refuel event.
      * These positions are tankers + any same team aircraft.
      */
-    static async getPositionRefuels(gameId: GameType['gameId'], gameTeam: number) {
+    static async getPositionRefuels(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         // TODO: constant for 'outside container' instead of -1?
         const queryString =
             'SELECT tnkr.pieceId as tnkrPieceId, tnkr.pieceTypeId as tnkrPieceTypeId, tnkr.piecePositionId as tnkrPiecePositionId, tnkr.pieceMoves as tnkrPieceMoves, tnkr.pieceFuel as tnkrPieceFuel, arcft.pieceId as arcftPieceId, arcft.pieceTypeId as arcftPieceTypeId, arcft.piecePositionId as arcftPiecePositionId, arcft.pieceMoves as arcftPieceMoves, arcft.pieceFuel as arcftPieceFuel FROM (SELECT * FROM pieces WHERE pieceTypeId = 3 AND pieceGameId = ? AND pieceTeamId = ?) as tnkr JOIN (SELECT * FROM pieces WHERE pieceTypeId in (0, 1, 2, 4, 5, 17, 18) AND pieceGameId = ? AND pieceTeamId = ?) as arcft ON tnkr.piecePositionId = arcft.piecePositionId WHERE arcft.pieceContainerId = -1';

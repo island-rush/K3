@@ -1,17 +1,17 @@
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 import { ANTI_SAT_MISSILE_ROUNDS, BLUE_TEAM_ID, RED_TEAM_ID } from '../../../constants';
-import { AntiSatMissileType, RemoteSensingType, GameType } from '../../../types';
+import { AntiSatMissileType, BlueOrRedTeamId, GameType, RemoteSensingType } from '../../../types';
 import { pool } from '../../database';
 import { Piece } from '../Piece';
 
-export const insertAntiSat = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const insertAntiSat = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'INSERT INTO antiSatMissiles (gameId, teamId, roundsLeft) VALUES (?, ?, ?)';
     const inserts = [gameId, gameTeam, ANTI_SAT_MISSILE_ROUNDS];
     const [results] = await pool.query<OkPacket>(queryString, inserts);
     return results.insertId;
 };
 
-export const getAntiSat = async (gameId: GameType['gameId'], teamId: number) => {
+export const getAntiSat = async (gameId: GameType['gameId'], teamId: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM antiSatMissiles WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, teamId];
     const [results] = await pool.query<RowDataPacket[] & AntiSatMissileType[]>(queryString, inserts);

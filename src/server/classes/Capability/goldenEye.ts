@@ -2,9 +2,9 @@ import { RowDataPacket } from 'mysql2';
 import { pool } from '../../';
 // prettier-ignore
 import { ACTIVATED, BLUE_TEAM_ID, DEACTIVATED, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, RED_TEAM_ID, TYPE_AIR_PIECES, TYPE_GROUND_PIECES } from '../../../constants';
-import { GoldenEyeType, GameType } from '../../../types';
+import { GoldenEyeType, GameType, BlueOrRedTeamId } from '../../../types';
 
-export const getGoldenEye = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const getGoldenEye = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM goldenEye WHERE gameId = ? AND (activated = ? OR teamId = ?)';
     const inserts = [gameId, ACTIVATED, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
@@ -17,7 +17,7 @@ export const getGoldenEye = async (gameId: GameType['gameId'], gameTeam: number)
     return listOfGoldenEye;
 };
 
-export const insertGoldenEye = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
+export const insertGoldenEye = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
     let queryString = 'SELECT * FROM goldenEye WHERE gameId = ? AND teamId = ? AND positionId = ?';
     let inserts = [gameId, gameTeam, selectedPositionId];
     const [results] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);

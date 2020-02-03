@@ -1,7 +1,7 @@
 // prettier-ignore
 import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, CLEAR_SAM_DELETE, COL_BATTLE_EVENT_TYPE, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, SAM_DELETED_PIECES, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
 // prettier-ignore
-import { ClearDroneSwarmMineNotifyAction, ClearSamDeleteAction, ClearSeaMineNotifyAction, DroneSwarmHitNotifyAction, NewRoundAction, PlacePhaseAction, SamDeletedPiecesAction, SeaMineHitNotifyAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../types';
+import { ClearDroneSwarmMineNotifyAction, ClearSamDeleteAction, ClearSeaMineNotifyAction, DroneSwarmHitNotifyAction, NewRoundAction, PlacePhaseAction, SamDeletedPiecesAction, SeaMineHitNotifyAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction, BlueOrRedTeamId } from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
 import { sendToGame, sendToTeam } from '../helpers';
 import { giveNextEvent } from './giveNextEvent';
@@ -346,7 +346,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         if (teamHadPlans[thisTeamNum]) {
             // refuel events if they had plans for this step, otherwise don't want to refuel stuff for no plans (possibly will do it anyway)
             // need to grab all refuel events from database, looking at pieces in the same positions
-            const allPositionRefuels: any = await Piece.getPositionRefuels(gameId, thisTeamNum);
+            const allPositionRefuels: any = await Piece.getPositionRefuels(gameId, thisTeamNum as BlueOrRedTeamId); // TODO: probably a way of not doing 'as Blue', loop declaration is messing up the types, should iterate through array of both values somehow
             if (allPositionRefuels.length > 0) {
                 const allPosEvents: any = {};
                 for (let x = 0; x < allPositionRefuels.length; x++) {

@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { Piece, pool } from '../../';
 import { ATTACK_HELICOPTER_TYPE_ID, DRONE_SWARM_ROUNDS, LIST_ALL_AIRFIELD_PIECES } from '../../../constants';
-import { DroneSwarmType, GameType } from '../../../types';
+import { DroneSwarmType, GameType, BlueOrRedTeamId } from '../../../types';
 
-export const getDroneSwarms = async (gameId: GameType['gameId'], gameTeam: number): Promise<number[]> => {
+export const getDroneSwarms = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId): Promise<number[]> => {
     const queryString = 'SELECT * FROM droneSwarms WHERE gameId = ? AND gameTeam = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & DroneSwarmType[]>(queryString, inserts);
@@ -16,7 +16,7 @@ export const getDroneSwarms = async (gameId: GameType['gameId'], gameTeam: numbe
     return listOfDroneSwarms;
 };
 
-export const insertDroneSwarm = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
+export const insertDroneSwarm = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
     const insertQuery = 'SELECT * FROM droneSwarms WHERE gameId = ? AND positionId = ? AND gameTeam = ?';
     const inserts = [gameId, selectedPositionId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & DroneSwarmType[]>(insertQuery, inserts);

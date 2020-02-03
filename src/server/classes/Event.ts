@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { ATTACK_MATRIX, PIECES_WITH_FUEL } from '../../constants';
-import { EventItemType, EventQueueType, PieceType, GameType } from '../../types';
+import { EventItemType, EventQueueType, PieceType, GameType, BlueOrRedTeamId } from '../../types';
 import { pool } from '../database';
 import { Piece } from './Piece';
 
@@ -87,7 +87,7 @@ export class Event implements EventQueueType {
     /**
      * getItems() but for a specific team.
      */
-    async getTeamItems(gameTeam: number) {
+    async getTeamItems(gameTeam: BlueOrRedTeamId) {
         const queryString =
             'SELECT * FROM (SELECT * FROM eventItems NATUAL JOIN pieces WHERE eventPieceId = pieceId AND eventId = ? AND pieceTeamId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.eventItemTarget = b.tpieceId';
         const inserts = [this.eventId, gameTeam];
@@ -108,7 +108,7 @@ export class Event implements EventQueueType {
     /**
      * Get the next event from the eventQueue.
      */
-    static async getNext(gameId: GameType['gameId'], gameTeam: number) {
+    static async getNext(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         const queryString = 'SELECT * FROM eventQueue WHERE eventGameId = ? AND (eventTeamId = ? OR eventTeamId = 2) ORDER BY eventId ASC LIMIT 1';
         const inserts = [gameId, gameTeam];
         const [events] = await pool.query<RowDataPacket[] & EventQueueType[]>(queryString, inserts);
@@ -203,7 +203,7 @@ export class Event implements EventQueueType {
             piecePositionId: PieceType['piecePositionId'];
             newFuel: number;
         }[],
-        gameTeam: number
+        gameTeam: BlueOrRedTeamId
     ) {
         if (fuelUpdates.length === 0) {
             return;

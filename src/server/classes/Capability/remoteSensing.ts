@@ -1,9 +1,9 @@
 import { RowDataPacket, OkPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { REMOTE_SENSING_ROUNDS } from '../../../constants';
-import { RemoteSensingType, GameType } from '../../../types';
+import { RemoteSensingType, GameType, BlueOrRedTeamId } from '../../../types';
 
-export const remoteSensingInsert = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
+export const remoteSensingInsert = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
     let queryString = 'SELECT * FROM remoteSensing WHERE gameId = ? AND teamId = ? AND positionId = ?';
     let inserts = [gameId, gameTeam, selectedPositionId];
     const [results] = await pool.query<RowDataPacket[] & RemoteSensingType[]>(queryString, inserts);
@@ -19,7 +19,7 @@ export const remoteSensingInsert = async (gameId: GameType['gameId'], gameTeam: 
     return results2.insertId;
 };
 
-export const getRemoteSensing = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const getRemoteSensing = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM remoteSensing WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & RemoteSensingType[]>(queryString, inserts);

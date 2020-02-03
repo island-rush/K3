@@ -1,8 +1,8 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
-import { RodsFromGodType, GameType } from '../../../types';
+import { RodsFromGodType, GameType, BlueOrRedTeamId } from '../../../types';
 
-export const rodsFromGodInsert = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
+export const rodsFromGodInsert = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
     // TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
     let queryString = 'SELECT * FROM rodsFromGod WHERE gameId = ? AND teamId = ? AND positionId = ?';
     const inserts = [gameId, gameTeam, selectedPositionId];
@@ -18,7 +18,7 @@ export const rodsFromGodInsert = async (gameId: GameType['gameId'], gameTeam: nu
     return true;
 };
 
-export const getRodsFromGod = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const getRodsFromGod = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM rodsFromGod WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & RodsFromGodType[]>(queryString, inserts);

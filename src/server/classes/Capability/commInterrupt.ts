@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { ACTIVATED, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, distanceMatrix } from '../../../constants';
-import { CommInterruptType, GameType } from '../../../types';
+import { CommInterruptType, GameType, BlueOrRedTeamId } from '../../../types';
 
-export const insertCommInterrupt = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
+export const insertCommInterrupt = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
     let queryString = 'SELECT * FROM commInterrupt WHERE gameId = ? AND teamId = ? AND positionId = ?';
     let inserts = [gameId, gameTeam, selectedPositionId];
     const [results] = await pool.query<RowDataPacket[] & CommInterruptType[]>(queryString, inserts);
@@ -19,7 +19,7 @@ export const insertCommInterrupt = async (gameId: GameType['gameId'], gameTeam: 
     return true;
 };
 
-export const getCommInterrupt = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const getCommInterrupt = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM commInterrupt WHERE gameId = ? AND (activated = ? OR teamId = ?)';
     const inserts = [gameId, ACTIVATED, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & CommInterruptType[]>(queryString, inserts);

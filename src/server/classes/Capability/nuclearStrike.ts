@@ -2,10 +2,10 @@ import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 // prettier-ignore
 import { ACTIVATED, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, DEACTIVATED, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, ISLAND_POSITIONS, NEUTRAL_TEAM_ID, NUKE_RANGE } from '../../../constants';
-import { NukeType, GameType } from '../../../types';
+import { NukeType, GameType, BlueOrRedTeamId } from '../../../types';
 import { Game } from '../Game';
 
-export const insertNuke = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
+export const insertNuke = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
     // TODO: Could prevent nuking a different position again?
     let queryString = 'SELECT * FROM nukes WHERE gameId = ? AND positionId = ? AND (teamId = ? OR activated = ?)';
     let inserts = [gameId, selectedPositionId, gameTeam, ACTIVATED];
@@ -88,7 +88,7 @@ export const useNukes = async (gameId: GameType['gameId']) => {
     return listPositions;
 };
 
-export const getNukes = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const getNukes = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM nukes WHERE gameId = ? AND (teamId = ? OR activated = ?)';
     const inserts = [gameId, gameTeam, ACTIVATED];
     const [results] = await pool.query<RowDataPacket[] & NukeType[]>(queryString, inserts);
