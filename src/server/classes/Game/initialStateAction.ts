@@ -8,7 +8,7 @@ import { Capability } from '../Capability';
 import { ShopItem } from '../ShopItem';
 import { Game } from './Game';
 
-export const initialStateAction = async (game: Game, gameTeam: number, gameControllers: any) => {
+export const initialStateAction = async (game: Game, gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, gameControllers: any) => {
     const serverAction: GameInitialStateAction = {
         type: INITIAL_GAMESTATE,
         payload: {

@@ -1,4 +1,4 @@
-import { AIRFIELD_TYPE, FLAG_TYPE, LAND_TYPE, MISSILE_SILO_TYPE, WATER_TYPE } from '../constants';
+import { AIRFIELD_TYPE, FLAG_TYPE, LAND_TYPE, MISSILE_SILO_TYPE, WATER_TYPE, NEUTRAL_TEAM_ID } from '../constants';
 import { EventItemType, GameType, InvItemType, NewsType, PieceType, ShopItemType } from './databaseTables';
 import { GameSession } from './sessionTypes';
 
@@ -14,7 +14,7 @@ export type GameboardState = { type: positionType; pieces: PieceType[] }[];
 export type GameInfoState = {
     gameSection: GameType['gameSection'];
     gameInstructor: GameType['gameInstructor'];
-    gameTeam: GameSession['gameTeam'];
+    gameTeam: GameSession['gameTeam'] | typeof NEUTRAL_TEAM_ID;
     gameControllers: GameSession['gameControllers'];
     gamePhase: GameType['gamePhase'];
     gameRound: GameType['gameRound'];
@@ -44,6 +44,7 @@ export type GameInfoState = {
     airfield7: GameType['airfield7'];
     airfield8: GameType['airfield8'];
     airfield9: GameType['airfield9'];
+    [key: string]: any;
 };
 export type GameboardMetaState = {
     /**

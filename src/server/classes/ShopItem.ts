@@ -6,13 +6,13 @@ import { pool } from '../database';
  * Represents rows for shopItems table in database.
  */
 export class ShopItem implements ShopItemType {
-    shopItemId: number;
+    shopItemId: ShopItemType['shopItemId'];
 
-    shopItemGameId: number;
+    shopItemGameId: ShopItemType['shopItemGameId'];
 
-    shopItemTeamId: number;
+    shopItemTeamId: ShopItemType['shopItemTeamId'];
 
-    shopItemTypeId: number;
+    shopItemTypeId: ShopItemType['shopItemTypeId'];
 
     constructor(shopItemId: number) {
         this.shopItemId = shopItemId;

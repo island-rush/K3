@@ -1,7 +1,7 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { AIRFIELD_CAPTURE_TYPES, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, RED_TEAM_ID, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID } from '../../../constants';
+import { AIRFIELD_CAPTURE_TYPES, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, RED_TEAM_ID, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID, ACTIVATED, DEACTIVATED, NOT_LOGGED_IN_VALUE, NEUTRAL_TEAM_ID } from '../../../constants';
 import { GameType, NewsState, PieceType } from '../../../types';
 import { gameInitialNews, gameInitialPieces } from '../../admin';
 import { pool } from '../../database';
@@ -165,23 +165,23 @@ export class Game extends GameProperties implements GameType {
     /**
      * Set a new value for gameActive in this game.
      */
-    async setGameActive(newValue: number) {
+    async setGameActive(newValue: typeof ACTIVATED | typeof DEACTIVATED) {
         const queryString =
             'UPDATE games SET gameActive = ?, gameBlueController0 = 0, gameBlueController1 = 0, gameBlueController2 = 0, gameBlueController3 = 0, gameBlueController4 = 0, gameRedController0 = 0, gameRedController1 = 0, gameRedController2 = 0, gameRedController3 = 0, gameRedController4 = 0 WHERE gameId = ?';
         const inserts = [newValue, this.gameId];
         await pool.query(queryString, inserts);
         const updatedInfo = {
             gameActive: newValue,
-            gameBlueController0: 0,
-            gameBlueController1: 0,
-            gameBlueController2: 0,
-            gameBlueController3: 0,
-            gameBlueController4: 0,
-            gameRedController0: 0,
-            gameRedController1: 0,
-            gameRedController2: 0,
-            gameRedController3: 0,
-            gameRedController4: 0
+            gameBlueController0: NOT_LOGGED_IN_VALUE,
+            gameBlueController1: NOT_LOGGED_IN_VALUE,
+            gameBlueController2: NOT_LOGGED_IN_VALUE,
+            gameBlueController3: NOT_LOGGED_IN_VALUE,
+            gameBlueController4: NOT_LOGGED_IN_VALUE,
+            gameRedController0: NOT_LOGGED_IN_VALUE,
+            gameRedController1: NOT_LOGGED_IN_VALUE,
+            gameRedController2: NOT_LOGGED_IN_VALUE,
+            gameRedController3: NOT_LOGGED_IN_VALUE,
+            gameRedController4: NOT_LOGGED_IN_VALUE
         };
         Object.assign(this, updatedInfo);
     }
@@ -189,7 +189,7 @@ export class Game extends GameProperties implements GameType {
     /**
      * Set loggedIn value for a specific team/controller in this game.
      */
-    async setLoggedIn(gameTeam: number, gameController: number, value: number) {
+    async setLoggedIn(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, gameController: number, value: number) {
         const queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
         const inserts = [`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Controller${gameController}`, value, this.gameId];
         await pool.query(queryString, inserts);
@@ -257,7 +257,7 @@ export class Game extends GameProperties implements GameType {
     /**
      * Set the points for a specific team in this game.
      */
-    async setPoints(gameTeam: number, newPoints: number) {
+    async setPoints(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, newPoints: number) {
         // TODO: could have a type alias for gameTeam since we use it a lot? (always ensure it is 'number' -> instead of manually always making it a 'number')
         const queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
         const inserts = [`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Points`, newPoints, this.gameId];
@@ -268,7 +268,7 @@ export class Game extends GameProperties implements GameType {
     /**
      * Set the status for a specific team in this game.
      */
-    async setStatus(gameTeam: number, newStatus: number) {
+    async setStatus(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, newStatus: number) {
         const queryString = 'UPDATE games set ?? = ? WHERE gameId = ?';
         const inserts = [`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Status`, newStatus, this.gameId];
         await pool.query(queryString, inserts);
@@ -278,7 +278,7 @@ export class Game extends GameProperties implements GameType {
     /**
      * Set the gamePhase value in this game.
      */
-    async setPhase(newGamePhase: number) {
+    async setPhase(newGamePhase: Game['gamePhase']) {
         const queryString = 'UPDATE games set gamePhase = ? WHERE gameId = ?';
         const inserts = [newGamePhase, this.gameId];
         await pool.query(queryString, inserts);
@@ -290,7 +290,7 @@ export class Game extends GameProperties implements GameType {
      *
      * gameSlice => planning or executing
      */
-    async setSlice(newGameSlice: number) {
+    async setSlice(newGameSlice: Game['gameSlice']) {
         const queryString = 'UPDATE games SET gameSlice = ? WHERE gameId = ?';
         const inserts = [newGameSlice, this.gameId];
         await pool.query(queryString, inserts);
@@ -327,7 +327,21 @@ export class Game extends GameProperties implements GameType {
         // update if only 1 team's pieces there, AND if not already the other team? (or update anyway if all 1 team)
 
         // TODO: need major refactoring here, this is quick and dirty (but should work)
-        const eachFlagsTeams: number[][] = [[], [], [], [], [], [], [], [], [], [], [], [], []];
+        const eachFlagsTeams: (typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID)[][] = [
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            [],
+            []
+        ];
         for (let x = 0; x < results.length; x++) {
             const thisPiece = results[x];
             const { piecePositionId, pieceTeamId } = thisPiece;
@@ -364,7 +378,7 @@ export class Game extends GameProperties implements GameType {
 
         // loop through pieces, decide if any airfield should change ownership
 
-        const eachAirfieldTeams: number[][] = [[], [], [], [], [], [], [], [], [], []];
+        const eachAirfieldTeams: (typeof BLUE_TEAM_ID | typeof RED_TEAM_ID | typeof NEUTRAL_TEAM_ID)[][] = [[], [], [], [], [], [], [], [], [], []];
 
         for (const thisPiece of results as PieceType[]) {
             const { piecePositionId, pieceTeamId } = thisPiece;
@@ -420,7 +434,7 @@ export class Game extends GameProperties implements GameType {
     /**
      * Generates a Redux Action, contains all current game information / state.
      */
-    async initialStateAction(gameTeam: number, gameControllers: any) {
+    async initialStateAction(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, gameControllers: any) {
         return initialStateAction(this, gameTeam, gameControllers);
     }
 }

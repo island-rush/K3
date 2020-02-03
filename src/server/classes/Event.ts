@@ -10,12 +10,12 @@ import { Piece } from './Piece';
  * Also contains other helping functions that deal with events and event items.
  */
 export class Event implements EventQueueType {
-    eventId: number;
-    eventGameId: number;
-    eventTeamId: number;
-    eventTypeId: number;
-    eventPosA: number;
-    eventPosB: number;
+    eventId: EventQueueType['eventId'];
+    eventGameId: EventQueueType['eventGameId'];
+    eventTeamId: EventQueueType['eventTeamId'];
+    eventTypeId: EventQueueType['eventTypeId'];
+    eventPosA: EventQueueType['eventPosA'];
+    eventPosB: EventQueueType['eventPosB'];
 
     // TODO: we have a class for event, but multiple tables for keeping track of events, event items, and that one for temp stuff (efficient)
     constructor(eventId: EventQueueType['eventId'], options: any) {

@@ -106,5 +106,5 @@ export const giveNextEvent = async (session: SocketSession, options: GiveNextEve
 
 type GiveNextEventOptions = {
     thisGame: Game;
-    gameTeam: number;
+    gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
 };

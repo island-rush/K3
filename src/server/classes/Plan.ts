@@ -6,11 +6,11 @@ import { pool } from '../database';
  * Represents rows for plans in the database.
  */
 export class Plan implements PlanType {
-    planGameId: number;
-    planTeamId: number;
-    planPieceId: number;
-    planMovementOrder: number;
-    planPositionId: number;
+    planGameId: PlanType['planGameId'];
+    planTeamId: PlanType['planTeamId'];
+    planPieceId: PlanType['planPieceId'];
+    planMovementOrder: PlanType['planMovementOrder'];
+    planPositionId: PlanType['planPositionId'];
 
     constructor(planPieceId: number, planMovementOrder: number) {
         this.planPieceId = planPieceId;

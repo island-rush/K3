@@ -1,3 +1,4 @@
+import { BLUE_TEAM_ID, RED_TEAM_ID } from '../../../constants';
 import { GameType } from '../../../types';
 import { Game } from '../Game';
 import { Piece } from '../Piece';
@@ -72,11 +73,16 @@ export class Capability {
         return getAntiSat(gameId, gameTeam);
     }
 
-    static async checkAntiSatHit(gameId: GameType['gameId'], gameTeam: number, antiSatId: number) {
+    static async checkAntiSatHit(gameId: GameType['gameId'], gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, antiSatId: number) {
         return checkAntiSatHit(gameId, gameTeam, antiSatId);
     }
 
-    static async checkRemoteSensingHit(gameId: GameType['gameId'], gameTeam: number, remoteSensingId: number, remoteSensingPosId: number) {
+    static async checkRemoteSensingHit(
+        gameId: GameType['gameId'],
+        gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID,
+        remoteSensingId: number,
+        remoteSensingPosId: number
+    ) {
         return checkRemoteSensingHit(gameId, gameTeam, remoteSensingId, remoteSensingPosId);
     }
 

@@ -10,17 +10,17 @@ import { Game } from './Game';
  * Represents a row in the pieces database table.
  */
 export class Piece implements PieceType {
-    pieceId: number;
-    pieceGameId: number;
-    pieceTeamId: number;
-    pieceTypeId: number;
-    piecePositionId: number;
-    pieceContainerId: number;
-    pieceVisible: number;
-    pieceMoves: number;
-    pieceFuel: number;
-    pieceContents?: { pieces: PieceType[] };
-    isPieceDisabled?: boolean;
+    pieceId: PieceType['pieceId'];
+    pieceGameId: PieceType['pieceGameId'];
+    pieceTeamId: PieceType['pieceTeamId'];
+    pieceTypeId: PieceType['pieceTypeId'];
+    piecePositionId: PieceType['piecePositionId'];
+    pieceContainerId: PieceType['pieceContainerId'];
+    pieceVisible: PieceType['pieceVisible'];
+    pieceMoves: PieceType['pieceMoves'];
+    pieceFuel: PieceType['pieceFuel'];
+    pieceContents?: PieceType['pieceContents'];
+    isPieceDisabled?: PieceType['isPieceDisabled'];
 
     constructor(pieceId: number) {
         this.pieceId = pieceId;
@@ -355,14 +355,14 @@ export class Piece implements PieceType {
      * Insert a single piece into the database for this game's team.
      */
     static async insert(
-        pieceGameId: number,
-        pieceTeamId: number,
-        pieceTypeId: number,
-        piecePositionId: number,
-        pieceContainerId: number,
-        pieceVisible: number,
-        pieceMoves: number,
-        pieceFuel: number
+        pieceGameId: PieceType['pieceGameId'],
+        pieceTeamId: PieceType['pieceTeamId'],
+        pieceTypeId: PieceType['pieceTypeId'],
+        piecePositionId: PieceType['piecePositionId'],
+        pieceContainerId: PieceType['pieceContainerId'],
+        pieceVisible: PieceType['pieceVisible'],
+        pieceMoves: PieceType['pieceMoves'],
+        pieceFuel: PieceType['pieceFuel']
     ) {
         const queryString =
             'INSERT INTO pieces (pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
@@ -461,7 +461,7 @@ export class Piece implements PieceType {
         }
     }
 
-    static async ableToPlaceRadar(thisGame: Game, gameTeam: number, selectedPositionId: number) {
+    static async ableToPlaceRadar(thisGame: Game, gameTeam: PieceType['pieceTeamId'], selectedPositionId: number) {
         // TODO: could make this into 1 request instead of 2
         const queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ? AND pieceTypeId in (?)';
         const inserts = [thisGame.gameId, gameTeam, selectedPositionId, TYPE_GROUND_PIECES];
@@ -557,7 +557,7 @@ export class Piece implements PieceType {
         return completelyOwnsIsland;
     }
 
-    static async ableToPlaceMissile(thisGame: Game, gameTeam: number, selectedPositionId: number) {
+    static async ableToPlaceMissile(thisGame: Game, gameTeam: PieceType['pieceTeamId'], selectedPositionId: number) {
         // what are the rules for placement with missiles (does it need to have friendly pieces there?)
 
         // TODO: could make this into 1 request instead of 2

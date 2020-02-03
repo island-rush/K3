@@ -69,7 +69,7 @@ const rIndexSolver = (index: number) => {
 
 const patternSolver = (
     position: any,
-    gameInfo: any,
+    gameInfo: GameInfoState,
     positionIndex: number,
     confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'],
     confirmedNukes: CapabilitiesState['confirmedNukes']
@@ -92,7 +92,7 @@ const patternSolver = (
 
     if (ALL_FLAG_LOCATIONS.includes(positionIndex)) {
         const flagNum = ALL_FLAG_LOCATIONS.indexOf(positionIndex);
-        const islandOwner = gameInfo['flag' + flagNum];
+        const islandOwner: GameInfoState['flag0'] = gameInfo[`flag${flagNum}`];
         const finalType = islandOwner === BLUE_TEAM_ID ? 'blueflag' : islandOwner === RED_TEAM_ID ? 'redflag' : 'flag';
 
         return finalType;
@@ -100,7 +100,7 @@ const patternSolver = (
 
     if (ALL_AIRFIELD_LOCATIONS.includes(positionIndex)) {
         const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(positionIndex);
-        const airfieldOwner = gameInfo['airfield' + airfieldNum]; // TODO: should use actual types instead of any here
+        const airfieldOwner: GameInfoState['airfield0'] = gameInfo[`airfield${airfieldNum}`]; // TODO: should use actual types instead of any here
         const finalType = airfieldOwner === BLUE_TEAM_ID ? 'blueairfield' : airfieldOwner === RED_TEAM_ID ? 'redairfield' : 'airfield';
         if (confirmedAtcScramble.includes(positionIndex)) {
             return `${finalType}_disabled`;
@@ -133,14 +133,14 @@ const hasPieceType = (
     }
 
     if (highLow === 'bottom' && confirmedSeaMines.includes(positionIndex)) {
-        const teamVar = gameInfo.gameTeam === BLUE_TEAM_ID ? 'blue' : 'red';
+        const teamVar = gameInfo.gameTeam === BLUE_TEAM_ID ? 'blue' : gameInfo.gameTeam === RED_TEAM_ID ? 'red' : '';
         if (teamVar !== team) {
             return true;
         }
     }
 
     if (highLow === 'top' && confirmedDroneSwarms.includes(positionIndex)) {
-        const teamVar = gameInfo.gameTeam === BLUE_TEAM_ID ? 'blue' : 'red';
+        const teamVar = gameInfo.gameTeam === BLUE_TEAM_ID ? 'blue' : gameInfo.gameTeam === RED_TEAM_ID ? 'red' : '';
         if (teamVar !== team) {
             return true;
         }

@@ -8,10 +8,10 @@ import { pool } from '../database';
  * Represents row in invItems table in the database.
  */
 export class InvItem implements InvItemType {
-    invItemId: number;
-    invItemGameId: number;
-    invItemTeamId: number;
-    invItemTypeId: number;
+    invItemId: InvItemType['invItemId'];
+    invItemGameId: InvItemType['invItemGameId'];
+    invItemTeamId: InvItemType['invItemTeamId'];
+    invItemTypeId: InvItemType['invItemTypeId'];
 
     constructor(invItemId: number) {
         this.invItemId = invItemId;

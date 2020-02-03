@@ -1,54 +1,54 @@
-import { BLUE_TEAM_ID, LOGGED_IN_VALUE } from '../../../constants';
+import { BLUE_TEAM_ID, LOGGED_IN_VALUE, RED_TEAM_ID } from '../../../constants';
 import { GameType } from '../../../types';
 
 export class GameProperties {
     readonly gameId: GameType['gameId'];
-    readonly gameSection: string;
-    readonly gameInstructor: string;
-    gameAdminPassword: string;
-    gameActive: number;
-    gameBluePassword: string;
-    gameRedPassword: string;
-    gameBlueController0: number;
-    gameBlueController1: number;
-    gameBlueController2: number;
-    gameBlueController3: number;
-    gameBlueController4: number;
-    gameRedController0: number;
-    gameRedController1: number;
-    gameRedController2: number;
-    gameRedController3: number;
-    gameRedController4: number;
-    gameBlueStatus: number;
-    gameRedStatus: number;
-    gameBluePoints: number;
-    gameRedPoints: number;
-    gamePhase: number;
-    gameRound: number;
-    gameSlice: number;
-    flag0: number;
-    flag1: number;
-    flag2: number;
-    flag3: number;
-    flag4: number;
-    flag5: number;
-    flag6: number;
-    flag7: number;
-    flag8: number;
-    flag9: number;
-    flag10: number;
-    flag11: number;
-    flag12: number;
-    airfield0: number;
-    airfield1: number;
-    airfield2: number;
-    airfield3: number;
-    airfield4: number;
-    airfield5: number;
-    airfield6: number;
-    airfield7: number;
-    airfield8: number;
-    airfield9: number;
+    readonly gameSection: GameType['gameSection'];
+    readonly gameInstructor: GameType['gameInstructor'];
+    gameAdminPassword: GameType['gameAdminPassword'];
+    gameActive: GameType['gameActive'];
+    gameBluePassword: GameType['gameBluePassword'];
+    gameRedPassword: GameType['gameRedPassword'];
+    gameBlueController0: GameType['gameBlueController0'];
+    gameBlueController1: GameType['gameBlueController1'];
+    gameBlueController2: GameType['gameBlueController2'];
+    gameBlueController3: GameType['gameBlueController3'];
+    gameBlueController4: GameType['gameBlueController4'];
+    gameRedController0: GameType['gameRedController0'];
+    gameRedController1: GameType['gameRedController1'];
+    gameRedController2: GameType['gameRedController2'];
+    gameRedController3: GameType['gameRedController3'];
+    gameRedController4: GameType['gameRedController4'];
+    gameBlueStatus: GameType['gameBlueStatus'];
+    gameRedStatus: GameType['gameRedStatus'];
+    gameBluePoints: GameType['gameBluePoints'];
+    gameRedPoints: GameType['gameRedPoints'];
+    gamePhase: GameType['gamePhase'];
+    gameRound: GameType['gameRound'];
+    gameSlice: GameType['gameSlice'];
+    flag0: GameType['flag0'];
+    flag1: GameType['flag1'];
+    flag2: GameType['flag2'];
+    flag3: GameType['flag3'];
+    flag4: GameType['flag4'];
+    flag5: GameType['flag5'];
+    flag6: GameType['flag6'];
+    flag7: GameType['flag7'];
+    flag8: GameType['flag8'];
+    flag9: GameType['flag9'];
+    flag10: GameType['flag10'];
+    flag11: GameType['flag11'];
+    flag12: GameType['flag12'];
+    airfield0: GameType['airfield0'];
+    airfield1: GameType['airfield1'];
+    airfield2: GameType['airfield2'];
+    airfield3: GameType['airfield3'];
+    airfield4: GameType['airfield4'];
+    airfield5: GameType['airfield5'];
+    airfield6: GameType['airfield6'];
+    airfield7: GameType['airfield7'];
+    airfield8: GameType['airfield8'];
+    airfield9: GameType['airfield9'];
 
     // This necessary to access this object using this['string'] for dynamic values -> ex: this[`flag${flagNum}`]
     [key: string]: any;
@@ -57,19 +57,19 @@ export class GameProperties {
         this.gameId = gameId;
     }
 
-    getStatus(gameTeam: number) {
+    getStatus(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID) {
         return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Status`];
     }
 
-    getPoints(gameTeam: number) {
+    getPoints(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID) {
         return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Points`];
     }
 
-    getPasswordHash(gameTeam: number) {
+    getPasswordHash(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID) {
         return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Password`];
     }
 
-    getLoggedIn(gameTeam: number, gameController: number): boolean {
+    getLoggedIn(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, gameController: number): boolean {
         return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Controller${gameController}`] === LOGGED_IN_VALUE;
     }
 }

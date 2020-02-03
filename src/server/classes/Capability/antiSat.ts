@@ -27,7 +27,12 @@ export const getAntiSat = async (gameId: GameType['gameId'], teamId: number) => 
     return confirmedAntiSat;
 };
 
-export const checkRemoteSensingHit = async (gameId: GameType['gameId'], teamId: number, remoteSensingId: number, remoteSensingPosId: number) => {
+export const checkRemoteSensingHit = async (
+    gameId: GameType['gameId'],
+    teamId: typeof RED_TEAM_ID | typeof BLUE_TEAM_ID,
+    remoteSensingId: number,
+    remoteSensingPosId: number
+) => {
     // team requesting this just put up an anti sat, check for enemy remote sensing to kill (and report killed to teams)
     const otherTeamId = teamId === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
 
@@ -55,7 +60,7 @@ export const checkRemoteSensingHit = async (gameId: GameType['gameId'], teamId: 
     return -1;
 };
 
-export const checkAntiSatHit = async (gameId: GameType['gameId'], teamId: number, antiSatId: number) => {
+export const checkAntiSatHit = async (gameId: GameType['gameId'], teamId: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, antiSatId: number) => {
     // team requesting this just put up an anti sat, check for enemy remote sensing to kill (and report killed to teams)
     const otherTeamId = teamId === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
 
