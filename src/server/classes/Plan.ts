@@ -1,5 +1,5 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { PlanType, GameType, BlueOrRedTeamId } from '../../types';
+import { PlanType, GameType, BlueOrRedTeamId, PieceType } from '../../types';
 import { pool } from '../database';
 
 /**
@@ -12,7 +12,7 @@ export class Plan implements PlanType {
     planMovementOrder: PlanType['planMovementOrder'];
     planPositionId: PlanType['planPositionId'];
 
-    constructor(planPieceId: number, planMovementOrder: number) {
+    constructor(planPieceId: PlanType['planPieceId'], planMovementOrder: PlanType['planMovementOrder']) {
         this.planPieceId = planPieceId;
         this.planMovementOrder = planMovementOrder;
     }
@@ -44,7 +44,7 @@ export class Plan implements PlanType {
     /**
      * Delete all plans for a certain piece.
      */
-    static async delete(pieceId: number) {
+    static async delete(pieceId: PieceType['pieceId']) {
         const queryString = 'DELETE FROM plans WHERE planPieceId = ?';
         const inserts = [pieceId];
         await pool.query(queryString, inserts);
@@ -63,7 +63,7 @@ export class Plan implements PlanType {
     /**
      * Get all piece collisions from plans.
      */
-    static async getCollisions(gameId: GameType['gameId'], movementOrder: number) {
+    static async getCollisions(gameId: GameType['gameId'], movementOrder: PlanType['planMovementOrder']) {
         const queryString =
             'SELECT * FROM (SELECT pieceId as pieceId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0, piecePositionId as piecePositionId0, planPositionId as planPositionId0 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 0 AND pieceGameId = ? AND planMovementOrder = ?) as a JOIN (SELECT pieceId as pieceId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1, piecePositionId as piecePositionId1, planPositionId as planPositionId1 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 1 AND pieceGameId = ? AND planMovementOrder = ?) as b ON piecePositionId0 = planPositionId1 AND planPositionId0 = piecePositionId1';
         const inserts = [gameId, movementOrder, gameId, movementOrder];

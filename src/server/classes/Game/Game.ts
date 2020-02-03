@@ -2,7 +2,7 @@
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
 import { AIRFIELD_CAPTURE_TYPES, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, BLUE_TEAM_ID, CAPTURE_TYPES, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POINTS, KEONI_ISLAND_ID, LION_ISLAND_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, RED_TEAM_ID, RICO_ISLAND_ID, SHOR_ISLAND_ID, TAMU_ISLAND_ID, ACTIVATED, DEACTIVATED, NOT_LOGGED_IN_VALUE, NEUTRAL_TEAM_ID } from '../../../constants';
-import { GameType, NewsState, PieceType } from '../../../types';
+import { GameType, NewsState, PieceType, NewsType, ControllerType, LoggedInValueTypes } from '../../../types';
 import { gameInitialNews, gameInitialPieces } from '../../admin';
 import { pool } from '../../database';
 import { GameProperties } from './GameProperties';
@@ -148,16 +148,9 @@ export class Game extends GameProperties implements GameType {
     /**
      * Get a sql array of news alerts for this game.
      */
-    static async getAllNews(gameId: GameType['gameId']) {
+    static async getAllNews(gameId: NewsType['newsGameId']) {
         const queryString = 'SELECT * FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC';
         const inserts = [gameId];
-        type NewsType = {
-            newsId: number;
-            newsGameId: number;
-            newsOrder: number;
-            newsTitle: string;
-            newsInfo: string;
-        };
         const [rows] = await pool.query<RowDataPacket[] & NewsType[]>(queryString, inserts);
         return rows;
     }
@@ -189,7 +182,7 @@ export class Game extends GameProperties implements GameType {
     /**
      * Set loggedIn value for a specific team/controller in this game.
      */
-    async setLoggedIn(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, gameController: number, value: number) {
+    async setLoggedIn(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, gameController: ControllerType, value: LoggedInValueTypes) {
         const queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
         const inserts = [`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Controller${gameController}`, value, this.gameId];
         await pool.query(queryString, inserts);
@@ -257,7 +250,7 @@ export class Game extends GameProperties implements GameType {
     /**
      * Set the points for a specific team in this game.
      */
-    async setPoints(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, newPoints: number) {
+    async setPoints(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, newPoints: GameType['gameBluePoints']) {
         // TODO: could have a type alias for gameTeam since we use it a lot? (always ensure it is 'number' -> instead of manually always making it a 'number')
         const queryString = 'UPDATE games SET ?? = ? WHERE gameId = ?';
         const inserts = [`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Points`, newPoints, this.gameId];
@@ -268,7 +261,7 @@ export class Game extends GameProperties implements GameType {
     /**
      * Set the status for a specific team in this game.
      */
-    async setStatus(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, newStatus: number) {
+    async setStatus(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, newStatus: GameType['gameBlueStatus']) {
         const queryString = 'UPDATE games set ?? = ? WHERE gameId = ?';
         const inserts = [`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Status`, newStatus, this.gameId];
         await pool.query(queryString, inserts);
@@ -302,7 +295,7 @@ export class Game extends GameProperties implements GameType {
      *
      * Usually 1, 2, or 3
      */
-    async setRound(newGameRound: number) {
+    async setRound(newGameRound: GameType['gameRound']) {
         const queryString = 'UPDATE games SET gameRound = ? WHERE gameId = ?';
         const inserts = [newGameRound, this.gameId];
         await pool.query(queryString, inserts);
@@ -406,11 +399,13 @@ export class Game extends GameProperties implements GameType {
 
     /**
      * Change flag ownership for a certain team.
+     * // TODO: need an enum or type that lists all possible airfield numbers
      */
     setFlag(flagNumber: number, flagValue: GameType['flag0']) {
         this[`flag${flagNumber}`] = flagValue;
     }
 
+    // TODO: need an enum or type that lists all possible airfield numbers
     setAirfield(airfieldNumber: number, airfieldValue: GameType['airfield0']) {
         this[`airfield${airfieldNumber}`] = airfieldValue;
     }

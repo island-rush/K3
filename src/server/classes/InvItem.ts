@@ -13,7 +13,7 @@ export class InvItem implements InvItemType {
     invItemTeamId: InvItemType['invItemTeamId'];
     invItemTypeId: InvItemType['invItemTypeId'];
 
-    constructor(invItemId: number) {
+    constructor(invItemId: InvItemType['invItemId']) {
         this.invItemId = invItemId;
     }
 

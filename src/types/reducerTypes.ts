@@ -1,4 +1,16 @@
-import { AIRFIELD_TYPE, FLAG_TYPE, LAND_TYPE, MISSILE_SILO_TYPE, WATER_TYPE, NEUTRAL_TEAM_ID } from '../constants';
+import {
+    AIRFIELD_TYPE,
+    FLAG_TYPE,
+    LAND_TYPE,
+    MISSILE_SILO_TYPE,
+    WATER_TYPE,
+    NEUTRAL_TEAM_ID,
+    NO_MENU_INDEX,
+    SHOP_MENU_INDEX,
+    INV_MENU_INDEX,
+    SPACE_MENU_INDEX,
+    GAME_INFO_MENU_INDEX
+} from '../constants';
 import { EventItemType, GameType, InvItemType, NewsType, PieceType, ShopItemType } from './databaseTables';
 import { GameSession } from './sessionTypes';
 
@@ -65,7 +77,7 @@ export type GameboardMetaState = {
     /**
      * Id of menu that should be open.
      */
-    selectedMenuId: number;
+    selectedMenuId: typeof NO_MENU_INDEX | typeof SHOP_MENU_INDEX | typeof INV_MENU_INDEX | typeof SPACE_MENU_INDEX | typeof GAME_INFO_MENU_INDEX;
 };
 
 export type CapabilitiesState = {
@@ -168,7 +180,7 @@ export type CapabilitiesState = {
     /**
      * Contains list of missile pieceId's that are currently disrupted.
      */
-    confirmedMissileDisrupts: number[];
+    confirmedMissileDisrupts: PieceType['pieceId'][];
 
     /**
      * Indicates if this team has a cyber defense currently in effect.
@@ -261,7 +273,7 @@ export type NewsState = {
 export type RefuelState = {
     isActive: boolean;
     isMinimized: boolean;
-    selectedTankerPieceId: number;
+    selectedTankerPieceId: PieceType['pieceId'];
     selectedTankerPieceIndex: number;
     tankers: (EventItemType &
         PieceType & {
