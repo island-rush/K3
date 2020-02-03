@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { TYPE_NAMES } from '../../../../../constants';
-import { ARROW_IMAGE, DICE_IMAGES, TYPE_IMAGES } from '../../styleConstants';
+import { ARROW_IMAGE, DICE_IMAGES, TYPE_IMAGES, SELECTED_BORDERS } from '../../styleConstants';
 
 const battlePieceStyle: any = {
     backgroundColor: 'white',
@@ -11,7 +11,7 @@ const battlePieceStyle: any = {
     borderRadius: '2%'
 };
 
-//TODO: could probably refactor how this is called to a cleaner way...
+// TODO: could probably refactor how this is called to a cleaner way...
 const battlePieceWonStyle: any = [
     {},
     {
@@ -43,11 +43,6 @@ const diceBoxStyle: any = {
     position: 'relative'
 };
 
-const selected: any = [
-    { border: '2px solid red' }, //selected
-    { border: '2px solid black' } //not selected
-];
-
 interface Props {
     isFriendly: boolean;
     battlePieceClick: any;
@@ -73,7 +68,7 @@ export class BattlePiece extends Component<Props> {
                 style={{
                     ...boxStyle,
                     ...TYPE_IMAGES[battlePiece.piece.pieceTypeId],
-                    ...selected[isSelected ? 0 : 1]
+                    ...SELECTED_BORDERS[isSelected ? 0 : 1]
                 }}
             >
                 {battlePieceIndex}

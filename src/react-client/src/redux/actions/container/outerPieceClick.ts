@@ -8,7 +8,7 @@ import { EnterContainerRequestAction, PieceType } from '../../../../../types';
  */
 export const outerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
-        //TODO: figure out if this is allowed (like all other actions)
+        // TODO: figure out if this is allowed (like all other actions)
 
         const clientAction: EnterContainerRequestAction = {
             type: SERVER_OUTER_PIECE_CLICK,
@@ -19,5 +19,6 @@ export const outerPieceClick = (selectedPiece: PieceType, containerPiece: PieceT
         };
 
         sendToServer(clientAction);
+        return;
     };
 };

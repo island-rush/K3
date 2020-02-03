@@ -37,5 +37,6 @@ export const missileAttack = (piece: PieceType) => {
         };
 
         dispatch(missileSelecingAction);
+        return;
     };
 };

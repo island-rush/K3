@@ -1,6 +1,6 @@
 export * from './battles';
 export * from './capabilities';
-export * from './clearPieceSelection'; //eventually replaced with menuSelect(-1) or menuSelect(0)
+export * from './clearPieceSelection';
 export * from './container';
 export * from './inv';
 export * from './mainButtonClick';

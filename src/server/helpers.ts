@@ -23,7 +23,7 @@ export const sendToClient = (socketId: Socket['id'], action: { type: string; [ex
     io.to(`${socketId}`).emit(SOCKET_SERVER_SENDING_ACTION, action);
 };
 
-export const sendToTeam = (gameId: number, team: number, action: { type: string; [extraProps: string]: any }) => {
+export const sendToTeam = (gameId: GameType['gameId'], team: number, action: { type: string; [extraProps: string]: any }) => {
     io.in(`game${gameId}team${team}`).emit(SOCKET_SERVER_SENDING_ACTION, action);
 };
 

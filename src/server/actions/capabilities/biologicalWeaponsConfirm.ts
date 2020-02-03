@@ -1,5 +1,5 @@
 // prettier-ignore
-import { BIOLOGICAL_WEAPONS_TYPE_ID, BIO_WEAPON_SELECTED, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { ALL_POSITIONS, BIOLOGICAL_WEAPONS_TYPE_ID, BIO_WEAPON_SELECTED, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
 import { BioWeaponsAction, BioWeaponsRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -68,8 +68,8 @@ export const biologicalWeaponsConfirm = async (session: SocketSession, action: B
     }
 
     // does the position make sense?
-    if (selectedPositionId < 0) {
-        sendUserFeedback(socketId, 'got a negative position for bio weapon.');
+    if (!ALL_POSITIONS.includes(selectedPositionId)) {
+        sendUserFeedback(socketId, 'got a bad position for bio weapon.');
         return;
     }
 

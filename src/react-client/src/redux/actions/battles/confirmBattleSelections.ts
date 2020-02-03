@@ -10,7 +10,7 @@ export const confirmBattleSelections = () => {
         const { gameInfo, battle } = getState();
         const { gameStatus } = gameInfo;
 
-        //TODO: could do loads more checks on current status of gameplay to prevent accidental presses? (but same checks on backend probably)
+        // TODO: could do loads more checks on current status of gameplay to prevent accidental presses? (but same checks on backend probably)
         if (gameStatus === WAITING_STATUS) {
             //already waiting
             dispatch(setUserfeedbackAction('already waiting, client prevented something...'));
@@ -28,5 +28,6 @@ export const confirmBattleSelections = () => {
         };
 
         sendToServer(clientAction);
+        return;
     };
 };

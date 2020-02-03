@@ -15,5 +15,6 @@ export const clearOldBattle = () => {
         };
 
         dispatch(clearBattleAction);
+        return;
     };
 };

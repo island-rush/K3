@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { NewsState } from '../../../../types';
 import { NEWS_POPUP_IMAGES } from '../styleConstants';
 
@@ -57,14 +57,16 @@ interface Props {
 }
 
 export const NewsPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
-    const minimizeClick = (event: any) => {
+    const minimizeClick = (event: MouseEvent) => {
         event.preventDefault();
         newsPopupMinimizeToggle();
         event.stopPropagation();
     };
 
     return (
-        <div style={news.active ? null : invisibleStyle}>
+        // Overall Component
+        <div style={news.isActive ? null : invisibleStyle}>
+            {/* Popup */}
             <div style={!news.isMinimized ? newsPopupStyle : invisibleStyle}>
                 <div style={popupTitleStyle}>NEWS ALERT!</div>
                 <br />
@@ -73,6 +75,8 @@ export const NewsPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
                 <div style={newsInfoStyle}>{news.newsInfo}</div>
                 <div onClick={minimizeClick} style={{ ...newsPopupMinimizeStyle, ...NEWS_POPUP_IMAGES.minIcon }} />
             </div>
+
+            {/* Minimize Button on the Left */}
             <div
                 style={{ ...(news.isMinimized ? newsPopupMinimizeStyle : invisibleStyle), ...NEWS_POPUP_IMAGES.minIcon, ...isMinimizedStyle }}
                 onClick={minimizeClick}

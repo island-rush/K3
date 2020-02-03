@@ -37,5 +37,6 @@ export const bombardment = (piece: PieceType) => {
         };
 
         dispatch(bombardmentSelectingAction);
+        return;
     };
 };

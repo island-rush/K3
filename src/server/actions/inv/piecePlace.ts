@@ -115,7 +115,7 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
     const serverAction: InvItemPlaceAction = {
         type: PIECE_PLACE,
         payload: {
-            invItemId,
+            invItem: thisInvItem,
             positionId: selectedPosition,
             newPiece
         }

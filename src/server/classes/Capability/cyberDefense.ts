@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { ACTIVATED, CYBER_DOMINANCE_ROUNDS, BLUE_TEAM_ID, RED_TEAM_ID, DEACTIVATED } from '../../../constants';
-import { CyberDefenseType } from '../../../types';
+import { CyberDefenseType, GameType } from '../../../types';
 
-export const getCyberDefense = async (gameId: number, gameTeam: number) => {
+export const getCyberDefense = async (gameId: GameType['gameId'], gameTeam: number) => {
     const queryString = 'SELECT * FROM cyberDefenses WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & CyberDefenseType[]>(queryString, inserts);
@@ -11,7 +11,7 @@ export const getCyberDefense = async (gameId: number, gameTeam: number) => {
     return results.length !== 0;
 };
 
-export const useCyberDefense = async (gameId: number) => {
+export const useCyberDefense = async (gameId: GameType['gameId']) => {
     const queryString = 'SELECT * FROM cyberDefenses WHERE gameId = ?';
     const inserts = [gameId];
     const [results] = await pool.query<RowDataPacket[] & CyberDefenseType[]>(queryString, inserts);
@@ -37,7 +37,7 @@ export const useCyberDefense = async (gameId: number) => {
     await pool.query(deleteQuery, deleteInserts);
 };
 
-export const insertCyberDefense = async (gameId: number, gameTeam: number) => {
+export const insertCyberDefense = async (gameId: GameType['gameId'], gameTeam: number) => {
     const insertQuery = 'SELECT * FROM cyberDefenses WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & CyberDefenseType[]>(insertQuery, inserts);
@@ -53,7 +53,7 @@ export const insertCyberDefense = async (gameId: number, gameTeam: number) => {
     return true;
 };
 
-export const decreaseCyberDefense = async (gameId: number) => {
+export const decreaseCyberDefense = async (gameId: GameType['gameId']) => {
     let queryString = 'UPDATE cyberDefenses SET roundsLeft = roundsLeft - 1 WHERE gameId = ?';
     const inserts = [gameId, ACTIVATED];
     await pool.query(queryString, inserts);

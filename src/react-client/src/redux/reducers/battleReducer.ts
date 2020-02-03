@@ -1,22 +1,12 @@
+import { AnyAction } from 'redux';
 // prettier-ignore
 import { BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CLEAR_BATTLE, ENEMY_PIECE_SELECT, EVENT_BATTLE, INITIAL_GAMESTATE, NO_MORE_EVENTS, TARGET_PIECE_SELECT } from '../../../../constants';
 // prettier-ignore
-import { BattlePieceSelectAction, BattlePopupToggleAction, BattleResultsAction, BattleState, ClearBattleAction, EnemyPieceSelectAction, EventBattleAction, GameInitialStateAction, NoMoreEventsAction, TargetPieceClickAction } from '../../../../types';
-
-type BattleReducerActions =
-    | BattleResultsAction
-    | NoMoreEventsAction
-    | EventBattleAction
-    | TargetPieceClickAction
-    | EnemyPieceSelectAction
-    | GameInitialStateAction
-    | BattlePieceSelectAction
-    | ClearBattleAction
-    | BattlePopupToggleAction;
+import { BattlePieceSelectAction, BattleResultsAction, BattleState, EnemyPieceSelectAction, EventBattleAction, GameInitialStateAction, TargetPieceClickAction } from '../../../../types';
 
 const initialBattleState: BattleState = {
     isMinimized: false,
-    active: false,
+    isActive: false,
     selectedBattlePiece: -1,
     selectedBattlePieceIndex: -1, //helper to find the piece within the array
     masterRecord: null,
@@ -24,7 +14,7 @@ const initialBattleState: BattleState = {
     enemyPieces: []
 };
 
-export function battleReducer(state = initialBattleState, action: BattleReducerActions) {
+export function battleReducer(state = initialBattleState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: BattleState = JSON.parse(JSON.stringify(state));
@@ -34,7 +24,7 @@ export function battleReducer(state = initialBattleState, action: BattleReducerA
             if ((action as GameInitialStateAction).payload.battle) {
                 stateCopy.friendlyPieces = (action as GameInitialStateAction).payload.battle!.friendlyPieces;
                 stateCopy.enemyPieces = (action as GameInitialStateAction).payload.battle!.enemyPieces;
-                stateCopy.active = true;
+                stateCopy.isActive = true;
             }
             return stateCopy;
 
@@ -72,23 +62,13 @@ export function battleReducer(state = initialBattleState, action: BattleReducerA
 
         case EVENT_BATTLE:
             stateCopy = initialBattleState;
-            stateCopy.active = true;
+            stateCopy.isActive = true;
             stateCopy.friendlyPieces = (action as EventBattleAction).payload.friendlyPieces;
             stateCopy.enemyPieces = (action as EventBattleAction).payload.enemyPieces;
             return stateCopy;
 
         case NO_MORE_EVENTS:
-            stateCopy = {
-                isMinimized: false,
-                active: false,
-                selectedBattlePiece: -1,
-                selectedBattlePieceIndex: -1, //helper to find the piece within the array
-                masterRecord: null,
-                friendlyPieces: [],
-                enemyPieces: []
-            };
-
-            return stateCopy;
+            return initialBattleState;
 
         case BATTLE_FIGHT_RESULTS:
             stateCopy.masterRecord = (action as BattleResultsAction).payload.masterRecord;
@@ -125,7 +105,7 @@ export function battleReducer(state = initialBattleState, action: BattleReducerA
 
                 if (targetId) {
                     //get the target information from the friendlyPieces
-                    //TODO: could refactor this to be better, lots of lookups probably not good
+                    // TODO: could refactor this to be better, lots of lookups probably not good
                     let friendlyPieceIndex = stateCopy.friendlyPieces.findIndex(
                         (friendlyBattlePiece: any) => friendlyBattlePiece.piece.pieceId === targetId
                     );
@@ -175,7 +155,9 @@ export function battleReducer(state = initialBattleState, action: BattleReducerA
             delete stateCopy.masterRecord;
 
             return stateCopy;
+
         default:
+            // Do nothing
             return state;
     }
 }

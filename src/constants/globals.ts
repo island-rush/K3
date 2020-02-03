@@ -60,3 +60,21 @@ TYPE_OWNER_NAMES[TYPE_SEA] = 'JFMCC';
 TYPE_OWNER_NAMES[TYPE_SPECIAL] = 'JFSOCC';
 
 export const ALL_COMMANDER_TYPES = [TYPE_MAIN, TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL];
+
+export const NO_POSITION = -1;
+
+export const NO_MENU_INDEX = -1;
+export const SHOP_MENU_INDEX = 0;
+export const INV_MENU_INDEX = 1;
+export const SPACE_MENU_INDEX = 2;
+export const GAME_INFO_MENU_INDEX = 3;
+
+export const PHASE_NAMES: { [phaseNumber: number]: string } = {};
+PHASE_NAMES[NEWS_PHASE_ID] = 'News Phase';
+PHASE_NAMES[PURCHASE_PHASE_ID] = 'Purchase Phase';
+PHASE_NAMES[COMBAT_PHASE_ID] = 'Combat Phase';
+PHASE_NAMES[PLACE_PHASE_ID] = 'Place Troops Phase';
+
+export const SLICE_NAMES: { [sliceNumber: number]: string } = {};
+SLICE_NAMES[SLICE_PLANNING_ID] = 'Planning Slice';
+SLICE_NAMES[SLICE_EXECUTING_ID] = 'Executing Steps Slice';

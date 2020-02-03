@@ -8,7 +8,7 @@ import { ExitContainerRequestAction, PieceType } from '../../../../../types';
  */
 export const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
-        //TODO: figure out if inner piece click is allowed
+        // TODO: figure out if inner piece click is allowed
 
         const clientAction: ExitContainerRequestAction = {
             type: SERVER_INNER_PIECE_CLICK,
@@ -19,5 +19,6 @@ export const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceT
         };
 
         sendToServer(clientAction);
+        return;
     };
 };

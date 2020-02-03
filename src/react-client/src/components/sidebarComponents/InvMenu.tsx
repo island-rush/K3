@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
-import { ANTI_SATELLITE_MISSILES_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, CYBER_DOMINANCE_TYPE_ID, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, LIST_ALL_CAPABILITIES, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, RAISE_MORALE_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SOF_TEAM_TYPE_ID, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL, CYBER_DOM_CHECK_TYPE_ID } from "../../../../constants";
+import { ANTI_SATELLITE_MISSILES_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, CYBER_DOMINANCE_TYPE_ID, CYBER_DOM_CHECK_TYPE_ID, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, LIST_ALL_CAPABILITIES, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, RAISE_MORALE_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from "../../../../constants";
 import { CapabilitiesState, InvItemType, InvState } from '../../../../types';
 //prettier-ignore
-import { cyberDefenseCheck, airPieceClick, antiSatelliteMissiles, atcScramble, biologicalWeapons, communicationsInterruption, cyberDominance, droneSwarms, goldenEye, insurgency, landPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines, seaPieceClick } from "../../redux";
+import { antiSatelliteMissiles, atcScramble, biologicalWeapons, communicationsInterruption, cyberDefenseCheck, cyberDominance, droneSwarms, goldenEye, insurgency, invPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines } from "../../redux";
 import { InvItem } from './InvItem';
 
 const inventoryStyle: any = {
@@ -71,12 +71,10 @@ const itemCount = (array: any, value: any) => {
 };
 
 interface Props {
-    confirmedRaiseMorale: number[];
-    selected: boolean;
+    isSelected: boolean;
     invItems: InvState;
-    airPieceClick: any;
-    landPieceClick: any;
-    seaPieceClick: any;
+    confirmedRaiseMorale: number[];
+    invPieceClick: any;
     atcScramble: any;
     cyberDominance: any;
     missileLaunchDisruption: any;
@@ -96,10 +94,10 @@ interface Props {
 
 class InvMenu extends Component<Props> {
     render() {
-        //TODO: selected is a poorly chosen variable name, change to MenuIsVisible or something (since selected is used for other components too)
         //prettier-ignore
-        const { cyberDefenseCheck, confirmedRaiseMorale, selected, invItems, airPieceClick, landPieceClick, seaPieceClick, atcScramble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } = this.props;
+        const { invPieceClick, cyberDefenseCheck, confirmedRaiseMorale, isSelected, invItems, atcScramble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } = this.props;
 
+        // TODO: change this to call a central redux capability function which then determined which sub-capability (these) to call
         let capabilityFunctions: any = {};
         capabilityFunctions[ATC_SCRAMBLE_TYPE_ID] = atcScramble;
         capabilityFunctions[CYBER_DOMINANCE_TYPE_ID] = cyberDominance;
@@ -120,67 +118,72 @@ class InvMenu extends Component<Props> {
         const airItems = invItems.filter((invItem: InvItemType) => {
             return TYPE_OWNERS[TYPE_AIR].includes(invItem.invItemTypeId);
         });
+        const airInvComponents = airItems.map((invItem: InvItemType, index: number) => (
+            <InvItem key={index} invItem={invItem} invItemClick={invPieceClick} />
+        ));
+
         const landItems = invItems.filter((invItem: InvItemType) => {
             return TYPE_OWNERS[TYPE_LAND].includes(invItem.invItemTypeId);
         });
+        const landInvComponents = landItems.map((invItem: InvItemType, index: number) => (
+            <InvItem key={index} invItem={invItem} invItemClick={invPieceClick} />
+        ));
+
         const seaItems = invItems.filter((invItem: InvItemType) => {
             return TYPE_OWNERS[TYPE_SEA].includes(invItem.invItemTypeId);
         });
+        const seaInvComponents = seaItems.map((invItem: InvItemType, index: number) => (
+            <InvItem key={index} invItem={invItem} invItemClick={invPieceClick} />
+        ));
+
         const specialItems = invItems.filter((invItem: InvItemType) => {
             return TYPE_OWNERS[TYPE_SPECIAL].includes(invItem.invItemTypeId);
         });
+        const specialInvComponents = specialItems.map((invItem: InvItemType, index: number) => (
+            <InvItem key={index} invItem={invItem} invItemClick={invPieceClick} />
+        ));
+
         const capabilityItems = invItems.filter((invItem: InvItemType) => {
             return LIST_ALL_CAPABILITIES.includes(invItem.invItemTypeId);
         });
-
-        const airInvComponents = airItems.map((invItem: InvItemType, index: number) => (
-            <InvItem key={index} invItem={invItem} invItemClick={airPieceClick} />
-        ));
-        const landInvComponents = landItems.map((invItem: InvItemType, index: number) => (
-            <InvItem key={index} invItem={invItem} invItemClick={landPieceClick} />
-        )); //TODO: are helicopters special? (placed not on land?) -> determine other special cases if able
-        const seaInvComponents = seaItems.map((invItem: InvItemType, index: number) => (
-            <InvItem key={index} invItem={invItem} invItemClick={seaPieceClick} />
-        ));
-
-        //SOF team is the only land piece in special group, others are air pieces
-        const specialInvComponents = specialItems.map((invItem: InvItemType, index: number) => (
-            <InvItem key={index} invItem={invItem} invItemClick={invItem.invItemTypeId === SOF_TEAM_TYPE_ID ? landPieceClick : airPieceClick} />
-        ));
-
         const capabilityItemComponents = capabilityItems.map((invItem: InvItemType, index: number) => (
             <InvItem key={index} invItem={invItem} invItemClick={capabilityFunctions[invItem.invItemTypeId]} />
         ));
 
-        //number of boosts from raise morale
+        // number of boosts from raise morale
         const airItemMoveBoost = itemCount(confirmedRaiseMorale, TYPE_AIR);
         const landItemMoveBoost = itemCount(confirmedRaiseMorale, TYPE_LAND);
         const seaItemMoveBoost = itemCount(confirmedRaiseMorale, TYPE_SEA);
         const specialItemMoveBoost = itemCount(confirmedRaiseMorale, TYPE_SPECIAL);
 
         return (
-            <div style={selected ? inventoryStyle : invisibleStyle}>
+            <div style={isSelected ? inventoryStyle : invisibleStyle}>
                 <div>Inventory Section for Purchased Items</div>
+
                 <div style={airpieceItemsContainerStyle}>
                     <div> Air Pieces</div>
                     <div> Boost = {airItemMoveBoost}</div>
                     {airInvComponents}
                 </div>
+
                 <div style={landpieceItemsContainerStyle}>
                     <div>Land Pieces</div>
                     <div> Boost = {landItemMoveBoost}</div>
                     {landInvComponents}
                 </div>
+
                 <div style={seapieceItemsContainerStyle}>
                     <div>Maritime Pieces</div>
                     <div> Boost = {seaItemMoveBoost}</div>
                     {seaInvComponents}
                 </div>
+
                 <div style={specialpieceItemsContainerStyle}>
                     <div>SOF Pieces</div>
                     <div> Boost = {specialItemMoveBoost}</div>
                     {specialInvComponents}
                 </div>
+
                 <div style={warfareItemsContainerStyle}>
                     <div>Capabilities</div>
                     {capabilityItemComponents}
@@ -196,9 +199,7 @@ const mapStateToProps = ({ invItems, capabilities }: { invItems: InvState; capab
 });
 
 const mapActionsToProps = {
-    airPieceClick,
-    landPieceClick,
-    seaPieceClick,
+    invPieceClick,
     atcScramble,
     cyberDominance,
     missileLaunchDisruption,

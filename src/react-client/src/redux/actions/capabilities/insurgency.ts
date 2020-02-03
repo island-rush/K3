@@ -30,5 +30,6 @@ export const insurgency = (invItem: InvItemType) => {
         };
 
         dispatch(insurgencySelectingAction);
+        return;
     };
 };

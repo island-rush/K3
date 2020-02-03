@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
 import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, NUKE_RANGE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from '../../../../constants';
@@ -12,7 +12,7 @@ import { ContainerPopup } from './container/ContainerPopup';
 import { NewsPopup } from './NewsPopup';
 import RefuelPopup from './refuel/RefuelPopup';
 // import AirfieldPopup from './airfield/AirfieldPopup';
-const { HexGrid, Layout, Hexagon, Pattern } = require('react-hexgrid'); //TODO: create type declaration for react-hexgrid
+const { HexGrid, Layout, Hexagon, Pattern } = require('react-hexgrid'); // TODO: create type declaration for react-hexgrid
 
 const imageSize = { x: 3.4, y: 2.75 };
 const positionImagesPath = './images/positionImages/';
@@ -222,39 +222,29 @@ class Gameboard extends Component<Props> {
         const { confirmedPlans } = planning;
 
         let planningPositions: any = []; //all of the positions part of a plan
-        let containerPositions: any = []; //specific positions part of a plan of type container
         let battlePositions: any = []; //position(s) involved in a battle
         let remoteSensedPositions: any = [];
         let commInterruptPositions: any = [];
         let goldenEyePositions: any = [];
 
         for (let x = 0; x < planning.moves.length; x++) {
-            const { type, positionId } = planning.moves[x];
+            const positionId = planning.moves[x];
 
             if (!planningPositions.includes(positionId)) {
                 planningPositions.push(positionId);
-            }
-
-            if (type === 'container' && !containerPositions.includes(positionId)) {
-                containerPositions.push(positionId);
             }
         }
 
         if (selectedPiece !== null) {
             if (selectedPiece.pieceId in confirmedPlans) {
                 for (let z = 0; z < confirmedPlans[selectedPiece.pieceId].length; z++) {
-                    const { type, positionId } = confirmedPlans[selectedPiece.pieceId][z];
-                    if (type === 'move') {
-                        planningPositions.push(positionId);
-                    }
-                    if (type === 'container') {
-                        containerPositions.push(positionId);
-                    }
+                    const positionId = confirmedPlans[selectedPiece.pieceId][z];
+                    planningPositions.push(positionId);
                 }
             }
         }
 
-        if (battle.active) {
+        if (battle.isActive) {
             if (battle.friendlyPieces.length > 0) {
                 let { piecePositionId } = battle.friendlyPieces[0].piece;
                 battlePositions.push(piecePositionId);
@@ -301,19 +291,17 @@ class Gameboard extends Component<Props> {
                 r={rIndexSolver(parseInt(positionIndex))}
                 s={-999}
                 fill={patternSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex), confirmedAtcScramble, confirmedNukes)}
-                //TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
-                onClick={(event: any) => {
+                // TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
+                onClick={(event: MouseEvent) => {
                     event.preventDefault();
                     selectPosition(parseInt(positionIndex));
                     event.stopPropagation();
                 }}
                 //These are found in the Game.css
-                //TODO: highlight according to some priority list
+                // TODO: highlight according to some priority list
                 className={
                     selectedPosition === parseInt(positionIndex)
                         ? 'selectedPos'
-                        : containerPositions.includes(parseInt(positionIndex))
-                        ? 'containerPos'
                         : planningPositions.includes(parseInt(positionIndex))
                         ? 'plannedPos'
                         : highlightedPositions.includes(parseInt(positionIndex))
@@ -346,7 +334,7 @@ class Gameboard extends Component<Props> {
                         ? 'goldenEyePos' // TODO: make it different
                         : ''
                 }
-                //TODO: pass down what the highlighting means into the title
+                // TODO: pass down what the highlighting means into the title
                 title={titleSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex))}
                 topBlue={hasPieceType(
                     gameboard[parseInt(positionIndex)],

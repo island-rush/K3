@@ -11,7 +11,7 @@ export const undoFuelSelection = (aircraftPiece: PieceType, aircraftPieceIndex: 
         // const { gameboardMeta } = getState();
         // const { selectedTankerPieceId } = gameboardMeta.refuel;
 
-        //TODO: determine if it can undo the selection...
+        // TODO: determine if it can undo the selection...
 
         const undoFuelSelectionAction: UndoFuelSelectionAction = {
             type: UNDO_FUEL_SELECTION,

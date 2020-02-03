@@ -39,17 +39,17 @@ const purchaseableItemsContainerStyle: any = {
 };
 
 interface Props {
+    isSelected: boolean;
+    points: number;
     shopItems: ShopState;
-    selected: boolean;
     purchase: any;
     refund: any;
-    points: number;
     confirmPurchase: any;
 }
 
 class ShopMenu extends Component<Props> {
     render() {
-        const { shopItems, selected, purchase, refund, points, confirmPurchase } = this.props;
+        const { shopItems, isSelected, purchase, refund, points, confirmPurchase } = this.props;
 
         const airShopComponents = TYPE_OWNERS[TYPE_AIR].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
@@ -72,33 +72,40 @@ class ShopMenu extends Component<Props> {
         ));
 
         return (
-            <div style={selected ? shopStyle : invisibleStyle}>
+            <div style={isSelected ? shopStyle : invisibleStyle}>
                 <div>Shop Menu</div>
                 <div>Points: {points}</div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Air</div>
                     {airShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Land</div>
                     {landShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Maritime</div>
                     {seaShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>SOF</div>
                     {specialShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Capabilities</div>
                     {capabilityShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Cart</div>
                     {shopItemComponents}
                 </div>
+
                 <div
                     style={purchaseButtonStyle}
                     onClick={event => {

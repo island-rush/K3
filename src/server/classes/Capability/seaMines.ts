@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { Piece, pool } from '../../';
 import { TYPE_OWNERS, TYPE_SEA } from '../../../constants';
-import { SeaMineType } from '../../../types';
+import { SeaMineType, GameType } from '../../../types';
 
-export const insertSeaMine = async (gameId: number, gameTeam: number, selectedPositionId: number) => {
+export const insertSeaMine = async (gameId: GameType['gameId'], gameTeam: number, selectedPositionId: number) => {
     // TODO: could make it unique within the database by doing double primary key, instead of single key id, other database tricks and best practices
     let queryString = 'SELECT * FROM seaMines WHERE gameId = ? AND positionId = ? AND gameTeam = ?';
     let inserts = [gameId, selectedPositionId, gameTeam];
@@ -20,7 +20,7 @@ export const insertSeaMine = async (gameId: number, gameTeam: number, selectedPo
     return true;
 };
 
-export const getSeaMines = async (gameId: number, gameTeam: number) => {
+export const getSeaMines = async (gameId: GameType['gameId'], gameTeam: number) => {
     const queryString = 'SELECT * FROM seaMines WHERE gameId = ? AND gameTeam = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & SeaMineType[]>(queryString, inserts);
@@ -33,7 +33,7 @@ export const getSeaMines = async (gameId: number, gameTeam: number) => {
     return listOfSeaMines;
 };
 
-export const checkSeaMineHit = async (gameId: number): Promise<number[]> => {
+export const checkSeaMineHit = async (gameId: GameType['gameId']): Promise<number[]> => {
     const queryString =
         'SELECT seaMineId, pieceId, positionId FROM seaMines INNER JOIN plans ON positionId = planPositionId INNER JOIN pieces ON planPieceId = pieceId WHERE pieceGameId = ? AND pieceTypeId in (?)';
     const inserts = [gameId, TYPE_OWNERS[TYPE_SEA]];

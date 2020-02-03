@@ -1,7 +1,7 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { Piece } from './Piece';
 import { TYPE_FUEL, TYPE_MOVES } from '../../constants';
-import { InvItemType } from '../../types';
+import { InvItemType, GameType } from '../../types';
 import { pool } from '../database';
 
 /**
@@ -65,7 +65,7 @@ export class InvItem implements InvItemType {
     /**
      * Take all shopItems and create invItems from them.
      */
-    static async insertFromShop(gameId: number, gameTeam: number) {
+    static async insertFromShop(gameId: GameType['gameId'], gameTeam: number) {
         const queryString =
             'INSERT INTO invItems (invItemId, invItemGameId, invItemTeamId, invItemTypeId) SELECT * FROM shopItems WHERE shopItemGameId = ? AND shopItemTeamId = ?';
         const inserts = [gameId, gameTeam];
@@ -75,7 +75,7 @@ export class InvItem implements InvItemType {
     /**
      * Get all invItems from the database for this game's team.
      */
-    static async all(gameId: number, gameTeam: number) {
+    static async all(gameId: GameType['gameId'], gameTeam: number) {
         const queryString = 'SELECT * FROM invItems WHERE invItemGameId = ? AND invItemTeamId = ?';
         const inserts = [gameId, gameTeam];
         const [invItems] = await pool.query<RowDataPacket[] & InvItemType[]>(queryString, inserts);

@@ -13,9 +13,9 @@ export const pieceOpen = (selectedPiece: PieceType) => {
 
         const { pieceTypeId } = selectedPiece;
 
-        //TODO: only show pieces that could go inside this container (specify that to the reducer?)
-        //TODO: do these checks on the backend as well
-        //TODO: are there any situations when we would not want players to look inside containers? (not likely)
+        // TODO: only show pieces that could go inside this container (specify that to the reducer?)
+        // TODO: do these checks on the backend as well
+        // TODO: are there any situations when we would not want players to look inside containers? (not likely)
 
         //don't want to open pieces that aren't container types
         if (!CONTAINER_TYPES.includes(pieceTypeId)) {
@@ -32,5 +32,6 @@ export const pieceOpen = (selectedPiece: PieceType) => {
         };
 
         dispatch(clientAction);
+        return;
     };
 };

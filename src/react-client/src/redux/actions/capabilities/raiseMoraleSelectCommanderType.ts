@@ -23,5 +23,6 @@ export const raiseMoraleSelectCommanderType = (selectedCommanderType: number) =>
         };
 
         sendToServer(clientAction);
+        return;
     };
 };

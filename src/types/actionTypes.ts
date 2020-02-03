@@ -184,7 +184,7 @@ export type InvItemPlaceRequestAction = {
 export type InvItemPlaceAction = {
     type: typeof PIECE_PLACE;
     payload: {
-        invItemId: InvItemType['invItemId'];
+        invItem: InvItemType;
         positionId: number;
         newPiece: PieceType;
     };
@@ -276,7 +276,7 @@ export type PlacePhaseAction = {
         confirmedNukes: CapabilitiesState['confirmedNukes'];
         confirmedAntiSat: CapabilitiesState['confirmedAntiSat'];
         confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
-        cyberDefenseIsActive: CapabilitiesState['cyberDefenseIsActive'];
+        cyberDefenseIsActive: CapabilitiesState['isCyberDefenseActive'];
     };
 };
 
@@ -296,7 +296,7 @@ export type NewRoundAction = {
         confirmedNukes: CapabilitiesState['confirmedNukes'];
         confirmedAntiSat: CapabilitiesState['confirmedAntiSat'];
         confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
-        cyberDefenseIsActive: CapabilitiesState['cyberDefenseIsActive'];
+        cyberDefenseIsActive: CapabilitiesState['isCyberDefenseActive'];
     };
 };
 
@@ -387,18 +387,15 @@ export type ConfirmPlanRequestAction = {
     type: typeof SERVER_CONFIRM_PLAN;
     payload: {
         pieceId: PieceType['pieceId'];
-        plan: singlePlan[];
+        plan: number[];
     };
 };
-
-// TODO: what are the different move types (right now only 'move' -> could remove this entirely but was preparing for different moves)
-export type singlePlan = { type: string; positionId: number };
 
 export type ConfirmPlanAction = {
     type: typeof PLAN_WAS_CONFIRMED;
     payload: {
         pieceId: PieceType['pieceId'];
-        plan: singlePlan[];
+        plan: number[];
     };
 };
 

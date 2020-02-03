@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { BLUE_TEAM_ID, RAISE_MORALE_ROUNDS, RED_TEAM_ID, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../../constants';
-import { RaiseMoraleType } from '../../../types';
+import { RaiseMoraleType, GameType } from '../../../types';
 
-export const insertRaiseMorale = async (gameId: number, gameTeam: number, selectedCommanderType: number) => {
+export const insertRaiseMorale = async (gameId: GameType['gameId'], gameTeam: number, selectedCommanderType: number) => {
     let queryString = 'SELECT * FROM raiseMorale WHERE gameId = ? AND teamId = ? AND commanderType = ?';
     let inserts = [gameId, gameTeam, selectedCommanderType];
     const [results] = await pool.query<RowDataPacket[] & RaiseMoraleType[]>(queryString, inserts);
@@ -24,7 +24,7 @@ export const insertRaiseMorale = async (gameId: number, gameTeam: number, select
     return true;
 };
 
-export const decreaseRaiseMorale = async (gameId: number) => {
+export const decreaseRaiseMorale = async (gameId: GameType['gameId']) => {
     const conn = await pool.getConnection();
 
     let queryString = 'DELETE FROM raiseMorale WHERE roundsLeft = 0';
@@ -79,7 +79,7 @@ export const decreaseRaiseMorale = async (gameId: number) => {
     conn.release();
 };
 
-export const getRaiseMorale = async (gameId: number, gameTeam: number) => {
+export const getRaiseMorale = async (gameId: GameType['gameId'], gameTeam: number) => {
     // TODO: handle more than 1 raise morale for double boosting (how would this look like when letting client know (object? / array?))
     const queryString = 'SELECT * FROM raiseMorale WHERE gameId = ?';
     const inserts = [gameId, gameTeam];

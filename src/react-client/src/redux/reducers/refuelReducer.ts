@@ -1,28 +1,19 @@
+import { AnyAction } from 'redux';
 // prettier-ignore
 import { AIRCRAFT_CLICK, EVENT_REFUEL, INITIAL_GAMESTATE, NO_MORE_EVENTS, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, TANKER_CLICK, TYPE_FUEL, UNDO_FUEL_SELECTION } from '../../../../constants';
 // prettier-ignore
-import { AircraftClickAction, EventRefuelAction, FuelResultsAction, GameInitialStateAction, NoMoreEventsAction, RefuelPopupToggleAction, RefuelState, TankerClickAction, UndoFuelSelectionAction } from '../../../../types';
-
-type RefuelReducerActions =
-    | GameInitialStateAction
-    | TankerClickAction
-    | AircraftClickAction
-    | UndoFuelSelectionAction
-    | FuelResultsAction
-    | EventRefuelAction
-    | RefuelPopupToggleAction
-    | NoMoreEventsAction;
+import { AircraftClickAction, EventRefuelAction, GameInitialStateAction, RefuelState, TankerClickAction, UndoFuelSelectionAction } from '../../../../types';
 
 const initialRefuelState: RefuelState = {
+    isActive: false,
     isMinimized: false,
-    active: false,
     selectedTankerPieceId: -1,
     selectedTankerPieceIndex: -1,
     tankers: [],
     aircraft: []
 };
 
-export function refuelReducer(state = initialRefuelState, action: RefuelReducerActions) {
+export function refuelReducer(state = initialRefuelState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: RefuelState = JSON.parse(JSON.stringify(state));
@@ -32,7 +23,7 @@ export function refuelReducer(state = initialRefuelState, action: RefuelReducerA
             if ((action as GameInitialStateAction).payload.refuel) {
                 stateCopy.aircraft = (action as GameInitialStateAction).payload.refuel!.aircraft;
                 stateCopy.tankers = (action as GameInitialStateAction).payload.refuel!.tankers;
-                stateCopy.active = true;
+                stateCopy.isActive = true;
             }
             return stateCopy;
 
@@ -68,7 +59,7 @@ export function refuelReducer(state = initialRefuelState, action: RefuelReducerA
             return stateCopy;
 
         case UNDO_FUEL_SELECTION:
-            //TODO: needs some good refactoring
+            // TODO: needs some good refactoring
             // let airPiece = payload.aircraftPiece;
             let airPieceIndex = (action as UndoFuelSelectionAction).payload.aircraftPieceIndex;
             let tankerPieceIndex2 = stateCopy.aircraft[airPieceIndex].tankerPieceIndex;
@@ -82,11 +73,8 @@ export function refuelReducer(state = initialRefuelState, action: RefuelReducerA
             stateCopy.tankers[tankerPieceIndex2!].removedFuel! -= fuelThatWasGoingToGetAdded;
             return stateCopy;
 
-        case REFUEL_RESULTS:
-            return initialRefuelState;
-
         case EVENT_REFUEL:
-            stateCopy.active = true;
+            stateCopy.isActive = true;
             stateCopy.tankers = (action as EventRefuelAction).payload.tankers;
             stateCopy.aircraft = (action as EventRefuelAction).payload.aircraft;
             stateCopy.selectedTankerPieceId = -1;
@@ -98,17 +86,11 @@ export function refuelReducer(state = initialRefuelState, action: RefuelReducerA
             return stateCopy;
 
         case NO_MORE_EVENTS:
-            stateCopy = {
-                isMinimized: false,
-                active: false,
-                selectedTankerPieceId: -1,
-                selectedTankerPieceIndex: -1,
-                tankers: [],
-                aircraft: []
-            };
-            return stateCopy;
+        case REFUEL_RESULTS:
+            return initialRefuelState;
 
         default:
+            // Do nothing
             return state;
     }
 }

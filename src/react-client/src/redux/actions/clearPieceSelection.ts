@@ -1,4 +1,4 @@
-//TODO: get rid of this function and use pieceClick(-1) or something that could handle it that way
+// TODO: get rid of this function and use pieceClick(-1) or something that could handle it that way
 
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
@@ -12,7 +12,7 @@ export const clearPieceSelection = () => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { planning } = getState();
 
-        if (!planning.active) {
+        if (!planning.isActive) {
             const pieceClearAction: PieceClearAction = {
                 type: PIECE_CLEAR_SELECTION,
                 payload: {}

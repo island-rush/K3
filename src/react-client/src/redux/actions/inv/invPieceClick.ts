@@ -1,34 +1,33 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { PLACE_PHASE_ID, SERVER_PIECE_PLACE } from '../../../../../constants';
+import { PLACE_PHASE_ID, SERVER_PIECE_PLACE, NO_POSITION } from '../../../../../constants';
 import { InvItemPlaceRequestAction, InvItemType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
- * Click an inv item to put into a sea position.
+ * Action to put inv item on the board.
  */
-export const seaPieceClick = (invItem: InvItemType) => {
+export const invPieceClick = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, gameInfo } = getState();
 
         const { gamePhase } = gameInfo;
 
         if (gamePhase !== PLACE_PHASE_ID) {
-            dispatch(setUserfeedbackAction('wrong phase to place sea inv item.'));
+            dispatch(setUserfeedbackAction('wrong phase to place inv item.'));
             return;
         }
 
         const { selectedPosition } = gameboardMeta;
 
-        if (selectedPosition === -1) {
+        if (selectedPosition === NO_POSITION) {
             dispatch(setUserfeedbackAction('Must select a position before using an inv item...'));
             return;
         }
 
-        //TODO: Is this position a sea position or around the island we own?
-        //other game effects that might prevent placing it...
+        // TODO: Client side checks
 
-        const { invItemId } = invItem; //TODO: send the whole item anyway? (even though the server only uses the id, consistent...)
+        const { invItemId } = invItem; // TODO: send the whole item anyway to be consistent...
 
         const clientAction: InvItemPlaceRequestAction = {
             type: SERVER_PIECE_PLACE,
@@ -39,5 +38,6 @@ export const seaPieceClick = (invItem: InvItemType) => {
         };
 
         sendToServer(clientAction);
+        return;
     };
 };

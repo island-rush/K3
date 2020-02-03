@@ -33,5 +33,6 @@ export const antiSatelliteMissiles = (invItem: InvItemType) => {
         };
 
         sendToServer(antiSatRequestAction);
+        return;
     };
 };

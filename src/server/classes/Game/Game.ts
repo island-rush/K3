@@ -65,7 +65,7 @@ export class Game extends GameProperties implements GameType {
 
         return {
             isMinimized: false,
-            active: true,
+            isActive: true,
             newsTitle,
             newsInfo
         } as NewsState;
@@ -148,7 +148,7 @@ export class Game extends GameProperties implements GameType {
     /**
      * Get a sql array of news alerts for this game.
      */
-    static async getAllNews(gameId: number) {
+    static async getAllNews(gameId: GameType['gameId']) {
         const queryString = 'SELECT * FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC';
         const inserts = [gameId];
         type NewsType = {

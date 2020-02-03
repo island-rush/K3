@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { cancelPlan, confirmPlan, startPlan, undoMove } from '../../redux';
 import { LEFT_CONTROLS_IMAGES } from '../styleConstants';
 
 const leftcontrolsStyle: any = {
@@ -38,7 +36,7 @@ interface Props {
     undoMove: () => void;
 }
 
-class Leftcontrols extends Component<Props> {
+export class Leftcontrols extends Component<Props> {
     render() {
         const { startPlan, cancelPlan, undoMove, confirmPlan } = this.props;
 
@@ -53,6 +51,7 @@ class Leftcontrols extends Component<Props> {
                         event.stopPropagation();
                     }}
                 />
+
                 <div
                     title={buttonTitles.cancel}
                     style={{ ...buttonStyle, ...LEFT_CONTROLS_IMAGES.cancel }}
@@ -62,6 +61,7 @@ class Leftcontrols extends Component<Props> {
                         event.stopPropagation();
                     }}
                 />
+
                 <div
                     title={buttonTitles.undo}
                     style={{ ...buttonStyle, ...LEFT_CONTROLS_IMAGES.undo }}
@@ -71,6 +71,7 @@ class Leftcontrols extends Component<Props> {
                         event.stopPropagation();
                     }}
                 />
+
                 <div
                     title={buttonTitles.confirm}
                     style={{ ...buttonStyle, ...LEFT_CONTROLS_IMAGES.confirm }}
@@ -84,13 +85,3 @@ class Leftcontrols extends Component<Props> {
         );
     }
 }
-
-const mapActionsToProps = {
-    startPlan,
-    cancelPlan,
-    confirmPlan,
-    undoMove
-};
-
-//Null for mapStateToProps since we aren't using any game state
-export default connect(null, mapActionsToProps)(Leftcontrols);

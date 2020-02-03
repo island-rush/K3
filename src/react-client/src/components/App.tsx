@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
+import { NO_MENU_INDEX, NO_POSITION } from '../../../constants';
 import { GameboardMetaState, PlanningState } from '../../../types';
 import { clearPieceSelection, menuSelect, selectPosition } from '../redux';
 import Bottombar from './bottombarComponents/Bottombar';
@@ -30,23 +31,24 @@ class App extends Component<Props> {
     render() {
         const { gameboardMeta, selectPosition, menuSelect, clearPieceSelection, planning } = this.props;
 
+        const style = {
+            ...appStyle,
+            ...(planning.isActive ? isPlanningStyle : '')
+        };
+
+        const onClick = (event: MouseEvent) => {
+            event.preventDefault();
+            if (gameboardMeta.selectedMenuId === NO_MENU_INDEX) {
+                selectPosition(NO_POSITION);
+            } else {
+                menuSelect(NO_MENU_INDEX);
+            }
+            clearPieceSelection();
+            event.stopPropagation();
+        };
+
         return (
-            <div
-                style={{
-                    ...appStyle,
-                    ...(planning.active ? isPlanningStyle : '')
-                }}
-                onClick={event => {
-                    event.preventDefault();
-                    if (gameboardMeta.selectedMenuId === 0) {
-                        selectPosition(-1);
-                    } else {
-                        menuSelect(0);
-                    }
-                    clearPieceSelection();
-                    event.stopPropagation();
-                }}
-            >
+            <div style={style} onClick={onClick}>
                 <Bottombar />
                 <Gameboard />
                 <Zoombox />

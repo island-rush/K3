@@ -222,7 +222,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         }, 5000);
     }
 
-    await Piece.move(gameId, currentMovementOrder); // changes the piecePositionId, deletes the plan, all for specialflag = 0
+    await Piece.move(gameId, currentMovementOrder); // changes the piecePositionId, deletes the plan
 
     await Capability.sofTakeoutAirfieldsAndSilos(thisGame);
 
@@ -376,11 +376,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         }
     }
 
-    // TODO: Container Events (special flag)
-
-    // Note: All non-move (specialflag != 0) plans should result in events (refuel/container)...
     // If there is now an event, send to user instead of PIECES_MOVE
-
     await giveNextEvent(session, { thisGame, gameTeam: BLUE_TEAM_ID });
     await giveNextEvent(session, { thisGame, gameTeam: RED_TEAM_ID });
 };

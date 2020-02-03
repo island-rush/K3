@@ -80,15 +80,9 @@ interface Props {
 
 class BattlePopup extends Component<Props> {
     render() {
-        const {
-            battlePieceClick,
-            enemyBattlePieceClick,
-            targetPieceClick,
-            confirmBattleSelections,
-            battle,
-            clearOldBattle,
-            battlePopupMinimizeToggle
-        } = this.props;
+        // prettier-ignore
+        const { battlePieceClick, enemyBattlePieceClick, targetPieceClick, confirmBattleSelections, battle, clearOldBattle, battlePopupMinimizeToggle } = this.props;
+
         const { selectedBattlePiece, friendlyPieces, enemyPieces } = battle;
 
         const friendlyBattlePieces = friendlyPieces.map((battlePiece: any, index: number) => (
@@ -104,13 +98,14 @@ class BattlePopup extends Component<Props> {
             />
         ));
 
+        // TODO: refactor BattlePiece components to have variable props instead of passing everything to both friendly and enemy (or have different props (but they have almost exact same style))
         const enemyBattlePieces = enemyPieces.map((battlePiece: any, index: number) => (
             <BattlePiece
-                isFriendly={false} //indicates right side battle piece functionality
+                isFriendly={false} // indicates right side battle piece functionality
                 battlePieceClick={battlePieceClick}
                 targetPieceClick={targetPieceClick}
                 enemyBattlePieceClick={enemyBattlePieceClick}
-                isSelected={false} //never selected
+                isSelected={false} // never selected for that side
                 key={index}
                 battlePiece={battlePiece}
                 battlePieceIndex={index}
@@ -118,7 +113,9 @@ class BattlePopup extends Component<Props> {
         ));
 
         return (
-            <div style={battle.active ? null : invisibleStyle}>
+            // Overall Component
+            <div style={battle.isActive ? null : invisibleStyle}>
+                {/* Popup */}
                 <div style={!battle.isMinimized ? battlePopupStyle : invisibleStyle}>
                     <div style={leftBattleStyle}>Friend{friendlyBattlePieces}</div>
                     <div style={rightBattleStyle}>Foe{enemyBattlePieces}</div>
@@ -145,6 +142,8 @@ class BattlePopup extends Component<Props> {
                         style={{ ...battlePopupMinimizeStyle, ...BATTLE_POPUP_IMAGES.minIcon }}
                     />
                 </div>
+
+                {/* Minimize Button on Left Side */}
                 <div
                     style={{
                         ...(battle.isMinimized ? battlePopupMinimizeStyle : invisibleStyle),

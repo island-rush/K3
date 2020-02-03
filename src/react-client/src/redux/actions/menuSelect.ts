@@ -10,7 +10,7 @@ export const menuSelect = (selectedMenuId: number) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { planning } = getState();
 
-        if (!planning.active) {
+        if (!planning.isActive) {
             const menuSelectAction: MenuSelectAction = {
                 type: MENU_SELECT,
                 payload: {

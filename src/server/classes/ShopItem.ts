@@ -1,5 +1,5 @@
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
-import { ShopItemType } from '../../types';
+import { ShopItemType, GameType } from '../../types';
 import { pool } from '../database';
 
 /**
@@ -56,7 +56,7 @@ export class ShopItem implements ShopItemType {
     /**
      * Delete all ShopItems in the database for this game's team.
      */
-    static async deleteAll(gameId: number, gameTeam: number) {
+    static async deleteAll(gameId: GameType['gameId'], gameTeam: number) {
         const queryString = 'DELETE FROM shopItems WHERE shopItemGameId = ? AND shopItemTeamId = ?';
         const inserts = [gameId, gameTeam];
         await pool.query(queryString, inserts);
@@ -65,7 +65,7 @@ export class ShopItem implements ShopItemType {
     /**
      * Get all ShopItems in the database for this game's team.
      */
-    static async all(gameId: number, gameTeam: number): Promise<ShopItemType[]> {
+    static async all(gameId: GameType['gameId'], gameTeam: number): Promise<ShopItemType[]> {
         const queryString = 'SELECT * FROM shopItems WHERE shopItemGameId = ? AND shopItemTeamId = ?';
         const inserts = [gameId, gameTeam];
         const [shopItems] = await pool.query<RowDataPacket[] & ShopItemType[]>(queryString, inserts);

@@ -1,10 +1,10 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { DESTROYER_ATTACK_RANGE_CHANCE, distanceMatrix } from '../../../constants';
-import { BombardmentType, CapabilitiesState } from '../../../types';
+import { BombardmentType, CapabilitiesState, GameType } from '../../../types';
 import { pool } from '../../database';
 import { Piece } from '../Piece';
 
-export const insertBombardmentAttack = async (gameId: number, destroyerPiece: Piece, targetPiece: Piece) => {
+export const insertBombardmentAttack = async (gameId: GameType['gameId'], destroyerPiece: Piece, targetPiece: Piece) => {
     // assume we know everything is setup by bombardmentConfirm (pieces exist, within range...)
 
     const queryString = 'SELECT * FROM bombardments WHERE gameId = ? AND destroyerId = ?';
@@ -22,7 +22,7 @@ export const insertBombardmentAttack = async (gameId: number, destroyerPiece: Pi
     return true;
 };
 
-export const getBombardmentAttack = async (gameId: number, teamId: number) => {
+export const getBombardmentAttack = async (gameId: GameType['gameId'], teamId: number) => {
     const queryString = 'SELECT * FROM bombardments WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, teamId];
     const [results] = await pool.query<RowDataPacket[] & BombardmentType[]>(queryString, inserts);
@@ -40,7 +40,7 @@ export const getBombardmentAttack = async (gameId: number, teamId: number) => {
     return confirmedBombardments;
 };
 
-export const useBombardmentAttack = async (gameId: number) => {
+export const useBombardmentAttack = async (gameId: GameType['gameId']) => {
     // go through each attack and return the 'results' of the attack or which positions to highlight?
 
     // start with big join selection that grabs all piece data (mostly just the target piece typeId / position to calculate hit %)

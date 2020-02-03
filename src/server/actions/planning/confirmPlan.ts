@@ -41,7 +41,7 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
         return;
     }
 
-    const { piecePositionId, pieceTypeId, pieceGameId, pieceTeamId, pieceMoves, pieceDisabled } = thisPiece;
+    const { piecePositionId, pieceTypeId, pieceGameId, pieceTeamId, pieceMoves, isPieceDisabled } = thisPiece;
 
     // Is this piece ours? (TODO: could also check pieceType with gameControllers)
     if (pieceGameId !== gameId || pieceTeamId !== gameTeam) {
@@ -63,7 +63,7 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
         return;
     }
 
-    if (pieceDisabled) {
+    if (isPieceDisabled) {
         sendUserFeedback(socketId, 'Piece is disabled from game effect (probably golden eye)');
         return;
     }
@@ -72,7 +72,7 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
     let previousPosition = piecePositionId;
     let trueMoveCount = 0;
     for (let x = 0; x < plan.length; x++) {
-        const { positionId } = plan[x];
+        const positionId = plan[x];
 
         const positionTerrain = initialGameboardEmpty[positionId].type;
 
@@ -100,9 +100,8 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
     // prepare the bulk insert
     const plansToInsert = [];
     for (let movementOrder = 0; movementOrder < plan.length; movementOrder++) {
-        const { positionId } = plan[movementOrder];
-        const specialFlag = 0; // 0 = normal movement, use other numbers for future move types...
-        plansToInsert.push([pieceGameId, pieceTeamId, pieceId, movementOrder, positionId, specialFlag]);
+        const positionId = plan[movementOrder];
+        plansToInsert.push([pieceGameId, pieceTeamId, pieceId, movementOrder, positionId]);
     }
 
     // bulk insert (always insert bulk, don't really ever insert single stuff, since a 'plan' is a collection of moves, but the table is 'Plans')

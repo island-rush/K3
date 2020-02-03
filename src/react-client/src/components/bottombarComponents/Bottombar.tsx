@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { GameInfoState, UserfeedbackState } from '../../../../types';
-import { mainButtonClick } from '../../redux';
-import Leftcontrols from './Leftcontrols';
+import { cancelPlan, confirmPlan, mainButtonClick, startPlan, undoMove } from '../../redux';
+import { Leftcontrols } from './Leftcontrols';
 import { MainButton } from './MainButton';
 import { Userfeedback } from './Userfeedback';
 
@@ -19,20 +19,24 @@ interface Props {
     userFeedback: UserfeedbackState;
     gameInfo: GameInfoState;
     mainButtonClick: any;
+    startPlan: () => void;
+    cancelPlan: () => void;
+    confirmPlan: () => void;
+    undoMove: () => void;
 }
 
 class Bottombar extends Component<Props> {
     render() {
-        const { userFeedback, gameInfo, mainButtonClick } = this.props;
+        const { userFeedback, gameInfo, mainButtonClick, startPlan, cancelPlan, confirmPlan, undoMove } = this.props;
 
-        const onClick = (event: any) => {
+        const onClick = (event: MouseEvent) => {
             event.preventDefault();
             event.stopPropagation();
         };
 
         return (
             <div style={bottombarStyle} onClick={onClick}>
-                <Leftcontrols />
+                <Leftcontrols startPlan={startPlan} cancelPlan={cancelPlan} confirmPlan={confirmPlan} undoMove={undoMove} />
                 <Userfeedback userFeedback={userFeedback} />
                 <MainButton gameInfo={gameInfo} mainButtonClick={mainButtonClick} />
             </div>
@@ -46,7 +50,11 @@ const mapStateToProps = ({ userFeedback, gameInfo }: { userFeedback: Userfeedbac
 });
 
 const mapActionsToProps = {
-    mainButtonClick
+    mainButtonClick,
+    startPlan,
+    cancelPlan,
+    confirmPlan,
+    undoMove
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Bottombar);
