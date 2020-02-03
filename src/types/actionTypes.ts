@@ -178,14 +178,14 @@ export type InvItemPlaceRequestAction = {
     type: typeof SERVER_PIECE_PLACE;
     payload: {
         invItemId: InvItemType['invItemId'];
-        selectedPosition: number;
+        selectedPosition: PieceType['piecePositionId'];
     };
 };
 export type InvItemPlaceAction = {
     type: typeof PIECE_PLACE;
     payload: {
         invItem: InvItemType;
-        positionId: number;
+        positionId: PieceType['piecePositionId'];
         newPiece: PieceType;
     };
 };
@@ -526,7 +526,7 @@ export type FuelResultsAction = {
         fuelUpdates: {
             pieceId: PieceType['pieceId'];
             piecePositionId: PieceType['piecePositionId'];
-            newFuel: number;
+            newFuel: PieceType['pieceFuel'];
         }[];
     };
 };
