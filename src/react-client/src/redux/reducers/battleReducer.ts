@@ -63,6 +63,7 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
         case EVENT_BATTLE:
             stateCopy = initialBattleState;
             stateCopy.isActive = true;
+            stateCopy.isMinimized = true;
             stateCopy.friendlyPieces = (action as EventBattleAction).payload.friendlyPieces;
             stateCopy.enemyPieces = (action as EventBattleAction).payload.enemyPieces;
             return stateCopy;

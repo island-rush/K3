@@ -75,6 +75,7 @@ export function refuelReducer(state = initialRefuelState, action: AnyAction) {
 
         case EVENT_REFUEL:
             stateCopy.isActive = true;
+            stateCopy.isMinimized = true;
             stateCopy.tankers = (action as EventRefuelAction).payload.tankers;
             stateCopy.aircraft = (action as EventRefuelAction).payload.aircraft;
             stateCopy.selectedTankerPieceId = -1;
