@@ -27,6 +27,7 @@ export const selectPiece = (selectedPiece: PieceType) => {
         // else planning is active
 
         if (planning.missileSelecting) {
+            setTimeout(() => {});
             if (window.confirm('Are you sure you want to attack this piece?')) {
                 const clientAction: MissileRequestAction = {
                     type: SERVER_MISSILE_CONFIRM,

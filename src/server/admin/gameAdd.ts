@@ -24,7 +24,7 @@ export const gameAdd = async (req: Request, res: Response) => {
     const adminPasswordHashed = md5(adminPassword);
 
     // Add the game
-    const thisGame = await Game.add(adminSection, adminInstructor, adminPasswordHashed);
+    const thisGame = await Game.add(adminSection.toLowerCase(), adminInstructor.toLowerCase(), adminPasswordHashed);
     if (!thisGame) {
         res.redirect('/courseDirector.html?gameAdd=failed');
     } else {

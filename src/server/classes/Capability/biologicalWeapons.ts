@@ -52,7 +52,7 @@ export const useBiologicalWeapons = async (gameId: GameType['gameId']) => {
     }
 
     // need the positions anyway to give back to the clients for updating
-    const fullListOfPositions: any = [];
+    const fullListOfPositions: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < results.length; x++) {
         fullListOfPositions.push(results[x].positionId);
     }
@@ -61,7 +61,7 @@ export const useBiologicalWeapons = async (gameId: GameType['gameId']) => {
         // now delete pieces with this position
         // TODO: " (does not include aircraft (that are taken off))"
         queryString = 'DELETE FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?)';
-        inserts = [gameId, fullListOfPositions];
+        const inserts = [gameId, fullListOfPositions];
         await pool.query(queryString, inserts);
     }
 

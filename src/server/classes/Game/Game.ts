@@ -413,7 +413,7 @@ export class Game extends GameProperties implements GameType {
     /**
      * Generates a Redux Action, contains all current game information / state.
      */
-    async initialStateAction(gameTeam: BlueOrRedTeamId, gameControllers: any) {
+    async initialStateAction(gameTeam: BlueOrRedTeamId, gameControllers: ControllerType[]) {
         return initialStateAction(this, gameTeam, gameControllers);
     }
 }

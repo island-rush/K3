@@ -22,14 +22,18 @@ export const adminLogin = async (req: Request, res: Response) => {
     const CourseDirectorSection = process.env.CD_SECTION;
     const CourseDirectorLastName = process.env.CD_LASTNAME;
     const CourseDirectorPasswordHash = process.env.CD_PASSWORDHASH;
-    if (adminSection === CourseDirectorSection && adminInstructor === CourseDirectorLastName && inputPasswordHash === CourseDirectorPasswordHash) {
+    if (
+        adminSection.toLowerCase() === CourseDirectorSection.toLowerCase() &&
+        adminInstructor.toLowerCase() === CourseDirectorLastName.toLowerCase() &&
+        inputPasswordHash === CourseDirectorPasswordHash
+    ) {
         req.session.ir3coursedirector = { courseDirector: true };
         res.redirect('/courseDirector.html');
         return;
     }
 
     // Get game info
-    const gameIdFromSearch = await Game.getId(adminSection, adminInstructor);
+    const gameIdFromSearch = await Game.getId(adminSection.toLowerCase(), adminInstructor.toLowerCase());
     if (!gameIdFromSearch) {
         res.redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
         return;
@@ -49,7 +53,7 @@ export const adminLogin = async (req: Request, res: Response) => {
     }
 
     // Create session
-    const session: TeacherSession = { gameId, gameSection: adminSection, gameInstructor: adminInstructor };
+    const session: TeacherSession = { gameId, gameSection: adminSection.toLowerCase(), gameInstructor: adminInstructor.toLowerCase() };
     req.session.ir3teacher = session;
 
     res.redirect('/teacher.html');
