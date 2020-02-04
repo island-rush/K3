@@ -1,5 +1,5 @@
 // prettier-ignore
-import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CANCEL_PLAN, CLEAR_BATTLE, CLEAR_SAM_DELETE, COMBAT_PHASE, DELETE_PLAN, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, MAIN_BUTTON_CLICK, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PIECE_PLACE, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, SAM_DELETED_PIECES, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_MAIN_BUTTON_CLICK, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE, UPDATE_AIRFIELDS, UPDATE_FLAGS } from '../constants';
+import { AIRCRAFT_CLICK, BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CANCEL_PLAN, CLEAR_BATTLE, CLEAR_SAM_DELETE, COMBAT_PHASE, DELETE_PLAN, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, HIGHLIGHT_POSITIONS, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, MAIN_BUTTON_CLICK, MENU_SELECT, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PIECE_PLACE, PLACE_PHASE, PLANNING_SELECT, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, SAM_DELETED_PIECES, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_DELETE_PLAN, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_MAIN_BUTTON_CLICK, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TANKER_CLICK, TARGET_PIECE_SELECT, UNDO_FUEL_SELECTION, UNDO_MOVE, UPDATE_AIRFIELDS, UPDATE_FLAGS, LIST_ALL_POSITIONS_TYPE } from '../constants';
 import { InvItemType, PieceType, ShopItemType } from './databaseTables';
 // prettier-ignore
 import { BattleState, CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, InvState, NewsState, PlanningState, RefuelState, ShopState, UserfeedbackState } from './reducerTypes';
@@ -178,14 +178,14 @@ export type InvItemPlaceRequestAction = {
     type: typeof SERVER_PIECE_PLACE;
     payload: {
         invItemId: InvItemType['invItemId'];
-        selectedPosition: number;
+        selectedPosition: PieceType['piecePositionId'];
     };
 };
 export type InvItemPlaceAction = {
     type: typeof PIECE_PLACE;
     payload: {
         invItem: InvItemType;
-        positionId: number;
+        positionId: PieceType['piecePositionId'];
         newPiece: PieceType;
     };
 };
@@ -330,7 +330,7 @@ export type SliceChangeAction = {
         confirmedNukes: CapabilitiesState['confirmedNukes'];
         confirmedMissileHitPos: CapabilitiesState['confirmedMissileHitPos'];
         confirmedBombardmentHitPos: CapabilitiesState['confirmedBombardmentHitPos'];
-        confirmedInsurgencyPos: number[];
+        confirmedInsurgencyPos: LIST_ALL_POSITIONS_TYPE[];
         confirmedInsurgencyPieces: PieceType[];
         gameboardPieces: GameboardPiecesDataType;
     };
@@ -387,7 +387,7 @@ export type ConfirmPlanRequestAction = {
     type: typeof SERVER_CONFIRM_PLAN;
     payload: {
         pieceId: PieceType['pieceId'];
-        plan: number[];
+        plan: LIST_ALL_POSITIONS_TYPE[];
     };
 };
 
@@ -395,7 +395,7 @@ export type ConfirmPlanAction = {
     type: typeof PLAN_WAS_CONFIRMED;
     payload: {
         pieceId: PieceType['pieceId'];
-        plan: number[];
+        plan: LIST_ALL_POSITIONS_TYPE[];
     };
 };
 
@@ -454,7 +454,7 @@ export type UpdateFlagAction = {
 export type SeaMineHitNotifyAction = {
     type: typeof SEA_MINE_HIT_NOTIFICATION;
     payload: {
-        positionsToHighlight: number[];
+        positionsToHighlight: LIST_ALL_POSITIONS_TYPE[];
     };
 };
 
@@ -466,7 +466,7 @@ export type ClearSeaMineNotifyAction = {
 export type DroneSwarmHitNotifyAction = {
     type: typeof DRONE_SWARM_HIT_NOTIFICATION;
     payload: {
-        positionsToHighlight: number[];
+        positionsToHighlight: LIST_ALL_POSITIONS_TYPE[];
     };
 };
 
@@ -526,7 +526,7 @@ export type FuelResultsAction = {
         fuelUpdates: {
             pieceId: PieceType['pieceId'];
             piecePositionId: PieceType['piecePositionId'];
-            newFuel: number;
+            newFuel: PieceType['pieceFuel'];
         }[];
     };
 };

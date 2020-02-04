@@ -1,9 +1,9 @@
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
-import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, NUKE_RANGE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW } from '../../../../constants';
+import { AIRFIELD_TITLE, AIRFIELD_TYPE, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, ALL_ISLAND_NAMES, BLUE_TEAM_ID, COMM_INTERRUPT_RANGE, distanceMatrix, FLAG_ISLAND_OWNERSHIP, GOLDEN_EYE_RANGE, IGNORE_TITLE_TYPES, ISLAND_POINTS, LIST_ALL_POSITIONS_TYPE, MISSILE_SILO_TITLE, MISSILE_SILO_TYPE, NUKE_RANGE, RED_TEAM_ID, REMOTE_SENSING_RANGE, TYPE_HIGH_LOW, ALL_AIRFIELD_LOCATIONS_TYPE } from '../../../../constants';
 // prettier-ignore
-import { BattleState, CapabilitiesState, ContainerState, GameboardMetaState, GameboardState, GameInfoState, NewsState, PlanningState } from '../../../../types';
+import { BattleState, CapabilitiesState, ContainerState, GameboardMetaState, GameboardPositionType, GameboardState, GameInfoState, NewsState, PlanningState } from '../../../../types';
 //prettier-ignore
 import { innerPieceClick, innerTransportPieceClick, newsPopupMinimizeToggle, outerPieceClick, pieceClose, raiseMoraleSelectCommanderType, selectPosition } from "../../redux";
 import BattlePopup from './battle/BattlePopup';
@@ -12,7 +12,7 @@ import { ContainerPopup } from './container/ContainerPopup';
 import { NewsPopup } from './NewsPopup';
 import RefuelPopup from './refuel/RefuelPopup';
 // import AirfieldPopup from './airfield/AirfieldPopup';
-const { HexGrid, Layout, Hexagon, Pattern } = require('react-hexgrid'); // TODO: create type declaration for react-hexgrid
+const { HexGrid, Layout, Hexagon, Pattern } = require('react-hexgrid'); // TODO: create type declaration for react-hexgrid, ability to import normally
 
 const imageSize = { x: 3.4, y: 2.75 };
 const positionImagesPath = './images/positionImages/';
@@ -32,7 +32,7 @@ const subDivStyle = {
 };
 
 //These functions organize the hexagons into the proper rows/columns to make the shape of the board (based on the index of the position (0->726))
-const qIndexSolver = (index: number) => {
+const qIndexSolver = (index: LIST_ALL_POSITIONS_TYPE) => {
     if (index < 81) {
         //above zoombox
         if (index % 27 < 14) {
@@ -51,7 +51,7 @@ const qIndexSolver = (index: number) => {
     }
 };
 
-const rIndexSolver = (index: number) => {
+const rIndexSolver = (index: LIST_ALL_POSITIONS_TYPE) => {
     if (index < 81) {
         if (index % 27 < 14) {
             return (index % 27) - Math.floor(index / 27);
@@ -69,8 +69,8 @@ const rIndexSolver = (index: number) => {
 
 const patternSolver = (
     position: any,
-    gameInfo: any,
-    positionIndex: number,
+    gameInfo: GameInfoState,
+    positionIndex: LIST_ALL_POSITIONS_TYPE,
     confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'],
     confirmedNukes: CapabilitiesState['confirmedNukes']
 ) => {
@@ -92,7 +92,7 @@ const patternSolver = (
 
     if (ALL_FLAG_LOCATIONS.includes(positionIndex)) {
         const flagNum = ALL_FLAG_LOCATIONS.indexOf(positionIndex);
-        const islandOwner = gameInfo['flag' + flagNum];
+        const islandOwner: GameInfoState['flag0'] = gameInfo[`flag${flagNum}`];
         const finalType = islandOwner === BLUE_TEAM_ID ? 'blueflag' : islandOwner === RED_TEAM_ID ? 'redflag' : 'flag';
 
         return finalType;
@@ -100,7 +100,7 @@ const patternSolver = (
 
     if (ALL_AIRFIELD_LOCATIONS.includes(positionIndex)) {
         const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(positionIndex);
-        const airfieldOwner = gameInfo['airfield' + airfieldNum]; // TODO: should use actual types instead of any here
+        const airfieldOwner: GameInfoState['airfield0'] = gameInfo[`airfield${airfieldNum}`]; // TODO: should use actual types instead of any here
         const finalType = airfieldOwner === BLUE_TEAM_ID ? 'blueairfield' : airfieldOwner === RED_TEAM_ID ? 'redairfield' : 'airfield';
         if (confirmedAtcScramble.includes(positionIndex)) {
             return `${finalType}_disabled`;
@@ -112,13 +112,13 @@ const patternSolver = (
 };
 
 const hasPieceType = (
-    position: any,
+    position: GameboardPositionType,
     highLow: 'top' | 'bottom',
     team: 'blue' | 'red',
-    confirmedSeaMines: number[],
-    confirmedDroneSwarms: number[],
+    confirmedSeaMines: CapabilitiesState['confirmedSeaMines'],
+    confirmedDroneSwarms: CapabilitiesState['confirmedDroneSwarms'],
     gameInfo: GameInfoState,
-    positionIndex: number
+    positionIndex: LIST_ALL_POSITIONS_TYPE
 ) => {
     const { pieces } = position;
     const { highPieces, lowPieces } = TYPE_HIGH_LOW;
@@ -133,14 +133,14 @@ const hasPieceType = (
     }
 
     if (highLow === 'bottom' && confirmedSeaMines.includes(positionIndex)) {
-        const teamVar = gameInfo.gameTeam === BLUE_TEAM_ID ? 'blue' : 'red';
+        const teamVar = gameInfo.gameTeam === BLUE_TEAM_ID ? 'blue' : gameInfo.gameTeam === RED_TEAM_ID ? 'red' : '';
         if (teamVar !== team) {
             return true;
         }
     }
 
     if (highLow === 'top' && confirmedDroneSwarms.includes(positionIndex)) {
-        const teamVar = gameInfo.gameTeam === BLUE_TEAM_ID ? 'blue' : 'red';
+        const teamVar = gameInfo.gameTeam === BLUE_TEAM_ID ? 'blue' : gameInfo.gameTeam === RED_TEAM_ID ? 'red' : '';
         if (teamVar !== team) {
             return true;
         }
@@ -149,7 +149,7 @@ const hasPieceType = (
     return false;
 };
 
-const titleSolver = (position: any, gameInfo: any, positionIndex: number) => {
+const titleSolver = (position: GameboardPositionType, positionIndex: LIST_ALL_POSITIONS_TYPE) => {
     const { type } = position;
     //ignore titles for types 'land' and 'water'
 
@@ -283,97 +283,68 @@ class Gameboard extends Component<Props> {
             }
         }
 
-        const positions = Object.keys(gameboard).map((positionIndex: string) => (
-            <Hexagon
-                key={positionIndex}
-                posId={0}
-                q={qIndexSolver(parseInt(positionIndex))}
-                r={rIndexSolver(parseInt(positionIndex))}
-                s={-999}
-                fill={patternSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex), confirmedAtcScramble, confirmedNukes)}
-                // TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
-                onClick={(event: MouseEvent) => {
-                    event.preventDefault();
-                    selectPosition(parseInt(positionIndex));
-                    event.stopPropagation();
-                }}
-                //These are found in the Game.css
-                // TODO: highlight according to some priority list
-                className={
-                    selectedPosition === parseInt(positionIndex)
-                        ? 'selectedPos'
-                        : planningPositions.includes(parseInt(positionIndex))
-                        ? 'plannedPos'
-                        : highlightedPositions.includes(parseInt(positionIndex))
-                        ? 'highlightedPos'
-                        : battlePositions.includes(parseInt(positionIndex))
-                        ? 'battlePos'
-                        : confirmedRods.includes(parseInt(positionIndex))
-                        ? 'battlePos'
-                        : confirmedBioWeapons.includes(parseInt(positionIndex))
-                        ? 'bioWeaponPos'
-                        : confirmedInsurgency.includes(parseInt(positionIndex))
-                        ? 'battlePos'
-                        : remoteSensedPositions.includes(parseInt(positionIndex))
-                        ? 'remoteSensePos'
-                        : commInterruptPositions.includes(parseInt(positionIndex))
-                        ? 'commInterruptPos'
-                        : goldenEyePositions.includes(parseInt(positionIndex))
-                        ? 'goldenEyePos'
-                        : seaMineHits.includes(parseInt(positionIndex))
-                        ? 'goldenEyePos' // TODO: change to different style for sea mine indication
-                        : droneSwarmHits.includes(parseInt(positionIndex))
-                        ? 'goldenEyePos' // TODO: change to different style for drone swarm indication
-                        : confirmedMissileHitPos.includes(parseInt(positionIndex))
-                        ? 'goldenEyePos' // TODO: change to different style for missile attack (success)
-                        : confirmedBombardmentHitPos.includes(parseInt(positionIndex))
-                        ? 'goldenEyePos' // TODO: it's own position highlight style
-                        : confirmedAntiSatHitPos.includes(parseInt(positionIndex))
-                        ? 'goldenEyePos' // TODO: it's own color / style
-                        : samHitPos.includes(parseInt(positionIndex))
-                        ? 'goldenEyePos' // TODO: make it different
-                        : ''
-                }
-                // TODO: pass down what the highlighting means into the title
-                title={titleSolver(gameboard[parseInt(positionIndex)], gameInfo, parseInt(positionIndex))}
-                topBlue={hasPieceType(
-                    gameboard[parseInt(positionIndex)],
-                    'top',
-                    'blue',
-                    confirmedSeaMines,
-                    confirmedDroneSwarms,
-                    gameInfo,
-                    parseInt(positionIndex)
-                )}
-                bottomBlue={hasPieceType(
-                    gameboard[parseInt(positionIndex)],
-                    'bottom',
-                    'blue',
-                    confirmedSeaMines,
-                    confirmedDroneSwarms,
-                    gameInfo,
-                    parseInt(positionIndex)
-                )}
-                topRed={hasPieceType(
-                    gameboard[parseInt(positionIndex)],
-                    'top',
-                    'red',
-                    confirmedSeaMines,
-                    confirmedDroneSwarms,
-                    gameInfo,
-                    parseInt(positionIndex)
-                )}
-                bottomRed={hasPieceType(
-                    gameboard[parseInt(positionIndex)],
-                    'bottom',
-                    'red',
-                    confirmedSeaMines,
-                    confirmedDroneSwarms,
-                    gameInfo,
-                    parseInt(positionIndex)
-                )}
-            />
-        ));
+        const positions = Object.keys(gameboard).map((positionIndex: string) => {
+            const positionId = parseInt(positionIndex) as LIST_ALL_POSITIONS_TYPE;
+            return (
+                <Hexagon
+                    key={positionIndex}
+                    posId={0}
+                    q={qIndexSolver(positionId)}
+                    r={rIndexSolver(positionId)}
+                    s={-999}
+                    fill={patternSolver(gameboard[positionId], gameInfo, positionId as LIST_ALL_POSITIONS_TYPE, confirmedAtcScramble, confirmedNukes)}
+                    // TODO: change this to always selectPositon(positionindex), instead of sending -1 (more info for the action, let it take care of it)
+                    onClick={(event: MouseEvent) => {
+                        event.preventDefault();
+                        selectPosition(positionId);
+                        event.stopPropagation();
+                    }}
+                    //These are found in the Game.css
+                    // TODO: highlight according to some priority list
+                    className={
+                        selectedPosition === positionId
+                            ? 'selectedPos'
+                            : planningPositions.includes(positionId)
+                            ? 'plannedPos'
+                            : highlightedPositions.includes(positionId)
+                            ? 'highlightedPos'
+                            : battlePositions.includes(positionId)
+                            ? 'battlePos'
+                            : confirmedRods.includes(positionId)
+                            ? 'battlePos'
+                            : confirmedBioWeapons.includes(positionId)
+                            ? 'bioWeaponPos'
+                            : confirmedInsurgency.includes(positionId)
+                            ? 'battlePos'
+                            : remoteSensedPositions.includes(positionId)
+                            ? 'remoteSensePos'
+                            : commInterruptPositions.includes(positionId)
+                            ? 'commInterruptPos'
+                            : goldenEyePositions.includes(positionId)
+                            ? 'goldenEyePos'
+                            : seaMineHits.includes(positionId)
+                            ? 'goldenEyePos' // TODO: change to different style for sea mine indication
+                            : droneSwarmHits.includes(positionId)
+                            ? 'goldenEyePos' // TODO: change to different style for drone swarm indication
+                            : confirmedMissileHitPos.includes(positionId)
+                            ? 'goldenEyePos' // TODO: change to different style for missile attack (success)
+                            : confirmedBombardmentHitPos.includes(positionId)
+                            ? 'goldenEyePos' // TODO: it's own position highlight style
+                            : confirmedAntiSatHitPos.includes(positionId)
+                            ? 'goldenEyePos' // TODO: it's own color / style
+                            : samHitPos.includes(positionId)
+                            ? 'goldenEyePos' // TODO: make it different
+                            : ''
+                    }
+                    // TODO: pass down what the highlighting means into the title
+                    title={titleSolver(gameboard[positionId], positionId)}
+                    topBlue={hasPieceType(gameboard[positionId], 'top', 'blue', confirmedSeaMines, confirmedDroneSwarms, gameInfo, positionId)}
+                    bottomBlue={hasPieceType(gameboard[positionId], 'bottom', 'blue', confirmedSeaMines, confirmedDroneSwarms, gameInfo, positionId)}
+                    topRed={hasPieceType(gameboard[positionId], 'top', 'red', confirmedSeaMines, confirmedDroneSwarms, gameInfo, positionId)}
+                    bottomRed={hasPieceType(gameboard[positionId], 'bottom', 'red', confirmedSeaMines, confirmedDroneSwarms, gameInfo, positionId)}
+                />
+            );
+        });
 
         return (
             <div style={gameboardStyle}>
@@ -414,7 +385,6 @@ class Gameboard extends Component<Props> {
                     container={container}
                     pieceClose={pieceClose}
                 />
-                {/* <AirfieldPopup /> */}
             </div>
         );
     }

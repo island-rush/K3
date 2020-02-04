@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { ACTIVATED, CYBER_DOMINANCE_ROUNDS, BLUE_TEAM_ID, RED_TEAM_ID, DEACTIVATED } from '../../../constants';
-import { CyberDefenseType, GameType } from '../../../types';
+import { CyberDefenseType, GameType, BlueOrRedTeamId } from '../../../types';
 
-export const getCyberDefense = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const getCyberDefense = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM cyberDefenses WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & CyberDefenseType[]>(queryString, inserts);
@@ -37,7 +37,7 @@ export const useCyberDefense = async (gameId: GameType['gameId']) => {
     await pool.query(deleteQuery, deleteInserts);
 };
 
-export const insertCyberDefense = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const insertCyberDefense = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const insertQuery = 'SELECT * FROM cyberDefenses WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & CyberDefenseType[]>(insertQuery, inserts);

@@ -1,4 +1,5 @@
 import { BLUE_TEAM_ID, RED_TEAM_ID } from '../globals';
+import { LIST_ALL_POSITIONS_TYPE, LIST_ALL_POSITIONS } from './initialGameboardEmpty';
 
 export const DRAGON_ISLAND_ID = 0;
 export const HR_REPUBLIC_ISLAND_ID = 1;
@@ -41,7 +42,7 @@ ISLAND_POINTS[EAGLE_ISLAND_ID] = 45;
 // TODO: island names / capture point names?
 // TODO: probably rethink this file, and possible the database naming convention for island (flag) positions?
 
-export const ISLAND_POSITIONS: { [id: number]: number[] } = {};
+export const ISLAND_POSITIONS: { [id: number]: LIST_ALL_POSITIONS_TYPE[] } = {};
 // prettier-ignore
 ISLAND_POSITIONS[DRAGON_ISLAND_ID] = [0, 1, 2, 3, 4, 5, 6, 7, 14, 15, 16, 17, 18, 19, 20, 21, 22, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 41, 42, 43, 44, 45, 46, 47, 48, 49, 54, 55, 56, 57, 58, 59, 60, 68, 69, 70, 71, 72, 73, 83, 84, 85, 86, 87, 99, 100, 101, 102, 103, 117, 118, 119];
 ISLAND_POSITIONS[HR_REPUBLIC_ISLAND_ID] = [91, 92, 108, 109];
@@ -67,8 +68,6 @@ TEAM_MAIN_ISLAND_STARTING_POSITIONS[RED_TEAM_ID] = [...ISLAND_POSITIONS[DRAGON_I
 TEAM_MAIN_ISLAND_STARTING_POSITIONS[BLUE_TEAM_ID] = [...ISLAND_POSITIONS[EAGLE_ISLAND_ID], 553, 554, 570, 572, 586, 589, 600, 601, 602, 603, 607, 616, 624, 634, 651, 668, 684, 701, 718, 719];
 
 // 0 -> 726
-export const ALL_POSITIONS = [...Array(727).keys()];
-
 export const ALL_LAND_POSITIONS = [
     ...ISLAND_POSITIONS[DRAGON_ISLAND_ID],
     ...ISLAND_POSITIONS[HR_REPUBLIC_ISLAND_ID],
@@ -83,4 +82,4 @@ export const ALL_LAND_POSITIONS = [
     ...ISLAND_POSITIONS[EAGLE_ISLAND_ID]
 ];
 
-export const ALL_WATER_POSITIONS = ALL_POSITIONS.filter(value => !ALL_LAND_POSITIONS.includes(value));
+export const ALL_WATER_POSITIONS = LIST_ALL_POSITIONS.filter(value => !ALL_LAND_POSITIONS.includes(value));

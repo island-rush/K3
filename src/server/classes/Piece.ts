@@ -1,8 +1,9 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID } from '../../constants';
-import { AtcScrambleType, BiologicalWeaponsType, GoldenEyeType, NukeType, PieceType, RemoteSensingType, GameType } from '../../types';
+import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, LIST_ALL_POSITIONS_TYPE } from '../../constants';
+// prettier-ignore
+import { AtcScrambleType, BiologicalWeaponsType, BlueOrRedTeamId, GameType, GoldenEyeType, NukeType, PieceType, PlanType, RemoteSensingType } from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
 
@@ -10,19 +11,19 @@ import { Game } from './Game';
  * Represents a row in the pieces database table.
  */
 export class Piece implements PieceType {
-    pieceId: number;
-    pieceGameId: number;
-    pieceTeamId: number;
-    pieceTypeId: number;
-    piecePositionId: number;
-    pieceContainerId: number;
-    pieceVisible: number;
-    pieceMoves: number;
-    pieceFuel: number;
-    pieceContents?: { pieces: PieceType[] };
-    isPieceDisabled?: boolean;
+    pieceId: PieceType['pieceId'];
+    pieceGameId: PieceType['pieceGameId'];
+    pieceTeamId: PieceType['pieceTeamId'];
+    pieceTypeId: PieceType['pieceTypeId'];
+    piecePositionId: PieceType['piecePositionId'];
+    pieceContainerId: PieceType['pieceContainerId'];
+    pieceVisible: PieceType['pieceVisible'];
+    pieceMoves: PieceType['pieceMoves'];
+    pieceFuel: PieceType['pieceFuel'];
+    pieceContents?: PieceType['pieceContents'];
+    isPieceDisabled?: PieceType['isPieceDisabled'];
 
-    constructor(pieceId: number) {
+    constructor(pieceId: PieceType['pieceId']) {
         this.pieceId = pieceId;
     }
 
@@ -169,7 +170,7 @@ export class Piece implements PieceType {
     /**
      * Globally move all pieces according to their plans for this game.
      */
-    static async move(gameId: GameType['gameId'], movementOrder: number) {
+    static async move(gameId: GameType['gameId'], movementOrder: PlanType['planMovementOrder']) {
         // movement based on plans (for this order/step)
         const conn = await pool.getConnection();
 
@@ -246,7 +247,7 @@ export class Piece implements PieceType {
     /**
      * Get dictionary of positions and the pieces those positions contain.
      */
-    static async getVisiblePieces(gameId: GameType['gameId'], gameTeam: number) {
+    static async getVisiblePieces(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         let queryString =
             'SELECT * FROM pieces WHERE pieceGameId = ? AND (pieceTeamId = ? OR pieceVisible = 1) ORDER BY pieceContainerId, pieceTeamId ASC';
         let inserts = [gameId, gameTeam];
@@ -309,7 +310,7 @@ export class Piece implements PieceType {
      * Get sql results querying positions that should cause refuel event.
      * These positions are tankers + any same team aircraft.
      */
-    static async getPositionRefuels(gameId: GameType['gameId'], gameTeam: number) {
+    static async getPositionRefuels(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         // TODO: constant for 'outside container' instead of -1?
         const queryString =
             'SELECT tnkr.pieceId as tnkrPieceId, tnkr.pieceTypeId as tnkrPieceTypeId, tnkr.piecePositionId as tnkrPiecePositionId, tnkr.pieceMoves as tnkrPieceMoves, tnkr.pieceFuel as tnkrPieceFuel, arcft.pieceId as arcftPieceId, arcft.pieceTypeId as arcftPieceTypeId, arcft.piecePositionId as arcftPiecePositionId, arcft.pieceMoves as arcftPieceMoves, arcft.pieceFuel as arcftPieceFuel FROM (SELECT * FROM pieces WHERE pieceTypeId = 3 AND pieceGameId = ? AND pieceTeamId = ?) as tnkr JOIN (SELECT * FROM pieces WHERE pieceTypeId in (0, 1, 2, 4, 5, 17, 18) AND pieceGameId = ? AND pieceTeamId = ?) as arcft ON tnkr.piecePositionId = arcft.piecePositionId WHERE arcft.pieceContainerId = -1';
@@ -343,7 +344,7 @@ export class Piece implements PieceType {
     /**
      * Put 1 piece outside of it's parent piece.
      */
-    static async putOutsideContainer(selectedPieceId: number, newPositionId: number) {
+    static async putOutsideContainer(selectedPieceId: PieceType['pieceId'], newPositionId: number) {
         // TODO: deal with inner transport pieces (need to also set the piecePositionId)
         const queryString = 'UPDATE pieces SET pieceContainerId = -1, piecePositionId = ? WHERE pieceId = ?';
         const inserts = [newPositionId, selectedPieceId];
@@ -355,14 +356,14 @@ export class Piece implements PieceType {
      * Insert a single piece into the database for this game's team.
      */
     static async insert(
-        pieceGameId: number,
-        pieceTeamId: number,
-        pieceTypeId: number,
-        piecePositionId: number,
-        pieceContainerId: number,
-        pieceVisible: number,
-        pieceMoves: number,
-        pieceFuel: number
+        pieceGameId: PieceType['pieceGameId'],
+        pieceTeamId: PieceType['pieceTeamId'],
+        pieceTypeId: PieceType['pieceTypeId'],
+        piecePositionId: PieceType['piecePositionId'],
+        pieceContainerId: PieceType['pieceContainerId'],
+        pieceVisible: PieceType['pieceVisible'],
+        pieceMoves: PieceType['pieceMoves'],
+        pieceFuel: PieceType['pieceFuel']
     ) {
         const queryString =
             'INSERT INTO pieces (pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
@@ -461,7 +462,7 @@ export class Piece implements PieceType {
         }
     }
 
-    static async ableToPlaceRadar(thisGame: Game, gameTeam: number, selectedPositionId: number) {
+    static async ableToPlaceRadar(thisGame: Game, gameTeam: PieceType['pieceTeamId'], selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         // TODO: could make this into 1 request instead of 2
         const queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ? AND pieceTypeId in (?)';
         const inserts = [thisGame.gameId, gameTeam, selectedPositionId, TYPE_GROUND_PIECES];
@@ -557,7 +558,7 @@ export class Piece implements PieceType {
         return completelyOwnsIsland;
     }
 
-    static async ableToPlaceMissile(thisGame: Game, gameTeam: number, selectedPositionId: number) {
+    static async ableToPlaceMissile(thisGame: Game, gameTeam: PieceType['pieceTeamId'], selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         // what are the rules for placement with missiles (does it need to have friendly pieces there?)
 
         // TODO: could make this into 1 request instead of 2
@@ -808,7 +809,7 @@ export class Piece implements PieceType {
         }
 
         if (listOfDeletedPieces.length !== 0) {
-            const listOfDeletedPieceIds: number[] = [];
+            const listOfDeletedPieceIds: PieceType['pieceId'][] = [];
             for (const deletedPiece of listOfDeletedPieces) {
                 if (!listOfDeletedPieceIds.includes(deletedPiece.pieceId)) {
                     listOfDeletedPieceIds.push(deletedPiece.pieceId);

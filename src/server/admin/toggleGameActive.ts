@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { GAME_INACTIVE_TAG, SOCKET_SERVER_REDIRECT } from '../../constants';
+import { GAME_INACTIVE_TAG, SOCKET_SERVER_REDIRECT, ACTIVATED, DEACTIVATED } from '../../constants';
 import { io } from '../../server';
 import { TeacherSession } from '../../types';
 import { Game } from '../classes';
@@ -20,7 +20,7 @@ export const toggleGameActive = async (req: Request, res: Response) => {
 
     const { gameActive } = thisGame;
 
-    const newValue = (gameActive + 1) % 2;
+    const newValue = gameActive === ACTIVATED ? DEACTIVATED : ACTIVATED;
 
     await thisGame.setGameActive(newValue);
 

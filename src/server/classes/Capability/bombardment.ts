@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { DESTROYER_ATTACK_RANGE_CHANCE, distanceMatrix } from '../../../constants';
-import { BombardmentType, CapabilitiesState, GameType } from '../../../types';
+import { DESTROYER_ATTACK_RANGE_CHANCE, distanceMatrix, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
+import { BlueOrRedTeamId, BombardmentType, CapabilitiesState, GameType, PieceType } from '../../../types';
 import { pool } from '../../database';
 import { Piece } from '../Piece';
 
@@ -22,7 +22,7 @@ export const insertBombardmentAttack = async (gameId: GameType['gameId'], destro
     return true;
 };
 
-export const getBombardmentAttack = async (gameId: GameType['gameId'], teamId: number) => {
+export const getBombardmentAttack = async (gameId: GameType['gameId'], teamId: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM bombardments WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, teamId];
     const [results] = await pool.query<RowDataPacket[] & BombardmentType[]>(queryString, inserts);
@@ -49,16 +49,16 @@ export const useBombardmentAttack = async (gameId: GameType['gameId']) => {
     const inserts = [gameId];
 
     type QueryResultType = {
-        targetId: number;
-        targetPositionId: number;
-        targetTypeId: number;
-        destroyerPositionId: number;
+        targetId: PieceType['pieceId'];
+        targetPositionId: PieceType['piecePositionId'];
+        targetTypeId: PieceType['pieceTypeId'];
+        destroyerPositionId: PieceType['piecePositionId'];
     };
 
     const [results] = await pool.query<RowDataPacket[] & QueryResultType[]>(queryString, inserts);
 
     const listOfTargetsToDelete = [];
-    const listOfPositionsHit = [];
+    const listOfPositionsHit: LIST_ALL_POSITIONS_TYPE[] = [];
 
     for (let x = 0; x < results.length; x++) {
         const { targetId, targetPositionId, destroyerPositionId } = results[x];

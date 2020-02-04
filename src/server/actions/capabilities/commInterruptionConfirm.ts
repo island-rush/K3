@@ -1,5 +1,5 @@
 // prettier-ignore
-import { ALL_POSITIONS, COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUP_SELECTED, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUP_SELECTED, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LIST_ALL_POSITIONS, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
 import { CommInterruptAction, CommInterruptRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -68,7 +68,7 @@ export const commInterruptConfirm = async (session: SocketSession, action: CommI
     }
 
     // does the position make sense?
-    if (!ALL_POSITIONS.includes(selectedPositionId)) {
+    if (!LIST_ALL_POSITIONS.includes(selectedPositionId)) {
         sendUserFeedback(socketId, 'got a bad position for comm interrupt.');
         return;
     }

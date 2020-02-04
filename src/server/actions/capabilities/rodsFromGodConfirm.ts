@@ -1,5 +1,5 @@
 // prettier-ignore
-import { ALL_POSITIONS, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { LIST_ALL_POSITIONS, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
 import { RodsFromGodAction, RodsFromGodRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -69,7 +69,7 @@ export const rodsFromGodConfirm = async (session: SocketSession, action: RodsFro
     }
 
     // does the position make sense?
-    if (!ALL_POSITIONS.includes(selectedPositionId)) {
+    if (!LIST_ALL_POSITIONS.includes(selectedPositionId)) {
         sendUserFeedback(socketId, 'got a bad position for rods from god.');
         return;
     }

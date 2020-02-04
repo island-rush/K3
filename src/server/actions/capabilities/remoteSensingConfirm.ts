@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REMOTE_SENSING_SELECTED, REMOTE_SENSING_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN, BLUE_TEAM_ID, RED_TEAM_ID, ANTISAT_HIT_ACTION, REMOTE_SENSING_HIT_ACTION, ANTISAT_TIME_TO_HIT, ALL_POSITIONS } from '../../../constants';
-import { RemoteSensingAction, RemoteSensingRequestAction, SocketSession, AntiSatHitAction, RemoteSensingHitAction } from '../../../types';
+import { LIST_ALL_POSITIONS, ANTISAT_HIT_ACTION, ANTISAT_TIME_TO_HIT, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RED_TEAM_ID, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, REMOTE_SENSING_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { AntiSatHitAction, RemoteSensingAction, RemoteSensingHitAction, RemoteSensingRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -68,7 +68,7 @@ export const remoteSensingConfirm = async (session: SocketSession, action: Remot
     }
 
     // does the position make sense?
-    if (!ALL_POSITIONS.includes(selectedPositionId)) {
+    if (!LIST_ALL_POSITIONS.includes(selectedPositionId)) {
         sendUserFeedback(socketId, 'got a negative position for remote sensing.');
         return;
     }

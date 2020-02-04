@@ -31,6 +31,21 @@ export const ALL_FLAG_LOCATIONS = [
     FLAG_12_LOCATION
 ];
 
+export type ALL_FLAG_LOCATIONS_TYPE =
+    | typeof FLAG_0_LOCATION
+    | typeof FLAG_1_LOCATION
+    | typeof FLAG_2_LOCATION
+    | typeof FLAG_3_LOCATION
+    | typeof FLAG_4_LOCATION
+    | typeof FLAG_5_LOCATION
+    | typeof FLAG_6_LOCATION
+    | typeof FLAG_7_LOCATION
+    | typeof FLAG_8_LOCATION
+    | typeof FLAG_9_LOCATION
+    | typeof FLAG_10_LOCATION
+    | typeof FLAG_11_LOCATION
+    | typeof FLAG_12_LOCATION;
+
 export const FLAG_ISLAND_OWNERSHIP: { [id: number]: number } = {};
 FLAG_ISLAND_OWNERSHIP[FLAG_0_LOCATION] = DRAGON_ISLAND_ID;
 FLAG_ISLAND_OWNERSHIP[FLAG_1_LOCATION] = DRAGON_ISLAND_ID;

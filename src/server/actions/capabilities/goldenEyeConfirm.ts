@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, GOLDEN_EYE_SELECTED, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN, ALL_POSITIONS } from '../../../constants';
+import { LIST_ALL_POSITIONS, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, GOLDEN_EYE_SELECTED, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
 import { GoldenEyeAction, GoldenEyeRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -68,7 +68,7 @@ export const goldenEyeConfirm = async (session: SocketSession, action: GoldenEye
     }
 
     // does the position make sense?
-    if (!ALL_POSITIONS.includes(selectedPositionId)) {
+    if (!LIST_ALL_POSITIONS.includes(selectedPositionId)) {
         sendUserFeedback(socketId, 'got a bad position for golden eye.');
         return;
     }

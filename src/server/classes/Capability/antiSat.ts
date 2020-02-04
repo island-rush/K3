@@ -1,17 +1,17 @@
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
-import { ANTI_SAT_MISSILE_ROUNDS, BLUE_TEAM_ID, RED_TEAM_ID } from '../../../constants';
-import { AntiSatMissileType, RemoteSensingType, GameType } from '../../../types';
+import { ANTI_SAT_MISSILE_ROUNDS, BLUE_TEAM_ID, RED_TEAM_ID, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
+import { AntiSatMissileType, BlueOrRedTeamId, GameType, RemoteSensingType } from '../../../types';
 import { pool } from '../../database';
 import { Piece } from '../Piece';
 
-export const insertAntiSat = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const insertAntiSat = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'INSERT INTO antiSatMissiles (gameId, teamId, roundsLeft) VALUES (?, ?, ?)';
     const inserts = [gameId, gameTeam, ANTI_SAT_MISSILE_ROUNDS];
     const [results] = await pool.query<OkPacket>(queryString, inserts);
     return results.insertId;
 };
 
-export const getAntiSat = async (gameId: GameType['gameId'], teamId: number) => {
+export const getAntiSat = async (gameId: GameType['gameId'], teamId: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM antiSatMissiles WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, teamId];
     const [results] = await pool.query<RowDataPacket[] & AntiSatMissileType[]>(queryString, inserts);
@@ -27,7 +27,12 @@ export const getAntiSat = async (gameId: GameType['gameId'], teamId: number) => 
     return confirmedAntiSat;
 };
 
-export const checkRemoteSensingHit = async (gameId: GameType['gameId'], teamId: number, remoteSensingId: number, remoteSensingPosId: number) => {
+export const checkRemoteSensingHit = async (
+    gameId: GameType['gameId'],
+    teamId: BlueOrRedTeamId,
+    remoteSensingId: RemoteSensingType['remoteSensingId'],
+    remoteSensingPosId: LIST_ALL_POSITIONS_TYPE
+) => {
     // team requesting this just put up an anti sat, check for enemy remote sensing to kill (and report killed to teams)
     const otherTeamId = teamId === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
 
@@ -55,7 +60,7 @@ export const checkRemoteSensingHit = async (gameId: GameType['gameId'], teamId: 
     return -1;
 };
 
-export const checkAntiSatHit = async (gameId: GameType['gameId'], teamId: number, antiSatId: number) => {
+export const checkAntiSatHit = async (gameId: GameType['gameId'], teamId: BlueOrRedTeamId, antiSatId: AntiSatMissileType['antiSatId']) => {
     // team requesting this just put up an anti sat, check for enemy remote sensing to kill (and report killed to teams)
     const otherTeamId = teamId === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
 

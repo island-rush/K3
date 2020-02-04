@@ -1,13 +1,13 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { ACTIVATED, DEACTIVATED, MISSILE_LAUNCH_DISRUPTION_ROUNDS } from '../../../constants';
-import { MissileDisruptType, GameType } from '../../../types';
+import { MissileDisruptType, GameType, BlueOrRedTeamId } from '../../../types';
 import { Piece } from '../Piece';
 
 /**
  * Returns list of missile ids that are known to be disrupted at this time.
  */
-export const getMissileDisrupt = async (gameId: GameType['gameId'], gameTeam: number) => {
+export const getMissileDisrupt = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM missileDisrupts WHERE gameId = ? AND (teamId = ? OR activated = ?)';
     const inserts = [gameId, gameTeam, ACTIVATED];
     const [results] = await pool.query<RowDataPacket[] & MissileDisruptType[]>(queryString, inserts);
@@ -20,7 +20,7 @@ export const getMissileDisrupt = async (gameId: GameType['gameId'], gameTeam: nu
     return listOfMissileDisrupt;
 };
 
-export const insertMissileDisrupt = async (gameId: GameType['gameId'], gameTeam: number, selectedPiece: Piece) => {
+export const insertMissileDisrupt = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPiece: Piece) => {
     const insertQuery = 'SELECT * FROM missileDisrupts WHERE gameId = ? AND missileId = ? AND (teamId = ? OR activated = ?)';
     const inserts = [gameId, selectedPiece.pieceId, gameTeam, ACTIVATED];
     const [results] = await pool.query<RowDataPacket[] & MissileDisruptType[]>(insertQuery, inserts);

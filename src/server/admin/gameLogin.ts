@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
+// prettier-ignore
 import { ALREADY_IN_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGGED_IN_VALUE, LOGIN_TAG } from '../../constants';
-import { GameSession } from '../../types';
+import { BlueOrRedTeamId, ControllerType, GameSession, GameType } from '../../types';
 import { Game } from '../classes';
 
 /**
@@ -70,9 +71,9 @@ export const gameLogin = async (req: Request, res: Response) => {
  * All the values that should be a part of a game login attempt.
  */
 type GameLoginRequest = {
-    gameSection: string;
-    gameInstructor: string;
-    gameTeam: number;
+    gameSection: GameType['gameSection'];
+    gameInstructor: GameType['gameSection'];
+    gameTeam: BlueOrRedTeamId;
     gameTeamPassword: string;
-    gameControllers: number[];
+    gameControllers: ControllerType[];
 };

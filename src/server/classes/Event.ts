@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { ATTACK_MATRIX, PIECES_WITH_FUEL } from '../../constants';
-import { EventItemType, EventQueueType, PieceType, GameType } from '../../types';
+import { EventItemType, EventQueueType, PieceType, GameType, BlueOrRedTeamId } from '../../types';
 import { pool } from '../database';
 import { Piece } from './Piece';
 
@@ -10,12 +10,12 @@ import { Piece } from './Piece';
  * Also contains other helping functions that deal with events and event items.
  */
 export class Event implements EventQueueType {
-    eventId: number;
-    eventGameId: number;
-    eventTeamId: number;
-    eventTypeId: number;
-    eventPosA: number;
-    eventPosB: number;
+    eventId: EventQueueType['eventId'];
+    eventGameId: EventQueueType['eventGameId'];
+    eventTeamId: EventQueueType['eventTeamId'];
+    eventTypeId: EventQueueType['eventTypeId'];
+    eventPosA: EventQueueType['eventPosA'];
+    eventPosB: EventQueueType['eventPosB'];
 
     // TODO: we have a class for event, but multiple tables for keeping track of events, event items, and that one for temp stuff (efficient)
     constructor(eventId: EventQueueType['eventId'], options: any) {
@@ -49,7 +49,7 @@ export class Event implements EventQueueType {
         // TODO: this selection could probably be combined with the update
         const queryString3 = 'SELECT pieceId FROM eventItems JOIN pieces ON pieceId = eventPieceId WHERE pieceTypeId IN (?) AND eventId = ?';
         const inserts3 = [PIECES_WITH_FUEL, this.eventId];
-        const [piecesWithFuel] = await pool.query<RowDataPacket[] & { pieceId: number }[]>(queryString3, inserts3);
+        const [piecesWithFuel] = await pool.query<RowDataPacket[] & { pieceId: PieceType['pieceId'] }[]>(queryString3, inserts3);
 
         const listOfPieceIds = [];
         for (let x = 0; x < piecesWithFuel.length; x++) {
@@ -87,7 +87,7 @@ export class Event implements EventQueueType {
     /**
      * getItems() but for a specific team.
      */
-    async getTeamItems(gameTeam: number) {
+    async getTeamItems(gameTeam: BlueOrRedTeamId) {
         const queryString =
             'SELECT * FROM (SELECT * FROM eventItems NATUAL JOIN pieces WHERE eventPieceId = pieceId AND eventId = ? AND pieceTeamId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.eventItemTarget = b.tpieceId';
         const inserts = [this.eventId, gameTeam];
@@ -108,7 +108,7 @@ export class Event implements EventQueueType {
     /**
      * Get the next event from the eventQueue.
      */
-    static async getNext(gameId: GameType['gameId'], gameTeam: number) {
+    static async getNext(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         const queryString = 'SELECT * FROM eventQueue WHERE eventGameId = ? AND (eventTeamId = ? OR eventTeamId = 2) ORDER BY eventId ASC LIMIT 1';
         const inserts = [gameId, gameTeam];
         const [events] = await pool.query<RowDataPacket[] & EventQueueType[]>(queryString, inserts);
@@ -201,9 +201,9 @@ export class Event implements EventQueueType {
         fuelUpdates: {
             pieceId: PieceType['pieceId'];
             piecePositionId: PieceType['piecePositionId'];
-            newFuel: number;
+            newFuel: PieceType['pieceFuel'];
         }[],
-        gameTeam: number
+        gameTeam: BlueOrRedTeamId
     ) {
         if (fuelUpdates.length === 0) {
             return;

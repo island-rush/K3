@@ -63,7 +63,7 @@ class ShopMenu extends Component<Props> {
         const specialShopComponents = TYPE_OWNERS[TYPE_SPECIAL].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
         ));
-        const capabilityShopComponents = LIST_ALL_CAPABILITIES.map((typeId, index) => (
+        const capabilityShopComponents = Object.values(LIST_ALL_CAPABILITIES).map((typeId, index) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
         ));
 

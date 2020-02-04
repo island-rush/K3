@@ -67,7 +67,7 @@ export const confirmFuelSelection = async (session: SocketSession, action: Confi
     const fuelSelections: {
         pieceId: PieceType['pieceId'];
         piecePositionId: PieceType['piecePositionId'];
-        newFuel: number;
+        newFuel: PieceType['pieceFuel'];
     }[] = [];
     for (let x = 0; x < aircraft.length; x++) {
         // add a thing to fuelSelections (pieceInfo, as well as newFuel?)

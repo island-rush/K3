@@ -1,20 +1,20 @@
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
-import { ShopItemType, GameType } from '../../types';
+import { ShopItemType, GameType, BlueOrRedTeamId } from '../../types';
 import { pool } from '../database';
 
 /**
  * Represents rows for shopItems table in database.
  */
 export class ShopItem implements ShopItemType {
-    shopItemId: number;
+    shopItemId: ShopItemType['shopItemId'];
 
-    shopItemGameId: number;
+    shopItemGameId: ShopItemType['shopItemGameId'];
 
-    shopItemTeamId: number;
+    shopItemTeamId: ShopItemType['shopItemTeamId'];
 
-    shopItemTypeId: number;
+    shopItemTypeId: ShopItemType['shopItemTypeId'];
 
-    constructor(shopItemId: number) {
+    constructor(shopItemId: ShopItemType['shopItemId']) {
         this.shopItemId = shopItemId;
     }
 
@@ -45,7 +45,11 @@ export class ShopItem implements ShopItemType {
     /**
      * Insert a ShopItem into the database.
      */
-    static async insert(shopItemGameId: number, shopItemTeamId: number, shopItemTypeId: number) {
+    static async insert(
+        shopItemGameId: ShopItemType['shopItemGameId'],
+        shopItemTeamId: ShopItemType['shopItemTeamId'],
+        shopItemTypeId: ShopItemType['shopItemTypeId']
+    ) {
         const queryString = 'INSERT INTO shopItems (shopItemGameId, shopItemTeamId, shopItemTypeId) values (?, ?, ?)';
         const inserts = [shopItemGameId, shopItemTeamId, shopItemTypeId];
         const [results] = await pool.query<OkPacket>(queryString, inserts);
@@ -56,7 +60,7 @@ export class ShopItem implements ShopItemType {
     /**
      * Delete all ShopItems in the database for this game's team.
      */
-    static async deleteAll(gameId: GameType['gameId'], gameTeam: number) {
+    static async deleteAll(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         const queryString = 'DELETE FROM shopItems WHERE shopItemGameId = ? AND shopItemTeamId = ?';
         const inserts = [gameId, gameTeam];
         await pool.query(queryString, inserts);
@@ -65,7 +69,7 @@ export class ShopItem implements ShopItemType {
     /**
      * Get all ShopItems in the database for this game's team.
      */
-    static async all(gameId: GameType['gameId'], gameTeam: number): Promise<ShopItemType[]> {
+    static async all(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId): Promise<ShopItemType[]> {
         const queryString = 'SELECT * FROM shopItems WHERE shopItemGameId = ? AND shopItemTeamId = ?';
         const inserts = [gameId, gameTeam];
         const [shopItems] = await pool.query<RowDataPacket[] & ShopItemType[]>(queryString, inserts);

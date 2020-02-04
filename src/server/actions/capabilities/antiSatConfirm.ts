@@ -68,7 +68,7 @@ export const antiSatConfirm = async (session: SocketSession, action: AntiSatRequ
     const serverAction: AntiSatAction = {
         type: ANTISAT_SELECTED,
         payload: {
-            invItem: thisInvItem
+            invItem: thisInvItem // TODO: check that methods aren't getting send to server as well, only need the data
         }
     };
 

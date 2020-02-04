@@ -1,6 +1,6 @@
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
-import { DRONE_SWARMS_TYPE_ID, SEA_MINES_TYPE_ID } from '../../../../constants';
+import { DRONE_SWARMS_TYPE_ID, SEA_MINES_TYPE_ID, LIST_ALL_POSITIONS_TYPE } from '../../../../constants';
 import { CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, PieceType } from '../../../../types';
 import { bombardment, clearPieceSelection, missileAttack, pieceClose, pieceOpen, selectPiece } from '../../redux';
 import { TYPE_IMAGES, ZOOMBOX_BACKGROUNDS } from '../styleConstants';
@@ -46,7 +46,7 @@ const droneSwarmStyle = {
 };
 
 interface Props {
-    selectedPos: number;
+    selectedPos: LIST_ALL_POSITIONS_TYPE;
     selectedPiece: PieceType | null;
     gameboard: GameboardState;
     selectPiece: any;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { ACCESS_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG, NOT_LOGGED_IN_VALUE, SOCKET_SERVER_REDIRECT } from '../../constants';
+import { ACCESS_TAG, GAME_DOES_NOT_EXIST, LOGIN_TAG, NOT_LOGGED_IN_VALUE, SOCKET_SERVER_REDIRECT, RED_TEAM_ID, BLUE_TEAM_ID } from '../../constants';
 import { io } from '../../server';
-import { TeacherSession } from '../../types';
+import { TeacherSession, ControllerType } from '../../types';
 import { Game } from '../classes';
 
 /**
@@ -31,7 +31,13 @@ export const logoutPlayer = async (req: Request, res: Response) => {
 
     const { gameTeam, gameController }: LogoutPlayerRequest = req.body;
 
-    await thisGame.setLoggedIn(parseInt(gameTeam), parseInt(gameController), NOT_LOGGED_IN_VALUE);
+    const parseValue = parseInt(gameTeam);
+    // TODO: weird hack here since we don't know that parseInt will return 0 or 1 (getting past typescript here, not ideal, should fix by figuring out parseInt)
+    await thisGame.setLoggedIn(
+        parseValue === BLUE_TEAM_ID ? BLUE_TEAM_ID : RED_TEAM_ID,
+        parseInt(gameController) as ControllerType,
+        NOT_LOGGED_IN_VALUE
+    );
 
     io.sockets.to(`game${gameId}team${gameTeam}controller${gameController}`).emit(SOCKET_SERVER_REDIRECT, LOGIN_TAG);
 

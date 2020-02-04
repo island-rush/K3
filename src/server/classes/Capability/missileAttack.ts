@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { ACTIVATED, distanceMatrix, MISSILE_ATTACK_RANGE_CHANGE } from '../../../constants';
-import { CapabilitiesState, MissileAttackType, MissileDisruptType, GameType } from '../../../types';
+import { ACTIVATED, distanceMatrix, MISSILE_ATTACK_RANGE_CHANGE, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
+import { CapabilitiesState, MissileAttackType, MissileDisruptType, GameType, PieceType, BlueOrRedTeamId } from '../../../types';
 import { pool } from '../../database';
 import { Piece } from '../Piece';
 
@@ -22,7 +22,7 @@ export const insertMissileAttack = async (gameId: GameType['gameId'], missilePie
     return true;
 };
 
-export const getMissileAttack = async (gameId: GameType['gameId'], teamId: number) => {
+export const getMissileAttack = async (gameId: GameType['gameId'], teamId: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM missileAttacks WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, teamId];
     const [results] = await pool.query<RowDataPacket[] & MissileAttackType[]>(queryString, inserts);
@@ -49,11 +49,11 @@ export const useMissileAttack = async (gameId: GameType['gameId']) => {
     const inserts = [gameId];
 
     type QueryResultType = {
-        targetId: number;
-        targetPositionId: number;
-        targetTypeId: number;
-        missilePositionId: number;
-        missileId: number;
+        targetId: PieceType['pieceId'];
+        targetPositionId: PieceType['piecePositionId'];
+        targetTypeId: PieceType['pieceTypeId'];
+        missilePositionId: PieceType['piecePositionId'];
+        missileId: PieceType['pieceId'];
     };
 
     const [results] = await pool.query<RowDataPacket[] & QueryResultType[]>(queryString, inserts);
@@ -69,7 +69,7 @@ export const useMissileAttack = async (gameId: GameType['gameId']) => {
 
     const listOfMissilesToDelete = [];
     const listOfTargetsToDelete = [];
-    const listOfPositionsHit = [];
+    const listOfPositionsHit: LIST_ALL_POSITIONS_TYPE[] = [];
 
     for (let x = 0; x < results.length; x++) {
         const { targetId, targetPositionId, missilePositionId, missileId } = results[x];

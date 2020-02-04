@@ -1,5 +1,8 @@
 import { Socket } from 'socket.io';
-import { GameType } from './databaseTables';
+import { TYPE_AIR, TYPE_LAND, TYPE_MAIN, TYPE_SEA, TYPE_SPECIAL } from '../constants';
+import { BlueOrRedTeamId, GameType } from './databaseTables';
+
+export type ControllerType = typeof TYPE_MAIN | typeof TYPE_AIR | typeof TYPE_LAND | typeof TYPE_SEA | typeof TYPE_SPECIAL;
 
 export type SocketSession = Socket['handshake']['session'] & {
     ir3: GameSession;
@@ -11,8 +14,8 @@ export type SocketSession = Socket['handshake']['session'] & {
  */
 export type GameSession = {
     gameId: GameType['gameId'];
-    gameTeam: number;
-    gameControllers: number[];
+    gameTeam: BlueOrRedTeamId; // TODO: potential errors if we assume neutral is part of gameTeam type, but almost always do checking based on blue and red team
+    gameControllers: ControllerType[];
 };
 
 /**
