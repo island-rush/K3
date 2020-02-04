@@ -1,10 +1,10 @@
-import { GameType } from '../../types';
+import { GameType, NewsType } from '../../types';
 import { pool } from '../database';
 
 /**
  * Helper function, generates array of inserts for gameInitialNews.
  */
-const news = (gameId: GameType['gameId'], newsOrder: number, newsOptions: NewsOptions) => {
+const news = (gameId: GameType['gameId'], newsOrder: NewsType['newsOrder'], newsOptions: NewsOptions) => {
     const newsTitle = newsOptions.newsTitle === undefined ? 'Default Title' : newsOptions.newsTitle;
     const newsInfo = newsOptions.newsInfo === undefined ? 'Default Info' : newsOptions.newsInfo;
 

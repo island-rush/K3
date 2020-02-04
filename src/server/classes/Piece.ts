@@ -1,17 +1,9 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID } from '../../constants';
-import {
-    AtcScrambleType,
-    BiologicalWeaponsType,
-    GoldenEyeType,
-    NukeType,
-    PieceType,
-    RemoteSensingType,
-    GameType,
-    BlueOrRedTeamId
-} from '../../types';
+import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
+// prettier-ignore
+import { AtcScrambleType, BiologicalWeaponsType, BlueOrRedTeamId, GameType, GoldenEyeType, NukeType, PieceType, PlanType, RemoteSensingType } from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
 
@@ -31,7 +23,7 @@ export class Piece implements PieceType {
     pieceContents?: PieceType['pieceContents'];
     isPieceDisabled?: PieceType['isPieceDisabled'];
 
-    constructor(pieceId: number) {
+    constructor(pieceId: PieceType['pieceId']) {
         this.pieceId = pieceId;
     }
 
@@ -178,7 +170,7 @@ export class Piece implements PieceType {
     /**
      * Globally move all pieces according to their plans for this game.
      */
-    static async move(gameId: GameType['gameId'], movementOrder: number) {
+    static async move(gameId: GameType['gameId'], movementOrder: PlanType['planMovementOrder']) {
         // movement based on plans (for this order/step)
         const conn = await pool.getConnection();
 
@@ -352,7 +344,7 @@ export class Piece implements PieceType {
     /**
      * Put 1 piece outside of it's parent piece.
      */
-    static async putOutsideContainer(selectedPieceId: number, newPositionId: number) {
+    static async putOutsideContainer(selectedPieceId: PieceType['pieceId'], newPositionId: number) {
         // TODO: deal with inner transport pieces (need to also set the piecePositionId)
         const queryString = 'UPDATE pieces SET pieceContainerId = -1, piecePositionId = ? WHERE pieceId = ?';
         const inserts = [newPositionId, selectedPieceId];
@@ -817,7 +809,7 @@ export class Piece implements PieceType {
         }
 
         if (listOfDeletedPieces.length !== 0) {
-            const listOfDeletedPieceIds: number[] = [];
+            const listOfDeletedPieceIds: PieceType['pieceId'][] = [];
             for (const deletedPiece of listOfDeletedPieces) {
                 if (!listOfDeletedPieceIds.includes(deletedPiece.pieceId)) {
                     listOfDeletedPieceIds.push(deletedPiece.pieceId);

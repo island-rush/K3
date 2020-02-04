@@ -14,7 +14,7 @@ export class ShopItem implements ShopItemType {
 
     shopItemTypeId: ShopItemType['shopItemTypeId'];
 
-    constructor(shopItemId: number) {
+    constructor(shopItemId: ShopItemType['shopItemId']) {
         this.shopItemId = shopItemId;
     }
 
@@ -45,7 +45,11 @@ export class ShopItem implements ShopItemType {
     /**
      * Insert a ShopItem into the database.
      */
-    static async insert(shopItemGameId: number, shopItemTeamId: number, shopItemTypeId: number) {
+    static async insert(
+        shopItemGameId: ShopItemType['shopItemGameId'],
+        shopItemTeamId: ShopItemType['shopItemTeamId'],
+        shopItemTypeId: ShopItemType['shopItemTypeId']
+    ) {
         const queryString = 'INSERT INTO shopItems (shopItemGameId, shopItemTeamId, shopItemTypeId) values (?, ?, ?)';
         const inserts = [shopItemGameId, shopItemTeamId, shopItemTypeId];
         const [results] = await pool.query<OkPacket>(queryString, inserts);

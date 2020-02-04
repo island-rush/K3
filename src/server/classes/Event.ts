@@ -49,7 +49,7 @@ export class Event implements EventQueueType {
         // TODO: this selection could probably be combined with the update
         const queryString3 = 'SELECT pieceId FROM eventItems JOIN pieces ON pieceId = eventPieceId WHERE pieceTypeId IN (?) AND eventId = ?';
         const inserts3 = [PIECES_WITH_FUEL, this.eventId];
-        const [piecesWithFuel] = await pool.query<RowDataPacket[] & { pieceId: number }[]>(queryString3, inserts3);
+        const [piecesWithFuel] = await pool.query<RowDataPacket[] & { pieceId: PieceType['pieceId'] }[]>(queryString3, inserts3);
 
         const listOfPieceIds = [];
         for (let x = 0; x < piecesWithFuel.length; x++) {
@@ -201,7 +201,7 @@ export class Event implements EventQueueType {
         fuelUpdates: {
             pieceId: PieceType['pieceId'];
             piecePositionId: PieceType['piecePositionId'];
-            newFuel: number;
+            newFuel: PieceType['pieceFuel'];
         }[],
         gameTeam: BlueOrRedTeamId
     ) {

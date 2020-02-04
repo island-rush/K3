@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
 import { ALL_COMMANDER_TYPES, SERVER_RAISE_MORALE_CONFIRM } from '../../../../../constants';
-import { RaiseMoraleRequestAction } from '../../../../../types';
+import { RaiseMoraleRequestAction, ControllerType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
-export const raiseMoraleSelectCommanderType = (selectedCommanderType: number) => {
+export const raiseMoraleSelectCommanderType = (selectedCommanderType: ControllerType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { planning }: any = getState();
         const { invItem } = planning;
