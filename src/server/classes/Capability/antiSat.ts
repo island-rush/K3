@@ -1,6 +1,6 @@
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 import { ANTI_SAT_MISSILE_ROUNDS, BLUE_TEAM_ID, RED_TEAM_ID } from '../../../constants';
-import { AntiSatMissileType, BlueOrRedTeamId, GameType, RemoteSensingType, PieceType } from '../../../types';
+import { AntiSatMissileType, BlueOrRedTeamId, GameType, RemoteSensingType } from '../../../types';
 import { pool } from '../../database';
 import { Piece } from '../Piece';
 
