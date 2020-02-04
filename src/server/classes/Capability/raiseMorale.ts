@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 import { BLUE_TEAM_ID, RAISE_MORALE_ROUNDS, RED_TEAM_ID, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../../constants';
-import { RaiseMoraleType, GameType, BlueOrRedTeamId } from '../../../types';
+import { RaiseMoraleType, GameType, BlueOrRedTeamId, ControllerType } from '../../../types';
 
-export const insertRaiseMorale = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedCommanderType: number) => {
+export const insertRaiseMorale = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedCommanderType: ControllerType) => {
     let queryString = 'SELECT * FROM raiseMorale WHERE gameId = ? AND teamId = ? AND commanderType = ?';
     let inserts = [gameId, gameTeam, selectedCommanderType];
     const [results] = await pool.query<RowDataPacket[] & RaiseMoraleType[]>(queryString, inserts);

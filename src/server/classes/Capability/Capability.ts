@@ -1,4 +1,4 @@
-import { BlueOrRedTeamId, GameType, RemoteSensingType } from '../../../types';
+import { BlueOrRedTeamId, GameType, RemoteSensingType, AntiSatMissileType, ControllerType } from '../../../types';
 import { Game } from '../Game';
 import { Piece } from '../Piece';
 import { checkAntiSatHit, checkRemoteSensingHit, decreaseAntiSat, getAntiSat, insertAntiSat } from './antiSat';
@@ -72,7 +72,7 @@ export class Capability {
         return getAntiSat(gameId, gameTeam);
     }
 
-    static async checkAntiSatHit(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, antiSatId: number) {
+    static async checkAntiSatHit(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, antiSatId: AntiSatMissileType['antiSatId']) {
         return checkAntiSatHit(gameId, gameTeam, antiSatId);
     }
 
@@ -174,7 +174,7 @@ export class Capability {
         return decreaseBiologicalWeapons(gameId);
     }
 
-    static async insertRaiseMorale(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedCommanderType: number) {
+    static async insertRaiseMorale(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedCommanderType: ControllerType) {
         return insertRaiseMorale(gameId, gameTeam, selectedCommanderType);
     }
 

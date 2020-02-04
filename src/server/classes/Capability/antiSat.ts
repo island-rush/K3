@@ -1,6 +1,6 @@
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 import { ANTI_SAT_MISSILE_ROUNDS, BLUE_TEAM_ID, RED_TEAM_ID } from '../../../constants';
-import { AntiSatMissileType, BlueOrRedTeamId, GameType, RemoteSensingType } from '../../../types';
+import { AntiSatMissileType, BlueOrRedTeamId, GameType, RemoteSensingType, PieceType } from '../../../types';
 import { pool } from '../../database';
 import { Piece } from '../Piece';
 
@@ -60,7 +60,7 @@ export const checkRemoteSensingHit = async (
     return -1;
 };
 
-export const checkAntiSatHit = async (gameId: GameType['gameId'], teamId: BlueOrRedTeamId, antiSatId: number) => {
+export const checkAntiSatHit = async (gameId: GameType['gameId'], teamId: BlueOrRedTeamId, antiSatId: AntiSatMissileType['antiSatId']) => {
     // team requesting this just put up an anti sat, check for enemy remote sensing to kill (and report killed to teams)
     const otherTeamId = teamId === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
 

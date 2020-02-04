@@ -104,6 +104,6 @@ export const gameInitialPieces = async (gameId: GameType['gameId']) => {
  * List of optional parameters for creating a piece.
  */
 type PieceOptions = {
-    pieceContainerId?: number;
-    pieceVisible?: number;
+    pieceContainerId?: PieceType['pieceContainerId'];
+    pieceVisible?: PieceType['pieceVisible'];
 };

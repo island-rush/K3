@@ -1,7 +1,7 @@
 // prettier-ignore
 import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, CLEAR_SAM_DELETE, COL_BATTLE_EVENT_TYPE, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, SAM_DELETED_PIECES, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
 // prettier-ignore
-import { ClearDroneSwarmMineNotifyAction, ClearSamDeleteAction, ClearSeaMineNotifyAction, DroneSwarmHitNotifyAction, NewRoundAction, PlacePhaseAction, SamDeletedPiecesAction, SeaMineHitNotifyAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction, BlueOrRedTeamId } from '../../types';
+import { ClearDroneSwarmMineNotifyAction, ClearSamDeleteAction, ClearSeaMineNotifyAction, DroneSwarmHitNotifyAction, NewRoundAction, PlacePhaseAction, SamDeletedPiecesAction, SeaMineHitNotifyAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction, BlueOrRedTeamId, PlanType } from '../../types';
 import { Capability, Event, Game, Piece, Plan } from '../classes';
 import { sendToGame, sendToTeam } from '../helpers';
 import { giveNextEvent } from './giveNextEvent';
@@ -141,7 +141,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         await thisGame.setStatus(RED_TEAM_ID, WAITING_STATUS);
     }
 
-    const currentMovementOrder: number = currentMovementOrderBlue != null ? currentMovementOrderBlue : currentMovementOrderRed;
+    const currentMovementOrder: PlanType['planMovementOrder'] = currentMovementOrderBlue != null ? currentMovementOrderBlue : currentMovementOrderRed;
 
     // Collision Battle Events
     const allCollisions: any = await Plan.getCollisions(gameId, currentMovementOrder); // each item in collisionBattles has {pieceId0, pieceTypeId0, pieceContainerId0, piecePositionId0, planPositionId0, pieceId1, pieceTypeId1, pieceContainerId1, piecePositionId1, planPositionId1 }
