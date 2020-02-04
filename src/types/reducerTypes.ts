@@ -1,5 +1,5 @@
 // prettier-ignore
-import { AIRFIELD_TYPE, FLAG_TYPE, GAME_INFO_MENU_INDEX, INV_MENU_INDEX, LAND_TYPE, MISSILE_SILO_TYPE, NEUTRAL_TEAM_ID, NO_MENU_INDEX, SHOP_MENU_INDEX, SPACE_MENU_INDEX, WATER_TYPE } from '../constants';
+import { AIRFIELD_TYPE, FLAG_TYPE, GAME_INFO_MENU_INDEX, INV_MENU_INDEX, LAND_TYPE, MISSILE_SILO_TYPE, NEUTRAL_TEAM_ID, NO_MENU_INDEX, SHOP_MENU_INDEX, SPACE_MENU_INDEX, WATER_TYPE, LIST_ALL_POSITIONS_TYPE } from '../constants';
 import { EventItemType, GameType, InvItemType, NewsType, PieceType, ShopItemType } from './databaseTables';
 import { GameSession } from './sessionTypes';
 
@@ -10,7 +10,8 @@ export type InvState = InvItemType[];
 export type UserfeedbackState = string;
 
 export type positionType = typeof LAND_TYPE | typeof AIRFIELD_TYPE | typeof WATER_TYPE | typeof FLAG_TYPE | typeof MISSILE_SILO_TYPE;
-export type GameboardState = { type: positionType; pieces: PieceType[] }[];
+export type GameboardPositionType = { type: positionType; pieces: PieceType[] };
+export type GameboardState = GameboardPositionType[];
 
 export type GameInfoState = {
     gameSection: GameType['gameSection'];
@@ -59,7 +60,7 @@ export type GameboardMetaState = {
     /**
      * Position most recently clicked by player. -1 => stop selecting positions.
      */
-    selectedPosition: number;
+    selectedPosition: LIST_ALL_POSITIONS_TYPE;
 
     /**
      * List of positions to highlight on the board.
@@ -81,22 +82,22 @@ export type CapabilitiesState = {
     /**
      * List of positions that were hit by rods from god.
      */
-    confirmedRods: number[];
+    confirmedRods: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of center positions for remote sensing active.
      */
-    confirmedRemoteSense: number[];
+    confirmedRemoteSense: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of positions that were hit by insurgency.
      */
-    confirmedInsurgency: number[];
+    confirmedInsurgency: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of positions that were hit by biological weapons.
      */
-    confirmedBioWeapons: number[];
+    confirmedBioWeapons: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of boosts for commander types, listed as commander type numbers
@@ -107,42 +108,42 @@ export type CapabilitiesState = {
     /**
      * List of center positions getting comm interrupted.
      */
-    confirmedCommInterrupt: number[];
+    confirmedCommInterrupt: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of positions hit by golden eye.
      */
-    confirmedGoldenEye: number[];
+    confirmedGoldenEye: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of positions with a sea mine in it.
      */
-    confirmedSeaMines: number[];
+    confirmedSeaMines: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of positions that had a sea mine successfully hit something.
      */
-    seaMineHits: number[];
+    seaMineHits: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of positions with drone swarms in them.
      */
-    confirmedDroneSwarms: number[];
+    confirmedDroneSwarms: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of positions that had a drone swarm successfully hit something.
      */
-    droneSwarmHits: number[];
+    droneSwarmHits: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of positions with an atc scramble active on it.
      */
-    confirmedAtcScramble: number[];
+    confirmedAtcScramble: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of center positions for nukes.
      */
-    confirmedNukes: number[];
+    confirmedNukes: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of confirmed plans for missile attack(s) against enemy piece(s).
@@ -152,7 +153,7 @@ export type CapabilitiesState = {
     /**
      * List of positions that had a piece get hit by missile attack.
      */
-    confirmedMissileHitPos: number[];
+    confirmedMissileHitPos: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of confirmed plans for bombardment attack(s) against enemy pieces(s).
@@ -162,7 +163,7 @@ export type CapabilitiesState = {
     /**
      * List of positions that had a piece get hit by bombardment.
      */
-    confirmedBombardmentHitPos: number[];
+    confirmedBombardmentHitPos: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * Each number in this array is an antisat, and the number represents number of rounds left.
@@ -172,7 +173,7 @@ export type CapabilitiesState = {
     /**
      * List of positions that were the center positions for a remote sensing, to show that it was taken out.
      */
-    confirmedAntiSatHitPos: number[]; // TODO: there's a lot of weird timing situations with keeping track of positions (of remote sensing) hit if multiple used rapidly
+    confirmedAntiSatHitPos: LIST_ALL_POSITIONS_TYPE[]; // TODO: there's a lot of weird timing situations with keeping track of positions (of remote sensing) hit if multiple used rapidly
 
     /**
      * Contains list of missile pieceId's that are currently disrupted.
@@ -187,7 +188,7 @@ export type CapabilitiesState = {
     /**
      * List of positions that had a piece get hit by a sam's auto fire.
      */
-    samHitPos: number[];
+    samHitPos: LIST_ALL_POSITIONS_TYPE[];
 };
 
 export type PlanningState = {
@@ -217,12 +218,12 @@ export type PlanningState = {
     /**
      * List of adjacent positions, in order, to be visited.
      */
-    moves: number[];
+    moves: LIST_ALL_POSITIONS_TYPE[];
 
     /**
      * List of all piece plans.
      */
-    confirmedPlans: { [pieceId: number]: number[] };
+    confirmedPlans: { [pieceId: number]: LIST_ALL_POSITIONS_TYPE[] };
 };
 
 export type ContainerState = {

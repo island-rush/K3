@@ -1,11 +1,11 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 // prettier-ignore
-import { ACTIVATED, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, DEACTIVATED, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, ISLAND_POSITIONS, NEUTRAL_TEAM_ID, NUKE_RANGE } from '../../../constants';
+import { ACTIVATED, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, DEACTIVATED, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, ISLAND_POSITIONS, NEUTRAL_TEAM_ID, NUKE_RANGE, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
 import { NukeType, GameType, BlueOrRedTeamId } from '../../../types';
 import { Game } from '../Game';
 
-export const insertNuke = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
+export const insertNuke = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
     // TODO: Could prevent nuking a different position again?
     let queryString = 'SELECT * FROM nukes WHERE gameId = ? AND positionId = ? AND (teamId = ? OR activated = ?)';
     let inserts = [gameId, selectedPositionId, gameTeam, ACTIVATED];
@@ -17,7 +17,7 @@ export const insertNuke = async (gameId: GameType['gameId'], gameTeam: BlueOrRed
     }
 
     // TODO: validate the position of the nuke isn't within 2 hexes of main islands
-    for (let x = 0; x < distanceMatrix[selectedPositionId].length; x++) {
+    for (let x = 0; x < distanceMatrix[parseInt(selectedPositionId.toString())].length; x++) {
         // 2 hexes away distance check
         if (distanceMatrix[selectedPositionId][x] <= 2) {
             if (ISLAND_POSITIONS[DRAGON_ISLAND_ID].includes(x)) {
@@ -46,7 +46,7 @@ export const useNukes = async (gameId: GameType['gameId']) => {
     inserts = [gameId];
     const [allNukes] = await pool.query<RowDataPacket[] & NukeType[]>(queryString, inserts);
 
-    const listPositions = [];
+    const listPositions: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < allNukes.length; x++) {
         listPositions.push(allNukes[x].positionId);
     }
@@ -93,7 +93,7 @@ export const getNukes = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTe
     const inserts = [gameId, gameTeam, ACTIVATED];
     const [results] = await pool.query<RowDataPacket[] & NukeType[]>(queryString, inserts);
 
-    const listOfNukes = [];
+    const listOfNukes: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < results.length; x++) {
         listOfNukes.push(results[x].positionId);
     }

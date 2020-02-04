@@ -1,5 +1,5 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { DESTROYER_ATTACK_RANGE_CHANCE, distanceMatrix } from '../../../constants';
+import { DESTROYER_ATTACK_RANGE_CHANCE, distanceMatrix, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
 import { BlueOrRedTeamId, BombardmentType, CapabilitiesState, GameType, PieceType } from '../../../types';
 import { pool } from '../../database';
 import { Piece } from '../Piece';
@@ -58,7 +58,7 @@ export const useBombardmentAttack = async (gameId: GameType['gameId']) => {
     const [results] = await pool.query<RowDataPacket[] & QueryResultType[]>(queryString, inserts);
 
     const listOfTargetsToDelete = [];
-    const listOfPositionsHit = [];
+    const listOfPositionsHit: LIST_ALL_POSITIONS_TYPE[] = [];
 
     for (let x = 0; x < results.length; x++) {
         const { targetId, targetPositionId, destroyerPositionId } = results[x];

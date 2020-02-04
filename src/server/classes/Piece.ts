@@ -1,7 +1,7 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
+import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, LIST_ALL_POSITIONS_TYPE } from '../../constants';
 // prettier-ignore
 import { AtcScrambleType, BiologicalWeaponsType, BlueOrRedTeamId, GameType, GoldenEyeType, NukeType, PieceType, PlanType, RemoteSensingType } from '../../types';
 import { pool } from '../database';
@@ -462,7 +462,7 @@ export class Piece implements PieceType {
         }
     }
 
-    static async ableToPlaceRadar(thisGame: Game, gameTeam: PieceType['pieceTeamId'], selectedPositionId: number) {
+    static async ableToPlaceRadar(thisGame: Game, gameTeam: PieceType['pieceTeamId'], selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         // TODO: could make this into 1 request instead of 2
         const queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ? AND pieceTypeId in (?)';
         const inserts = [thisGame.gameId, gameTeam, selectedPositionId, TYPE_GROUND_PIECES];
@@ -558,7 +558,7 @@ export class Piece implements PieceType {
         return completelyOwnsIsland;
     }
 
-    static async ableToPlaceMissile(thisGame: Game, gameTeam: PieceType['pieceTeamId'], selectedPositionId: number) {
+    static async ableToPlaceMissile(thisGame: Game, gameTeam: PieceType['pieceTeamId'], selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         // what are the rules for placement with missiles (does it need to have friendly pieces there?)
 
         // TODO: could make this into 1 request instead of 2

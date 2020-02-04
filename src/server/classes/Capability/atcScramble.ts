@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
-import { ACTIVATED, ATC_SCRAMBLE_ROUNDS, DEACTIVATED } from '../../../constants';
+import { ACTIVATED, ATC_SCRAMBLE_ROUNDS, DEACTIVATED, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
 import { AtcScrambleType, BlueOrRedTeamId, GameType } from '../../../types';
 
 export const getAtcScramble = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
@@ -8,7 +8,7 @@ export const getAtcScramble = async (gameId: GameType['gameId'], gameTeam: BlueO
     const inserts = [gameId, gameTeam, ACTIVATED];
     const [results] = await pool.query<RowDataPacket[] & AtcScrambleType[]>(queryString, inserts);
 
-    const listOfAtcScramble = [];
+    const listOfAtcScramble: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < results.length; x++) {
         listOfAtcScramble.push(results[x].positionId);
     }
@@ -16,7 +16,7 @@ export const getAtcScramble = async (gameId: GameType['gameId'], gameTeam: BlueO
     return listOfAtcScramble;
 };
 
-export const insertAtcScramble = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
+export const insertAtcScramble = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
     const insertQuery = 'SELECT * FROM atcScramble WHERE gameId = ? AND positionId = ? AND (teamId = ? OR activated = ?)';
     const inserts = [gameId, selectedPositionId, gameTeam, ACTIVATED];
     const [results] = await pool.query<RowDataPacket[] & AtcScrambleType[]>(insertQuery, inserts);
@@ -50,7 +50,7 @@ export const useAtcScramble = async (gameId: GameType['gameId']) => {
     inserts = [gameId];
     const [allAtcScramble] = await pool.query<RowDataPacket[] & AtcScrambleType[]>(queryString, inserts);
 
-    const listPositions = [];
+    const listPositions: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < allAtcScramble.length; x++) {
         listPositions.push(allAtcScramble[x].positionId);
     }

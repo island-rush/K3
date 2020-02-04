@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { Piece, pool } from '../../';
-import { TYPE_OWNERS, TYPE_SEA } from '../../../constants';
+import { TYPE_OWNERS, TYPE_SEA, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
 import { SeaMineType, GameType, BlueOrRedTeamId, PieceType } from '../../../types';
 
-export const insertSeaMine = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
+export const insertSeaMine = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
     // TODO: could make it unique within the database by doing double primary key, instead of single key id, other database tricks and best practices
     let queryString = 'SELECT * FROM seaMines WHERE gameId = ? AND positionId = ? AND gameTeam = ?';
     let inserts = [gameId, selectedPositionId, gameTeam];
@@ -25,7 +25,7 @@ export const getSeaMines = async (gameId: GameType['gameId'], gameTeam: BlueOrRe
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & SeaMineType[]>(queryString, inserts);
 
-    const listOfSeaMines = [];
+    const listOfSeaMines: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < results.length; x++) {
         listOfSeaMines.push(results[x].positionId);
     }
@@ -33,14 +33,14 @@ export const getSeaMines = async (gameId: GameType['gameId'], gameTeam: BlueOrRe
     return listOfSeaMines;
 };
 
-export const checkSeaMineHit = async (gameId: GameType['gameId']): Promise<number[]> => {
+export const checkSeaMineHit = async (gameId: GameType['gameId']): Promise<LIST_ALL_POSITIONS_TYPE[]> => {
     const queryString =
         'SELECT seaMineId, pieceId, positionId FROM seaMines INNER JOIN plans ON positionId = planPositionId INNER JOIN pieces ON planPieceId = pieceId WHERE pieceGameId = ? AND pieceTypeId in (?)';
     const inserts = [gameId, TYPE_OWNERS[TYPE_SEA]];
     type QueryResult = {
         seaMineId: SeaMineType['seaMineId'];
         pieceId: PieceType['pieceId'];
-        positionId: number;
+        positionId: LIST_ALL_POSITIONS_TYPE;
     };
     const [results] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
 

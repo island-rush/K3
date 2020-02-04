@@ -1,7 +1,7 @@
 import { RowDataPacket } from 'mysql2';
 import { pool } from '../../';
 // prettier-ignore
-import { ACTIVATED, BLUE_TEAM_ID, DEACTIVATED, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, RED_TEAM_ID, TYPE_AIR_PIECES, TYPE_GROUND_PIECES } from '../../../constants';
+import { ACTIVATED, BLUE_TEAM_ID, DEACTIVATED, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, RED_TEAM_ID, TYPE_AIR_PIECES, TYPE_GROUND_PIECES, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
 import { GoldenEyeType, GameType, BlueOrRedTeamId } from '../../../types';
 
 export const getGoldenEye = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
@@ -9,7 +9,7 @@ export const getGoldenEye = async (gameId: GameType['gameId'], gameTeam: BlueOrR
     const inserts = [gameId, ACTIVATED, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
 
-    const listOfGoldenEye = [];
+    const listOfGoldenEye: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < results.length; x++) {
         listOfGoldenEye.push(results[x].positionId);
     }
@@ -17,7 +17,7 @@ export const getGoldenEye = async (gameId: GameType['gameId'], gameTeam: BlueOrR
     return listOfGoldenEye;
 };
 
-export const insertGoldenEye = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
+export const insertGoldenEye = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
     let queryString = 'SELECT * FROM goldenEye WHERE gameId = ? AND teamId = ? AND positionId = ?';
     let inserts = [gameId, gameTeam, selectedPositionId];
     const [results] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
@@ -47,7 +47,7 @@ export const useGoldenEye = async (gameId: GameType['gameId']) => {
         return [];
     }
 
-    const listOfEffectedPositions = [];
+    const listOfEffectedPositions: LIST_ALL_POSITIONS_TYPE[] = [];
 
     for (let x = 0; x < allGoldenEye.length; x++) {
         const thisGoldenEye = allGoldenEye[x];

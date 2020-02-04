@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
-import { ACTIVATED, BIO_WEAPONS_ROUNDS, DEACTIVATED } from '../../../constants';
+import { ACTIVATED, BIO_WEAPONS_ROUNDS, DEACTIVATED, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
 import { BiologicalWeaponsType, BlueOrRedTeamId, GameType } from '../../../types';
 
-export const insertBiologicalWeapons = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
+export const insertBiologicalWeapons = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
     // TODO: Humanitarian assistance is restricted for the duration of this effect.
     let queryString = 'SELECT * FROM biologicalWeapons WHERE gameId = ? AND teamId = ? AND positionId = ?';
     let inserts = [gameId, gameTeam, selectedPositionId];
@@ -30,7 +30,7 @@ export const getBiologicalWeapons = async (gameId: GameType['gameId'], gameTeam:
     const inserts = [gameId, ACTIVATED, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & BiologicalWeaponsType[]>(queryString, inserts);
 
-    const listOfPositions = [];
+    const listOfPositions: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < results.length; x++) {
         listOfPositions.push(results[x].positionId);
     }

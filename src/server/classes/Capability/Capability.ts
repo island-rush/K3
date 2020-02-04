@@ -1,4 +1,5 @@
-import { BlueOrRedTeamId, GameType, RemoteSensingType, AntiSatMissileType, ControllerType } from '../../../types';
+import { LIST_ALL_POSITIONS_TYPE } from '../../../constants';
+import { AntiSatMissileType, BlueOrRedTeamId, ControllerType, GameType, RemoteSensingType } from '../../../types';
 import { Game } from '../Game';
 import { Piece } from '../Piece';
 import { checkAntiSatHit, checkRemoteSensingHit, decreaseAntiSat, getAntiSat, insertAntiSat } from './antiSat';
@@ -80,7 +81,7 @@ export class Capability {
         gameId: GameType['gameId'],
         gameTeam: BlueOrRedTeamId,
         remoteSensingId: RemoteSensingType['remoteSensingId'],
-        remoteSensingPosId: number
+        remoteSensingPosId: LIST_ALL_POSITIONS_TYPE
     ) {
         return checkRemoteSensingHit(gameId, gameTeam, remoteSensingId, remoteSensingPosId);
     }
@@ -114,7 +115,7 @@ export class Capability {
         return getNukes(gameId, gameTeam);
     }
 
-    static async insertNuke(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) {
+    static async insertNuke(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         return insertNuke(gameId, gameTeam, selectedPositionId);
     }
 
@@ -122,7 +123,7 @@ export class Capability {
         return useNukes(gameId);
     }
 
-    static async rodsFromGodInsert(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) {
+    static async rodsFromGodInsert(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         return rodsFromGodInsert(gameId, gameTeam, selectedPositionId);
     }
 
@@ -134,7 +135,7 @@ export class Capability {
         return useRodsFromGod(gameId);
     }
 
-    static async insurgencyInsert(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) {
+    static async insurgencyInsert(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         return insurgencyInsert(gameId, gameTeam, selectedPositionId);
     }
 
@@ -146,7 +147,7 @@ export class Capability {
         return useInsurgency(gameId);
     }
 
-    static async remoteSensingInsert(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) {
+    static async remoteSensingInsert(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         return remoteSensingInsert(gameId, gameTeam, selectedPositionId);
     }
 
@@ -158,7 +159,7 @@ export class Capability {
         return decreaseRemoteSensing(gameId);
     }
 
-    static async insertBiologicalWeapons(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) {
+    static async insertBiologicalWeapons(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         return insertBiologicalWeapons(gameId, gameTeam, selectedPositionId);
     }
 
@@ -186,7 +187,7 @@ export class Capability {
         return getRaiseMorale(gameId, gameTeam);
     }
 
-    static async insertCommInterrupt(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) {
+    static async insertCommInterrupt(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         return insertCommInterrupt(gameId, gameTeam, selectedPositionId);
     }
 
@@ -206,7 +207,7 @@ export class Capability {
         return getGoldenEye(gameId, gameTeam);
     }
 
-    static async insertGoldenEye(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) {
+    static async insertGoldenEye(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         return insertGoldenEye(gameId, gameTeam, selectedPositionId);
     }
 
@@ -218,7 +219,7 @@ export class Capability {
         return decreaseGoldenEye(gameId);
     }
 
-    static async insertSeaMine(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) {
+    static async insertSeaMine(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         return insertSeaMine(gameId, gameTeam, selectedPositionId);
     }
 
@@ -234,7 +235,7 @@ export class Capability {
         return getDroneSwarms(gameId, gameTeam);
     }
 
-    static async insertDroneSwarm(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) {
+    static async insertDroneSwarm(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         return insertDroneSwarm(gameId, gameTeam, selectedPositionId);
     }
 
@@ -250,7 +251,7 @@ export class Capability {
         return getAtcScramble(gameId, gameTeam);
     }
 
-    static async insertAtcScramble(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) {
+    static async insertAtcScramble(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         return insertAtcScramble(gameId, gameTeam, selectedPositionId);
     }
 

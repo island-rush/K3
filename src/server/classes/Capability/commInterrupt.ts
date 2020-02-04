@@ -1,9 +1,9 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
-import { ACTIVATED, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, distanceMatrix } from '../../../constants';
+import { ACTIVATED, COMM_INTERRUPT_RANGE, COMM_INTERRUPT_ROUNDS, DEACTIVATED, distanceMatrix, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
 import { CommInterruptType, GameType, BlueOrRedTeamId } from '../../../types';
 
-export const insertCommInterrupt = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: number) => {
+export const insertCommInterrupt = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
     let queryString = 'SELECT * FROM commInterrupt WHERE gameId = ? AND teamId = ? AND positionId = ?';
     let inserts = [gameId, gameTeam, selectedPositionId];
     const [results] = await pool.query<RowDataPacket[] & CommInterruptType[]>(queryString, inserts);
@@ -24,7 +24,7 @@ export const getCommInterrupt = async (gameId: GameType['gameId'], gameTeam: Blu
     const inserts = [gameId, ACTIVATED, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & CommInterruptType[]>(queryString, inserts);
 
-    const listOfCommInterrupt = [];
+    const listOfCommInterrupt: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < results.length; x++) {
         listOfCommInterrupt.push(results[x].positionId);
     }
@@ -47,9 +47,9 @@ export const useCommInterrupt = async (gameId: GameType['gameId']) => {
     }
 
     // need the positions anyway to give back to the clients for updating
-    const fullListOfPositions0 = [];
-    const fullListOfPositions1 = [];
-    const masterListOfAllPositions = [];
+    const fullListOfPositions0: LIST_ALL_POSITIONS_TYPE[] = [];
+    const fullListOfPositions1: LIST_ALL_POSITIONS_TYPE[] = [];
+    const masterListOfAllPositions: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < results.length; x++) {
         const thisResult = results[x];
         const { positionId, teamId } = thisResult;

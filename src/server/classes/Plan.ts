@@ -1,5 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { PlanType, GameType, BlueOrRedTeamId, PieceType } from '../../types';
+import { LIST_ALL_POSITIONS_TYPE } from '../../constants';
+import { BlueOrRedTeamId, GameType, PieceType, PlanType } from '../../types';
 import { pool } from '../database';
 
 /**
@@ -91,7 +92,7 @@ export class Plan implements PlanType {
         const [resultPlans] = await pool.query<RowDataPacket[] & PlanType[]>(queryString, inserts);
 
         // formatting for the client, needs it in this object kinda way
-        const confirmedPlans: { [pieceId: number]: number[] } = {};
+        const confirmedPlans: { [pieceId: number]: LIST_ALL_POSITIONS_TYPE[] } = {};
         for (let x = 0; x < resultPlans.length; x++) {
             const { planPieceId, planPositionId } = resultPlans[x];
 

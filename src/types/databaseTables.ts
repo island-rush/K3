@@ -1,5 +1,5 @@
 // prettier-ignore
-import { ACTIVATED, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, COMBAT_PHASE_ID, DEACTIVATED, LIST_ALL_TYPES_ENUM, LOGGED_IN_VALUE, NEUTRAL_TEAM_ID, NEWS_PHASE_ID, NOT_LOGGED_IN_VALUE, NOT_WAITING_STATUS, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, PURCHASE_PHASE_ID, RED_TEAM_ID, REFUEL_EVENT_TYPE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, WAITING_STATUS } from '../constants';
+import { ACTIVATED, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, COMBAT_PHASE_ID, DEACTIVATED, LIST_ALL_POSITIONS_TYPE, LIST_ALL_TYPES_ENUM, LOGGED_IN_VALUE, NEUTRAL_TEAM_ID, NEWS_PHASE_ID, NOT_LOGGED_IN_VALUE, NOT_WAITING_STATUS, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, PURCHASE_PHASE_ID, RED_TEAM_ID, REFUEL_EVENT_TYPE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, WAITING_STATUS } from '../constants';
 import { ControllerType } from './sessionTypes';
 
 export type BlueOrRedTeamId = typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
@@ -93,7 +93,7 @@ export type PieceType = {
     pieceGameId: GameType['gameId'];
     pieceTeamId: BlueOrRedTeamId;
     pieceTypeId: LIST_ALL_TYPES_ENUM;
-    piecePositionId: number;
+    piecePositionId: LIST_ALL_POSITIONS_TYPE;
     pieceContainerId: PieceType['pieceId'];
     pieceVisible: PieceVisibleTypes;
     pieceMoves: number;
@@ -115,7 +115,7 @@ export type PlanType = {
     planTeamId: BlueOrRedTeamId;
     planPieceId: PieceType['pieceId'];
     planMovementOrder: number;
-    planPositionId: number;
+    planPositionId: LIST_ALL_POSITIONS_TYPE;
 };
 
 export type NewsType = {
@@ -133,8 +133,8 @@ export type EventQueueType = {
     eventGameId: GameType['gameId'];
     eventTeamId: BlueOrRedTeamId;
     eventTypeId: EventTypes;
-    eventPosA: number;
-    eventPosB: number;
+    eventPosA: LIST_ALL_POSITIONS_TYPE;
+    eventPosB: LIST_ALL_POSITIONS_TYPE;
 };
 
 export type EventItemType = {
@@ -147,14 +147,14 @@ export type RodsFromGodType = {
     rodsFromGodId: number;
     gameId: GameType['gameId'];
     teamId: BlueOrRedTeamId;
-    positionId: number;
+    positionId: LIST_ALL_POSITIONS_TYPE;
 };
 
 export type RemoteSensingType = {
     remoteSensingId: number;
     gameId: GameType['gameId'];
     teamId: BlueOrRedTeamId;
-    positionId: number;
+    positionId: LIST_ALL_POSITIONS_TYPE;
     roundsLeft: number;
 };
 
@@ -162,14 +162,14 @@ export type InsurgencyType = {
     insurgencyId: number;
     gameId: GameType['gameId'];
     teamId: BlueOrRedTeamId;
-    positionId: number;
+    positionId: LIST_ALL_POSITIONS_TYPE;
 };
 
 export type BiologicalWeaponsType = {
     biologicalweaponsId: number;
     gameId: GameType['gameId'];
     teamId: BlueOrRedTeamId;
-    positionId: number; // TODO: create enum for list of all possible positions
+    positionId: LIST_ALL_POSITIONS_TYPE;
     roundsLeft: number;
     activated: ActivatedTypes;
 };
@@ -186,7 +186,7 @@ export type CommInterruptType = {
     commInterruptId: number;
     gameId: GameType['gameId'];
     teamId: BlueOrRedTeamId;
-    positionId: number;
+    positionId: LIST_ALL_POSITIONS_TYPE;
     roundsLeft: number;
     activated: ActivatedTypes;
 };
@@ -195,7 +195,7 @@ export type GoldenEyeType = {
     goldenEyeId: number;
     gameId: GameType['gameId'];
     teamId: BlueOrRedTeamId;
-    positionId: number;
+    positionId: LIST_ALL_POSITIONS_TYPE;
     roundsLeft: number;
     activated: ActivatedTypes;
 };
@@ -209,14 +209,14 @@ export type SeaMineType = {
     seaMineId: number;
     gameId: GameType['gameId'];
     gameTeam: BlueOrRedTeamId;
-    positionId: number;
+    positionId: LIST_ALL_POSITIONS_TYPE;
 };
 
 export type DroneSwarmType = {
     droneSwarmId: number;
     gameId: GameType['gameId'];
     gameTeam: BlueOrRedTeamId;
-    positionId: number;
+    positionId: LIST_ALL_POSITIONS_TYPE;
     roundsLeft: number;
 };
 
@@ -224,7 +224,7 @@ export type AtcScrambleType = {
     atcScrambleId: number;
     gameId: GameType['gameId'];
     teamId: BlueOrRedTeamId;
-    positionId: number; // TODO: could even do enum for sub position lists
+    positionId: LIST_ALL_POSITIONS_TYPE; // TODO: could even do enum for sub position lists
     roundsLeft: number;
     activated: ActivatedTypes;
 };
@@ -233,7 +233,7 @@ export type NukeType = {
     nukeId: number;
     gameId: GameType['gameId'];
     teamId: BlueOrRedTeamId;
-    positionId: number;
+    positionId: LIST_ALL_POSITIONS_TYPE;
     activated: ActivatedTypes;
 };
 

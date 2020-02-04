@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { Piece } from './Piece';
-import { TYPE_FUEL, TYPE_MOVES } from '../../constants';
+import { TYPE_FUEL, TYPE_MOVES, LIST_ALL_POSITIONS_TYPE } from '../../constants';
 import { InvItemType, GameType, BlueOrRedTeamId } from '../../types';
 import { pool } from '../database';
 
@@ -45,7 +45,7 @@ export class InvItem implements InvItemType {
     /**
      * Move inv item from the inventory and put it on the board as a piece.
      */
-    async placeOnBoard(selectedPosition: number) {
+    async placeOnBoard(selectedPosition: LIST_ALL_POSITIONS_TYPE) {
         const newPiece = await Piece.insert(
             this.invItemGameId,
             this.invItemTeamId,
