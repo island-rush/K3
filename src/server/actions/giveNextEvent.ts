@@ -1,6 +1,6 @@
 // prettier-ignore
 import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, EVENT_BATTLE, EVENT_REFUEL, NOT_WAITING_STATUS, NO_MORE_EVENTS, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE } from '../../constants';
-import { EventBattleAction, EventRefuelAction, NoMoreEventsAction, SocketSession } from '../../types';
+import { EventBattleAction, EventRefuelAction, NoMoreEventsAction, SocketSession, BlueOrRedTeamId } from '../../types';
 import { Event, Game, Piece } from '../classes';
 import { sendToTeam, sendUserFeedback } from '../helpers';
 
@@ -106,5 +106,5 @@ export const giveNextEvent = async (session: SocketSession, options: GiveNextEve
 
 type GiveNextEventOptions = {
     thisGame: Game;
-    gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    gameTeam: BlueOrRedTeamId;
 };

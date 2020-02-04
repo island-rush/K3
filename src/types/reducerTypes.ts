@@ -1,16 +1,5 @@
-import {
-    AIRFIELD_TYPE,
-    FLAG_TYPE,
-    LAND_TYPE,
-    MISSILE_SILO_TYPE,
-    WATER_TYPE,
-    NEUTRAL_TEAM_ID,
-    NO_MENU_INDEX,
-    SHOP_MENU_INDEX,
-    INV_MENU_INDEX,
-    SPACE_MENU_INDEX,
-    GAME_INFO_MENU_INDEX
-} from '../constants';
+// prettier-ignore
+import { AIRFIELD_TYPE, FLAG_TYPE, GAME_INFO_MENU_INDEX, INV_MENU_INDEX, LAND_TYPE, MISSILE_SILO_TYPE, NEUTRAL_TEAM_ID, NO_MENU_INDEX, SHOP_MENU_INDEX, SPACE_MENU_INDEX, WATER_TYPE } from '../constants';
 import { EventItemType, GameType, InvItemType, NewsType, PieceType, ShopItemType } from './databaseTables';
 import { GameSession } from './sessionTypes';
 
@@ -20,7 +9,7 @@ export type InvState = InvItemType[];
 
 export type UserfeedbackState = string;
 
-type positionType = typeof LAND_TYPE | typeof AIRFIELD_TYPE | typeof WATER_TYPE | typeof FLAG_TYPE | typeof MISSILE_SILO_TYPE;
+export type positionType = typeof LAND_TYPE | typeof AIRFIELD_TYPE | typeof WATER_TYPE | typeof FLAG_TYPE | typeof MISSILE_SILO_TYPE;
 export type GameboardState = { type: positionType; pieces: PieceType[] }[];
 
 export type GameInfoState = {
@@ -58,6 +47,14 @@ export type GameInfoState = {
     airfield9: GameType['airfield9'];
     [key: string]: any;
 };
+
+export type MenuIndexType =
+    | typeof NO_MENU_INDEX
+    | typeof SHOP_MENU_INDEX
+    | typeof INV_MENU_INDEX
+    | typeof SPACE_MENU_INDEX
+    | typeof GAME_INFO_MENU_INDEX;
+
 export type GameboardMetaState = {
     /**
      * Position most recently clicked by player. -1 => stop selecting positions.
@@ -77,7 +74,7 @@ export type GameboardMetaState = {
     /**
      * Id of menu that should be open.
      */
-    selectedMenuId: typeof NO_MENU_INDEX | typeof SHOP_MENU_INDEX | typeof INV_MENU_INDEX | typeof SPACE_MENU_INDEX | typeof GAME_INFO_MENU_INDEX;
+    selectedMenuId: MenuIndexType;
 };
 
 export type CapabilitiesState = {

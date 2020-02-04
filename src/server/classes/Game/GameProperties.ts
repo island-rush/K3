@@ -1,5 +1,5 @@
-import { BLUE_TEAM_ID, LOGGED_IN_VALUE, RED_TEAM_ID } from '../../../constants';
-import { ControllerType, GameType } from '../../../types';
+import { BLUE_TEAM_ID, LOGGED_IN_VALUE } from '../../../constants';
+import { BlueOrRedTeamId, ControllerType, GameType } from '../../../types';
 
 export class GameProperties {
     readonly gameId: GameType['gameId'];
@@ -57,19 +57,19 @@ export class GameProperties {
         this.gameId = gameId;
     }
 
-    getStatus(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID) {
+    getStatus(gameTeam: BlueOrRedTeamId) {
         return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Status`];
     }
 
-    getPoints(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID) {
+    getPoints(gameTeam: BlueOrRedTeamId) {
         return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Points`];
     }
 
-    getPasswordHash(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID) {
+    getPasswordHash(gameTeam: BlueOrRedTeamId) {
         return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Password`];
     }
 
-    getLoggedIn(gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID, gameController: ControllerType): boolean {
+    getLoggedIn(gameTeam: BlueOrRedTeamId, gameController: ControllerType): boolean {
         return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Controller${gameController}`] === LOGGED_IN_VALUE;
     }
 }

@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
 // prettier-ignore
-import { ALREADY_IN_TAG, BAD_REQUEST_TAG, BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGGED_IN_VALUE, LOGIN_TAG, RED_TEAM_ID } from '../../constants';
-import { ControllerType, GameSession, GameType } from '../../types';
+import { ALREADY_IN_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGGED_IN_VALUE, LOGIN_TAG } from '../../constants';
+import { BlueOrRedTeamId, ControllerType, GameSession, GameType } from '../../types';
 import { Game } from '../classes';
 
 /**
@@ -73,7 +73,7 @@ export const gameLogin = async (req: Request, res: Response) => {
 type GameLoginRequest = {
     gameSection: GameType['gameSection'];
     gameInstructor: GameType['gameSection'];
-    gameTeam: typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
+    gameTeam: BlueOrRedTeamId;
     gameTeamPassword: string;
     gameControllers: ControllerType[];
 };
