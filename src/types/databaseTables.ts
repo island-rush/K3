@@ -224,7 +224,7 @@ export type AtcScrambleType = {
     atcScrambleId: number;
     gameId: GameType['gameId'];
     teamId: BlueOrRedTeamId;
-    positionId: LIST_ALL_POSITIONS_TYPE; // TODO: could even do enum for sub position lists
+    positionId: LIST_ALL_POSITIONS_TYPE;
     roundsLeft: number;
     activated: ActivatedTypes;
 };

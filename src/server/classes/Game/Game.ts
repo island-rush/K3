@@ -385,13 +385,11 @@ export class Game extends GameProperties implements GameType {
 
     /**
      * Change flag ownership for a certain team.
-     * // TODO: need an enum or type that lists all possible airfield numbers
      */
     setFlag(flagNumber: number, flagValue: GameType['flag0']) {
         this[`flag${flagNumber}`] = flagValue;
     }
 
-    // TODO: need an enum or type that lists all possible airfield numbers
     setAirfield(airfieldNumber: number, airfieldValue: GameType['airfield0']) {
         this[`airfield${airfieldNumber}`] = airfieldValue;
     }
