@@ -127,65 +127,67 @@ export const selectPosition = (selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
                 dispatch(highlightAction);
             }
 
-            if (
-                planning.invItem &&
-                planning.invItem.invItemTypeId !== SEA_MINES_TYPE_ID &&
-                planning.invItem.invItemTypeId !== MISSILE_LAUNCH_DISRUPTION_TYPE_ID &&
-                planning.invItem.invItemTypeId !== DRONE_SWARMS_TYPE_ID &&
-                window.confirm('Are you sure you want to use capability on this position?')
-            ) {
-                let type: PositionCapabilityRequestAction['type'];
-                switch (planning.invItem.invItemTypeId) {
-                    case RODS_FROM_GOD_TYPE_ID:
-                        type = SERVER_RODS_FROM_GOD_CONFIRM;
-                        break;
-                    case REMOTE_SENSING_TYPE_ID:
-                        type = SERVER_REMOTE_SENSING_CONFIRM;
-                        break;
-                    case INSURGENCY_TYPE_ID:
-                        type = SERVER_INSURGENCY_CONFIRM;
-                        break;
-                    case BIOLOGICAL_WEAPONS_TYPE_ID:
-                        type = SERVER_BIOLOGICAL_WEAPONS_CONFIRM;
-                        break;
-                    case COMMUNICATIONS_INTERRUPTION_TYPE_ID:
-                        type = SERVER_COMM_INTERRUPT_CONFIRM;
-                        break;
-                    case GOLDEN_EYE_TYPE_ID:
-                        type = SERVER_GOLDEN_EYE_CONFIRM;
-                        break;
-                    case NUCLEAR_STRIKE_TYPE_ID:
-                        type = SERVER_NUKE_CONFIRM;
-                        break;
-                    case ATC_SCRAMBLE_TYPE_ID:
-                        type = SERVER_ATC_SCRAMBLE_CONFIRM;
-                        break;
-                    default:
-                        dispatch(setUserfeedbackAction('unkown/not yet implemented invItemTypeId functionality (capability)'));
-                        return;
+            setTimeout(() => {
+                if (
+                    planning.invItem &&
+                    planning.invItem.invItemTypeId !== SEA_MINES_TYPE_ID &&
+                    planning.invItem.invItemTypeId !== MISSILE_LAUNCH_DISRUPTION_TYPE_ID &&
+                    planning.invItem.invItemTypeId !== DRONE_SWARMS_TYPE_ID &&
+                    window.confirm('Are you sure you want to use capability on this position?')
+                ) {
+                    let type: PositionCapabilityRequestAction['type'];
+                    switch (planning.invItem.invItemTypeId) {
+                        case RODS_FROM_GOD_TYPE_ID:
+                            type = SERVER_RODS_FROM_GOD_CONFIRM;
+                            break;
+                        case REMOTE_SENSING_TYPE_ID:
+                            type = SERVER_REMOTE_SENSING_CONFIRM;
+                            break;
+                        case INSURGENCY_TYPE_ID:
+                            type = SERVER_INSURGENCY_CONFIRM;
+                            break;
+                        case BIOLOGICAL_WEAPONS_TYPE_ID:
+                            type = SERVER_BIOLOGICAL_WEAPONS_CONFIRM;
+                            break;
+                        case COMMUNICATIONS_INTERRUPTION_TYPE_ID:
+                            type = SERVER_COMM_INTERRUPT_CONFIRM;
+                            break;
+                        case GOLDEN_EYE_TYPE_ID:
+                            type = SERVER_GOLDEN_EYE_CONFIRM;
+                            break;
+                        case NUCLEAR_STRIKE_TYPE_ID:
+                            type = SERVER_NUKE_CONFIRM;
+                            break;
+                        case ATC_SCRAMBLE_TYPE_ID:
+                            type = SERVER_ATC_SCRAMBLE_CONFIRM;
+                            break;
+                        default:
+                            dispatch(setUserfeedbackAction('unkown/not yet implemented invItemTypeId functionality (capability)'));
+                            return;
+                    }
+
+                    // TODO: frontend action to change into a 'waiting on server' state?
+                    const highlightAction: HighlightPositionsAction = {
+                        type: HIGHLIGHT_POSITIONS,
+                        payload: {
+                            highlightedPositions: []
+                        }
+                    };
+
+                    dispatch(highlightAction);
+
+                    const clientAction: PositionCapabilityRequestAction = {
+                        type,
+                        payload: {
+                            selectedPositionId: selectedPositionId !== NO_POSITION ? selectedPositionId : gameboardMeta.selectedPosition,
+                            invItem: planning.invItem
+                        }
+                    };
+
+                    sendToServer(clientAction);
+                    return;
                 }
-
-                // TODO: frontend action to change into a 'waiting on server' state?
-                const highlightAction: HighlightPositionsAction = {
-                    type: HIGHLIGHT_POSITIONS,
-                    payload: {
-                        highlightedPositions: []
-                    }
-                };
-
-                dispatch(highlightAction);
-
-                const clientAction: PositionCapabilityRequestAction = {
-                    type,
-                    payload: {
-                        selectedPositionId: selectedPositionId !== NO_POSITION ? selectedPositionId : gameboardMeta.selectedPosition,
-                        invItem: planning.invItem
-                    }
-                };
-
-                sendToServer(clientAction);
-                return;
-            }
+            }, 375); // TODO: possibly make this time a constant
 
             //select the position anyway
             const positionSelectAction: PositionSelectAction = {
