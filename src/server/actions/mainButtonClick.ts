@@ -131,6 +131,8 @@ export const mainButtonClick = async (session: SocketSession) => {
 
         sendToTeam(gameId, BLUE_TEAM_ID, sliceChangeActionBlue);
         sendToTeam(gameId, RED_TEAM_ID, sliceChangeActionRed);
+
+        // TODO: send another timeout update to clear the rods from god hit pos, and things like that, so they don't stay there forever (consider teams needing to notice it / notification area)
         return;
     }
 
