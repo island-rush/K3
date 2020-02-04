@@ -20,10 +20,10 @@ export const insertNuke = async (gameId: GameType['gameId'], gameTeam: BlueOrRed
     for (let x = 0; x < distanceMatrix[parseInt(selectedPositionId.toString())].length; x++) {
         // 2 hexes away distance check
         if (distanceMatrix[selectedPositionId][x] <= 2) {
-            if (ISLAND_POSITIONS[DRAGON_ISLAND_ID].includes(x)) {
+            if (ISLAND_POSITIONS[DRAGON_ISLAND_ID].includes(x as LIST_ALL_POSITIONS_TYPE)) {
                 return false;
             }
-            if (ISLAND_POSITIONS[EAGLE_ISLAND_ID].includes(x)) {
+            if (ISLAND_POSITIONS[EAGLE_ISLAND_ID].includes(x as LIST_ALL_POSITIONS_TYPE)) {
                 return false;
             }
         }
