@@ -4,7 +4,10 @@ import session from 'express-session';
 import sharedsession from 'express-socket.io-session';
 import http, { Server } from 'http';
 import { SessionOptions } from 'http2';
+import redis, { ClientOpts } from 'redis';
 import { Socket } from 'socket.io';
+import connectRedis, { RedisStoreOptions } from 'connect-redis';
+import redisAdapter from 'socket.io-redis';
 import { router } from './server/router';
 import { socketSetup } from './server/socketSetup';
 
@@ -22,6 +25,22 @@ if (process.env.SESSION_TYPE === 'azure') {
     };
     fullSession = session({
         store: AzureTablesStoreFactory.create(AzureOptions),
+        secret: process.env.SESSION_SECRET || '@d$f4%ggGG4_*7FGkdkjlk',
+        resave: false,
+        saveUninitialized: false
+    });
+} else if (process.env.SESSION_TYPE === 'redis' && process.env.REDIS_ACTIVE) {
+    const RedisStore = connectRedis(session);
+    const redisClientOptions: ClientOpts = {
+        auth_pass: process.env.REDISCACHEKEY,
+        tls: { servername: process.env.REDISCACHEHOSTNAME },
+        prefix: 'session'
+    };
+    const redisClient = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, redisClientOptions);
+    const redisOptions: RedisStoreOptions = { client: redisClient };
+
+    fullSession = session({
+        store: new RedisStore(redisOptions),
         secret: process.env.SESSION_SECRET || '@d$f4%ggGG4_*7FGkdkjlk',
         resave: false,
         saveUninitialized: false
@@ -61,19 +80,14 @@ export const io: SocketIO.Server = require('socket.io')(server);
 
 // Socket's use Redis Cache to talk between server instances
 if (process.env.REDIS_ACTIVE) {
-    const redis = require('redis');
-    const redisAdapter = require('socket.io-redis');
-
-    const pub = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, {
+    const clientOptions: ClientOpts = {
         auth_pass: process.env.REDISCACHEKEY,
         tls: { servername: process.env.REDISCACHEHOSTNAME }
-    });
-    const sub = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, {
-        auth_pass: process.env.REDISCACHEKEY,
-        tls: { servername: process.env.REDISCACHEHOSTNAME }
-    });
+    };
+    const pub = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, clientOptions);
+    const sub = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, clientOptions);
 
-    io.adapter(redisAdapter({ pubClient: pub, subClient: sub }));
+    io.adapter(redisAdapter({ pubClient: pub, subClient: sub, key: 'socket.io' }));
 }
 
 // Socket has access to sessions
