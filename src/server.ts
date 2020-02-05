@@ -1,12 +1,11 @@
-import connectAzuretables, { AzureTableStoreFactory, AzureTableStoreOptions } from 'connect-azuretables';
+import connectAzuretables, { AzureTableStoreFactory } from 'connect-azuretables';
+import connectRedis, { RedisStore } from 'connect-redis';
 import express, { Application, Request, RequestHandler, Response } from 'express';
-import session from 'express-session';
+import session, { SessionOptions } from 'express-session';
 import sharedsession from 'express-socket.io-session';
 import http, { Server } from 'http';
-import { SessionOptions } from 'http2';
-import redis, { ClientOpts } from 'redis';
+import redis, { ClientOpts, RedisClient } from 'redis';
 import { Socket } from 'socket.io';
-import connectRedis, { RedisStoreOptions } from 'connect-redis';
 import redisAdapter from 'socket.io-redis';
 import { router } from './server/router';
 import { socketSetup } from './server/socketSetup';
@@ -15,46 +14,44 @@ import { socketSetup } from './server/socketSetup';
 const app: Application = express();
 const server: Server = http.createServer(app);
 
-// Session Setup (2 possible types)
+// Redis Clients (possibly) used on both sessions and sockets, define options for both here
+const redisClientOptions: ClientOpts = {
+    auth_pass: process.env.REDISCACHEKEY,
+    tls: { servername: process.env.REDISCACHEHOSTNAME }
+};
+
+// Session Setup (3 possible types)
 let fullSession: RequestHandler;
-if (process.env.SESSION_TYPE === 'azure') {
-    // Azure Sessions uses Azure Storage Account (tables) -> Probably best for auto-scaling with multiple instances
+const fullSessionOptions: SessionOptions = {
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false
+};
+
+// Create session store (based on env type)
+if (process.env.SESSION_TYPE === 'azure' && process.env.AZURE_STORAGE_CONNECTION_STRING) {
     const AzureTablesStoreFactory: AzureTableStoreFactory = connectAzuretables(session);
-    const AzureOptions: AzureTableStoreOptions = {
-        sessionTimeOut: 120
-    };
-    fullSession = session({
-        store: AzureTablesStoreFactory.create(AzureOptions),
-        secret: process.env.SESSION_SECRET || '@d$f4%ggGG4_*7FGkdkjlk',
-        resave: false,
-        saveUninitialized: false
-    });
-} else if (process.env.SESSION_TYPE === 'redis' && process.env.REDIS_ACTIVE) {
-    const RedisStore = connectRedis(session);
-    const redisClientOptions: ClientOpts = {
-        auth_pass: process.env.REDISCACHEKEY,
-        tls: { servername: process.env.REDISCACHEHOSTNAME },
-        prefix: 'session'
-    };
-    const redisClient = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, redisClientOptions);
-    const redisOptions: RedisStoreOptions = { client: redisClient };
 
     fullSession = session({
-        store: new RedisStore(redisOptions),
-        secret: process.env.SESSION_SECRET || '@d$f4%ggGG4_*7FGkdkjlk',
-        resave: false,
-        saveUninitialized: false
+        store: AzureTablesStoreFactory.create({ sessionTimeOut: 120 }),
+        ...fullSessionOptions
+    });
+} else if (process.env.SESSION_TYPE === 'redis' && process.env.REDISCACHEHOSTNAME && process.env.REDISCACHEKEY) {
+    const RedisSessionStore: RedisStore = connectRedis(session);
+    const redisClient: RedisClient = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, { ...redisClientOptions, prefix: 'session' });
+
+    fullSession = session({
+        store: new RedisSessionStore({ client: redisClient }),
+        ...fullSessionOptions
     });
 } else {
     // LokiStore session uses session-store.db file in root directory -> Probably best for single-instance or offline development
     // Required instead of imported because missing type declarations
     const LokiStore = require('connect-loki')(session);
-    const lokiOptions: SessionOptions = {};
+
     fullSession = session({
-        store: new LokiStore(lokiOptions),
-        secret: process.env.SESSION_SECRET || '@d$f4%ggGG4_*7FGkdkjlk',
-        resave: false,
-        saveUninitialized: false
+        store: new LokiStore(),
+        ...fullSessionOptions
     });
 }
 
@@ -78,16 +75,12 @@ app.use((req: Request, res: Response) => {
 // Socket Setup
 export const io: SocketIO.Server = require('socket.io')(server);
 
-// Socket's use Redis Cache to talk between server instances
-if (process.env.REDIS_ACTIVE) {
-    const clientOptions: ClientOpts = {
-        auth_pass: process.env.REDISCACHEKEY,
-        tls: { servername: process.env.REDISCACHEHOSTNAME }
-    };
-    const pub = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, clientOptions);
-    const sub = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, clientOptions);
+// Socket's use Redis Cache to talk between server instances (not needed on development / single instance)
+if (process.env.REDIS_SOCKETS) {
+    const pub = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, redisClientOptions);
+    const sub = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, redisClientOptions);
 
-    io.adapter(redisAdapter({ pubClient: pub, subClient: sub, key: 'socket.io' }));
+    io.adapter(redisAdapter({ pubClient: pub, subClient: sub }));
 }
 
 // Socket has access to sessions
