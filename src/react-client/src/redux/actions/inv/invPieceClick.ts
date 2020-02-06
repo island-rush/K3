@@ -15,7 +15,7 @@ export const invPieceClick = (invItem: InvItemType) => {
 
         if (gamePhase !== PLACE_PHASE_ID) {
             dispatch(setUserfeedbackAction('wrong phase to place inv item.'));
-            return;
+            // return;
         }
 
         const { selectedPosition } = gameboardMeta;
