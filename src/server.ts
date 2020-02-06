@@ -17,7 +17,8 @@ const server: Server = http.createServer(app);
 // Redis Clients (possibly) used on both sessions and sockets, define options for both here
 const redisClientOptions: ClientOpts = {
     auth_pass: process.env.REDISCACHEKEY,
-    tls: { servername: process.env.REDISCACHEHOSTNAME }
+    tls: { servername: process.env.REDISCACHEHOSTNAME },
+    connect_timeout: 15000
 };
 
 // Session Setup (3 possible types)

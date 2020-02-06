@@ -151,9 +151,6 @@ export function userFeedbackReducer(state = initialUserFeedback, action: AnyActi
         case PURCHASE_PHASE:
             return 'Switched to the purchase phase....check out the shop and buy stuff...';
 
-        case UPDATE_FLAGS:
-            return 'island was captured btw';
-
         case COMBAT_PHASE:
             return 'Switched to the combat phase...start to plan your turn by clicking on pieces!';
 

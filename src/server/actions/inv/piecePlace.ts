@@ -25,20 +25,20 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
 
     if (!gameActive) {
         redirectClient(socketId, GAME_INACTIVE_TAG);
-        // return;
+        return;
     }
 
     // Can only place pieces from inv during 'place reinforcements phase' (3)
     if (gamePhase !== PLACE_PHASE_ID) {
         sendUserFeedback(socketId, 'Not the right phase...');
-        // return;
+        return;
     }
 
     // Grab the InvItem
     const thisInvItem = await new InvItem(invItemId).init();
     if (!thisInvItem) {
         sendUserFeedback(socketId, 'Inv Item did not exist...');
-        // return;
+        return;
     }
 
     const { invItemGameId, invItemTeamId, invItemTypeId } = thisInvItem;
@@ -46,7 +46,7 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
     // Do they own this item?
     if (invItemGameId !== gameId || invItemTeamId !== gameTeam) {
         redirectClient(socketId, BAD_REQUEST_TAG);
-        // return;
+        return;
     }
 
     // Could be multiple controller
@@ -60,33 +60,33 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
 
     if (!atLeast1Owner) {
         sendUserFeedback(socketId, "Piece doesn't fall under your control");
-        // return;
+        return;
     }
 
     // valid position on the board?
     if (!LIST_ALL_POSITIONS.includes(selectedPosition)) {
         sendUserFeedback(socketId, 'Not a valid position on the board.');
-        // return;
+        return;
     }
 
     // valid terrain for this piece?
     const { type } = initialGameboardEmpty[selectedPosition];
     if (!TYPE_TERRAIN[invItemTypeId].includes(type)) {
         sendUserFeedback(socketId, "can't go on that terrain with this piece type");
-        // return;
+        return;
     }
 
     if (!TEAM_MAIN_ISLAND_STARTING_POSITIONS[gameTeam].includes(selectedPosition) && ![RADAR_TYPE_ID, MISSILE_TYPE_ID].includes(invItemTypeId)) {
         // radar and missile only need to be placed in either silo or next to friendly piece
         sendUserFeedback(socketId, 'Must place piece on/around main island.');
-        // return;
+        return;
     }
 
     // TODO: could also check that they own the airfield? already check that this is on the main island...
     if (TYPE_AIR_PIECES.includes(invItemTypeId)) {
         if (!ALL_AIRFIELD_LOCATIONS.includes(selectedPosition)) {
             sendUserFeedback(socketId, 'Must place air unit on airfield.');
-            // return;
+            return;
         }
     }
 
@@ -95,7 +95,7 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
         const ableToPlaceRadar = await Piece.ableToPlaceRadar(thisGame, gameTeam, selectedPosition);
         if (!ableToPlaceRadar) {
             sendUserFeedback(socketId, 'Radar must be placed next to ground unit with no enemies. Must also own the island.');
-            // return;
+            return;
         }
     }
 
@@ -103,7 +103,7 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
         const ableToPlaceMissile = await Piece.ableToPlaceMissile(thisGame, gameTeam, selectedPosition);
         if (!ableToPlaceMissile) {
             sendUserFeedback(socketId, 'Missile must be placed according to rules. Must ownt the island...etc');
-            // return;
+            return;
         }
     }
 
