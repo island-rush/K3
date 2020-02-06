@@ -29,14 +29,14 @@ const fullSessionOptions: SessionOptions = {
 };
 
 // Create session store (based on env type)
-if (process.env.SESSION_TYPE === 'azure' && process.env.AZURE_STORAGE_CONNECTION_STRING !== '') {
+if (process.env.SESSION_TYPE === 'azure') {
     const AzureTablesStoreFactory: AzureTableStoreFactory = connectAzuretables(session);
 
     fullSession = session({
         store: AzureTablesStoreFactory.create({ sessionTimeOut: 120 }),
         ...fullSessionOptions
     });
-} else if (process.env.SESSION_TYPE === 'redis' && process.env.REDISCACHEHOSTNAME !== '' && process.env.REDISCACHEKEY !== '') {
+} else if (process.env.SESSION_TYPE === 'redis') {
     const RedisSessionStore: RedisStore = connectRedis(session);
     const redisClient: RedisClient = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, { ...redisClientOptions, prefix: 'session' });
 
@@ -77,7 +77,7 @@ export const io: SocketIO.Server = require('socket.io')(server);
 
 // Socket's use Redis Cache to talk between server instances (not needed on development / single instance)
 // Note: .env variables parsed as strings
-if (process.env.REDIS_SOCKETS !== 'false' && process.env.REDISCACHEHOSTNAME !== '' && process.env.REDISCACHEKEY !== '') {
+if (process.env.REDIS_SOCKETS !== 'false') {
     const pub = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, redisClientOptions);
     const sub = redis.createClient(6380, process.env.REDISCACHEHOSTNAME, redisClientOptions);
 
