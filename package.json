@@ -21,14 +21,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/island-rush/K3.3.git"
+        "url": "git+https://github.com/island-rush/K3.git"
     },
     "author": "Spencer Adolph",
     "license": "MIT",
     "bugs": {
-        "url": "https://github.com/island-rush/K3.3/issues"
+        "url": "https://github.com/island-rush/K3/issues"
     },
-    "homepage": "https://github.com/island-rush/K3.3#readme",
+    "homepage": "https://github.com/island-rush/K3#readme",
     "devDependencies": {
         "@types/connect-azuretables": "^1.0.0",
         "@types/connect-redis": "0.0.13",
