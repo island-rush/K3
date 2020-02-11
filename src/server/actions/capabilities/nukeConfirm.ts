@@ -68,10 +68,11 @@ export const nukeConfirm = async (session: SocketSession, action: NukeRequestAct
     }
 
     // verify position is not within 2 hexes of main island
-    // TODO: verify position
-
     if (!(await Capability.insertNuke(gameId, gameTeam, selectedPositionId))) {
-        sendUserFeedback(socketId, 'db failed to insert nuke, likely already an entry for that position. Or within 2 hexes of main islands.');
+        sendUserFeedback(
+            socketId,
+            'db failed to insert nuke, likely already an entry for that position. Or within 2 hexes of main islands. (cant nuke main flags)'
+        );
         return;
     }
 
