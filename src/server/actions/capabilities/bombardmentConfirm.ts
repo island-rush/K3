@@ -45,7 +45,7 @@ export const bombardmentConfirm = async (session: SocketSession, action: Bombard
         return;
     }
 
-    // Only the SOF controller
+    // Only the sea controller
     if (!gameControllers.includes(TYPE_SEA)) {
         sendUserFeedback(socketId, 'Not the sea controller...');
         return;

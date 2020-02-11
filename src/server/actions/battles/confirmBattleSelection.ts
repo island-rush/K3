@@ -36,7 +36,7 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
     }
 
     if (!gameControllers.includes(TYPE_MAIN)) {
-        sendUserFeedback(socketId, 'Need to be air commander.');
+        sendUserFeedback(socketId, 'Need to be main commander.');
         return;
     }
 
