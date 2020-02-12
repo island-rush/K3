@@ -97,7 +97,6 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: An
             return stateCopy;
 
         case REMOTE_SENSING_HIT_ACTION:
-            stateCopy.confirmedAntiSatHitPos.push((action as RemoteSensingHitAction).payload.positionOfRemoteHit);
             stateCopy.confirmedRemoteSense = stateCopy.confirmedRemoteSense.filter(pos => {
                 return pos !== (action as RemoteSensingHitAction).payload.positionOfRemoteHit;
             });

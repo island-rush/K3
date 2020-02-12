@@ -72,4 +72,8 @@ export class GameProperties {
     getLoggedIn(gameTeam: BlueOrRedTeamId, gameController: ControllerType): boolean {
         return this[`game${gameTeam === BLUE_TEAM_ID ? 'Blue' : 'Red'}Controller${gameController}`] === LOGGED_IN_VALUE;
     }
+
+    getAirfield(airfieldNum: number) {
+        return this[`airfield${airfieldNum}`];
+    }
 }

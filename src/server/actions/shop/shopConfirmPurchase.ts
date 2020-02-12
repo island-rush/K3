@@ -1,5 +1,5 @@
 // prettier-ignore
-import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_TRANSFER, TYPE_MAIN } from '../../../constants';
+import { GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_TRANSFER, TYPE_MAIN, NOT_WAITING_STATUS } from '../../../constants';
 import { ShopConfirmPurchaseAction, SocketSession } from '../../../types';
 import { Game, InvItem, ShopItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -28,6 +28,12 @@ export const shopConfirmPurchase = async (session: SocketSession) => {
 
     if (gamePhase !== PURCHASE_PHASE_ID) {
         sendUserFeedback(socketId, 'Not the right phase...');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

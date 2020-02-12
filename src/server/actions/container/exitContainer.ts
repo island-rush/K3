@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN, NOT_WAITING_STATUS, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, AIRFIELD_TYPE, ALL_AIRFIELD_LOCATIONS } from '../../../constants';
 import { ExitContainerAction, ExitContainerRequestAction, SocketSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -33,6 +33,12 @@ export const exitContainer = async (session: SocketSession, action: ExitContaine
         return;
     }
 
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
+        return;
+    }
+
     // Grab the Pieces
     const thisSelectedPiece = await new Piece(selectedPiece.pieceId).init();
     if (!thisSelectedPiece) {
@@ -40,7 +46,7 @@ export const exitContainer = async (session: SocketSession, action: ExitContaine
         return;
     }
 
-    //Controller must own the piece
+    // Controller must own the piece
     let atLeast1Owner = false;
     for (const gameController of gameControllers) {
         if (TYPE_OWNERS[gameController].includes(thisSelectedPiece.pieceTypeId)) {
@@ -71,6 +77,28 @@ export const exitContainer = async (session: SocketSession, action: ExitContaine
     if (!TYPE_TERRAIN[thisSelectedPiece.pieceTypeId].includes(initialGameboardEmpty[thisSelectedPiece.piecePositionId].type)) {
         sendUserFeedback(socketId, "that piece can't be on that terrain.");
         return;
+    }
+
+    // Air Transport is not allowed to 'air drop', can only drop off and enter from a controlled airfield
+    if (thisContainerPiece.pieceTypeId === TACTICAL_AIRLIFT_SQUADRON_TYPE_ID) {
+        // must be on an airfield
+        // TODO: can likely assume these are true, since already inside the container (getting redundant from enterContainer)
+        if (thisContainerPiece.piecePositionId !== thisSelectedPiece.piecePositionId) {
+            sendUserFeedback(socketId, 'Selected piece must be in same hex for tactial airlift.');
+            return;
+        }
+
+        if (initialGameboardEmpty[thisContainerPiece.piecePositionId].type !== AIRFIELD_TYPE) {
+            sendUserFeedback(socketId, 'Must be on an airfield spot to transfer troops out of tactical airlift.');
+            return;
+        }
+
+        const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisContainerPiece.piecePositionId);
+        const airfieldOwner = thisGame.getAirfield(airfieldNum);
+        if (gameTeam !== airfieldOwner) {
+            sendUserFeedback(socketId, 'must own the airfield to land the aircraft and board things into it or out.');
+            return;
+        }
     }
 
     await Piece.putOutsideContainer(thisSelectedPiece.pieceId, thisSelectedPiece.piecePositionId);

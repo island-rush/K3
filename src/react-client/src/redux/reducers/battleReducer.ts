@@ -69,7 +69,14 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
             return stateCopy;
 
         case NO_MORE_EVENTS:
-            return initialBattleState;
+            stateCopy.isMinimized = false;
+            stateCopy.isActive = false;
+            stateCopy.selectedBattlePiece = -1;
+            stateCopy.selectedBattlePieceIndex = -1;
+            stateCopy.masterRecord = null;
+            stateCopy.friendlyPieces = [];
+            stateCopy.enemyPieces = [];
+            return stateCopy;
 
         case BATTLE_FIGHT_RESULTS:
             stateCopy.masterRecord = (action as BattleResultsAction).payload.masterRecord;

@@ -1,5 +1,5 @@
 // prettier-ignore
-import { LIST_ALL_POSITIONS, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, GOLDEN_EYE_SELECTED, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { LIST_ALL_POSITIONS, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, GOLDEN_EYE_SELECTED, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN, NOT_WAITING_STATUS } from '../../../constants';
 import { GoldenEyeAction, GoldenEyeRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -42,6 +42,12 @@ export const goldenEyeConfirm = async (session: SocketSession, action: GoldenEye
     // gameSlice 0 is only slice for golden eye
     if (gameSlice !== SLICE_PLANNING_ID) {
         sendUserFeedback(socketId, 'Not the right slice (must be planning)...');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

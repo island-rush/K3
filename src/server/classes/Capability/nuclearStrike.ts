@@ -1,7 +1,7 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
 // prettier-ignore
-import { ACTIVATED, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, DEACTIVATED, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, ISLAND_POSITIONS, NEUTRAL_TEAM_ID, NUKE_RANGE, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
+import { ACTIVATED, ALL_AIRFIELD_LOCATIONS, ALL_FLAG_LOCATIONS, DEACTIVATED, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, ISLAND_POSITIONS, NEUTRAL_TEAM_ID, NUKE_RANGE, LIST_ALL_POSITIONS_TYPE, FLAG_0_LOCATION, FLAG_1_LOCATION, FLAG_11_LOCATION, FLAG_12_LOCATION } from '../../../constants';
 import { NukeType, GameType, BlueOrRedTeamId } from '../../../types';
 import { Game } from '../Game';
 
@@ -16,7 +16,6 @@ export const insertNuke = async (gameId: GameType['gameId'], gameTeam: BlueOrRed
         return false;
     }
 
-    // TODO: validate the position of the nuke isn't within 2 hexes of main islands
     for (let x = 0; x < distanceMatrix[parseInt(selectedPositionId.toString())].length; x++) {
         // 2 hexes away distance check
         if (distanceMatrix[selectedPositionId][x] <= 2) {
@@ -27,6 +26,18 @@ export const insertNuke = async (gameId: GameType['gameId'], gameTeam: BlueOrRed
                 return false;
             }
         }
+
+        // can't kill a flag, too much
+        if (distanceMatrix[selectedPositionId][x] <= NUKE_RANGE) {
+            if (x === FLAG_0_LOCATION || x === FLAG_1_LOCATION || x === FLAG_11_LOCATION || x === FLAG_12_LOCATION) {
+                return false;
+            }
+        }
+    }
+
+    // don't allow nuking of flag (these positions allows it)
+    if ([].includes(selectedPositionId)) {
+        return false;
     }
 
     // TODO: humanitarian not available after using this
