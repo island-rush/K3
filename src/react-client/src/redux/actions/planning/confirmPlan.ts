@@ -11,6 +11,11 @@ export const confirmPlan = () => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, planning } = getState();
 
+        if (planning.bombardmentSelecting !== null || planning.missileSelecting !== null || planning.isUsingCapability) {
+            dispatch(setUserfeedbackAction("Button doesn't apply to capability"));
+            return;
+        }
+
         if (planning.moves.length === 0 || !gameboardMeta.selectedPiece) {
             dispatch(setUserfeedbackAction("Can't submit an empty plan...or unselected piece."));
             return;

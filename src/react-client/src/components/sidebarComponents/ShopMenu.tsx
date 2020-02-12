@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { LIST_ALL_CAPABILITIES, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../../../constants';
 import { GameInfoState, ShopItemType, ShopState } from '../../../../types';
@@ -71,8 +71,13 @@ class ShopMenu extends Component<Props> {
             <ShopItem key={index} shopItem={shopItem} refund={(shopItemId: number) => refund(shopItemId)} />
         ));
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={isSelected ? shopStyle : invisibleStyle}>
+            <div style={isSelected ? shopStyle : invisibleStyle} onClick={standardOnClick}>
                 <div>Shop Menu</div>
                 <div>Points: {points}</div>
 

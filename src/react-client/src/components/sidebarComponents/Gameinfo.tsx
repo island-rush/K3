@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { TYPE_OWNER_NAMES, PHASE_NAMES, SLICE_NAMES } from '../../../../constants';
 import { GameInfoState } from '../../../../types';
 
@@ -31,8 +31,13 @@ export const Gameinfo = ({ isSelected, gameInfo }: Props) => {
         }
     }
 
+    const standardOnClick = (event: MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+    };
+
     return (
-        <div style={isSelected ? gameinfoStyle : invisibleStyle}>
+        <div style={isSelected ? gameinfoStyle : invisibleStyle} onClick={standardOnClick}>
             <h1>Game Info</h1>
             <div>GameSection: {gameSection}</div>
             <div>GameInstructor: {gameInstructor}</div>

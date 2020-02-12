@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { RefuelState } from '../../../../../types';
 import { aircraftClick, confirmFuelSelections, refuelPopupMinimizeToggle, tankerClick, undoFuelSelection } from '../../../redux';
@@ -103,9 +103,14 @@ class RefuelPopup extends Component<Props> {
             />
         ));
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
             // Overall Component
-            <div style={refuel.isActive ? null : invisibleStyle}>
+            <div style={refuel.isActive ? null : invisibleStyle} onClick={standardOnClick}>
                 {/* Popup */}
                 <div style={!refuel.isMinimized ? refuelPopupStyle : invisibleStyle}>
                     <div style={leftSectionStyle}>

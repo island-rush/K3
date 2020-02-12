@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { ANTI_SATELLITE_MISSILES_TYPE_ID } from '../../../../constants';
 import { CapabilitiesState } from '../../../../types';
@@ -55,8 +55,13 @@ class SpaceArea extends Component<Props> {
 
         const cyberDefenseDiv = isCyberDefenseActive ? <div>Cyber defense is active.</div> : null;
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={isSelected ? spaceAreaStyle : invisibleStyle}>
+            <div style={isSelected ? spaceAreaStyle : invisibleStyle} onClick={standardOnClick}>
                 <div>Space Area Capabilities</div>
 
                 {cyberDefenseDiv}
