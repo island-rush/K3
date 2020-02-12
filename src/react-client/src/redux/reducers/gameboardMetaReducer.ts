@@ -30,7 +30,7 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
 
         case POSITION_SELECT:
             stateCopy.selectedPosition = (action as PositionSelectAction).payload.selectedPositionId;
-            // stateCopy.highlightedPositions = [];
+            stateCopy.selectedPiece = null;
             return stateCopy;
 
         case PIECE_CLICK:
