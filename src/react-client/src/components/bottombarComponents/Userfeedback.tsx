@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, MouseEvent } from 'react';
 import { UserfeedbackState } from '../../../../types';
 
 const userfeedbackStyle: any = {
@@ -15,5 +15,14 @@ interface Props {
 }
 
 export const Userfeedback: FC<Props> = ({ userFeedback }) => {
-    return <div style={userfeedbackStyle}>{userFeedback}</div>;
+    const standardOnClick = (event: MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+    };
+
+    return (
+        <div style={userfeedbackStyle} onClick={standardOnClick}>
+            {userFeedback}
+        </div>
+    );
 };

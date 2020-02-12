@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { BattleState } from '../../../../../types';
 //prettier-ignore
@@ -112,9 +112,14 @@ class BattlePopup extends Component<Props> {
             />
         ));
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
             // Overall Component
-            <div style={battle.isActive ? null : invisibleStyle}>
+            <div style={battle.isActive ? null : invisibleStyle} onClick={standardOnClick}>
                 {/* Popup */}
                 <div style={!battle.isMinimized ? battlePopupStyle : invisibleStyle}>
                     <div style={leftBattleStyle}>Friend{friendlyBattlePieces}</div>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
 import { ANTI_SATELLITE_MISSILES_TYPE_ID, ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, CYBER_DOMINANCE_TYPE_ID, CYBER_DOM_CHECK_TYPE_ID, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_TYPE_ID, INSURGENCY_TYPE_ID, LIST_ALL_CAPABILITIES, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, RAISE_MORALE_TYPE_ID, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from "../../../../constants";
@@ -156,8 +156,13 @@ class InvMenu extends Component<Props> {
         const seaItemMoveBoost = itemCount(confirmedRaiseMorale, TYPE_SEA);
         const specialItemMoveBoost = itemCount(confirmedRaiseMorale, TYPE_SPECIAL);
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={isSelected ? inventoryStyle : invisibleStyle}>
+            <div style={isSelected ? inventoryStyle : invisibleStyle} onClick={standardOnClick}>
                 <div>Inventory Section for Purchased Items</div>
 
                 <div style={airpieceItemsContainerStyle}>

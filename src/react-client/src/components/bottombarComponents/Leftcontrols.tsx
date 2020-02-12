@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { LEFT_CONTROLS_IMAGES } from '../styleConstants';
 
 const leftcontrolsStyle: any = {
@@ -40,8 +40,13 @@ export class Leftcontrols extends Component<Props> {
     render() {
         const { startPlan, cancelPlan, undoMove, confirmPlan } = this.props;
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={leftcontrolsStyle}>
+            <div style={leftcontrolsStyle} onClick={standardOnClick}>
                 <div
                     title={buttonTitles.start}
                     style={{ ...buttonStyle, ...LEFT_CONTROLS_IMAGES.start }}

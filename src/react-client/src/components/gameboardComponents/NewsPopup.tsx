@@ -63,9 +63,14 @@ export const NewsPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
         event.stopPropagation();
     };
 
+    const standardOnClick = (event: MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+    };
+
     return (
         // Overall Component
-        <div style={news.isActive ? null : invisibleStyle}>
+        <div style={news.isActive ? null : invisibleStyle} onClick={standardOnClick}>
             {/* Popup */}
             <div style={!news.isMinimized ? newsPopupStyle : invisibleStyle}>
                 <div style={popupTitleStyle}>NEWS ALERT!</div>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { NOT_SELECTED_INDEX, SELECTED_BORDERS, SELECTED_INDEX, TYPE_IMAGES } from '../../styleConstants';
 
 const tankerPieceStyle = {
@@ -37,8 +37,13 @@ export class TankerPiece extends Component<Props> {
 
         const newTotalFuel = tankerPiece.pieceFuel - removingFuel;
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={tankerPieceStyle}>
+            <div style={tankerPieceStyle} onClick={standardOnClick}>
                 <div
                     style={{
                         ...boxStyle,

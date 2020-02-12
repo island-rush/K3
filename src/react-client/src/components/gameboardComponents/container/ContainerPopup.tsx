@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { TRANSPORT_TYPE_ID } from '../../../../../constants';
 import { ContainerState, PieceType } from '../../../../../types';
 import { ContainerPiece } from './ContainerPiece';
@@ -82,8 +82,13 @@ export class ContainerPopup extends Component<Props> {
                       />
                   ));
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={container.isActive && !container.isSelectingHex ? containerPopupStyle : invisibleStyle}>
+            <div style={container.isActive && !container.isSelectingHex ? containerPopupStyle : invisibleStyle} onClick={standardOnClick}>
                 <div style={leftSectionStyle}>
                     <div>Outer Pieces</div>
                     {outsidePieces}

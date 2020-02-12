@@ -346,8 +346,13 @@ class Gameboard extends Component<Props> {
             );
         });
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={gameboardStyle}>
+            <div style={gameboardStyle} onClick={standardOnClick}>
                 <div style={subDivStyle}>
                     <HexGrid width={'100%'} height={'100%'} viewBox="-50 -50 100 100">
                         <Layout size={{ x: 3.15, y: 3.15 }} flat={true} spacing={1.03} origin={{ x: -98, y: -46 }}>
