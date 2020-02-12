@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, PLAN_WAS_CONFIRMED, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { COMBAT_PHASE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, PLAN_WAS_CONFIRMED, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN, NOT_WAITING_STATUS } from '../../../constants';
 import { ConfirmPlanAction, ConfirmPlanRequestAction, SocketSession } from '../../../types';
 import { Game, Piece, Plan } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -31,6 +31,12 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
     // Must be in combat phase (2), planning slice (0) to make plans
     if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
         sendUserFeedback(socketId, 'Not the right phase/slice...looking for phase 2 slice 0');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

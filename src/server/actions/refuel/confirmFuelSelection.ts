@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REFUEL_RESULTS, TYPE_AIR, TYPE_FUEL } from '../../../constants';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, REFUEL_RESULTS, TYPE_AIR, TYPE_FUEL, NOT_WAITING_STATUS } from '../../../constants';
 import { ConfirmFuelSelectionRequestAction, FuelResultsAction, PieceType, SocketSession } from '../../../types';
 import { Event, Game } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -29,6 +29,12 @@ export const confirmFuelSelection = async (session: SocketSession, action: Confi
 
     if (gamePhase !== COMBAT_PHASE_ID) {
         sendUserFeedback(socketId, 'Wrong phase for refueling.');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

@@ -1,5 +1,5 @@
 // prettier-ignore
-import { ANTISAT_HIT_ACTION, ANTISAT_SELECTED, ANTISAT_TIME_TO_HIT, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RED_TEAM_ID, REMOTE_SENSING_HIT_ACTION, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { ANTISAT_HIT_ACTION, ANTISAT_SELECTED, ANTISAT_TIME_TO_HIT, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RED_TEAM_ID, REMOTE_SENSING_HIT_ACTION, SLICE_PLANNING_ID, TYPE_MAIN, NOT_WAITING_STATUS } from '../../../constants';
 import { AntiSatAction, AntiSatHitAction, AntiSatRequestAction, RemoteSensingHitAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -42,6 +42,12 @@ export const antiSatConfirm = async (session: SocketSession, action: AntiSatRequ
     // gameSlice 0 is only slice for anti sat
     if (gameSlice !== SLICE_PLANNING_ID) {
         sendUserFeedback(socketId, 'Not the right slice (must be planning)...');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

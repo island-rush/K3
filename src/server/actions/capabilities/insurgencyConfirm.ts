@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, INSURGENCY_SELECTED, INSURGENCY_TYPE_ID, LIST_ALL_POSITIONS, SLICE_PLANNING_ID, TYPE_MAIN, ALL_LAND_POSITIONS } from '../../../constants';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, INSURGENCY_SELECTED, INSURGENCY_TYPE_ID, LIST_ALL_POSITIONS, SLICE_PLANNING_ID, TYPE_MAIN, ALL_LAND_POSITIONS, NOT_WAITING_STATUS } from '../../../constants';
 import { InsurgencyAction, InsurgencyRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -42,6 +42,12 @@ export const insurgencyConfirm = async (session: SocketSession, action: Insurgen
     // gameSlice 0 is only slice for insurgency
     if (gameSlice !== SLICE_PLANNING_ID) {
         sendUserFeedback(socketId, 'Not the right slice (must be planning)...');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

@@ -1,5 +1,5 @@
 // prettier-ignore
-import { BOMBARDMENT_SELECTED, COMBAT_PHASE_ID, DESTROYER_ATTACK_RANGE_CHANCE, DESTROYER_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, TYPE_LAND, TYPE_OWNERS, TYPE_SEA } from '../../../constants';
+import { BOMBARDMENT_SELECTED, COMBAT_PHASE_ID, DESTROYER_ATTACK_RANGE_CHANCE, DESTROYER_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, NOT_WAITING_STATUS } from '../../../constants';
 import { BombardmentAction, BombardmentRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -42,6 +42,12 @@ export const bombardmentConfirm = async (session: SocketSession, action: Bombard
     // gameSlice 0 is only slice for bombardment attack
     if (gameSlice !== SLICE_PLANNING_ID) {
         sendUserFeedback(socketId, 'Not the right slice (must be planning)...');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

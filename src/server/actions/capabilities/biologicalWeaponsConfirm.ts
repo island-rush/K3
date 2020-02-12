@@ -1,5 +1,5 @@
 // prettier-ignore
-import { BIOLOGICAL_WEAPONS_TYPE_ID, BIO_WEAPON_SELECTED, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LIST_ALL_POSITIONS, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { BIOLOGICAL_WEAPONS_TYPE_ID, BIO_WEAPON_SELECTED, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LIST_ALL_POSITIONS, SLICE_PLANNING_ID, TYPE_MAIN, NOT_WAITING_STATUS } from '../../../constants';
 import { BioWeaponsAction, BioWeaponsRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -42,6 +42,12 @@ export const biologicalWeaponsConfirm = async (session: SocketSession, action: B
     // gameSlice 0 is only slice for bio weapons
     if (gameSlice !== SLICE_PLANNING_ID) {
         sendUserFeedback(socketId, 'Not the right slice (must be planning)...');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, DELETE_PLAN, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID } from '../../../constants';
+import { COMBAT_PHASE_ID, DELETE_PLAN, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, NOT_WAITING_STATUS } from '../../../constants';
 import { DeletePlanAction, DeletePlanRequestAction, SocketSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -31,6 +31,12 @@ export const deletePlan = async (session: SocketSession, action: DeletePlanReque
     // Can only change/delete plans in combat phase (2) and slice 0
     if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
         sendUserFeedback(socketId, 'Not the right phase/slice...looking for phase 2 slice 0');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

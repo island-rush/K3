@@ -1,5 +1,5 @@
 // prettier-ignore
-import { AIRFIELD_TYPE, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, OUTER_PIECE_CLICK_ACTION, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_MAIN, TYPE_OWNERS } from '../../../constants';
+import { AIRFIELD_TYPE, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, OUTER_PIECE_CLICK_ACTION, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_OWNERS, NOT_WAITING_STATUS } from '../../../constants';
 import { EnterContainerAction, EnterContainerRequestAction, PieceType, SocketSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -33,6 +33,12 @@ export const enterContainer = async (session: SocketSession, action: EnterContai
         return;
     }
 
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
+        return;
+    }
+
     // Grab the Pieces
     const thisSelectedPiece = await new Piece(selectedPiece.pieceId).init();
     if (!thisSelectedPiece) {
@@ -40,7 +46,7 @@ export const enterContainer = async (session: SocketSession, action: EnterContai
         return;
     }
 
-    //Controller must own the piece
+    // Controller must own the piece
     let atLeast1Owner = false;
     for (const gameController of gameControllers) {
         if (TYPE_OWNERS[gameController].includes(thisSelectedPiece.pieceTypeId)) {

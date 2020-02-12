@@ -1,5 +1,5 @@
 // prettier-ignore
-import { ALL_AIRFIELD_LOCATIONS, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIST_ALL_POSITIONS, MISSILE_TYPE_ID, PIECE_PLACE, PLACE_PHASE_ID, RADAR_TYPE_ID, TEAM_MAIN_ISLAND_STARTING_POSITIONS, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { ALL_AIRFIELD_LOCATIONS, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIST_ALL_POSITIONS, MISSILE_TYPE_ID, PIECE_PLACE, PLACE_PHASE_ID, RADAR_TYPE_ID, TEAM_MAIN_ISLAND_STARTING_POSITIONS, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN, NOT_WAITING_STATUS } from '../../../constants';
 import { InvItemPlaceAction, InvItemPlaceRequestAction, SocketSession } from '../../../types';
 import { Game, InvItem, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -31,6 +31,12 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
     // Can only place pieces from inv during 'place reinforcements phase' (3)
     if (gamePhase !== PLACE_PHASE_ID) {
         sendUserFeedback(socketId, 'Not the right phase...');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

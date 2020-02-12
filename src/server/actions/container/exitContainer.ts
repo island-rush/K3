@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN, NOT_WAITING_STATUS } from '../../../constants';
 import { ExitContainerAction, ExitContainerRequestAction, SocketSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -33,6 +33,12 @@ export const exitContainer = async (session: SocketSession, action: ExitContaine
         return;
     }
 
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
+        return;
+    }
+
     // Grab the Pieces
     const thisSelectedPiece = await new Piece(selectedPiece.pieceId).init();
     if (!thisSelectedPiece) {
@@ -40,7 +46,7 @@ export const exitContainer = async (session: SocketSession, action: ExitContaine
         return;
     }
 
-    //Controller must own the piece
+    // Controller must own the piece
     let atLeast1Owner = false;
     for (const gameController of gameControllers) {
         if (TYPE_OWNERS[gameController].includes(thisSelectedPiece.pieceTypeId)) {

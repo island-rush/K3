@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, C_130_TYPE_ID, DRONE_SWARMS_TYPE_ID, DRONE_SWARM_SELECTED, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, TYPE_SPECIAL } from '../../../constants';
+import { COMBAT_PHASE_ID, C_130_TYPE_ID, DRONE_SWARMS_TYPE_ID, DRONE_SWARM_SELECTED, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, TYPE_SPECIAL, NOT_WAITING_STATUS } from '../../../constants';
 import { DroneSwarmAction, DroneSwarmRequestAction, SocketSession } from '../../../types';
 import { Capability, Game, InvItem, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -43,6 +43,12 @@ export const droneSwarmConfirm = async (session: SocketSession, action: DroneSwa
     // gameSlice 0 is only slice for drone swarm
     if (gameSlice !== SLICE_PLANNING_ID) {
         sendUserFeedback(socketId, 'Not the right slice (must be planning)...');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

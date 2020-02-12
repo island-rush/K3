@@ -1,5 +1,5 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SEA_MINES_TYPE_ID, SLICE_PLANNING_ID, TYPE_SEA, TRANSPORT_TYPE_ID, SEA_MINE_SELECTED } from '../../../constants';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SEA_MINES_TYPE_ID, SLICE_PLANNING_ID, TYPE_SEA, TRANSPORT_TYPE_ID, SEA_MINE_SELECTED, NOT_WAITING_STATUS } from '../../../constants';
 import { SeaMineRequestAction, SocketSession, SeaMineAction } from '../../../types';
 import { Game, InvItem, Piece, Capability } from '../../classes';
 import { redirectClient, sendUserFeedback, sendToTeam } from '../../helpers';
@@ -42,6 +42,12 @@ export const seaMineConfirm = async (session: SocketSession, action: SeaMineRequ
     // gameSlice 0 is only slice for sea mine
     if (gameSlice !== SLICE_PLANNING_ID) {
         sendUserFeedback(socketId, 'Not the right slice (must be planning)...');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 
