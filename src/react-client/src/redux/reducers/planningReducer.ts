@@ -93,7 +93,11 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
 
         case CANCEL_PLAN:
             stateCopy.isActive = false;
+            stateCopy.isSelectingCommander = false;
             stateCopy.isUsingCapability = false;
+            stateCopy.bombardmentSelecting = null;
+            stateCopy.missileSelecting = null;
+            stateCopy.invItem = null;
             stateCopy.moves = [];
             return stateCopy;
 

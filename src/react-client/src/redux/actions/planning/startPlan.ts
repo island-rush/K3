@@ -12,6 +12,11 @@ export const startPlan = () => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, gameInfo, planning } = getState();
 
+        if (planning.bombardmentSelecting !== null || planning.missileSelecting !== null || planning.isUsingCapability) {
+            dispatch(setUserfeedbackAction("Button doesn't apply to capability"));
+            return;
+        }
+
         if (gameboardMeta.selectedPiece == null) {
             dispatch(setUserfeedbackAction('Must select a piece to plan a move...'));
             return;
