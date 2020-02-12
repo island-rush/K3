@@ -1,5 +1,5 @@
 // prettier-ignore
-import { AIRFIELD_TYPE, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, OUTER_PIECE_CLICK_ACTION, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_OWNERS, NOT_WAITING_STATUS } from '../../../constants';
+import { AIRFIELD_TYPE, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, OUTER_PIECE_CLICK_ACTION, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_OWNERS, NOT_WAITING_STATUS, ALL_AIRFIELD_LOCATIONS } from '../../../constants';
 import { EnterContainerAction, EnterContainerRequestAction, PieceType, SocketSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
@@ -89,6 +89,13 @@ export const enterContainer = async (session: SocketSession, action: EnterContai
                 return;
             }
 
+            const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisContainerPiece.piecePositionId);
+            const airfieldOwner = thisGame.getAirfield(airfieldNum);
+            if (gameTeam !== airfieldOwner) {
+                sendUserFeedback(socketId, 'must own the airfield to land the aircraft and board things into it.');
+                return;
+            }
+
             switch (thisSelectedPiece.pieceTypeId) {
                 case ARMY_INFANTRY_COMPANY_TYPE_ID:
                 case MARINE_INFANTRY_COMPANY_TYPE_ID:
@@ -151,6 +158,14 @@ export const enterContainer = async (session: SocketSession, action: EnterContai
 
             if (initialGameboardEmpty[thisContainerPiece.piecePositionId].type !== AIRFIELD_TYPE) {
                 sendUserFeedback(socketId, 'Must enter from within an airfield.');
+                return;
+            }
+
+            // TODO: repeated from above, don't use airfieldNum2 if possible
+            const airfieldNum2 = ALL_AIRFIELD_LOCATIONS.indexOf(thisContainerPiece.piecePositionId);
+            const airfieldOwner2 = thisGame.getAirfield(airfieldNum2);
+            if (gameTeam !== airfieldOwner2) {
+                sendUserFeedback(socketId, 'must own the airfield to land the aircraft and board things into it.');
                 return;
             }
 
