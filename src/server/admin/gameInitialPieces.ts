@@ -1,5 +1,5 @@
 // prettier-ignore
-import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, RADAR_TYPE_ID, RED_TEAM_ID, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_FUEL, TYPE_MOVES } from '../../constants';
+import { AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, RADAR_TYPE_ID, RED_TEAM_ID, SAM_SITE_TYPE_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_FUEL, TYPE_MOVES, NO_PARENT_VALUE } from '../../constants';
 import { GameType, PieceType } from '../../types';
 import { pool } from '../database';
 
@@ -9,7 +9,7 @@ import { pool } from '../database';
  */
 const piece = (pieceGameId: PieceType['pieceGameId'], pieceTeamId: PieceType['pieceTeamId'], pieceTypeId: PieceType['pieceTypeId'], piecePositionId: PieceType['piecePositionId'], pieceOptions: PieceOptions = {}): number[] => {
     // TODO: could have constants to indicated pieceVisible and pieceContainer (not in container == -1)
-    const pieceContainerId = pieceOptions.pieceContainerId === undefined ? -1 : pieceOptions.pieceContainerId;
+    const pieceContainerId = pieceOptions.pieceContainerId === undefined ? NO_PARENT_VALUE : pieceOptions.pieceContainerId;
     const pieceVisible = pieceOptions.pieceVisible === undefined ? 0 : pieceOptions.pieceVisible;
 
     const pieceMoves = TYPE_MOVES[pieceTypeId];

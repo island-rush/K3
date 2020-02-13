@@ -1,8 +1,8 @@
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
-import { DRONE_SWARMS_TYPE_ID, SEA_MINES_TYPE_ID, LIST_ALL_POSITIONS_TYPE } from '../../../../constants';
+import { DRONE_SWARMS_TYPE_ID, LIST_ALL_POSITIONS_TYPE, SEA_MINES_TYPE_ID } from '../../../../constants';
 import { CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, PieceType } from '../../../../types';
-import { bombardment, clearPieceSelection, missileAttack, pieceClose, pieceOpen, selectPiece } from '../../redux';
+import { bombardment, clearPieceSelection, missileAttack, pieceOpen, selectPiece } from '../../redux';
 import { TYPE_IMAGES, ZOOMBOX_BACKGROUNDS } from '../styleConstants';
 import { Piece } from './Piece';
 
@@ -129,7 +129,6 @@ const mapActionsToProps = {
     selectPiece: selectPiece,
     clearPieceSelection: clearPieceSelection,
     pieceOpen,
-    pieceClose,
     missileAttack,
     bombardment
 };

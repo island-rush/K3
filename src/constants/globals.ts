@@ -16,6 +16,8 @@ export const SOCKET_CLIENT_SENDING_ACTION = 'clientSendingAction';
 export const ACTIVATED = 1;
 export const DEACTIVATED = 0;
 
+export const NO_PARENT_VALUE: null = null;
+
 export const NEWS_PHASE_ID = 0;
 export const PURCHASE_PHASE_ID = 1;
 export const COMBAT_PHASE_ID = 2;

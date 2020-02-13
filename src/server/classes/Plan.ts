@@ -66,7 +66,7 @@ export class Plan implements PlanType {
      */
     static async getCollisions(gameId: GameType['gameId'], movementOrder: PlanType['planMovementOrder']) {
         const queryString =
-            'SELECT * FROM (SELECT pieceId as pieceId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0, piecePositionId as piecePositionId0, planPositionId as planPositionId0 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 0 AND pieceGameId = ? AND planMovementOrder = ?) as a JOIN (SELECT pieceId as pieceId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1, piecePositionId as piecePositionId1, planPositionId as planPositionId1 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 1 AND pieceGameId = ? AND planMovementOrder = ?) as b ON piecePositionId0 = planPositionId1 AND planPositionId0 = piecePositionId1';
+            'SELECT * FROM (SELECT pieceId as pieceId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0, piecePositionId as piecePositionId0, planPositionId as planPositionId0 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 0 AND pieceGameId = ? AND planMovementOrder = ? AND pieceContainerId IS NULL) as a JOIN (SELECT pieceId as pieceId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1, piecePositionId as piecePositionId1, planPositionId as planPositionId1 FROM plans NATURAL JOIN pieces WHERE planPieceId = pieceId AND pieceTeamId = 1 AND pieceGameId = ? AND planMovementOrder = ? AND pieceContainerId IS NULL) as b ON piecePositionId0 = planPositionId1 AND planPositionId0 = piecePositionId1';
         const inserts = [gameId, movementOrder, gameId, movementOrder];
         const [results] = await pool.query<RowDataPacket[]>(queryString, inserts); // TODO: weird datatype here with query
         return results as any;
@@ -76,8 +76,9 @@ export class Plan implements PlanType {
      * Get all positions/pieces where both teams exist.
      */
     static async getPositionCombinations(gameId: GameType['gameId']) {
+        // TODO: use constants as query params in the queryString (don't use pieceTeamId = 0, do pieceTeamId = ? and fill it in with constant)
         const queryString =
-            'SELECT * FROM (SELECT pieceId as pieceId0, piecePositionId as piecePositionId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 0) as a JOIN (SELECT pieceId as pieceId1, piecePositionId as piecePositionId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 1) as b ON piecePositionId0 = piecePositionId1';
+            'SELECT * FROM (SELECT pieceId as pieceId0, piecePositionId as piecePositionId0, pieceTypeId as pieceTypeId0, pieceContainerId as pieceContainerId0 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 0 AND pieceContainerId IS NULL) as a JOIN (SELECT pieceId as pieceId1, piecePositionId as piecePositionId1, pieceTypeId as pieceTypeId1, pieceContainerId as pieceContainerId1 FROM pieces WHERE pieceGameId = ? AND pieceTeamId = 1 AND pieceContainerId IS NULL) as b ON piecePositionId0 = piecePositionId1';
         const inserts = [gameId, gameId];
         const [results] = await pool.query<RowDataPacket[]>(queryString, inserts); // TODO: weird datatype with query
         return results as any;
