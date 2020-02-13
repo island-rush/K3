@@ -347,8 +347,9 @@ class Gameboard extends Component<Props> {
         });
 
         const standardOnClick = (event: MouseEvent) => {
-            event.preventDefault();
-            event.stopPropagation();
+            // TODO: need to have the selectPosition(-1) or something here, currently letting the parent / children handle it?
+            // event.preventDefault();
+            // event.stopPropagation();
         };
 
         return (
