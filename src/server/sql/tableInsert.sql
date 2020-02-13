@@ -80,11 +80,12 @@ CREATE TABLE IF NOT EXISTS pieces (
     pieceTeamId INT(1) NOT NULL,
     pieceTypeId INT(2) NOT NULL,
     piecePositionId INT(4) NOT NULL,
-    pieceContainerId INT(8) NOT NULL,
+    pieceContainerId INT(8),
     pieceVisible INT(1) NOT NULL,
     pieceMoves INT(2) NOT NULL,
     pieceFuel INT(2) NOT NULL,
-    FOREIGN KEY (pieceGameId) REFERENCES games (gameId) ON DELETE CASCADE
+    FOREIGN KEY (pieceGameId) REFERENCES games (gameId) ON DELETE CASCADE,
+    FOREIGN KEY (pieceContainerId) REFERENCES pieces (pieceId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS plans(
