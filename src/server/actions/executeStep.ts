@@ -133,6 +133,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         return;
     }
 
+    // TODO: this is no longer necessary, everyone has the same amount of plans (only battles now)
     // One of the teams may be without plans, keep them waiting
     if (currentMovementOrderBlue == null) {
         await thisGame.setStatus(BLUE_TEAM_ID, WAITING_STATUS);
