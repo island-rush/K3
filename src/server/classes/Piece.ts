@@ -278,7 +278,7 @@ export class Piece implements PieceType {
             // TODO: constant instead of null
             if (currentPiece.pieceContainerId === NO_PARENT_VALUE) {
                 allPieces[currentPiece.piecePositionId].push(currentPiece);
-            } else {
+            } else if (currentPiece.pieceTeamId === gameTeam) {
                 const indexOfParent = allPieces[currentPiece.piecePositionId].findIndex(
                     (piece: PieceType) => piece.pieceId === currentPiece.pieceContainerId
                 );
