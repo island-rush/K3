@@ -1,5 +1,5 @@
 import { LIST_ALL_POSITIONS_TYPE } from '../../../constants';
-import { AntiSatMissileType, BlueOrRedTeamId, ControllerType, GameType, RemoteSensingType } from '../../../types';
+import { AntiSatMissileType, BlueOrRedTeamId, ControllerType, GameType, RemoteSensingType, PieceType } from '../../../types';
 import { Game } from '../Game';
 import { Piece } from '../Piece';
 import { checkAntiSatHit, checkRemoteSensingHit, decreaseAntiSat, getAntiSat, insertAntiSat } from './antiSat';
@@ -19,11 +19,21 @@ import { decreaseRemoteSensing, getRemoteSensing, remoteSensingInsert } from './
 import { getRodsFromGod, rodsFromGodInsert, useRodsFromGod } from './rodsFromGod';
 import { checkSeaMineHit, getSeaMines, insertSeaMine } from './seaMines';
 import { sofTakeoutAirfieldsAndSilos } from './sofTeam';
+import { bulkUpdatePieceFuels } from './refuel';
 
 /**
  * List of static functions for handling capabilities. (Groups all functions inside a single static class)
  */
 export class Capability {
+    // TODO: make a central type for fuelUpdates, defining here and also within actual function
+    static async bulkUpdatePieceFuels(
+        fuelUpdates: { pieceId: PieceType['pieceId']; piecePositionId: PieceType['piecePositionId']; newFuel: PieceType['pieceFuel'] }[],
+        gameId: GameType['gameId'],
+        gameTeam: BlueOrRedTeamId
+    ) {
+        return bulkUpdatePieceFuels(fuelUpdates, gameId, gameTeam);
+    }
+
     static async sofTakeoutAirfieldsAndSilos(game: Game) {
         // need the entire game, and not just gameId, to check airfield ownerships
         return sofTakeoutAirfieldsAndSilos(game);

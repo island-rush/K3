@@ -270,7 +270,6 @@ export type NewsState = {
 
 export type RefuelState = {
     isActive: boolean;
-    isMinimized: boolean;
     selectedTankerPieceId: PieceType['pieceId'];
     selectedTankerPieceIndex: number;
     tankers: (PieceType & {
