@@ -1,8 +1,8 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_EVENTS, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from '../../../../constants';
+import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_BATTLES, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from '../../../../constants';
 // prettier-ignore
-import { ClearBattleAction, CombatPhaseAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, InvItemPlaceAction, NewRoundAction, NoMoreEventsAction, PieceType, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RemoteSensingHitAction, SliceChangeAction } from '../../../../types';
+import { ClearBattleAction, CombatPhaseAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, InvItemPlaceAction, NewRoundAction, NoMoreBattlesAction, PieceType, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RemoteSensingHitAction, SliceChangeAction } from '../../../../types';
 
 export function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
     const { type } = action;
@@ -15,7 +15,7 @@ export function gameboardReducer(state = initialGameboardEmpty, action: AnyActio
         case NEW_ROUND:
         case PLACE_PHASE:
         case SLICE_CHANGE:
-        case NO_MORE_EVENTS:
+        case NO_MORE_BATTLES:
         case REMOTE_SENSING_SELECTED:
         case REMOTE_SENSING_HIT_ACTION:
         case RAISE_MORALE_SELECTED:
@@ -90,7 +90,7 @@ type GameboardPiecesUpdateActions =
     | NewRoundAction
     | PlacePhaseAction
     | SliceChangeAction
-    | NoMoreEventsAction
+    | NoMoreBattlesAction
     | RemoteSensingHitAction
     | RemoteSensingAction
     | RaiseMoraleAction

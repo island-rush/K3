@@ -4,13 +4,13 @@ import { BLUE_TEAM_ID, CLEAR_SAM_DELETE, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWA
 import { ClearDroneSwarmMineNotifyAction, ClearSamDeleteAction, ClearSeaMineNotifyAction, DroneSwarmHitNotifyAction, NewRoundAction, PlacePhaseAction, PlanType, SamDeletedPiecesAction, SeaMineHitNotifyAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../types';
 import { Battle, Capability, Game, Piece, Plan } from '../classes';
 import { sendToGame, sendToTeam } from '../helpers';
-import { giveNextEvent } from './giveNextEvent';
+import { giveNextBattle } from './battles';
 
 /**
  * Move pieces / step through plans
  */
 export const executeStep = async (session: SocketSession, thisGame: Game) => {
-    // inserting events here and moving pieces, or changing to new round or something...
+    // inserting battles here and moving pieces, or changing to new round or something...
     const { gameId, gameRound } = thisGame;
 
     // TODO: rename this to 'hadPlans0' or something more descriptive
@@ -143,10 +143,10 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
 
     const currentMovementOrder: PlanType['planMovementOrder'] = currentMovementOrderBlue != null ? currentMovementOrderBlue : currentMovementOrderRed;
 
-    // Collision Battle Events
+    // Collision Battles
     const allCollisions: any = await Plan.getCollisions(gameId, currentMovementOrder); // each item in collisionBattles has {pieceId0, pieceTypeId0, pieceContainerId0, piecePositionId0, planPositionId0, pieceId1, pieceTypeId1, pieceContainerId1, piecePositionId1, planPositionId1 }
     if (allCollisions.length > 0) {
-        const allCollideEvents: any = {}; // 'position0-position1' => [piecesInvolved]
+        const allCollideBattles: any = {}; // 'position0-position1' => [piecesInvolved]
 
         for (let x = 0; x < allCollisions.length; x++) {
             const { pieceId0, piecePositionId0, planPositionId0, pieceId1 } = allCollisions[x];
@@ -154,24 +154,24 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
             // TODO: figure out if these 2 pieces would actually collide / battle (do the same for position battles)
             // consider visibility
 
-            const thisEventPositions = `${piecePositionId0}-${planPositionId0}`;
-            if (!Object.keys(allCollideEvents).includes(thisEventPositions)) allCollideEvents[thisEventPositions] = [];
-            if (!allCollideEvents[thisEventPositions].includes(pieceId0)) allCollideEvents[thisEventPositions].push(pieceId0);
-            if (!allCollideEvents[thisEventPositions].includes(pieceId1)) allCollideEvents[thisEventPositions].push(pieceId1);
+            const thisBattlePositions = `${piecePositionId0}-${planPositionId0}`;
+            if (!Object.keys(allCollideBattles).includes(thisBattlePositions)) allCollideBattles[thisBattlePositions] = [];
+            if (!allCollideBattles[thisBattlePositions].includes(pieceId0)) allCollideBattles[thisBattlePositions].push(pieceId0);
+            if (!allCollideBattles[thisBattlePositions].includes(pieceId1)) allCollideBattles[thisBattlePositions].push(pieceId1);
         }
 
-        const eventInserts = [];
-        const eventItemInserts = [];
-        const keys = Object.keys(allCollideEvents);
+        const battleInserts = [];
+        const battleItemInserts = [];
+        const keys = Object.keys(allCollideBattles);
         for (let b = 0; b < keys.length; b++) {
             const key = keys[b];
-            eventInserts.push([gameId, parseInt(key.split('-')[0]), parseInt(key.split('-')[1])]);
-            const eventPieces = allCollideEvents[key];
-            for (let x = 0; x < eventPieces.length; x++) eventItemInserts.push([eventPieces[x], gameId, key.split('-')[0], key.split('-')[1]]);
+            battleInserts.push([gameId, parseInt(key.split('-')[0]), parseInt(key.split('-')[1])]);
+            const battlePieces = allCollideBattles[key];
+            for (let x = 0; x < battlePieces.length; x++) battleItemInserts.push([battlePieces[x], gameId, key.split('-')[0], key.split('-')[1]]);
         }
 
-        await Battle.bulkInsertBattles(eventInserts);
-        await Battle.bulkInsertItems(gameId, eventItemInserts);
+        await Battle.bulkInsertBattles(battleInserts);
+        await Battle.bulkInsertItems(gameId, battleItemInserts);
     }
 
     const positionsThatWereHit = await Capability.checkSeaMineHit(gameId);
@@ -307,34 +307,34 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
 
     await Piece.refuelPlanesOverAirfields(thisGame);
 
-    // Position Battle Events
+    // Position Battles
     const allPositionCombinations: any = await Plan.getPositionCombinations(gameId);
     if (allPositionCombinations.length > 0) {
-        const allPosEvents: any = {};
+        const allPosBattles: any = {};
         for (let x = 0; x < allPositionCombinations.length; x++) {
             const { pieceId0, piecePositionId0, pieceId1 } = allPositionCombinations[x];
 
             // consider if they would fight (see collision)
             // consider visibility
 
-            const thisEventPosition = `${piecePositionId0}`;
-            if (!Object.keys(allPosEvents).includes(thisEventPosition)) allPosEvents[thisEventPosition] = [];
-            if (!allPosEvents[thisEventPosition].includes(pieceId0)) allPosEvents[thisEventPosition].push(pieceId0);
-            if (!allPosEvents[thisEventPosition].includes(pieceId1)) allPosEvents[thisEventPosition].push(pieceId1);
+            const thisBattlePosition = `${piecePositionId0}`;
+            if (!Object.keys(allPosBattles).includes(thisBattlePosition)) allPosBattles[thisBattlePosition] = [];
+            if (!allPosBattles[thisBattlePosition].includes(pieceId0)) allPosBattles[thisBattlePosition].push(pieceId0);
+            if (!allPosBattles[thisBattlePosition].includes(pieceId1)) allPosBattles[thisBattlePosition].push(pieceId1);
         }
 
-        const eventInserts = [];
-        const eventItemInserts = [];
-        const keys = Object.keys(allPosEvents);
+        const battleInserts = [];
+        const battleItemInserts = [];
+        const keys = Object.keys(allPosBattles);
         for (let b = 0; b < keys.length; b++) {
             const key = keys[b];
-            eventInserts.push([gameId, parseInt(key), parseInt(key)]);
-            const eventPieces = allPosEvents[key];
-            for (let x = 0; x < eventPieces.length; x++) eventItemInserts.push([eventPieces[x], gameId, key, key]);
+            battleInserts.push([gameId, parseInt(key), parseInt(key)]);
+            const battlePieces = allPosBattles[key];
+            for (let x = 0; x < battlePieces.length; x++) battleItemInserts.push([battlePieces[x], gameId, key, key]);
         }
 
-        await Battle.bulkInsertBattles(eventInserts);
-        await Battle.bulkInsertItems(gameId, eventItemInserts);
+        await Battle.bulkInsertBattles(battleInserts);
+        await Battle.bulkInsertItems(gameId, battleItemInserts);
     }
 
     // should not do refuel events if the team didn't have any plans for this step (TODO: prevent refuel stuff for team specific things)
@@ -376,8 +376,5 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
     //     // }
     // }
 
-    // If there is now an event, send to user instead of PIECES_MOVE
-    await giveNextEvent(thisGame);
-    // await giveNextEvent(session, { thisGame, gameTeam: RED_TEAM_ID });
-    // await giveNextEvent(session, { thisGame, gameTeam: BLUE_TEAM_ID });
+    await giveNextBattle(thisGame);
 };

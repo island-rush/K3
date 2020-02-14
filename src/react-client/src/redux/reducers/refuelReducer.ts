@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { AIRCRAFT_CLICK, EVENT_REFUEL, INITIAL_GAMESTATE, NO_MORE_EVENTS, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, TANKER_CLICK, TYPE_FUEL, UNDO_FUEL_SELECTION } from '../../../../constants';
+import { AIRCRAFT_CLICK, EVENT_REFUEL, INITIAL_GAMESTATE, NO_MORE_BATTLES, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_RESULTS, TANKER_CLICK, TYPE_FUEL, UNDO_FUEL_SELECTION } from '../../../../constants';
 // prettier-ignore
 import { AircraftClickAction, EventRefuelAction, GameInitialStateAction, RefuelState, TankerClickAction, UndoFuelSelectionAction } from '../../../../types';
 
@@ -86,7 +86,7 @@ export function refuelReducer(state = initialRefuelState, action: AnyAction) {
             stateCopy.isMinimized = !stateCopy.isMinimized;
             return stateCopy;
 
-        case NO_MORE_EVENTS:
+        case NO_MORE_BATTLES:
         case REFUEL_RESULTS:
             return initialRefuelState;
 

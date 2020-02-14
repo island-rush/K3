@@ -1,13 +1,13 @@
 // prettier-ignore
-import { BLUE_TEAM_ID, EVENT_BATTLE, NOT_WAITING_STATUS, NO_MORE_EVENTS, RED_TEAM_ID } from '../../constants';
-import { EventBattleAction, NoMoreEventsAction } from '../../types';
-import { Battle, Game, Piece } from '../classes';
-import { sendToTeam } from '../helpers';
+import { BLUE_TEAM_ID, EVENT_BATTLE, NOT_WAITING_STATUS, NO_MORE_BATTLES, RED_TEAM_ID } from '../../../constants';
+import { EventBattleAction, NoMoreBattlesAction } from '../../../types';
+import { Battle, Game, Piece } from '../../classes';
+import { sendToTeam } from '../../helpers';
 
 /**
  * Find the next battle in the battleQueue and send to this team (through a socket)
  */
-export const giveNextEvent = async (thisGame: Game) => {
+export const giveNextBattle = async (thisGame: Game) => {
     const { gameId } = thisGame;
 
     await thisGame.setStatus(BLUE_TEAM_ID, NOT_WAITING_STATUS);
@@ -16,30 +16,27 @@ export const giveNextEvent = async (thisGame: Game) => {
     const gameEvent = await Battle.getNext(gameId);
 
     if (!gameEvent) {
-        const noMoreEventsActionBlue: NoMoreEventsAction = {
-            type: NO_MORE_EVENTS,
+        const NoMoreBattlesActionBlue: NoMoreBattlesAction = {
+            type: NO_MORE_BATTLES,
             payload: {
                 gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID),
                 gameStatus: NOT_WAITING_STATUS
             }
         };
-        const noMoreEventsActionRed: NoMoreEventsAction = {
-            type: NO_MORE_EVENTS,
+        const NoMoreBattlesActionRed: NoMoreBattlesAction = {
+            type: NO_MORE_BATTLES,
             payload: {
                 gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID),
                 gameStatus: NOT_WAITING_STATUS
             }
         };
 
-        sendToTeam(gameId, BLUE_TEAM_ID, noMoreEventsActionBlue);
-        sendToTeam(gameId, RED_TEAM_ID, noMoreEventsActionRed);
+        sendToTeam(gameId, BLUE_TEAM_ID, NoMoreBattlesActionBlue);
+        sendToTeam(gameId, RED_TEAM_ID, NoMoreBattlesActionRed);
         return;
     }
 
-    // Giving them a fresh battle, they are no longer waiting for anything
-
-    // send to the blue team
-
+    // There is a battle to give
     const blueBattleEventItems: any = await gameEvent.getTeamItems(BLUE_TEAM_ID);
     const redBattleEventItems: any = await gameEvent.getTeamItems(RED_TEAM_ID);
 
@@ -48,7 +45,7 @@ export const giveNextEvent = async (thisGame: Game) => {
     const redFriendlyBattlePieces: any = [];
     const redEnemyBattlePieces: any = [];
 
-    // Format for the client
+    // Format for the client with extra properties
     for (let x = 0; x < blueBattleEventItems.length; x++) {
         const currentBlueBattlePiece: any = {
             targetPiece: null,
