@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { ATTACK_MATRIX, PIECES_WITH_FUEL } from '../../constants';
-import { BattleItemType, BattleQueueType, PieceType, GameType, BlueOrRedTeamId } from '../../types';
+import { BattleQueueType, PieceType, GameType, BlueOrRedTeamId, BattlePieceType } from '../../types';
 import { pool } from '../database';
 import { Piece } from './Piece';
 
@@ -28,7 +28,7 @@ export class Battle implements BattleQueueType {
     async delete() {
         // update the planes from this battle to subtract fuel
         // TODO: this selection could probably be combined with the update
-        const queryString3 = 'SELECT pieceId FROM battleItems JOIN pieces ON pieceId = battlePieceId WHERE pieceTypeId IN (?) AND battleId = ?';
+        const queryString3 = 'SELECT pieceId FROM battlePieces JOIN pieces ON pieceId = battlePieceId WHERE pieceTypeId IN (?) AND battleId = ?';
         const inserts3 = [PIECES_WITH_FUEL, this.battleId];
         const [piecesWithFuel] = await pool.query<RowDataPacket[] & { pieceId: PieceType['pieceId'] }[]>(queryString3, inserts3);
 
@@ -51,18 +51,18 @@ export class Battle implements BattleQueueType {
     }
 
     /**
-     * Get sql array of battleItems/pieces that are tied to this battle.
+     * Get sql array of battlePieces/pieces that are tied to this battle.
      */
     async getItems() {
-        const queryString = 'SELECT * FROM battleItems NATURAL JOIN pieces WHERE battleId = ? AND battlePieceId = pieceId';
+        const queryString = 'SELECT * FROM battlePieces NATURAL JOIN pieces WHERE battleId = ? AND battlePieceId = pieceId';
         const inserts = [this.battleId];
-        const [battleItems] = await pool.query<RowDataPacket[] & BattleItemType[]>(queryString, inserts);
+        const [battlePieces] = await pool.query<RowDataPacket[] & BattlePieceType[]>(queryString, inserts);
 
-        if (battleItems.length === 0) {
+        if (battlePieces.length === 0) {
             return null;
         }
 
-        return battleItems;
+        return battlePieces;
     }
 
     /**
@@ -70,7 +70,7 @@ export class Battle implements BattleQueueType {
      */
     async getTeamItems(gameTeam: BlueOrRedTeamId) {
         const queryString =
-            'SELECT * FROM (SELECT * FROM battleItems NATUAL JOIN pieces WHERE battlePieceId = pieceId AND battleId = ? AND pieceTeamId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.battlePieceTargetId = b.tpieceId';
+            'SELECT * FROM (SELECT * FROM battlePieces NATUAL JOIN pieces WHERE battlePieceId = pieceId AND battleId = ? AND pieceTeamId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.battlePieceTargetId = b.tpieceId';
         const inserts = [this.battleId, gameTeam];
         const [battleTeamItems] = await pool.query<RowDataPacket[]>(queryString, inserts); // TODO: weird data type here
         return battleTeamItems; // TODO: do we need to return null explicitly? (this is an empty array ^^^ see getItems for difference (not sure why needed))
@@ -103,7 +103,7 @@ export class Battle implements BattleQueueType {
     }
 
     /**
-     * Insert battleItems as a bulk insert sql query.
+     * Insert battlePieces as a bulk insert sql query.
      */
     static async bulkInsertItems(gameId: GameType['gameId'], allInserts: any) {
         const conn = await pool.getConnection();
@@ -113,7 +113,7 @@ export class Battle implements BattleQueueType {
         await conn.query(queryString, inserts);
 
         queryString =
-            'INSERT INTO battleItems (battleId, battlePieceId) SELECT battleId, battlePieceId FROM battleItemsTemp NATURAL JOIN battleQueue WHERE battleItemsTemp.battlePosA = battleQueue.battlePosA AND battleItemsTemp.battlePosB = battleQueue.battlePosB AND battleItemsTemp.gameId = battleQueue.battleGameId';
+            'INSERT INTO battlePieces (battleId, battlePieceId) SELECT battleId, battlePieceId FROM battleItemsTemp NATURAL JOIN battleQueue WHERE battleItemsTemp.battlePosA = battleQueue.battlePosA AND battleItemsTemp.battlePosB = battleQueue.battlePosB AND battleItemsTemp.gameId = battleQueue.battleGameId';
         await conn.query(queryString);
 
         queryString = 'DELETE FROM battleItemsTemp WHERE gameId = ?';
@@ -141,7 +141,7 @@ export class Battle implements BattleQueueType {
             await pool.query(queryString, inserts);
 
             queryString =
-                'UPDATE battleItems, battleItemsTargetsTemp SET battleItems.battlePieceTargetId = battleItemsTargetsTemp.battlePieceTargetId WHERE battleItems.battleId = battleItemsTargetsTemp.battleId AND battleItems.battlePieceId = battleItemsTargetsTemp.battlePieceId';
+                'UPDATE battlePieces, battleItemsTargetsTemp SET battlePieces.battlePieceTargetId = battleItemsTargetsTemp.battlePieceTargetId WHERE battlePieces.battleId = battleItemsTargetsTemp.battleId AND battlePieces.battlePieceId = battleItemsTargetsTemp.battlePieceId';
             await pool.query(queryString);
 
             queryString = 'DELETE FROM battleItemsTargetsTemp WHERE gameId = ?';
@@ -155,15 +155,15 @@ export class Battle implements BattleQueueType {
      * Using battleItem targets, perform dice rolls between pieces and determine success or failure.
      */
     async fight() {
-        let queryString = 'SELECT * FROM (SELECT * FROM battleItems NATUAL JOIN pieces WHERE battlePieceId = pieceId AND battleId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.battlePieceTargetId = b.tpieceId';
+        let queryString = 'SELECT * FROM (SELECT * FROM battlePieces NATUAL JOIN pieces WHERE battlePieceId = pieceId AND battleId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.battlePieceTargetId = b.tpieceId';
         let inserts = [this.battleId];
-        const [battleItemsWithTargets] = await pool.query<RowDataPacket[]>(queryString, inserts); // TODO: weird datatype here
+        const [battlePiecesWithTargets] = await pool.query<RowDataPacket[]>(queryString, inserts); // TODO: weird datatype here
 
         // need to know if any battles, and if 0 battles, end the battle
         let atLeastOneBattle = false;
-        for (let t = 0; t < battleItemsWithTargets.length; t++) {
+        for (let t = 0; t < battlePiecesWithTargets.length; t++) {
             // assume that anything inserted into the database was legit (that piece had valid attack...etc)
-            if (battleItemsWithTargets[t].tpieceId != null) {
+            if (battlePiecesWithTargets[t].tpieceId != null) {
                 atLeastOneBattle = true;
                 break;
             }
@@ -177,8 +177,8 @@ export class Battle implements BattleQueueType {
             const piecesToDelete = [-1]; // need at least 1 value for sql to work?
             const masterRecord = []; // for the client to handle...(future may do more things for client in advance...)
 
-            for (let x = 0; x < battleItemsWithTargets.length; x++) {
-                const thisBattleItem = battleItemsWithTargets[x];
+            for (let x = 0; x < battlePiecesWithTargets.length; x++) {
+                const thisBattleItem = battlePiecesWithTargets[x];
                 const { pieceId, pieceTypeId, tpieceId, tpieceTypeId } = thisBattleItem;
                 // is there a target?
                 if (tpieceId == null) {
@@ -233,7 +233,7 @@ export class Battle implements BattleQueueType {
             await pool.query(queryString, inserts2);
 
             // prevents seeing previous attack from refresh*
-            queryString = 'UPDATE battleItems SET battlePieceTargetId = -1 WHERE battleId = ?';
+            queryString = 'UPDATE battlePieces SET battlePieceTargetId = -1 WHERE battleId = ?';
             inserts = [this.battleId];
             await pool.query(queryString, inserts);
 

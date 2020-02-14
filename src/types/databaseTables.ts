@@ -133,7 +133,7 @@ export type BattleQueueType = {
     battlePosB: LIST_ALL_POSITIONS_TYPE;
 };
 
-export type BattleItemType = {
+export type BattlePieceType = {
     battleId: BattleQueueType['battleId'];
     battlePieceId: PieceType['pieceId'];
     battlePieceTargetId: PieceType['pieceId'];

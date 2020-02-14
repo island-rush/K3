@@ -13,9 +13,9 @@ export const giveNextBattle = async (thisGame: Game) => {
     await thisGame.setStatus(BLUE_TEAM_ID, NOT_WAITING_STATUS);
     await thisGame.setStatus(RED_TEAM_ID, NOT_WAITING_STATUS);
 
-    const gameEvent = await Battle.getNext(gameId);
+    const battle = await Battle.getNext(gameId);
 
-    if (!gameEvent) {
+    if (!battle) {
         const NoMoreBattlesActionBlue: NoMoreBattlesAction = {
             type: NO_MORE_BATTLES,
             payload: {
@@ -37,8 +37,8 @@ export const giveNextBattle = async (thisGame: Game) => {
     }
 
     // There is a battle to give
-    const blueBattleEventItems: any = await gameEvent.getTeamItems(BLUE_TEAM_ID);
-    const redBattleEventItems: any = await gameEvent.getTeamItems(RED_TEAM_ID);
+    const blueBattleEventItems: any = await battle.getTeamItems(BLUE_TEAM_ID);
+    const redBattleEventItems: any = await battle.getTeamItems(RED_TEAM_ID);
 
     const blueFriendlyBattlePieces: any = [];
     const blueEnemyBattlePieces: any = [];
@@ -66,6 +66,7 @@ export const giveNextBattle = async (thisGame: Game) => {
     }
 
     // Create Frontend Actions
+    // TODO: get rid of 'event' phrasing, since now only battles
     const eventBattleActionBlue: EventBattleAction = {
         type: EVENT_BATTLE,
         payload: {

@@ -116,7 +116,7 @@ CREATE TABLE IF NOT EXISTS battleQueue(
     FOREIGN KEY (battleGameId) REFERENCES games (gameId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS battleItems(
+CREATE TABLE IF NOT EXISTS battlePieces(
 	battleId INT(8) NOT NULL,
     battlePieceId INT(8) NOT NULL,
     battlePieceTargetId INT(8) DEFAULT -1,
