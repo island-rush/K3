@@ -2,7 +2,7 @@ import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { DRONE_SWARMS_TYPE_ID, LIST_ALL_POSITIONS_TYPE, SEA_MINES_TYPE_ID } from '../../../../constants';
 import { CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, PieceType } from '../../../../types';
-import { bombardment, clearPieceSelection, missileAttack, pieceOpen, selectPiece } from '../../redux';
+import { bombardment, clearPieceSelection, missileAttack, pieceOpen, selectPiece, refuelOpen } from '../../redux';
 import { TYPE_IMAGES, ZOOMBOX_BACKGROUNDS } from '../styleConstants';
 import { Piece } from './Piece';
 
@@ -54,6 +54,7 @@ interface Props {
     pieceOpen: any;
     missileAttack: any; // TODO: make these actual function types (import the types? (like typeof: missileAttack?))
     bombardment: any;
+    refuelOpen: any;
     gameInfo: GameInfoState;
     confirmedSeaMines: CapabilitiesState['confirmedSeaMines'];
     confirmedDroneSwarms: CapabilitiesState['confirmedDroneSwarms'];
@@ -66,7 +67,7 @@ interface Props {
 class Zoombox extends Component<Props> {
     render() {
         // prettier-ignore
-        const { selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, gameInfo, confirmedSeaMines, confirmedDroneSwarms, confirmedAtcScramble, confirmedMissileAttacks, confirmedMissileDisrupts, missileAttack, confirmedBombardments, bombardment } = this.props;
+        const { refuelOpen, selectedPos, selectedPiece, gameboard, selectPiece, clearPieceSelection, pieceOpen, gameInfo, confirmedSeaMines, confirmedDroneSwarms, confirmedAtcScramble, confirmedMissileAttacks, confirmedMissileDisrupts, missileAttack, confirmedBombardments, bombardment } = this.props;
 
         const isVisible = selectedPos !== -1;
 
@@ -86,6 +87,7 @@ class Zoombox extends Component<Props> {
                       missileAttack={missileAttack} // TODO: Shouldn't send this to all Piece components, only missiles (figure it out up here, not down there for everyone)
                       confirmedBombardments={confirmedBombardments}
                       bombardment={bombardment}
+                      refuelOpen={refuelOpen}
                   />
               ));
 
@@ -130,7 +132,8 @@ const mapActionsToProps = {
     clearPieceSelection: clearPieceSelection,
     pieceOpen,
     missileAttack,
-    bombardment
+    bombardment,
+    refuelOpen
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Zoombox);

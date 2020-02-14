@@ -7,10 +7,9 @@ import { sendToGame, sendToTeam } from '../helpers';
 import { giveNextBattle } from './battles';
 
 /**
- * Move pieces / step through plans
+ * Move pieces / step through plans / create battles to handle
  */
 export const executeStep = async (session: SocketSession, thisGame: Game) => {
-    // inserting battles here and moving pieces, or changing to new round or something...
     const { gameId, gameRound } = thisGame;
 
     // TODO: rename this to 'hadPlans0' or something more descriptive
@@ -84,6 +83,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
             sendToTeam(gameId, RED_TEAM_ID, placePhaseActionRed);
             return;
         }
+
         // Next Round of Combat
         await thisGame.setRound(gameRound + 1);
 
@@ -141,6 +141,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         await thisGame.setStatus(RED_TEAM_ID, WAITING_STATUS);
     }
 
+    // Both should be the same, until one runs out of plans before the other
     const currentMovementOrder: PlanType['planMovementOrder'] = currentMovementOrderBlue != null ? currentMovementOrderBlue : currentMovementOrderRed;
 
     // Collision Battles
@@ -174,6 +175,8 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         await Battle.bulkInsertItems(gameId, battleItemInserts);
     }
 
+    // Sea Mine Hit Check
+    // TODO: somehow consolidate this with collision battles? (crossing into position = battle, but sea mine will hit and destroy piece anyway before the battle....)
     const positionsThatWereHit = await Capability.checkSeaMineHit(gameId);
     if (positionsThatWereHit.length !== 0) {
         // need to send to client that these positions were hit
@@ -226,7 +229,7 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
 
     await Capability.sofTakeoutAirfieldsAndSilos(thisGame);
 
-    const listOfPiecesDeletedFromSams = await Piece.samFire(thisGame); // TODO: need tell client which positions were hit by sams
+    const listOfPiecesDeletedFromSams = await Piece.samFire(thisGame);
     if (listOfPiecesDeletedFromSams.length !== 0) {
         // send to the teams for display / highlighting
         const samDeletedPiecesAction: SamDeletedPiecesAction = {
