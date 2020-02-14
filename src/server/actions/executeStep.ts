@@ -1,8 +1,8 @@
 // prettier-ignore
-import { BLUE_TEAM_ID, BOTH_TEAMS_INDICATOR, CLEAR_SAM_DELETE, COL_BATTLE_EVENT_TYPE, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE, ROUNDS_PER_COMBAT_PHASE, SAM_DELETED_PIECES, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
+import { BLUE_TEAM_ID, CLEAR_SAM_DELETE, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, RED_TEAM_ID, ROUNDS_PER_COMBAT_PHASE, SAM_DELETED_PIECES, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
 // prettier-ignore
-import { ClearDroneSwarmMineNotifyAction, ClearSamDeleteAction, ClearSeaMineNotifyAction, DroneSwarmHitNotifyAction, NewRoundAction, PlacePhaseAction, SamDeletedPiecesAction, SeaMineHitNotifyAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction, BlueOrRedTeamId, PlanType } from '../../types';
-import { Capability, Event, Game, Piece, Plan } from '../classes';
+import { ClearDroneSwarmMineNotifyAction, ClearSamDeleteAction, ClearSeaMineNotifyAction, DroneSwarmHitNotifyAction, NewRoundAction, PlacePhaseAction, PlanType, SamDeletedPiecesAction, SeaMineHitNotifyAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../types';
+import { Battle, Capability, Game, Piece, Plan } from '../classes';
 import { sendToGame, sendToTeam } from '../helpers';
 import { giveNextEvent } from './giveNextEvent';
 
@@ -133,7 +133,6 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         return;
     }
 
-    // TODO: this is no longer necessary, everyone has the same amount of plans (only battles now)
     // One of the teams may be without plans, keep them waiting
     if (currentMovementOrderBlue == null) {
         await thisGame.setStatus(BLUE_TEAM_ID, WAITING_STATUS);
@@ -166,13 +165,13 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         const keys = Object.keys(allCollideEvents);
         for (let b = 0; b < keys.length; b++) {
             const key = keys[b];
-            eventInserts.push([gameId, BOTH_TEAMS_INDICATOR, COL_BATTLE_EVENT_TYPE, key.split('-')[0], key.split('-')[1]]);
+            eventInserts.push([gameId, parseInt(key.split('-')[0]), parseInt(key.split('-')[1])]);
             const eventPieces = allCollideEvents[key];
             for (let x = 0; x < eventPieces.length; x++) eventItemInserts.push([eventPieces[x], gameId, key.split('-')[0], key.split('-')[1]]);
         }
 
-        await Event.bulkInsertEvents(eventInserts);
-        await Event.bulkInsertItems(gameId, eventItemInserts);
+        await Battle.bulkInsertBattles(eventInserts);
+        await Battle.bulkInsertItems(gameId, eventItemInserts);
     }
 
     const positionsThatWereHit = await Capability.checkSeaMineHit(gameId);
@@ -329,55 +328,56 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         const keys = Object.keys(allPosEvents);
         for (let b = 0; b < keys.length; b++) {
             const key = keys[b];
-            eventInserts.push([gameId, BOTH_TEAMS_INDICATOR, POS_BATTLE_EVENT_TYPE, key, key]);
+            eventInserts.push([gameId, parseInt(key), parseInt(key)]);
             const eventPieces = allPosEvents[key];
             for (let x = 0; x < eventPieces.length; x++) eventItemInserts.push([eventPieces[x], gameId, key, key]);
         }
 
-        await Event.bulkInsertEvents(eventInserts);
-        await Event.bulkInsertItems(gameId, eventItemInserts);
+        await Battle.bulkInsertBattles(eventInserts);
+        await Battle.bulkInsertItems(gameId, eventItemInserts);
     }
 
     // should not do refuel events if the team didn't have any plans for this step (TODO: prevent refuel stuff for team specific things)
 
     // refueling is team specific (loop through 0 and 1 teamIds)
     // TODO: could refactor this to be cleaner (easier to read)
-    const teamHadPlans = [currentMovementOrderBlue == null ? 0 : 1, currentMovementOrderRed == null ? 0 : 1];
-    for (let thisTeamNum = 0; thisTeamNum < 2; thisTeamNum++) {
-        if (teamHadPlans[thisTeamNum]) {
-            // refuel events if they had plans for this step, otherwise don't want to refuel stuff for no plans (possibly will do it anyway)
-            // need to grab all refuel events from database, looking at pieces in the same positions
-            const allPositionRefuels: any = await Piece.getPositionRefuels(gameId, thisTeamNum as BlueOrRedTeamId); // TODO: probably a way of not doing 'as Blue', loop declaration is messing up the types, should iterate through array of both values somehow
-            if (allPositionRefuels.length > 0) {
-                const allPosEvents: any = {};
-                for (let x = 0; x < allPositionRefuels.length; x++) {
-                    // tnkrPieceId, tnkrPieceTypeId, tnkrPiecePositionId, tnkrPieceMoves, tnkrPieceFuel, arcftPieceId, arcftPieceTypeId, arcftPiecePositionId, arcftPieceMoves, arcftPieceFuel
-                    // prettier-ignore
-                    const { tnkrPieceId, tnkrPiecePositionId, arcftPieceId } = allPositionRefuels[x];
+    // const teamHadPlans = [currentMovementOrderBlue == null ? 0 : 1, currentMovementOrderRed == null ? 0 : 1];
+    // for (let thisTeamNum = 0; thisTeamNum < 2; thisTeamNum++) {
+    //     // if (teamHadPlans[thisTeamNum]) {
+    //     //     // refuel events if they had plans for this step, otherwise don't want to refuel stuff for no plans (possibly will do it anyway)
+    //     //     // need to grab all refuel events from database, looking at pieces in the same positions
+    //     //     const allPositionRefuels: any = await Piece.getPositionRefuels(gameId, thisTeamNum as BlueOrRedTeamId); // TODO: probably a way of not doing 'as Blue', loop declaration is messing up the types, should iterate through array of both values somehow
+    //     //     if (allPositionRefuels.length > 0) {
+    //     //         const allPosEvents: any = {};
+    //     //         for (let x = 0; x < allPositionRefuels.length; x++) {
+    //     //             // tnkrPieceId, tnkrPieceTypeId, tnkrPiecePositionId, tnkrPieceMoves, tnkrPieceFuel, arcftPieceId, arcftPieceTypeId, arcftPiecePositionId, arcftPieceMoves, arcftPieceFuel
+    //     //             // prettier-ignore
+    //     //             const { tnkrPieceId, tnkrPiecePositionId, arcftPieceId } = allPositionRefuels[x];
 
-                    const thisEventPosition = `${tnkrPiecePositionId}`;
-                    if (!Object.keys(allPosEvents).includes(thisEventPosition)) allPosEvents[thisEventPosition] = [];
-                    if (!allPosEvents[thisEventPosition].includes(tnkrPieceId)) allPosEvents[thisEventPosition].push(tnkrPieceId);
-                    if (!allPosEvents[thisEventPosition].includes(arcftPieceId)) allPosEvents[thisEventPosition].push(arcftPieceId);
-                }
+    //     //             const thisEventPosition = `${tnkrPiecePositionId}`;
+    //     //             if (!Object.keys(allPosEvents).includes(thisEventPosition)) allPosEvents[thisEventPosition] = [];
+    //     //             if (!allPosEvents[thisEventPosition].includes(tnkrPieceId)) allPosEvents[thisEventPosition].push(tnkrPieceId);
+    //     //             if (!allPosEvents[thisEventPosition].includes(arcftPieceId)) allPosEvents[thisEventPosition].push(arcftPieceId);
+    //     //         }
 
-                const eventInserts = [];
-                const eventItemInserts = [];
-                const keys = Object.keys(allPosEvents);
-                for (let b = 0; b < keys.length; b++) {
-                    const key = keys[b];
-                    eventInserts.push([gameId, thisTeamNum, REFUEL_EVENT_TYPE, key, key]);
-                    const eventPieces = allPosEvents[key];
-                    for (let x = 0; x < eventPieces.length; x++) eventItemInserts.push([eventPieces[x], gameId, key, key]);
-                }
+    //     //         const eventInserts = [];
+    //     //         const eventItemInserts = [];
+    //     //         const keys = Object.keys(allPosEvents);
+    //     //         for (let b = 0; b < keys.length; b++) {
+    //     //             const key = keys[b];
+    //     //             eventInserts.push([gameId, thisTeamNum, REFUEL_EVENT_TYPE, key, key]);
+    //     //             const eventPieces = allPosEvents[key];
+    //     //             for (let x = 0; x < eventPieces.length; x++) eventItemInserts.push([eventPieces[x], gameId, key, key]);
+    //     //         }
 
-                await Event.bulkInsertEvents(eventInserts);
-                await Event.bulkInsertItems(gameId, eventItemInserts);
-            }
-        }
-    }
+    //     //         await Event.bulkInsertEvents(eventInserts);
+    //     //         await Event.bulkInsertItems(gameId, eventItemInserts);
+    //     //     }
+    //     // }
+    // }
 
     // If there is now an event, send to user instead of PIECES_MOVE
-    await giveNextEvent(session, { thisGame, gameTeam: BLUE_TEAM_ID });
-    await giveNextEvent(session, { thisGame, gameTeam: RED_TEAM_ID });
+    await giveNextEvent(thisGame);
+    // await giveNextEvent(session, { thisGame, gameTeam: RED_TEAM_ID });
+    // await giveNextEvent(session, { thisGame, gameTeam: BLUE_TEAM_ID });
 };

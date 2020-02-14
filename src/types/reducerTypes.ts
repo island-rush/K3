@@ -1,6 +1,6 @@
 // prettier-ignore
-import { AIRFIELD_TYPE, FLAG_TYPE, GAME_INFO_MENU_INDEX, INV_MENU_INDEX, LAND_TYPE, MISSILE_SILO_TYPE, NEUTRAL_TEAM_ID, NO_MENU_INDEX, SHOP_MENU_INDEX, SPACE_MENU_INDEX, WATER_TYPE, LIST_ALL_POSITIONS_TYPE } from '../constants';
-import { EventItemType, GameType, InvItemType, NewsType, PieceType, ShopItemType } from './databaseTables';
+import { AIRFIELD_TYPE, FLAG_TYPE, GAME_INFO_MENU_INDEX, INV_MENU_INDEX, LAND_TYPE, LIST_ALL_POSITIONS_TYPE, MISSILE_SILO_TYPE, NEUTRAL_TEAM_ID, NO_MENU_INDEX, SHOP_MENU_INDEX, SPACE_MENU_INDEX, WATER_TYPE } from '../constants';
+import { GameType, InvItemType, NewsType, PieceType, ShopItemType } from './databaseTables';
 import { GameSession } from './sessionTypes';
 
 export type ShopState = ShopItemType[];
@@ -273,13 +273,11 @@ export type RefuelState = {
     isMinimized: boolean;
     selectedTankerPieceId: PieceType['pieceId'];
     selectedTankerPieceIndex: number;
-    tankers: (EventItemType &
-        PieceType & {
-            removedFuel?: number;
-        })[]; // Client is adding some stuff (fuel selections)
-    aircraft: (EventItemType &
-        PieceType & {
-            tankerPieceId?: number;
-            tankerPieceIndex?: number;
-        })[];
+    tankers: (PieceType & {
+        removedFuel?: number;
+    })[]; // Client is adding some stuff (fuel selections)
+    aircraft: (PieceType & {
+        tankerPieceId?: number;
+        tankerPieceIndex?: number;
+    })[];
 };

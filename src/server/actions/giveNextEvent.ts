@@ -1,110 +1,93 @@
 // prettier-ignore
-import { AIR_REFUELING_SQUADRON_ID, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, EVENT_BATTLE, EVENT_REFUEL, NOT_WAITING_STATUS, NO_MORE_EVENTS, POS_BATTLE_EVENT_TYPE, RED_TEAM_ID, REFUEL_EVENT_TYPE } from '../../constants';
-import { EventBattleAction, EventRefuelAction, NoMoreEventsAction, SocketSession, BlueOrRedTeamId } from '../../types';
-import { Event, Game, Piece } from '../classes';
-import { sendToTeam, sendUserFeedback } from '../helpers';
+import { BLUE_TEAM_ID, EVENT_BATTLE, NOT_WAITING_STATUS, NO_MORE_EVENTS, RED_TEAM_ID } from '../../constants';
+import { EventBattleAction, NoMoreEventsAction } from '../../types';
+import { Battle, Game, Piece } from '../classes';
+import { sendToTeam } from '../helpers';
 
 /**
- * Find the next event in the EventQueue and send to this team (through a socket)
+ * Find the next battle in the battleQueue and send to this team (through a socket)
  */
-export const giveNextEvent = async (session: SocketSession, options: GiveNextEventOptions) => {
-    // prettier-ignore
-    const { thisGame: { gameId }, gameTeam } = options;
+export const giveNextEvent = async (thisGame: Game) => {
+    const { gameId } = thisGame;
 
-    const otherTeam = gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
+    await thisGame.setStatus(BLUE_TEAM_ID, NOT_WAITING_STATUS);
+    await thisGame.setStatus(RED_TEAM_ID, NOT_WAITING_STATUS);
 
-    const gameEvent = await Event.getNext(gameId, gameTeam);
+    const gameEvent = await Battle.getNext(gameId);
 
     if (!gameEvent) {
-        const noMoreEventsAction: NoMoreEventsAction = {
+        const noMoreEventsActionBlue: NoMoreEventsAction = {
             type: NO_MORE_EVENTS,
             payload: {
-                gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),
-                gameStatus: 0
+                gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID),
+                gameStatus: NOT_WAITING_STATUS
+            }
+        };
+        const noMoreEventsActionRed: NoMoreEventsAction = {
+            type: NO_MORE_EVENTS,
+            payload: {
+                gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID),
+                gameStatus: NOT_WAITING_STATUS
             }
         };
 
-        sendToTeam(gameId, gameTeam, noMoreEventsAction);
+        sendToTeam(gameId, BLUE_TEAM_ID, noMoreEventsActionBlue);
+        sendToTeam(gameId, RED_TEAM_ID, noMoreEventsActionRed);
         return;
     }
 
-    switch (gameEvent.eventTypeId) {
-        case COL_BATTLE_EVENT_TYPE:
-        case POS_BATTLE_EVENT_TYPE:
-            await options.thisGame.setStatus(gameTeam, NOT_WAITING_STATUS);
+    // Giving them a fresh battle, they are no longer waiting for anything
 
-            const friendlyPiecesList: any = await gameEvent.getTeamItems(gameTeam);
-            const enemyPiecesList: any = await gameEvent.getTeamItems(otherTeam);
-            const friendlyPieces: any = [];
-            const enemyPieces: any = [];
+    // send to the blue team
 
-            // Format for the client
-            for (let x = 0; x < friendlyPiecesList.length; x++) {
-                const thisFriendlyPiece: any = {
-                    targetPiece: null,
-                    targetPieceIndex: -1
-                };
-                thisFriendlyPiece.piece = friendlyPiecesList[x];
-                friendlyPieces.push(thisFriendlyPiece);
-            }
+    const blueBattleEventItems: any = await gameEvent.getTeamItems(BLUE_TEAM_ID);
+    const redBattleEventItems: any = await gameEvent.getTeamItems(RED_TEAM_ID);
 
-            for (let y = 0; y < enemyPiecesList.length; y++) {
-                const thisEnemyPiece: any = {
-                    targetPiece: null,
-                    targetPieceIndex: -1
-                };
-                thisEnemyPiece.piece = enemyPiecesList[y];
-                enemyPieces.push(thisEnemyPiece);
-            }
+    const blueFriendlyBattlePieces: any = [];
+    const blueEnemyBattlePieces: any = [];
+    const redFriendlyBattlePieces: any = [];
+    const redEnemyBattlePieces: any = [];
 
-            const eventBattleAction: EventBattleAction = {
-                type: EVENT_BATTLE,
-                payload: {
-                    friendlyPieces,
-                    enemyPieces,
-                    gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),
-                    gameStatus: 0
-                }
-            };
-
-            sendToTeam(gameId, gameTeam, eventBattleAction);
-            return;
-        case REFUEL_EVENT_TYPE:
-            // get the pieces from the event, put them into payload (pre-format based on state?)
-            // Format for the client
-            const allRefuelEventItems: any = await gameEvent.getRefuelItems();
-
-            const tankers = [];
-            const aircraft = [];
-            for (let x = 0; x < allRefuelEventItems.length; x++) {
-                // put each piece into the refuel event....
-                const thisPiece = allRefuelEventItems[x];
-                const { pieceTypeId } = thisPiece;
-                if (pieceTypeId === AIR_REFUELING_SQUADRON_ID) {
-                    tankers.push(thisPiece);
-                } else {
-                    aircraft.push(thisPiece);
-                }
-            }
-
-            const eventRefuelAction: EventRefuelAction = {
-                type: EVENT_REFUEL,
-                payload: {
-                    tankers,
-                    aircraft,
-                    gameboardPieces: await Piece.getVisiblePieces(gameId, gameTeam),
-                    gameStatus: 0
-                }
-            };
-
-            sendToTeam(gameId, gameTeam, eventRefuelAction);
-            return;
-        default:
-            sendUserFeedback(session.socketId, 'Server Error, unknown event type...');
+    // Format for the client
+    for (let x = 0; x < blueBattleEventItems.length; x++) {
+        const currentBlueBattlePiece: any = {
+            targetPiece: null,
+            targetPieceIndex: -1
+        };
+        currentBlueBattlePiece.piece = blueBattleEventItems[x];
+        blueFriendlyBattlePieces.push(currentBlueBattlePiece);
+        redEnemyBattlePieces.push(currentBlueBattlePiece);
     }
-};
+    for (let y = 0; y < redBattleEventItems.length; y++) {
+        const currentRedBattlePiece: any = {
+            targetPiece: null,
+            targetPieceIndex: -1
+        };
+        currentRedBattlePiece.piece = redBattleEventItems[y];
+        blueEnemyBattlePieces.push(currentRedBattlePiece);
+        redFriendlyBattlePieces.push(currentRedBattlePiece);
+    }
 
-type GiveNextEventOptions = {
-    thisGame: Game;
-    gameTeam: BlueOrRedTeamId;
+    // Create Frontend Actions
+    const eventBattleActionBlue: EventBattleAction = {
+        type: EVENT_BATTLE,
+        payload: {
+            friendlyPieces: blueFriendlyBattlePieces,
+            enemyPieces: blueEnemyBattlePieces,
+            gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID),
+            gameStatus: NOT_WAITING_STATUS
+        }
+    };
+    const eventBattleActionRed: EventBattleAction = {
+        type: EVENT_BATTLE,
+        payload: {
+            friendlyPieces: redFriendlyBattlePieces,
+            enemyPieces: redEnemyBattlePieces,
+            gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID),
+            gameStatus: NOT_WAITING_STATUS
+        }
+    };
+
+    sendToTeam(gameId, BLUE_TEAM_ID, eventBattleActionBlue);
+    sendToTeam(gameId, RED_TEAM_ID, eventBattleActionRed);
 };

@@ -1,5 +1,5 @@
 export * from './Capability';
-export * from './Event';
+export * from './Battle';
 export * from './Game';
 export * from './InvItem';
 export * from './Piece';

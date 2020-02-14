@@ -2,7 +2,7 @@
 import { BLUE_TEAM_ID, COMBAT_PHASE, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, MAIN_BUTTON_CLICK, NEWS_PHASE, NEWS_PHASE_ID, NOT_WAITING_STATUS, PURCHASE_PHASE, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_CHANGE, SLICE_EXECUTING_ID, TYPE_MAIN, WAITING_STATUS } from '../../constants';
 // prettier-ignore
 import { CombatPhaseAction, MainButtonClickAction, NewsPhaseAction, PurchasePhaseAction, SliceChangeAction, SocketSession } from '../../types';
-import { Capability, Game, Piece, Event } from '../classes';
+import { Battle, Capability, Game, Piece } from '../classes';
 import { redirectClient, sendToClient, sendToGame, sendToTeam, sendUserFeedback } from '../helpers';
 import { executeStep } from './executeStep';
 
@@ -93,9 +93,9 @@ export const mainButtonClick = async (session: SocketSession) => {
     // Combat Phase === Planning -> execute || execute -> execute
     if (gamePhase === COMBAT_PHASE_ID) {
         if (gameSlice === SLICE_EXECUTING_ID) {
-            const thisEvent = await Event.getNextAnyteam(gameId);
-            if (thisEvent) {
-                sendUserFeedback(socketId, 'Still waiting on events to be handled before next step');
+            const battle = await Battle.getNext(gameId);
+            if (battle) {
+                sendUserFeedback(socketId, 'Still waiting on battles to be handled before next step');
                 return;
             }
 
