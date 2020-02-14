@@ -340,44 +340,5 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         await Battle.bulkInsertItems(gameId, battleItemInserts);
     }
 
-    // should not do refuel events if the team didn't have any plans for this step (TODO: prevent refuel stuff for team specific things)
-
-    // refueling is team specific (loop through 0 and 1 teamIds)
-    // TODO: could refactor this to be cleaner (easier to read)
-    // const teamHadPlans = [currentMovementOrderBlue == null ? 0 : 1, currentMovementOrderRed == null ? 0 : 1];
-    // for (let thisTeamNum = 0; thisTeamNum < 2; thisTeamNum++) {
-    //     // if (teamHadPlans[thisTeamNum]) {
-    //     //     // refuel events if they had plans for this step, otherwise don't want to refuel stuff for no plans (possibly will do it anyway)
-    //     //     // need to grab all refuel events from database, looking at pieces in the same positions
-    //     //     const allPositionRefuels: any = await Piece.getPositionRefuels(gameId, thisTeamNum as BlueOrRedTeamId); // TODO: probably a way of not doing 'as Blue', loop declaration is messing up the types, should iterate through array of both values somehow
-    //     //     if (allPositionRefuels.length > 0) {
-    //     //         const allPosEvents: any = {};
-    //     //         for (let x = 0; x < allPositionRefuels.length; x++) {
-    //     //             // tnkrPieceId, tnkrPieceTypeId, tnkrPiecePositionId, tnkrPieceMoves, tnkrPieceFuel, arcftPieceId, arcftPieceTypeId, arcftPiecePositionId, arcftPieceMoves, arcftPieceFuel
-    //     //             // prettier-ignore
-    //     //             const { tnkrPieceId, tnkrPiecePositionId, arcftPieceId } = allPositionRefuels[x];
-
-    //     //             const thisEventPosition = `${tnkrPiecePositionId}`;
-    //     //             if (!Object.keys(allPosEvents).includes(thisEventPosition)) allPosEvents[thisEventPosition] = [];
-    //     //             if (!allPosEvents[thisEventPosition].includes(tnkrPieceId)) allPosEvents[thisEventPosition].push(tnkrPieceId);
-    //     //             if (!allPosEvents[thisEventPosition].includes(arcftPieceId)) allPosEvents[thisEventPosition].push(arcftPieceId);
-    //     //         }
-
-    //     //         const eventInserts = [];
-    //     //         const eventItemInserts = [];
-    //     //         const keys = Object.keys(allPosEvents);
-    //     //         for (let b = 0; b < keys.length; b++) {
-    //     //             const key = keys[b];
-    //     //             eventInserts.push([gameId, thisTeamNum, REFUEL_EVENT_TYPE, key, key]);
-    //     //             const eventPieces = allPosEvents[key];
-    //     //             for (let x = 0; x < eventPieces.length; x++) eventItemInserts.push([eventPieces[x], gameId, key, key]);
-    //     //         }
-
-    //     //         await Event.bulkInsertEvents(eventInserts);
-    //     //         await Event.bulkInsertItems(gameId, eventItemInserts);
-    //     //     }
-    //     // }
-    // }
-
     await giveNextBattle(thisGame);
 };

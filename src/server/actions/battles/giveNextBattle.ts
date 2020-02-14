@@ -10,9 +10,6 @@ import { sendToTeam } from '../../helpers';
 export const giveNextBattle = async (thisGame: Game) => {
     const { gameId } = thisGame;
 
-    await thisGame.setStatus(BLUE_TEAM_ID, NOT_WAITING_STATUS);
-    await thisGame.setStatus(RED_TEAM_ID, NOT_WAITING_STATUS);
-
     const battle = await Battle.getNext(gameId);
 
     if (!battle) {
@@ -20,14 +17,14 @@ export const giveNextBattle = async (thisGame: Game) => {
             type: NO_MORE_BATTLES,
             payload: {
                 gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID),
-                gameStatus: NOT_WAITING_STATUS
+                gameStatus: thisGame.getStatus(BLUE_TEAM_ID)
             }
         };
         const NoMoreBattlesActionRed: NoMoreBattlesAction = {
             type: NO_MORE_BATTLES,
             payload: {
                 gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID),
-                gameStatus: NOT_WAITING_STATUS
+                gameStatus: thisGame.getStatus(RED_TEAM_ID)
             }
         };
 
@@ -35,6 +32,10 @@ export const giveNextBattle = async (thisGame: Game) => {
         sendToTeam(gameId, RED_TEAM_ID, NoMoreBattlesActionRed);
         return;
     }
+
+    // since there is a battle to handle, no longer 'waiting'
+    await thisGame.setStatus(BLUE_TEAM_ID, NOT_WAITING_STATUS);
+    await thisGame.setStatus(RED_TEAM_ID, NOT_WAITING_STATUS);
 
     // There is a battle to give
     const blueBattleEventItems: any = await battle.getTeamItems(BLUE_TEAM_ID);
@@ -73,7 +74,7 @@ export const giveNextBattle = async (thisGame: Game) => {
             friendlyPieces: blueFriendlyBattlePieces,
             enemyPieces: blueEnemyBattlePieces,
             gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID),
-            gameStatus: NOT_WAITING_STATUS
+            gameStatus: thisGame.getStatus(BLUE_TEAM_ID) // just set to 'not waiting' above
         }
     };
     const eventBattleActionRed: EventBattleAction = {
@@ -82,7 +83,7 @@ export const giveNextBattle = async (thisGame: Game) => {
             friendlyPieces: redFriendlyBattlePieces,
             enemyPieces: redEnemyBattlePieces,
             gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID),
-            gameStatus: NOT_WAITING_STATUS
+            gameStatus: thisGame.getStatus(RED_TEAM_ID)
         }
     };
 
