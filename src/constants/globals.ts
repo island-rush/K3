@@ -26,11 +26,6 @@ export const PLACE_PHASE_ID = 3;
 export const SLICE_PLANNING_ID = 0;
 export const SLICE_EXECUTING_ID = 1;
 
-export const BOTH_TEAMS_INDICATOR = 2;
-export const POS_BATTLE_EVENT_TYPE = 1;
-export const COL_BATTLE_EVENT_TYPE = 0;
-export const REFUEL_EVENT_TYPE = 2;
-
 export const ROUNDS_PER_COMBAT_PHASE = 2; // 0 indexed
 
 /**

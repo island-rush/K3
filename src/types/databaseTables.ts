@@ -1,5 +1,5 @@
 // prettier-ignore
-import { ACTIVATED, BLUE_TEAM_ID, COL_BATTLE_EVENT_TYPE, COMBAT_PHASE_ID, DEACTIVATED, LIST_ALL_POSITIONS_TYPE, LIST_ALL_TYPES_ENUM, LOGGED_IN_VALUE, NEUTRAL_TEAM_ID, NEWS_PHASE_ID, NOT_LOGGED_IN_VALUE, NOT_WAITING_STATUS, PLACE_PHASE_ID, POS_BATTLE_EVENT_TYPE, PURCHASE_PHASE_ID, RED_TEAM_ID, REFUEL_EVENT_TYPE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, WAITING_STATUS } from '../constants';
+import { ACTIVATED, BLUE_TEAM_ID, COMBAT_PHASE_ID, DEACTIVATED, LIST_ALL_POSITIONS_TYPE, LIST_ALL_TYPES_ENUM, LOGGED_IN_VALUE, NEUTRAL_TEAM_ID, NEWS_PHASE_ID, NOT_LOGGED_IN_VALUE, NOT_WAITING_STATUS, PLACE_PHASE_ID, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, WAITING_STATUS } from '../constants';
 import { ControllerType } from './sessionTypes';
 
 export type BlueOrRedTeamId = typeof BLUE_TEAM_ID | typeof RED_TEAM_ID;
@@ -126,21 +126,17 @@ export type NewsType = {
     newsInfo: string;
 };
 
-export type EventTypes = typeof POS_BATTLE_EVENT_TYPE | typeof COL_BATTLE_EVENT_TYPE | typeof REFUEL_EVENT_TYPE;
-
-export type EventQueueType = {
-    eventId: number;
-    eventGameId: GameType['gameId'];
-    eventTeamId: BlueOrRedTeamId;
-    eventTypeId: EventTypes;
-    eventPosA: LIST_ALL_POSITIONS_TYPE;
-    eventPosB: LIST_ALL_POSITIONS_TYPE;
+export type BattleQueueType = {
+    battleId: number;
+    battleGameId: GameType['gameId'];
+    battlePosA: LIST_ALL_POSITIONS_TYPE;
+    battlePosB: LIST_ALL_POSITIONS_TYPE;
 };
 
-export type EventItemType = {
-    eventId: EventQueueType['eventId'];
-    eventPieceId: PieceType['pieceId'];
-    eventItemTarget: PieceType['pieceId'];
+export type BattlePieceType = {
+    battleId: BattleQueueType['battleId'];
+    battlePieceId: PieceType['pieceId'];
+    battlePieceTargetId: PieceType['pieceId'];
 };
 
 export type RodsFromGodType = {

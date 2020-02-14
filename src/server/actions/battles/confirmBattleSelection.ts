@@ -2,9 +2,9 @@
 import { BATTLE_FIGHT_RESULTS, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../../constants';
 // prettier-ignore
 import { BattleResultsAction, ConfirmBattleSelectionRequestAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../../types';
-import { Event, Game } from '../../classes';
+import { Battle, Game } from '../../classes';
 import { redirectClient, sendToGame, sendUserFeedback } from '../../helpers';
-import { giveNextEvent } from '../giveNextEvent';
+import { giveNextBattle } from './giveNextBattle';
 
 /**
  * User request to confirm their battle selections. (what pieces are attacking what other pieces)
@@ -50,8 +50,8 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
     }
 
     // confirm the selections
-    const thisTeamsCurrentEvent = await Event.getNext(gameId, gameTeam);
-    await thisTeamsCurrentEvent.bulkUpdateTargets(friendlyPieces);
+    const thisBattle = await Battle.getNext(gameId);
+    await thisBattle.bulkUpdateTargets(friendlyPieces);
 
     // are we waiting for the other client?
     // and if thisTeamStatus == NOT_WAITING....(maybe make explicit here <-TODO:
@@ -65,7 +65,7 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
     await thisGame.setStatus(otherTeam, NOT_WAITING_STATUS);
 
     // Do the fight!
-    const fightResults = await thisTeamsCurrentEvent.fight();
+    const fightResults = await thisBattle.fight();
 
     // Send the results of the battle back to the client(s)
     if (fightResults.atLeastOneBattle) {
@@ -80,7 +80,7 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
         return;
     }
 
-    await thisTeamsCurrentEvent.delete();
+    await thisBattle.delete();
 
     // Check for flag updates after the battle (enemy may no longer be there = capture the flag)
     const didUpdateFlags = await thisGame.updateFlags();
@@ -131,6 +131,5 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
         sendToGame(gameId, updateAirfieldAction);
     }
 
-    await giveNextEvent(session, { thisGame, gameTeam: 0 }); // not putting executingStep in options to let it know not to send pieceMove
-    await giveNextEvent(session, { thisGame, gameTeam: 1 }); // not putting executingStep in options to let it know not to send pieceMove
+    await giveNextBattle(thisGame);
 };

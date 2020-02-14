@@ -1,5 +1,13 @@
 import React, { Component, MouseEvent } from 'react';
-import { ALL_AIRFIELD_LOCATIONS, DESTROYER_TYPE_ID, LIST_ALL_AIRFIELD_PIECES, MISSILE_TYPE_ID, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
+import {
+    ALL_AIRFIELD_LOCATIONS,
+    DESTROYER_TYPE_ID,
+    LIST_ALL_AIRFIELD_PIECES,
+    MISSILE_TYPE_ID,
+    TYPE_MOVES,
+    TYPE_NAMES,
+    AIR_REFUELING_SQUADRON_ID
+} from '../../../../constants';
 import { CapabilitiesState, GameInfoState, PieceType } from '../../../../types';
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../styleConstants';
 
@@ -34,12 +42,13 @@ interface Props {
     confirmedBombardments: CapabilitiesState['confirmedBombardments'];
     confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
     bombardment: any;
+    refuelOpen: any;
 }
 
 export class Piece extends Component<Props> {
     render() {
         // prettier-ignore
-        const { piece, isSelected, pieceClick, pieceOpen, confirmedMissileAttacks, gameInfo, confirmedAtcScramble, missileAttack, confirmedBombardments, confirmedMissileDisrupts, bombardment } = this.props;
+        const { refuelOpen, piece, isSelected, pieceClick, pieceOpen, confirmedMissileAttacks, gameInfo, confirmedAtcScramble, missileAttack, confirmedBombardments, confirmedMissileDisrupts, bombardment } = this.props;
 
         const pieceCombinedStyle = {
             ...pieceStyle,
@@ -119,11 +128,19 @@ export class Piece extends Component<Props> {
             event.stopPropagation();
         };
 
+        const tankerDoubleClick = (event: MouseEvent) => {
+            event.preventDefault();
+            refuelOpen(piece);
+            event.stopPropagation();
+        };
+
         const onDoubleClick =
             piece.pieceTypeId === MISSILE_TYPE_ID
                 ? missileAttackDoubleClick
                 : piece.pieceTypeId === DESTROYER_TYPE_ID
                 ? bombardmentDoubleClick
+                : piece.pieceTypeId === AIR_REFUELING_SQUADRON_ID
+                ? tankerDoubleClick
                 : pieceOpenDoubleClick;
 
         return <div style={pieceCombinedStyle} title={title} onClick={onClick} onDoubleClick={onDoubleClick} />;

@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CLEAR_BATTLE, ENEMY_PIECE_SELECT, EVENT_BATTLE, INITIAL_GAMESTATE, NO_MORE_EVENTS, TARGET_PIECE_SELECT } from '../../../../constants';
+import { BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CLEAR_BATTLE, ENEMY_PIECE_SELECT, EVENT_BATTLE, INITIAL_GAMESTATE, NO_MORE_BATTLES, TARGET_PIECE_SELECT } from '../../../../constants';
 // prettier-ignore
 import { BattlePieceSelectAction, BattleResultsAction, BattleState, EnemyPieceSelectAction, EventBattleAction, GameInitialStateAction, TargetPieceClickAction } from '../../../../types';
 
@@ -68,7 +68,7 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
             stateCopy.enemyPieces = (action as EventBattleAction).payload.enemyPieces;
             return stateCopy;
 
-        case NO_MORE_EVENTS:
+        case NO_MORE_BATTLES:
             stateCopy.isMinimized = false;
             stateCopy.isActive = false;
             stateCopy.selectedBattlePiece = -1;

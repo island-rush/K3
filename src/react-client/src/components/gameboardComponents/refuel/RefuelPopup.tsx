@@ -2,7 +2,7 @@ import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { RefuelState } from '../../../../../types';
 import { aircraftClick, confirmFuelSelections, refuelPopupMinimizeToggle, tankerClick, undoFuelSelection } from '../../../redux';
-import { REFUEL_POPUP_IMAGES } from '../../styleConstants';
+import { LEFT_CONTROLS_IMAGES } from '../../styleConstants';
 import { AircraftPiece } from './AircraftPiece';
 import { TankerPiece } from './TankerPiece';
 
@@ -30,12 +30,6 @@ const refuelPopupMinimizeStyle: any = {
     zIndex: 4,
     backgroundSize: '100% 100%',
     backgroundRepeat: 'no-repeat'
-};
-
-const isMinimizedStyle: any = {
-    border: '2px solid red',
-    top: '45%',
-    margin: '2%'
 };
 
 const leftSectionStyle: any = {
@@ -110,49 +104,32 @@ class RefuelPopup extends Component<Props> {
 
         return (
             // Overall Component
-            <div style={refuel.isActive ? null : invisibleStyle} onClick={standardOnClick}>
-                {/* Popup */}
-                <div style={!refuel.isMinimized ? refuelPopupStyle : invisibleStyle}>
-                    <div style={leftSectionStyle}>
-                        Aircraft
-                        {aircraftPieces}
-                    </div>
-                    <div style={rightSectionStyle}>
-                        Tankers
-                        {tankerPieces}
-                    </div>
-                    <button
-                        onClick={event => {
-                            event.preventDefault();
-                            confirmFuelSelections();
-                            event.stopPropagation();
-                        }}
-                        style={confirmButtonStyle}
-                    >
-                        Confirm Fuel Selections
-                    </button>
-                    <div
-                        onClick={event => {
-                            event.preventDefault();
-                            refuelPopupMinimizeToggle();
-                            event.stopPropagation();
-                        }}
-                        style={{ ...refuelPopupMinimizeStyle, ...REFUEL_POPUP_IMAGES.minIcon }}
-                    />
+            <div style={refuel.isActive ? refuelPopupStyle : invisibleStyle} onClick={standardOnClick}>
+                <div style={leftSectionStyle}>
+                    Aircraft
+                    {aircraftPieces}
                 </div>
-
-                {/* Minimize Button on the Left */}
-                <div
-                    style={{
-                        ...(refuel.isMinimized ? refuelPopupMinimizeStyle : invisibleStyle),
-                        ...REFUEL_POPUP_IMAGES.minIcon,
-                        ...isMinimizedStyle
+                <div style={rightSectionStyle}>
+                    Tankers
+                    {tankerPieces}
+                </div>
+                <button
+                    onClick={event => {
+                        event.preventDefault();
+                        confirmFuelSelections();
+                        event.stopPropagation();
                     }}
+                    style={confirmButtonStyle}
+                >
+                    Confirm Fuel Selections
+                </button>
+                <div
                     onClick={event => {
                         event.preventDefault();
                         refuelPopupMinimizeToggle();
                         event.stopPropagation();
                     }}
+                    style={{ ...refuelPopupMinimizeStyle, ...LEFT_CONTROLS_IMAGES.cancel }}
                 />
             </div>
         );

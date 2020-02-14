@@ -45,8 +45,8 @@ export const gameInitialPieces = async (gameId: GameType['gameId']) => {
         piece(gameId, RED_TEAM_ID, STEALTH_BOMBER_TYPE_ID, 21),
         piece(gameId, RED_TEAM_ID, BOMBER_TYPE_ID, 21),
         piece(gameId, RED_TEAM_ID, AIRBORN_ISR_TYPE_ID, 21),
-        piece(gameId, RED_TEAM_ID, AIR_REFUELING_SQUADRON_ID, 70),
-        piece(gameId, RED_TEAM_ID, AIR_REFUELING_SQUADRON_ID, 70),
+        piece(gameId, RED_TEAM_ID, AIR_REFUELING_SQUADRON_ID, 21),
+        piece(gameId, RED_TEAM_ID, AIR_REFUELING_SQUADRON_ID, 21),
 
         // show submarines
         piece(gameId, RED_TEAM_ID, SUBMARINE_TYPE_ID, 120),
