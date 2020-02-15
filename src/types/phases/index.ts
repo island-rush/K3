@@ -13,21 +13,6 @@ export type MainButtonClickRequestAction = {
     type: typeof SERVER_MAIN_BUTTON_CLICK;
 };
 
-export const NEWS_PHASE = 'NEWS_PHASE';
-export type NewsPhaseAction = {
-    type: typeof NEWS_PHASE;
-    payload: {
-        news: NewsState;
-        gamePoints: GameInfoState['gamePoints'];
-    };
-};
-
-export const NEWSPOPUP_MINIMIZE_TOGGLE = 'NEWSPOPUP_MINIMIZE_TOGGLE';
-export type NewsPopupToggleAction = {
-    type: typeof NEWSPOPUP_MINIMIZE_TOGGLE;
-    payload: {};
-};
-
 export const PURCHASE_PHASE = 'PURCHASE_PHASE';
 export type PurchasePhaseAction = {
     type: typeof PURCHASE_PHASE;
@@ -37,6 +22,25 @@ export const COMBAT_PHASE = 'COMBAT_PHASE';
 export type CombatPhaseAction = {
     type: typeof COMBAT_PHASE;
     payload: {
+        gameboardPieces: GameboardPiecesDataType;
+    };
+};
+
+export const SLICE_CHANGE = 'SLICE_CHANGE';
+export type SliceChangeAction = {
+    type: typeof SLICE_CHANGE;
+    payload: {
+        confirmedRods: CapabilitiesState['confirmedRods'];
+        confirmedBioWeapons: CapabilitiesState['confirmedBioWeapons'];
+        confirmedGoldenEye: CapabilitiesState['confirmedGoldenEye'];
+        confirmedCommInterrupt: CapabilitiesState['confirmedCommInterrupt'];
+        confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
+        confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
+        confirmedNukes: CapabilitiesState['confirmedNukes'];
+        confirmedMissileHitPos: CapabilitiesState['confirmedMissileHitPos'];
+        confirmedBombardmentHitPos: CapabilitiesState['confirmedBombardmentHitPos'];
+        confirmedInsurgencyPos: LIST_ALL_POSITIONS_TYPE[];
+        confirmedInsurgencyPieces: PieceType[];
         gameboardPieces: GameboardPiecesDataType;
     };
 };
@@ -62,25 +66,6 @@ export type NewRoundAction = {
     };
 };
 
-export const SLICE_CHANGE = 'SLICE_CHANGE';
-export type SliceChangeAction = {
-    type: typeof SLICE_CHANGE;
-    payload: {
-        confirmedRods: CapabilitiesState['confirmedRods'];
-        confirmedBioWeapons: CapabilitiesState['confirmedBioWeapons'];
-        confirmedGoldenEye: CapabilitiesState['confirmedGoldenEye'];
-        confirmedCommInterrupt: CapabilitiesState['confirmedCommInterrupt'];
-        confirmedAtcScramble: CapabilitiesState['confirmedAtcScramble'];
-        confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
-        confirmedNukes: CapabilitiesState['confirmedNukes'];
-        confirmedMissileHitPos: CapabilitiesState['confirmedMissileHitPos'];
-        confirmedBombardmentHitPos: CapabilitiesState['confirmedBombardmentHitPos'];
-        confirmedInsurgencyPos: LIST_ALL_POSITIONS_TYPE[];
-        confirmedInsurgencyPieces: PieceType[];
-        gameboardPieces: GameboardPiecesDataType;
-    };
-};
-
 export const PLACE_PHASE = 'PLACE_PHASE';
 export type PlacePhaseAction = {
     type: typeof PLACE_PHASE;
@@ -99,4 +84,19 @@ export type PlacePhaseAction = {
         confirmedMissileDisrupts: CapabilitiesState['confirmedMissileDisrupts'];
         cyberDefenseIsActive: CapabilitiesState['isCyberDefenseActive'];
     };
+};
+
+export const NEWS_PHASE = 'NEWS_PHASE';
+export type NewsPhaseAction = {
+    type: typeof NEWS_PHASE;
+    payload: {
+        news: NewsState;
+        gamePoints: GameInfoState['gamePoints'];
+    };
+};
+
+export const NEWSPOPUP_MINIMIZE_TOGGLE = 'NEWSPOPUP_MINIMIZE_TOGGLE';
+export type NewsPopupToggleAction = {
+    type: typeof NEWSPOPUP_MINIMIZE_TOGGLE;
+    payload: {};
 };

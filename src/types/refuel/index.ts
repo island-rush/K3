@@ -10,6 +10,7 @@ export type RefuelOpenAction = {
     };
 };
 
+// TODO: rename, this now closes the popup, no more minimize
 export const REFUELPOPUP_MINIMIZE_TOGGLE = 'REFUELPOPUP_MINIMIZE_TOGGLE';
 export type RefuelPopupToggleAction = {
     type: typeof REFUELPOPUP_MINIMIZE_TOGGLE;

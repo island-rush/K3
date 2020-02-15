@@ -1,12 +1,21 @@
 import { GameboardPiecesDataType } from '../board';
 import { BattleState, GameInfoState } from '../reducerTypes';
 
-export const SERVER_CONFIRM_BATTLE_SELECTION = 'SERVER_CONFIRM_BATTLE_SELECTION';
-export type ConfirmBattleSelectionRequestAction = {
-    type: typeof SERVER_CONFIRM_BATTLE_SELECTION;
+export const EVENT_BATTLE = 'EVENT_BATTLE';
+export type EventBattleAction = {
+    type: typeof EVENT_BATTLE;
     payload: {
-        friendlyPieces: any;
+        friendlyPieces: BattleState['friendlyPieces'];
+        enemyPieces: BattleState['enemyPieces'];
+        gameboardPieces: GameboardPiecesDataType;
+        gameStatus: GameInfoState['gameStatus'];
     };
+};
+
+export const BATTLEPOPUP_MINIMIZE_TOGGLE = 'BATTLEPOPUP_MINIMIZE_TOGGLE';
+export type BattlePopupToggleAction = {
+    type: typeof BATTLEPOPUP_MINIMIZE_TOGGLE;
+    payload: {};
 };
 
 export const BATTLE_PIECE_SELECT = 'BATTLE_PIECE_SELECT';
@@ -36,22 +45,11 @@ export type EnemyPieceSelectAction = {
     };
 };
 
-export const EVENT_BATTLE = 'EVENT_BATTLE';
-export type EventBattleAction = {
-    type: typeof EVENT_BATTLE;
+export const SERVER_CONFIRM_BATTLE_SELECTION = 'SERVER_CONFIRM_BATTLE_SELECTION';
+export type ConfirmBattleSelectionRequestAction = {
+    type: typeof SERVER_CONFIRM_BATTLE_SELECTION;
     payload: {
-        friendlyPieces: BattleState['friendlyPieces'];
-        enemyPieces: BattleState['enemyPieces'];
-        gameboardPieces: GameboardPiecesDataType;
-        gameStatus: GameInfoState['gameStatus'];
-    };
-};
-
-export const BATTLE_FIGHT_RESULTS = 'BATTLE_FIGHT_RESULTS';
-export type BattleResultsAction = {
-    type: typeof BATTLE_FIGHT_RESULTS;
-    payload: {
-        masterRecord: BattleState['masterRecord'];
+        friendlyPieces: any;
     };
 };
 
@@ -61,6 +59,14 @@ export type BattleSelectionsAction = {
     payload: {
         friendlyPieces: BattleState['friendlyPieces'];
         enemyPieces: BattleState['enemyPieces'];
+    };
+};
+
+export const BATTLE_FIGHT_RESULTS = 'BATTLE_FIGHT_RESULTS';
+export type BattleResultsAction = {
+    type: typeof BATTLE_FIGHT_RESULTS;
+    payload: {
+        masterRecord: BattleState['masterRecord'];
     };
 };
 
@@ -80,10 +86,4 @@ export type NoMoreBattlesAction = {
         gameboardPieces: GameboardPiecesDataType;
         gameStatus: GameInfoState['gameStatus'];
     };
-};
-
-export const BATTLEPOPUP_MINIMIZE_TOGGLE = 'BATTLEPOPUP_MINIMIZE_TOGGLE';
-export type BattlePopupToggleAction = {
-    type: typeof BATTLEPOPUP_MINIMIZE_TOGGLE;
-    payload: {};
 };
