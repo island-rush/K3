@@ -1,8 +1,8 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, EVENT_REFUEL, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_BATTLES, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from '../../../../constants';
+import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_BATTLES, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from '../../../../constants';
 // prettier-ignore
-import { ClearBattleAction, CombatPhaseAction, EnterContainerAction, EventBattleAction, EventRefuelAction, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, InvItemPlaceAction, NewRoundAction, NoMoreBattlesAction, PieceType, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RemoteSensingHitAction, SliceChangeAction } from '../../../../types';
+import { ClearBattleAction, CombatPhaseAction, EnterContainerAction, EventBattleAction, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, InvItemPlaceAction, NewRoundAction, NoMoreBattlesAction, PieceType, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RemoteSensingHitAction, SliceChangeAction } from '../../../../types';
 
 export function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
     const { type } = action;
@@ -23,7 +23,6 @@ export function gameboardReducer(state = initialGameboardEmpty, action: AnyActio
         case COMBAT_PHASE:
         case OUTER_PIECE_CLICK_ACTION:
         case INNER_PIECE_CLICK_ACTION:
-        case EVENT_REFUEL:
             for (const positionIndex in (action as GameboardPiecesUpdateActions).payload.gameboardPieces) {
                 freshBoard[positionIndex].pieces = (action as GameboardPiecesUpdateActions).payload.gameboardPieces[positionIndex];
             }
@@ -97,5 +96,4 @@ type GameboardPiecesUpdateActions =
     | EventBattleAction
     | CombatPhaseAction
     | EnterContainerAction
-    | ExitContainerAction
-    | EventRefuelAction;
+    | ExitContainerAction;
