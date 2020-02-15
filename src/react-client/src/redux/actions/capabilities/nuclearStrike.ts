@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { COMBAT_PHASE_ID, NUKE_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
-import { InvItemType, NukeSelectingAction } from '../../../../../types';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
+import { InvItemType, NukeSelectingAction, NUKE_SELECTING } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const nuclearStrike = (invItem: InvItemType) => {

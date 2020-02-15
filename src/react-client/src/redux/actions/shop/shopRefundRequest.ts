@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { SERVER_SHOP_REFUND_REQUEST } from '../../../../../constants';
-import { ShopItemType, ShopRefundRequestAction } from '../../../../../types';
+import { SERVER_SHOP_REFUND_REQUEST, ShopItemType, ShopRefundRequestAction } from '../../../../../types';
 
 /**
  * Action to refund an item from the shop.

@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { COMBAT_PHASE_ID, DRONE_SWARM_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
-import { DroneSwarmSelectingAction, InvItemType } from '../../../../../types';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
+import { DroneSwarmSelectingAction, DRONE_SWARM_SELECTING, InvItemType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const droneSwarms = (invItem: InvItemType) => {

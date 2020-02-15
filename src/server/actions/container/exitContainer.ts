@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN, NOT_WAITING_STATUS, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, AIRFIELD_TYPE, ALL_AIRFIELD_LOCATIONS } from '../../../constants';
-import { ExitContainerAction, ExitContainerRequestAction, SocketSession } from '../../../types';
+import { AIRFIELD_TYPE, ALL_AIRFIELD_LOCATIONS, COMBAT_PHASE_ID, CONTAINER_TYPES, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, NOT_WAITING_STATUS, SLICE_PLANNING_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { ExitContainerAction, ExitContainerRequestAction, INNER_PIECE_CLICK_ACTION, SocketSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 

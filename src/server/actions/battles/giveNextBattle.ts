@@ -1,8 +1,8 @@
 // prettier-ignore
-import { BLUE_TEAM_ID, EVENT_BATTLE, NOT_WAITING_STATUS, NO_MORE_BATTLES, RED_TEAM_ID } from '../../../constants';
-import { EventBattleAction, NoMoreBattlesAction } from '../../../types';
+import { BLUE_TEAM_ID, NOT_WAITING_STATUS, RED_TEAM_ID } from '../../../constants';
+import { EventBattleAction, EVENT_BATTLE, NoMoreBattlesAction, NO_MORE_BATTLES } from '../../../types';
 import { Battle, Game, Piece } from '../../classes';
-import { sendToTeam, sendToGame, userFeedbackAction } from '../../helpers';
+import { sendToGame, sendToTeam, userFeedbackAction } from '../../helpers';
 
 /**
  * Find the next battle in the battleQueue and send to this team (through a socket)

@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { COMBAT_PHASE_ID, SEA_MINE_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
-import { InvItemType, SeaMineSelectingAction } from '../../../../../types';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
+import { InvItemType, SeaMineSelectingAction, SEA_MINE_SELECTING } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const seaMines = (invItem: InvItemType) => {

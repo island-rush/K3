@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
-import { SERVER_MAIN_BUTTON_CLICK, WAITING_STATUS } from '../../../../constants';
-import { MainButtonClickRequestAction } from '../../../../types';
+import { WAITING_STATUS } from '../../../../constants';
+import { MainButtonClickRequestAction, SERVER_MAIN_BUTTON_CLICK } from '../../../../types';
 import { setUserfeedbackAction } from './setUserfeedbackAction';
 
 /**

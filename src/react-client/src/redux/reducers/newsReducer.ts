@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
-import { INITIAL_GAMESTATE, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, PURCHASE_PHASE } from '../../../../constants';
-import { GameInitialStateAction, NewsPhaseAction, NewsState } from '../../../../types';
+// prettier-ignore
+import { GameInitialStateAction, NewsPhaseAction, NewsState, INITIAL_GAMESTATE, NEWS_PHASE, PURCHASE_PHASE, NEWSPOPUP_MINIMIZE_TOGGLE } from '../../../../types';
 
 const initialNewsState: NewsState = {
     isActive: false,

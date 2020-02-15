@@ -1,8 +1,8 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SEA_MINES_TYPE_ID, SLICE_PLANNING_ID, TYPE_SEA, TRANSPORT_TYPE_ID, SEA_MINE_SELECTED, NOT_WAITING_STATUS } from '../../../constants';
-import { SeaMineRequestAction, SocketSession, SeaMineAction } from '../../../types';
-import { Game, InvItem, Piece, Capability } from '../../classes';
-import { redirectClient, sendUserFeedback, sendToTeam } from '../../helpers';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, SEA_MINES_TYPE_ID, SLICE_PLANNING_ID, TRANSPORT_TYPE_ID, TYPE_SEA } from '../../../constants';
+import { SeaMineAction, SeaMineRequestAction, SEA_MINE_SELECTED, SocketSession } from '../../../types';
+import { Capability, Game, InvItem, Piece } from '../../classes';
+import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
 /**
  * User request to use SeaMine capability.

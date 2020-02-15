@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { PIECE_PLACE_START, PLACE_PHASE_ID } from '../../../../../constants';
-import { InvItemType, PiecePlaceStartAction } from '../../../../../types';
+import { PLACE_PHASE_ID } from '../../../../../constants';
+import { InvItemType, PiecePlaceStartAction, PIECE_PLACE_START } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**

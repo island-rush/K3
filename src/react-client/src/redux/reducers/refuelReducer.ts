@@ -1,8 +1,7 @@
 import { AnyAction } from 'redux';
+import { TYPE_FUEL } from '../../../../constants';
 // prettier-ignore
-import { AIRCRAFT_CLICK, REFUELPOPUP_MINIMIZE_TOGGLE, REFUEL_OPEN, REFUEL_RESULTS, TANKER_CLICK, TYPE_FUEL, UNDO_FUEL_SELECTION } from '../../../../constants';
-// prettier-ignore
-import { AircraftClickAction, RefuelOpenAction, RefuelState, TankerClickAction, UndoFuelSelectionAction } from '../../../../types';
+import { AircraftClickAction, AIRCRAFT_CLICK, RefuelOpenAction, REFUELPOPUP_MINIMIZE_TOGGLE, RefuelState, REFUEL_OPEN, REFUEL_RESULTS, TankerClickAction, TANKER_CLICK, UndoFuelSelectionAction, UNDO_FUEL_SELECTION } from '../../../../types';
 
 const initialRefuelState: RefuelState = {
     isActive: false,

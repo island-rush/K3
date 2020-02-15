@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, DELETE_PLAN, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, NOT_WAITING_STATUS } from '../../../constants';
-import { DeletePlanAction, DeletePlanRequestAction, SocketSession } from '../../../types';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, SLICE_PLANNING_ID } from '../../../constants';
+import { DeletePlanAction, DeletePlanRequestAction, DELETE_PLAN, SocketSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 

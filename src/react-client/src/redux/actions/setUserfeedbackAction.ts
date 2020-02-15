@@ -1,5 +1,4 @@
-import { SET_USERFEEDBACK } from '../../../../constants';
-import { UserfeedbackAction } from '../../../../types';
+import { SET_USERFEEDBACK, UserfeedbackAction } from '../../../../types';
 
 /**
  * Helper function to create Redux Action to send userfeedback to the state.

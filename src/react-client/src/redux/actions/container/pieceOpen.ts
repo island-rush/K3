@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { CONTAINER_TYPES, PIECE_OPEN_ACTION, PIECE_CLOSE_ACTION } from '../../../../../constants';
-import { PieceOpenAction, PieceType, PieceCloseAction } from '../../../../../types';
+import { CONTAINER_TYPES } from '../../../../../constants';
+import { PieceCloseAction, PieceOpenAction, PieceType, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**

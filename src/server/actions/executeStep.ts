@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BLUE_TEAM_ID, CLEAR_SAM_DELETE, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, NEW_ROUND, PLACE_PHASE, PLACE_PHASE_ID, RED_TEAM_ID, ROUNDS_PER_COMBAT_PHASE, SAM_DELETED_PIECES, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../constants';
+import { BLUE_TEAM_ID, PLACE_PHASE_ID, RED_TEAM_ID, ROUNDS_PER_COMBAT_PHASE, WAITING_STATUS } from '../../constants';
 // prettier-ignore
-import { ClearDroneSwarmMineNotifyAction, ClearSamDeleteAction, ClearSeaMineNotifyAction, DroneSwarmHitNotifyAction, NewRoundAction, PlacePhaseAction, PlanType, SamDeletedPiecesAction, SeaMineHitNotifyAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../types';
+import { ClearDroneSwarmMineNotifyAction, ClearSamDeleteAction, ClearSeaMineNotifyAction, CLEAR_SAM_DELETE, DroneSwarmHitNotifyAction, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, NewRoundAction, NEW_ROUND, PlacePhaseAction, PLACE_PHASE, PlanType, SamDeletedPiecesAction, SAM_DELETED_PIECES, SeaMineHitNotifyAction, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SocketSession, UpdateAirfieldAction, UpdateFlagAction, UPDATE_AIRFIELDS, UPDATE_FLAGS } from '../../types';
 import { Battle, Capability, Game, Piece, Plan } from '../classes';
 import { sendToGame, sendToTeam } from '../helpers';
 import { giveNextBattle } from './battles';

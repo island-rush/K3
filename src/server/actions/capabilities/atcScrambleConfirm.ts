@@ -1,6 +1,6 @@
 // prettier-ignore
-import { ALL_AIRFIELD_LOCATIONS, ATC_SCRAMBLE_SELECTED, ATC_SCRAMBLE_TYPE_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, SLICE_PLANNING_ID, TYPE_MAIN, NOT_WAITING_STATUS } from '../../../constants';
-import { AtcScrambleAction, AtcScrambleRequestAction, SocketSession } from '../../../types';
+import { ALL_AIRFIELD_LOCATIONS, ATC_SCRAMBLE_TYPE_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { AtcScrambleAction, AtcScrambleRequestAction, ATC_SCRAMBLE_SELECTED, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 

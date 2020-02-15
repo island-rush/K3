@@ -1,6 +1,6 @@
 // prettier-ignore
-import { BIOLOGICAL_WEAPONS_TYPE_ID, BIO_WEAPON_SELECTED, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LIST_ALL_POSITIONS, SLICE_PLANNING_ID, TYPE_MAIN, NOT_WAITING_STATUS } from '../../../constants';
-import { BioWeaponsAction, BioWeaponsRequestAction, SocketSession } from '../../../types';
+import { BIOLOGICAL_WEAPONS_TYPE_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LIST_ALL_POSITIONS, NOT_WAITING_STATUS, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { BioWeaponsAction, BioWeaponsRequestAction, BIO_WEAPON_SELECTED, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 

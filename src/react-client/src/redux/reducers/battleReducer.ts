@@ -1,8 +1,6 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CLEAR_BATTLE, ENEMY_PIECE_SELECT, EVENT_BATTLE, INITIAL_GAMESTATE, NO_MORE_BATTLES, TARGET_PIECE_SELECT, BATTLE_SELECTIONS } from '../../../../constants';
-// prettier-ignore
-import { BattlePieceSelectAction, BattleResultsAction, BattleState, EnemyPieceSelectAction, EventBattleAction, GameInitialStateAction, TargetPieceClickAction, BattleSelectionsAction } from '../../../../types';
+import { BattlePieceSelectAction, BATTLEPOPUP_MINIMIZE_TOGGLE, BattleResultsAction, BattleSelectionsAction, BattleState, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BATTLE_SELECTIONS, CLEAR_BATTLE, EnemyPieceSelectAction, ENEMY_PIECE_SELECT, EventBattleAction, EVENT_BATTLE, GameInitialStateAction, INITIAL_GAMESTATE, NO_MORE_BATTLES, TargetPieceClickAction, TARGET_PIECE_SELECT } from '../../../../types';
 
 const initialBattleState: BattleState = {
     isMinimized: false,

@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { COMBAT_PHASE_ID, SERVER_CYBER_DEFENSE_CHECK, SLICE_PLANNING_ID } from '../../../../../constants';
-import { CyberDefenseCheckRequest, InvItemType } from '../../../../../types';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
+import { CyberDefenseCheckRequest, InvItemType, SERVER_CYBER_DEFENSE_CHECK } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const cyberDefenseCheck = (invItem: InvItemType) => {

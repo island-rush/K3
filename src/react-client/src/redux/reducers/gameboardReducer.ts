@@ -1,8 +1,7 @@
 import { AnyAction } from 'redux';
+import { initialGameboardEmpty } from '../../../../constants';
 // prettier-ignore
-import { CLEAR_BATTLE, COMBAT_PHASE, EVENT_BATTLE, initialGameboardEmpty, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, NEW_ROUND, NO_MORE_BATTLES, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PLACE_PHASE, RAISE_MORALE_SELECTED, REFUEL_RESULTS, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, SLICE_CHANGE } from '../../../../constants';
-// prettier-ignore
-import { ClearBattleAction, CombatPhaseAction, EnterContainerAction, EventBattleAction, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, InvItemPlaceAction, NewRoundAction, NoMoreBattlesAction, PieceType, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RemoteSensingHitAction, SliceChangeAction } from '../../../../types';
+import { ClearBattleAction, CLEAR_BATTLE, CombatPhaseAction, COMBAT_PHASE, EnterContainerAction, EventBattleAction, EVENT_BATTLE, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, InvItemPlaceAction, NewRoundAction, NEW_ROUND, NoMoreBattlesAction, NO_MORE_BATTLES, OUTER_PIECE_CLICK_ACTION, PieceType, PIECE_PLACE, PlacePhaseAction, PLACE_PHASE, RaiseMoraleAction, RAISE_MORALE_SELECTED, REFUEL_RESULTS, RemoteSensingAction, RemoteSensingHitAction, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, SliceChangeAction, SLICE_CHANGE } from '../../../../types';
 
 export function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
     const { type } = action;

@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, REFUEL_RESULTS, TYPE_AIR, TYPE_FUEL } from '../../../constants';
-import { ConfirmFuelSelectionRequestAction, FuelResultsAction, PieceType, SocketSession } from '../../../types';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, TYPE_AIR, TYPE_FUEL } from '../../../constants';
+import { ConfirmFuelSelectionRequestAction, FuelResultsAction, PieceType, REFUEL_RESULTS, SocketSession } from '../../../types';
 import { Capability, Game } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 

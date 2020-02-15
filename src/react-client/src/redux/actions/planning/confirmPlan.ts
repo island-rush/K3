@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { SERVER_CONFIRM_PLAN } from '../../../../../constants';
-import { ConfirmPlanRequestAction } from '../../../../../types';
+import { ConfirmPlanRequestAction, SERVER_CONFIRM_PLAN } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
