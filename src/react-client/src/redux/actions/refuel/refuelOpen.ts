@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../..';
-import { AIR_REFUELING_SQUADRON_ID, ATTACK_HELICOPTER_TYPE_ID, PIECES_WITH_FUEL } from '../../../../../constants';
+// prettier-ignore
+import { AIR_REFUELING_SQUADRON_ID, ATTACK_HELICOPTER_TYPE_ID, COMBAT_PHASE_ID, PIECES_WITH_FUEL, TYPE_AIR, WAITING_STATUS } from '../../../../../constants';
 import { PieceType, RefuelOpenAction, REFUEL_OPEN } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
@@ -10,6 +11,24 @@ import { setUserfeedbackAction } from '../setUserfeedbackAction';
 export const refuelOpen = (piece: PieceType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameInfo, gameboard } = getState();
+
+        const { gameControllers, gameStatus, gamePhase } = gameInfo;
+
+        if (!gameControllers.includes(TYPE_AIR)) {
+            dispatch(setUserfeedbackAction('must be air commander to do refueling'));
+            return;
+        }
+
+        if (gamePhase !== COMBAT_PHASE_ID) {
+            dispatch(setUserfeedbackAction('must be combat phase to open air refuel.'));
+            return;
+        }
+
+        // TODO: better messages for this
+        if (gameStatus === WAITING_STATUS) {
+            dispatch(setUserfeedbackAction('already confirmed waiting for other team.'));
+            return;
+        }
 
         if (piece.pieceTeamId !== gameInfo.gameTeam) {
             dispatch(setUserfeedbackAction('piece does not belong to you'));

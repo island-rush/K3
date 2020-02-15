@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { AtcScrambleSelectingAction, ATC_SCRAMBLE_SELECTED, ATC_SCRAMBLE_SELECTING, BioWeaponSelectingAction, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, BombardmentSelectingAction, BOMBARDMENT_SELECTED, BOMBARDMENT_SELECTING, CANCEL_PLAN, CommInterruptSelectingAction, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, ConfirmPlanAction, DeletePlanAction, DELETE_PLAN, DroneSwarmSelectingAction, DRONE_SWARM_SELECTED, DRONE_SWARM_SELECTING, GameInitialStateAction, GoldenEyeSelectingAction, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, InsurgencySelectingAction, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MissileDisruptSelectingAction, MissileSelectingAction, MISSILE_DISRUPT_SELECTED, MISSILE_DISRUPT_SELECTING, MISSILE_SELECTED, MISSILE_SELECTING, NukeSelectingAction, NUKE_SELECTED, NUKE_SELECTING, PiecePlaceStartAction, PIECE_PLACE, PIECE_PLACE_START, PlanningSelectAction, PlanningState, PLANNING_SELECT, PLAN_WAS_CONFIRMED, RaiseMoraleSelectingAction, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, RemoteSenseSelectingAction, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RodsFromGodSelectingAction, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SeaMineSelectingAction, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SLICE_CHANGE, START_PLAN, UNDO_MOVE } from '../../../../types';
+import { AtcScrambleSelectingAction, ATC_SCRAMBLE_SELECTED, ATC_SCRAMBLE_SELECTING, BioWeaponSelectingAction, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, BombardmentSelectingAction, BOMBARDMENT_SELECTED, BOMBARDMENT_SELECTING, CANCEL_PLAN, CommInterruptSelectingAction, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, ConfirmPlanAction, DeletePlanAction, DELETE_PLAN, DroneSwarmSelectingAction, DRONE_SWARM_SELECTED, DRONE_SWARM_SELECTING, GameInitialStateAction, GoldenEyeSelectingAction, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, InsurgencySelectingAction, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MissileDisruptSelectingAction, MissileSelectingAction, MISSILE_DISRUPT_SELECTED, MISSILE_DISRUPT_SELECTING, MISSILE_SELECTED, MISSILE_SELECTING, NukeSelectingAction, NUKE_SELECTED, NUKE_SELECTING, PiecePlaceStartAction, PIECE_PLACE, PIECE_PLACE_START, PlanningSelectAction, PlanningState, PLANNING_SELECT, PLAN_WAS_CONFIRMED, RaiseMoraleSelectingAction, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, RemoteSenseSelectingAction, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RodsFromGodSelectingAction, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SeaMineSelectingAction, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SLICE_CHANGE, START_PLAN, UNDO_MOVE } from '../../../../types';
 
 const initialPlanningState: PlanningState = {
     isActive: false,
@@ -62,6 +62,14 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
             stateCopy.invItem = null;
             stateCopy.isActive = false;
             stateCopy.isSelectingCommander = false;
+            return stateCopy;
+
+        case INNER_TRANSPORT_PIECE_CLICK_ACTION:
+            stateCopy.isActive = true;
+            return stateCopy;
+
+        case INNER_PIECE_CLICK_ACTION:
+            stateCopy.isActive = false;
             return stateCopy;
 
         case INSURGENCY_SELECTING:

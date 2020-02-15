@@ -48,12 +48,7 @@ export class MainButton extends Component<Props> {
                 style={mainButtonStyle}
                 onClick={event => {
                     event.preventDefault();
-                    // normally confirms are obtrusive UI, and should use something else // TODO: confirm dialog box (instead of default window one, make a component for it (might be hard))
-                    if (gameStatus !== WAITING_STATUS) {
-                        if (window.confirm('Are you sure you want to move on?')) {
-                            mainButtonClick();
-                        }
-                    }
+                    mainButtonClick();
                     event.stopPropagation();
                 }}
             >

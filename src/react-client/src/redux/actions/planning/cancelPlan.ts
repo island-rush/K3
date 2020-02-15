@@ -9,9 +9,9 @@ import { setUserfeedbackAction } from '../setUserfeedbackAction';
  */
 export const cancelPlan = () => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
-        const { gameboardMeta, planning } = getState();
+        const { gameboardMeta, planning, container } = getState();
 
-        if (planning.isActive) {
+        if (planning.isActive || container.isSelectingHex) {
             const preventPlanAction: PreventPlanAction = {
                 type: CANCEL_PLAN,
                 payload: {}

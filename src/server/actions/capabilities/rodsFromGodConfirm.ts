@@ -47,6 +47,7 @@ export const rodsFromGodConfirm = async (session: SocketSession, action: RodsFro
     }
 
     // already confirmed done
+    // TODO: makes better sense with === WAITING_STATUS, change on other functions
     if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
         sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;

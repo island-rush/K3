@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { ALL_GROUND_TYPES, distanceMatrix, initialGameboardEmpty, TRANSPORT_TYPE_ID } from '../../../../constants';
 // prettier-ignore
-import { ContainerState, EnterContainerAction, ExitContainerAction, ExitTransportContainerAction, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, OUTER_PIECE_CLICK_ACTION, PieceOpenAction, PieceType, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION } from '../../../../types';
+import { ContainerState, EnterContainerAction, ExitContainerAction, ExitTransportContainerAction, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, OUTER_PIECE_CLICK_ACTION, PieceOpenAction, PieceType, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, CANCEL_PLAN } from '../../../../types';
 
 const initialContainerState: ContainerState = {
     isActive: false,
@@ -91,6 +91,12 @@ export function containerReducer(state = initialContainerState, action: AnyActio
                 }
             );
             stateCopy.outerPieces.push((action as ExitContainerAction).payload.selectedPiece);
+            return stateCopy;
+
+        case CANCEL_PLAN:
+            stateCopy.isActive = true;
+            stateCopy.isSelectingHex = false;
+            stateCopy.innerPieceToDrop = null;
             return stateCopy;
 
         default:
