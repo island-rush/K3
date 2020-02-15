@@ -31,13 +31,17 @@ export const sendToGame = (gameId: GameType['gameId'], action: { type: string; [
     io.in(`game${gameId}`).emit(SOCKET_SERVER_SENDING_ACTION, action);
 };
 
-export const sendUserFeedback = async (socketId: Socket['id'], userFeedback: string) => {
-    const serverAction: UserfeedbackAction = {
+export const userFeedbackAction = (userFeedback: string) => {
+    const userFeedbackAction: UserfeedbackAction = {
         type: SET_USERFEEDBACK,
         payload: {
             userFeedback
         }
     };
 
-    sendToClient(socketId, serverAction);
+    return userFeedbackAction;
+};
+
+export const sendUserFeedback = async (socketId: Socket['id'], userFeedback: string) => {
+    sendToClient(socketId, userFeedbackAction(userFeedback));
 };

@@ -2,13 +2,13 @@
 import { BLUE_TEAM_ID, EVENT_BATTLE, NOT_WAITING_STATUS, NO_MORE_BATTLES, RED_TEAM_ID } from '../../../constants';
 import { EventBattleAction, NoMoreBattlesAction } from '../../../types';
 import { Battle, Game, Piece } from '../../classes';
-import { sendToTeam } from '../../helpers';
+import { sendToTeam, sendToGame, userFeedbackAction } from '../../helpers';
 
 /**
  * Find the next battle in the battleQueue and send to this team (through a socket)
  */
 export const giveNextBattle = async (thisGame: Game) => {
-    const { gameId } = thisGame;
+    const { gameId, flag0, flag1, flag11, flag12 } = thisGame;
 
     const battle = await Battle.getNext(gameId);
 
@@ -30,6 +30,22 @@ export const giveNextBattle = async (thisGame: Game) => {
 
         sendToTeam(gameId, BLUE_TEAM_ID, NoMoreBattlesActionBlue);
         sendToTeam(gameId, RED_TEAM_ID, NoMoreBattlesActionRed);
+
+        // TODO: sending multiple actions here from the server, not efficient but probably simplist...consider turning this function into a class function or helper function.
+        // need the action above to send the updated piece locations, could combine and send 1 action altogether (more efficient) but might lead to messier code
+        if (flag0 === BLUE_TEAM_ID && flag1 === BLUE_TEAM_ID && flag11 === RED_TEAM_ID && flag12 === RED_TEAM_ID) {
+            sendToGame(gameId, userFeedbackAction('it was a tie?'));
+            return;
+        }
+        if (flag0 === BLUE_TEAM_ID && flag1 === BLUE_TEAM_ID) {
+            sendToGame(gameId, userFeedbackAction('blue team won'));
+            return;
+        }
+        if (flag11 === RED_TEAM_ID && flag12 === RED_TEAM_ID) {
+            sendToGame(gameId, userFeedbackAction('red team won'));
+            return;
+        }
+
         return;
     }
 
