@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { SERVER_SHOP_PURCHASE_REQUEST } from '../../../../../constants';
-import { ShopPurchaseRequestAction } from '../../../../../types';
+import { SERVER_SHOP_PURCHASE_REQUEST, ShopPurchaseRequestAction } from '../../../../../types';
 
 /**
  * Action to purchase a shop item.

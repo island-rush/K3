@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { REFUELPOPUP_MINIMIZE_TOGGLE } from '../../../../../constants';
-import { RefuelPopupToggleAction } from '../../../../../types';
+import { RefuelPopupToggleAction, REFUELPOPUP_MINIMIZE_TOGGLE } from '../../../../../types';
 
 /**
  * Action to toggle refuel popup minimized.

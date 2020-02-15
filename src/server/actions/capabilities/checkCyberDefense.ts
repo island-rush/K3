@@ -1,6 +1,6 @@
 // prettier-ignore
-import { BLUE_TEAM_ID, COMBAT_PHASE_ID, CYBER_DEFENSE_CHECK, CYBER_DOM_CHECK_TYPE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RED_TEAM_ID, SLICE_PLANNING_ID, TYPE_MAIN, NOT_WAITING_STATUS } from '../../../constants';
-import { CyberDefenseCheckAction, CyberDefenseCheckRequest, SocketSession } from '../../../types';
+import { BLUE_TEAM_ID, COMBAT_PHASE_ID, CYBER_DOM_CHECK_TYPE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { CyberDefenseCheckAction, CyberDefenseCheckRequest, CYBER_DEFENSE_CHECK, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 

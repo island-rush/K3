@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { AIRCRAFT_CLICK } from '../../../../../constants';
-import { AircraftClickAction, PieceType } from '../../../../../types';
+import { AircraftClickAction, AIRCRAFT_CLICK, PieceType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 // TODO: could have more checks for current game event / phase / slice / other easy stuff that should be obvious

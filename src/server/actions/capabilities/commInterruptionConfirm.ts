@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUP_SELECTED, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LIST_ALL_POSITIONS, SLICE_PLANNING_ID, TYPE_MAIN, NOT_WAITING_STATUS } from '../../../constants';
-import { CommInterruptAction, CommInterruptRequestAction, SocketSession } from '../../../types';
+import { COMBAT_PHASE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LIST_ALL_POSITIONS, NOT_WAITING_STATUS, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { CommInterruptAction, CommInterruptRequestAction, COMM_INTERRUP_SELECTED, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 

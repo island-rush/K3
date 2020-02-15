@@ -1,7 +1,7 @@
 // prettier-ignore
-import { BATTLE_FIGHT_RESULTS, BATTLE_SELECTIONS, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../../constants';
+import { BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, WAITING_STATUS } from '../../../constants';
 // prettier-ignore
-import { BattleResultsAction, BattleSelectionsAction, BattleState, ConfirmBattleSelectionRequestAction, PieceType, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../../types';
+import { BattleResultsAction, BattleSelectionsAction, BattleState, BATTLE_FIGHT_RESULTS, BATTLE_SELECTIONS, ConfirmBattleSelectionRequestAction, PieceType, SocketSession, UpdateAirfieldAction, UpdateFlagAction, UPDATE_AIRFIELDS, UPDATE_FLAGS } from '../../../types';
 import { Battle, Game } from '../../classes';
 import { redirectClient, sendToGame, sendToTeam, sendUserFeedback } from '../../helpers';
 import { giveNextBattle } from './giveNextBattle';

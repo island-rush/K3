@@ -1,6 +1,6 @@
 // prettier-ignore
-import { BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_PURCHASE, TYPE_COSTS, TYPE_MAIN, NOT_WAITING_STATUS } from '../../../constants';
-import { ShopPurchaseAction, ShopPurchaseRequestAction, SocketSession } from '../../../types';
+import { BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
+import { ShopPurchaseAction, ShopPurchaseRequestAction, SHOP_PURCHASE, SocketSession } from '../../../types';
 import { Game, ShopItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 

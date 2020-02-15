@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
-import { MENU_SELECT } from '../../../../constants';
-import { MenuIndexType, MenuSelectAction } from '../../../../types';
+import { MenuIndexType, MenuSelectAction, MENU_SELECT } from '../../../../types';
 
 /**
  * Dispatch to Redux store that user selected menu.

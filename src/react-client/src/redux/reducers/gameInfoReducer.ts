@@ -1,8 +1,8 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { COMBAT_PHASE, COMBAT_PHASE_ID, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEUTRAL_TEAM_ID, NEWS_PHASE, NEWS_PHASE_ID, NEW_ROUND, NOT_WAITING_STATUS, NO_MORE_BATTLES, PLACE_PHASE, PLACE_PHASE_ID, PURCHASE_PHASE, PURCHASE_PHASE_ID, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS, BATTLE_SELECTIONS, BATTLE_FIGHT_RESULTS } from '../../../../constants';
+import { COMBAT_PHASE_ID, NEUTRAL_TEAM_ID, NEWS_PHASE_ID, NOT_WAITING_STATUS, PLACE_PHASE_ID, PURCHASE_PHASE_ID, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, WAITING_STATUS } from '../../../../constants';
 // prettier-ignore
-import { EventBattleAction, GameInfoState, GameInitialStateAction, NewRoundAction, NewsPhaseAction, NoMoreBattlesAction, ShopPurchaseAction, ShopRefundAction, UpdateAirfieldAction, UpdateFlagAction } from '../../../../types';
+import { BATTLE_FIGHT_RESULTS, BATTLE_SELECTIONS, COMBAT_PHASE, EventBattleAction, EVENT_BATTLE, GameInfoState, GameInitialStateAction, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NewRoundAction, NewsPhaseAction, NEWS_PHASE, NEW_ROUND, NoMoreBattlesAction, NO_MORE_BATTLES, PLACE_PHASE, PURCHASE_PHASE, ShopPurchaseAction, ShopRefundAction, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, UpdateAirfieldAction, UpdateFlagAction, UPDATE_AIRFIELDS, UPDATE_FLAGS } from '../../../../types';
 
 const initialGameInfoState: GameInfoState = {
     gameSection: 'Loading...',

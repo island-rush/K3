@@ -1,8 +1,8 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { Battle, InvItem, Piece, Plan } from '..';
 // prettier-ignore
-import { BLUE_TEAM_ID, INITIAL_GAMESTATE, NEWS_PHASE_ID, RED_TEAM_ID } from '../../../constants';
-import { BattleState, BlueOrRedTeamId, ControllerType, GameInitialStateAction, NewsType, PieceType } from '../../../types';
+import { BLUE_TEAM_ID, NEWS_PHASE_ID, RED_TEAM_ID } from '../../../constants';
+import { BattleState, BlueOrRedTeamId, ControllerType, GameInitialStateAction, INITIAL_GAMESTATE, NewsType, PieceType } from '../../../types';
 import { pool } from '../../database';
 import { Capability } from '../Capability';
 import { ShopItem } from '../ShopItem';

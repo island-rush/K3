@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
+import { INV_MENU_INDEX, NO_MENU_INDEX, SHOP_MENU_INDEX } from '../../../../constants';
 // prettier-ignore
-import { ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INSURGENCY_SELECTING, MENU_SELECT, MISSILE_DISRUPT_SELECTING, NEWS_PHASE, NO_MENU_INDEX, NUKE_SELECTING, PIECE_CLEAR_SELECTION, PIECE_CLICK, PLACE_PHASE, PLAN_WAS_CONFIRMED, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING, SHOP_MENU_INDEX } from '../../../../constants';
-import { GameboardMetaState, HighlightPositionsAction, MenuSelectAction, PieceClickAction, PositionSelectAction } from '../../../../types';
+import { ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GameboardMetaState, GOLDEN_EYE_SELECTING, HighlightPositionsAction, HIGHLIGHT_POSITIONS, INSURGENCY_SELECTING, MenuSelectAction, MENU_SELECT, MISSILE_DISRUPT_SELECTING, NEWS_PHASE, NUKE_SELECTING, PieceClickAction, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_PLACE, PIECE_PLACE_START, PLACE_PHASE, PLAN_WAS_CONFIRMED, PositionSelectAction, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING } from '../../../../types';
 
 const initialGameboardMeta: GameboardMetaState = {
     // TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
@@ -26,6 +26,14 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
                 (action as MenuSelectAction).payload.selectedMenuId !== stateCopy.selectedMenuId
                     ? (action as MenuSelectAction).payload.selectedMenuId
                     : NO_MENU_INDEX;
+            return stateCopy;
+
+        case PIECE_PLACE_START:
+            stateCopy.selectedMenuId = NO_MENU_INDEX;
+            return stateCopy;
+
+        case PIECE_PLACE:
+            stateCopy.selectedMenuId = INV_MENU_INDEX;
             return stateCopy;
 
         case POSITION_SELECT:

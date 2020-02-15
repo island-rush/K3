@@ -1,8 +1,8 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { ACCESS_TAG, ALREADY_IN_TAG, BAD_REQUEST_TAG, BAD_SESSION, DATABASE_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGIN_TAG, NOT_LOGGED_IN_TAG, SET_USERFEEDBACK, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../constants';
+import { ACCESS_TAG, ALREADY_IN_TAG, BAD_REQUEST_TAG, BAD_SESSION, DATABASE_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGIN_TAG, NOT_LOGGED_IN_TAG, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../constants';
 import { io } from '../server';
-import { GameType, UserfeedbackAction, BlueOrRedTeamId } from '../types';
+import { BlueOrRedTeamId, GameType, SET_USERFEEDBACK, UserfeedbackAction } from '../types';
 
 export type ALL_ERROR_TYPES =
     | typeof LOGIN_TAG
@@ -31,13 +31,17 @@ export const sendToGame = (gameId: GameType['gameId'], action: { type: string; [
     io.in(`game${gameId}`).emit(SOCKET_SERVER_SENDING_ACTION, action);
 };
 
-export const sendUserFeedback = async (socketId: Socket['id'], userFeedback: string) => {
-    const serverAction: UserfeedbackAction = {
+export const userFeedbackAction = (userFeedback: string) => {
+    const userFeedbackAction: UserfeedbackAction = {
         type: SET_USERFEEDBACK,
         payload: {
             userFeedback
         }
     };
 
-    sendToClient(socketId, serverAction);
+    return userFeedbackAction;
+};
+
+export const sendUserFeedback = async (socketId: Socket['id'], userFeedback: string) => {
+    sendToClient(socketId, userFeedbackAction(userFeedback));
 };

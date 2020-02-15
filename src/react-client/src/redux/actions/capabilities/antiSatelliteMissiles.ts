@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { COMBAT_PHASE_ID, SERVER_ANTISAT_CONFIRM, SLICE_PLANNING_ID } from '../../../../../constants';
-import { AntiSatRequestAction, InvItemType } from '../../../../../types';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
+import { AntiSatRequestAction, InvItemType, SERVER_ANTISAT_CONFIRM } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const antiSatelliteMissiles = (invItem: InvItemType) => {

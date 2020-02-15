@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, START_PLAN, TYPE_OWNERS } from '../../../../../constants';
-import { StartPlanAction } from '../../../../../types';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from '../../../../../constants';
+import { StartPlanAction, START_PLAN } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 // TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)

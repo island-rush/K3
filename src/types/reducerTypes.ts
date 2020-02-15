@@ -201,6 +201,11 @@ export type PlanningState = {
     isUsingCapability: boolean;
 
     /**
+     * If the player is selecting a position to place a piece on, null if not, invItem if selecting
+     */
+    placementSelecting: InvItemType | null;
+
+    /**
      * Contains the missile piece that was selected to use.
      */
     missileSelecting: PieceType | null;

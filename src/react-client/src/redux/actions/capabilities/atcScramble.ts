@@ -1,8 +1,8 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { InvItemType, AtcScrambleSelectingAction } from '../../../../../types';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
+import { AtcScrambleSelectingAction, ATC_SCRAMBLE_SELECTING, InvItemType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, ATC_SCRAMBLE_SELECTING } from '../../../../../constants';
 
 export const atcScramble = (invItem: InvItemType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {

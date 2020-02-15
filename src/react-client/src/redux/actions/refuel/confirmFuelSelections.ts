@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { SERVER_CONFIRM_FUEL_SELECTION } from '../../../../../constants';
-import { ConfirmFuelSelectionRequestAction } from '../../../../../types';
+import { ConfirmFuelSelectionRequestAction, SERVER_CONFIRM_FUEL_SELECTION } from '../../../../../types';
 
 /**
  * Action to confirm all fuel selections from specific tankers to specific aircraft.

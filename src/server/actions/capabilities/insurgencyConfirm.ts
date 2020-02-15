@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, INSURGENCY_SELECTED, INSURGENCY_TYPE_ID, LIST_ALL_POSITIONS, SLICE_PLANNING_ID, TYPE_MAIN, ALL_LAND_POSITIONS, NOT_WAITING_STATUS } from '../../../constants';
-import { InsurgencyAction, InsurgencyRequestAction, SocketSession } from '../../../types';
+import { ALL_LAND_POSITIONS, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, INSURGENCY_TYPE_ID, LIST_ALL_POSITIONS, NOT_WAITING_STATUS, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { InsurgencyAction, InsurgencyRequestAction, INSURGENCY_SELECTED, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 

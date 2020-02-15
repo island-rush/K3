@@ -1,9 +1,9 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
 // prettier-ignore
-import { ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, HIGHLIGHT_POSITIONS, initialGameboardEmpty, INSURGENCY_TYPE_ID, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NUCLEAR_STRIKE_TYPE_ID, NUKE_RANGE, PLANNING_SELECT, POSITION_SELECT, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, SERVER_ATC_SCRAMBLE_CONFIRM, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_NUKE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, TYPE_TERRAIN, NO_POSITION, LIST_ALL_POSITIONS_TYPE } from '../../../../constants';
+import { ATC_SCRAMBLE_TYPE_ID, BIOLOGICAL_WEAPONS_TYPE_ID, COMMUNICATIONS_INTERRUPTION_TYPE_ID, COMM_INTERRUPT_RANGE, distanceMatrix, DRONE_SWARMS_TYPE_ID, GOLDEN_EYE_RANGE, GOLDEN_EYE_TYPE_ID, initialGameboardEmpty, INSURGENCY_TYPE_ID, LIST_ALL_POSITIONS, LIST_ALL_POSITIONS_TYPE, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, NO_POSITION, NUCLEAR_STRIKE_TYPE_ID, NUKE_RANGE, REMOTE_SENSING_RANGE, REMOTE_SENSING_TYPE_ID, RODS_FROM_GOD_TYPE_ID, SEA_MINES_TYPE_ID, TYPE_TERRAIN } from '../../../../constants';
 //prettier-ignore
-import { AtcScrambleRequestAction, BioWeaponsRequestAction, CommInterruptRequestAction, ExitTransportContainerRequestAction, GoldenEyeRequestAction, HighlightPositionsAction, InsurgencyRequestAction, NukeRequestAction, PlanningSelectAction, PositionSelectAction, RemoteSensingRequestAction, RodsFromGodRequestAction } from "../../../../types";
+import { AtcScrambleRequestAction, BioWeaponsRequestAction, CommInterruptRequestAction, ExitTransportContainerRequestAction, GoldenEyeRequestAction, HighlightPositionsAction, HIGHLIGHT_POSITIONS, InsurgencyRequestAction, InvItemPlaceRequestAction, NukeRequestAction, PlanningSelectAction, PLANNING_SELECT, PositionSelectAction, POSITION_SELECT, RemoteSensingRequestAction, RodsFromGodRequestAction, SERVER_ATC_SCRAMBLE_CONFIRM, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_NUKE_CONFIRM, SERVER_PIECE_PLACE, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM } from "../../../../types";
 import { setUserfeedbackAction } from './setUserfeedbackAction';
 
 /**
@@ -12,6 +12,20 @@ import { setUserfeedbackAction } from './setUserfeedbackAction';
 export const selectPosition = (selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, planning, container } = getState();
+
+        if (planning.isActive && planning.placementSelecting && LIST_ALL_POSITIONS.includes(selectedPositionId)) {
+            // TODO: could do client side checks for terrain and other simple things...
+
+            const clientAction: InvItemPlaceRequestAction = {
+                type: SERVER_PIECE_PLACE,
+                payload: {
+                    invItemId: planning.placementSelecting.invItemId,
+                    selectedPosition: selectedPositionId
+                }
+            };
+            sendToServer(clientAction);
+            return;
+        }
 
         //selecting the hex to put piece that is inside container
         if (container.isSelectingHex) {

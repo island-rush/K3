@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { SERVER_CONFIRM_BATTLE_SELECTION, WAITING_STATUS } from '../../../../../constants';
-import { ConfirmBattleSelectionRequestAction } from '../../../../../types';
+import { WAITING_STATUS } from '../../../../../constants';
+import { ConfirmBattleSelectionRequestAction, SERVER_CONFIRM_BATTLE_SELECTION } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const confirmBattleSelections = () => {

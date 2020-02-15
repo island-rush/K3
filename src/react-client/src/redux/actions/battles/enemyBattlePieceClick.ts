@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { ENEMY_PIECE_SELECT, WAITING_STATUS } from '../../../../../constants';
-import { EnemyPieceSelectAction } from '../../../../../types';
+import { WAITING_STATUS } from '../../../../../constants';
+import { EnemyPieceSelectAction, ENEMY_PIECE_SELECT } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number) => {

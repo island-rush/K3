@@ -34,7 +34,7 @@ const battlePopupMinimizeStyle: any = {
 
 const isMinimizedStyle: any = {
     border: '2px solid red',
-    top: '35%',
+    top: '50%',
     margin: '2%'
 };
 

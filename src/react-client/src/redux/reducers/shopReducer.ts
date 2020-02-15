@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
-import { INITIAL_GAMESTATE, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../../../../constants';
-import { GameInitialStateAction, ShopItemType, ShopPurchaseAction, ShopRefundAction, ShopState } from '../../../../types';
+// prettier-ignore
+import { GameInitialStateAction, INITIAL_GAMESTATE, ShopItemType, ShopPurchaseAction, ShopRefundAction, ShopState, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER } from '../../../../types';
 
 const initialShopState: ShopState = [];
 

@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../..';
-import { AIR_REFUELING_SQUADRON_ID, ATTACK_HELICOPTER_TYPE_ID, PIECES_WITH_FUEL, REFUEL_OPEN } from '../../../../../constants';
-import { PieceType, RefuelOpenAction } from '../../../../../types';
+import { AIR_REFUELING_SQUADRON_ID, ATTACK_HELICOPTER_TYPE_ID, PIECES_WITH_FUEL } from '../../../../../constants';
+import { PieceType, RefuelOpenAction, REFUEL_OPEN } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**

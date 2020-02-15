@@ -1,13 +1,12 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { ATC_SCRAMBLE_SELECTED, ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, BOMBARDMENT_SELECTED, BOMBARDMENT_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, DELETE_PLAN, DRONE_SWARM_SELECTED, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MISSILE_DISRUPT_SELECTED, MISSILE_DISRUPT_SELECTING, MISSILE_SELECTED, MISSILE_SELECTING, NUKE_SELECTED, NUKE_SELECTING, PLANNING_SELECT, PLAN_WAS_CONFIRMED, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SLICE_CHANGE, START_PLAN, UNDO_MOVE } from '../../../../constants';
-// prettier-ignore
-import { AtcScrambleSelectingAction, BioWeaponSelectingAction, BombardmentSelectingAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, DroneSwarmSelectingAction, GameInitialStateAction, GoldenEyeSelectingAction, InsurgencySelectingAction, MissileDisruptSelectingAction, MissileSelectingAction, NukeSelectingAction, PlanningSelectAction, PlanningState, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RodsFromGodSelectingAction, SeaMineSelectingAction } from '../../../../types';
+import { AtcScrambleSelectingAction, ATC_SCRAMBLE_SELECTED, ATC_SCRAMBLE_SELECTING, BioWeaponSelectingAction, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, BombardmentSelectingAction, BOMBARDMENT_SELECTED, BOMBARDMENT_SELECTING, CANCEL_PLAN, CommInterruptSelectingAction, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, ConfirmPlanAction, DeletePlanAction, DELETE_PLAN, DroneSwarmSelectingAction, DRONE_SWARM_SELECTED, DRONE_SWARM_SELECTING, GameInitialStateAction, GoldenEyeSelectingAction, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, InsurgencySelectingAction, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MissileDisruptSelectingAction, MissileSelectingAction, MISSILE_DISRUPT_SELECTED, MISSILE_DISRUPT_SELECTING, MISSILE_SELECTED, MISSILE_SELECTING, NukeSelectingAction, NUKE_SELECTED, NUKE_SELECTING, PiecePlaceStartAction, PIECE_PLACE, PIECE_PLACE_START, PlanningSelectAction, PlanningState, PLANNING_SELECT, PLAN_WAS_CONFIRMED, RaiseMoraleSelectingAction, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, RemoteSenseSelectingAction, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RodsFromGodSelectingAction, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SeaMineSelectingAction, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SLICE_CHANGE, START_PLAN, UNDO_MOVE } from '../../../../types';
 
 const initialPlanningState: PlanningState = {
     isActive: false,
     isSelectingCommander: false,
     isUsingCapability: false,
+    placementSelecting: null,
     bombardmentSelecting: null,
     missileSelecting: null,
     invItem: null,
@@ -30,6 +29,16 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
         case MISSILE_SELECTING:
             stateCopy.isActive = true;
             stateCopy.missileSelecting = (action as MissileSelectingAction).payload.selectedPiece;
+            return stateCopy;
+
+        case PIECE_PLACE_START:
+            stateCopy.isActive = true;
+            stateCopy.placementSelecting = (action as PiecePlaceStartAction).payload.invItem;
+            return stateCopy;
+
+        case PIECE_PLACE:
+            stateCopy.isActive = false;
+            stateCopy.placementSelecting = null;
             return stateCopy;
 
         case BOMBARDMENT_SELECTING:
@@ -97,6 +106,7 @@ export function planningReducer(state = initialPlanningState, action: AnyAction)
             stateCopy.isUsingCapability = false;
             stateCopy.bombardmentSelecting = null;
             stateCopy.missileSelecting = null;
+            stateCopy.placementSelecting = null;
             stateCopy.invItem = null;
             stateCopy.moves = [];
             return stateCopy;

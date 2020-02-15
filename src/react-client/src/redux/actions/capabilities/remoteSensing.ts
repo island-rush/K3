@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { COMBAT_PHASE_ID, REMOTE_SENSING_SELECTING, SLICE_PLANNING_ID } from '../../../../../constants';
-import { InvItemType, RemoteSenseSelectingAction } from '../../../../../types';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
+import { InvItemType, RemoteSenseSelectingAction, REMOTE_SENSING_SELECTING } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const remoteSensing = (invItem: InvItemType) => {

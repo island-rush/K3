@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, PLAN_WAS_CONFIRMED, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN, NOT_WAITING_STATUS } from '../../../constants';
-import { ConfirmPlanAction, ConfirmPlanRequestAction, SocketSession } from '../../../types';
+import { COMBAT_PHASE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, NOT_WAITING_STATUS, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { ConfirmPlanAction, ConfirmPlanRequestAction, PLAN_WAS_CONFIRMED, SocketSession } from '../../../types';
 import { Game, Piece, Plan } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
