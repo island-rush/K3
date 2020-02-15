@@ -253,9 +253,9 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         }, 10000); // TODO: constant for these settimeout times?
     }
 
-    await Piece.deletePlanesWithoutFuel(gameId);
-
+    await Piece.refuelPlanesOverAirfields(thisGame);
     await Piece.giveFuelToHelisOverLand(gameId);
+    await Piece.deletePlanesWithoutFuel(gameId);
 
     await Piece.updateVisibilities(gameId);
 
@@ -307,8 +307,6 @@ export const executeStep = async (session: SocketSession, thisGame: Game) => {
         // Send all airfield updates to every team
         sendToGame(gameId, updateAirfieldAction);
     }
-
-    await Piece.refuelPlanesOverAirfields(thisGame);
 
     // Position Battles
     const allPositionCombinations: any = await Plan.getPositionCombinations(gameId);
