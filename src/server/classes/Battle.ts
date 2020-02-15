@@ -194,13 +194,6 @@ export class Battle implements BattleQueueType {
                     // figure out needed value for success
                     const neededValue = ATTACK_MATRIX[pieceTypeId][tpieceTypeId];
 
-                    // TODO: dice values in the attack matrix are not 'dice values' -> "they have a x out of 12 chance of killing" -> therefore this value is reversed....should make this more clear
-                    // 0 values need to stay 0, means no chance of hitting
-                    // if (neededValue !== 0) {
-                    //     neededValue = 12 - neededValue;
-                    // }
-
-
                     const diceRolledResult1 = Math.floor(Math.random() * 6) + 1;
                     // const diceRolledResult1 = 1;
                     const diceRolledResult2 = Math.floor(Math.random() * 6) + 1;

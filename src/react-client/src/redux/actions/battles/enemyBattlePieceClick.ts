@@ -14,6 +14,11 @@ export const enemyBattlePieceClick = (battlePiece: any, battlePieceIndex: number
             return;
         }
 
+        if (battle.masterRecord) {
+            dispatch(setUserfeedbackAction('click return to battle first'));
+            return;
+        }
+
         const { selectedBattlePiece, selectedBattlePieceIndex } = battle;
 
         if (selectedBattlePiece === -1 || selectedBattlePieceIndex === -1) {

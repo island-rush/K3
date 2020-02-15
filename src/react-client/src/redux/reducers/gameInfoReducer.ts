@@ -1,6 +1,6 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { COMBAT_PHASE, COMBAT_PHASE_ID, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEUTRAL_TEAM_ID, NEWS_PHASE, NEWS_PHASE_ID, NEW_ROUND, NOT_WAITING_STATUS, NO_MORE_BATTLES, PLACE_PHASE, PLACE_PHASE_ID, PURCHASE_PHASE, PURCHASE_PHASE_ID, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../../../constants';
+import { COMBAT_PHASE, COMBAT_PHASE_ID, EVENT_BATTLE, INITIAL_GAMESTATE, MAIN_BUTTON_CLICK, NEUTRAL_TEAM_ID, NEWS_PHASE, NEWS_PHASE_ID, NEW_ROUND, NOT_WAITING_STATUS, NO_MORE_BATTLES, PLACE_PHASE, PLACE_PHASE_ID, PURCHASE_PHASE, PURCHASE_PHASE_ID, SHOP_PURCHASE, SHOP_REFUND, SLICE_CHANGE, SLICE_EXECUTING_ID, SLICE_PLANNING_ID, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS, BATTLE_SELECTIONS, BATTLE_FIGHT_RESULTS } from '../../../../constants';
 // prettier-ignore
 import { EventBattleAction, GameInfoState, GameInitialStateAction, NewRoundAction, NewsPhaseAction, NoMoreBattlesAction, ShopPurchaseAction, ShopRefundAction, UpdateAirfieldAction, UpdateFlagAction } from '../../../../types';
 
@@ -96,6 +96,14 @@ export function gameInfoReducer(state = initialGameInfoState, action: AnyAction)
             if ((action as EventBattleAction).payload.gameStatus !== null) {
                 stateCopy.gameStatus = (action as EventBattleAction).payload.gameStatus;
             }
+            return stateCopy;
+
+        case BATTLE_FIGHT_RESULTS:
+            stateCopy.gameStatus = NOT_WAITING_STATUS; // TODO: best practice might be to always let server tell us the status (keep logic over there, don't assume? (don't want to get out of sync if server is ever different))
+            return stateCopy;
+
+        case BATTLE_SELECTIONS:
+            stateCopy.gameStatus = WAITING_STATUS;
             return stateCopy;
 
         case NEW_ROUND:

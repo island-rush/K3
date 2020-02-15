@@ -1,8 +1,8 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CLEAR_BATTLE, ENEMY_PIECE_SELECT, EVENT_BATTLE, INITIAL_GAMESTATE, NO_MORE_BATTLES, TARGET_PIECE_SELECT } from '../../../../constants';
+import { BATTLEPOPUP_MINIMIZE_TOGGLE, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, CLEAR_BATTLE, ENEMY_PIECE_SELECT, EVENT_BATTLE, INITIAL_GAMESTATE, NO_MORE_BATTLES, TARGET_PIECE_SELECT, BATTLE_SELECTIONS } from '../../../../constants';
 // prettier-ignore
-import { BattlePieceSelectAction, BattleResultsAction, BattleState, EnemyPieceSelectAction, EventBattleAction, GameInitialStateAction, TargetPieceClickAction } from '../../../../types';
+import { BattlePieceSelectAction, BattleResultsAction, BattleState, EnemyPieceSelectAction, EventBattleAction, GameInitialStateAction, TargetPieceClickAction, BattleSelectionsAction } from '../../../../types';
 
 const initialBattleState: BattleState = {
     isMinimized: false,
@@ -78,6 +78,13 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
             stateCopy.enemyPieces = [];
             return stateCopy;
 
+        case BATTLE_SELECTIONS:
+            stateCopy.selectedBattlePiece = -1;
+            stateCopy.selectedBattlePieceIndex = -1;
+            stateCopy.friendlyPieces = (action as BattleSelectionsAction).payload.friendlyPieces;
+            stateCopy.enemyPieces = (action as BattleSelectionsAction).payload.enemyPieces;
+            return stateCopy;
+
         case BATTLE_FIGHT_RESULTS:
             stateCopy.masterRecord = (action as BattleResultsAction).payload.masterRecord;
 
@@ -128,6 +135,8 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
                 }
             }
 
+            stateCopy.selectedBattlePiece = -1;
+            stateCopy.selectedBattlePieceIndex = -1;
             return stateCopy;
 
         case CLEAR_BATTLE:

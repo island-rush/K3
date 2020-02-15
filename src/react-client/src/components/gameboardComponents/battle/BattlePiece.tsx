@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TYPE_NAMES } from '../../../../../constants';
+import { TYPE_NAMES, ATTACK_MATRIX } from '../../../../../constants';
 import { ARROW_IMAGE, DICE_IMAGES, TYPE_IMAGES, SELECTED_BORDERS } from '../../styleConstants';
 
 const battlePieceStyle: any = {
@@ -102,11 +102,21 @@ export class BattlePiece extends Component<Props> {
                 <div title={battlePiece.diceRoll2} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll2] }} />
             );
 
+        const neededValue =
+            battlePiece.targetPiece == null || battlePiece.diceRoll != null ? null : (
+                <div>
+                    {ATTACK_MATRIX[battlePiece.piece.pieceTypeId][battlePiece.targetPiece.pieceTypeId] !== 0
+                        ? `Need: ${ATTACK_MATRIX[battlePiece.piece.pieceTypeId][battlePiece.targetPiece.pieceTypeId]}`
+                        : 'No Hit Value'}
+                </div>
+            );
+
         return (
             <div style={{ ...battlePieceStyle, ...battlePieceWonStyle[battlePiece.win != null && battlePiece.win ? 1 : 0] }}>
                 {battlePieceBox}
                 {arrowBox}
                 {targetBox}
+                {neededValue}
                 {diceBox1}
                 {diceBox2}
             </div>
