@@ -61,16 +61,6 @@ export type PieceClearAction = {
     payload: {};
 };
 
-export const MAIN_BUTTON_CLICK = 'MAIN_BUTTON_CLICK';
-export type MainButtonClickAction = {
-    type: typeof MAIN_BUTTON_CLICK;
-};
-
-export const SERVER_MAIN_BUTTON_CLICK = 'SERVER_MAIN_BUTTON_CLICK';
-export type MainButtonClickRequestAction = {
-    type: typeof SERVER_MAIN_BUTTON_CLICK;
-};
-
 export const POSITION_SELECT = 'POSITION_SELECT';
 export type PositionSelectAction = {
     type: typeof POSITION_SELECT;

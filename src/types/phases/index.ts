@@ -3,6 +3,16 @@ import { GameboardPiecesDataType } from '../board';
 import { PieceType } from '../databaseTables';
 import { CapabilitiesState, GameInfoState, NewsState } from '../reducerTypes';
 
+export const MAIN_BUTTON_CLICK = 'MAIN_BUTTON_CLICK';
+export type MainButtonClickAction = {
+    type: typeof MAIN_BUTTON_CLICK;
+};
+
+export const SERVER_MAIN_BUTTON_CLICK = 'SERVER_MAIN_BUTTON_CLICK';
+export type MainButtonClickRequestAction = {
+    type: typeof SERVER_MAIN_BUTTON_CLICK;
+};
+
 export const NEWS_PHASE = 'NEWS_PHASE';
 export type NewsPhaseAction = {
     type: typeof NEWS_PHASE;
