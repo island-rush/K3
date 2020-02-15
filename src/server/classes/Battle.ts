@@ -193,6 +193,7 @@ export class Battle implements BattleQueueType {
                     // do a dice roll
                     // figure out needed value for success
                     const neededValue = ATTACK_MATRIX[pieceTypeId][tpieceTypeId];
+
                     const diceRolledResult1 = Math.floor(Math.random() * 6) + 1;
                     // const diceRolledResult1 = 1;
                     const diceRolledResult2 = Math.floor(Math.random() * 6) + 1;

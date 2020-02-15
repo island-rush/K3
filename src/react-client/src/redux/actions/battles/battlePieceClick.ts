@@ -6,11 +6,16 @@ import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 export const battlePieceClick = (battlePiece: any, battlePieceIndex: number) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
-        const { gameInfo } = getState();
+        const { gameInfo, battle } = getState();
         const { gameStatus } = gameInfo;
 
         if (gameStatus === WAITING_STATUS) {
             dispatch(setUserfeedbackAction("can't make more selections, status == 1, already submitted probably"));
+            return;
+        }
+
+        if (battle.masterRecord) {
+            dispatch(setUserfeedbackAction('click return to battle first'));
             return;
         }
 
