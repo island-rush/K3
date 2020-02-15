@@ -51,7 +51,7 @@ export class InvItem implements InvItemType {
             this.invItemTeamId,
             this.invItemTypeId,
             selectedPosition,
-            -1,
+            null,
             0,
             TYPE_MOVES[this.invItemTypeId],
             TYPE_FUEL[this.invItemTypeId]
