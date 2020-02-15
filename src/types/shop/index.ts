@@ -1,6 +1,8 @@
 import { ShopItemType } from '../databaseTables';
 import { GameInfoState, InvState } from '../reducerTypes';
 
+// TODO: think about how it might be confusing to have a 'types' directory that also has constants in it (used to be only types)
+// But on the other hand, keeping these together kinda makes sense...
 export const SERVER_SHOP_PURCHASE_REQUEST = 'SERVER_SHOP_PURCHASE_REQUEST';
 export type ShopPurchaseRequestAction = {
     type: typeof SERVER_SHOP_PURCHASE_REQUEST;
