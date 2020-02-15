@@ -1,9 +1,53 @@
 // prettier-ignore
-import { LIST_ALL_POSITIONS_TYPE } from '../constants';
-import { GameboardPiecesDataType } from './actionTypes';
-import { InvItemType, PieceType } from './databaseTables';
-import { CapabilitiesState, GameboardMetaState } from './reducerTypes';
-import { ControllerType } from './sessionTypes';
+import { LIST_ALL_POSITIONS_TYPE } from '../../constants';
+import { GameboardPiecesDataType } from '../board';
+import { InvItemType, PieceType } from '../databaseTables';
+import { CapabilitiesState, GameboardMetaState } from '../reducerTypes';
+import { ControllerType } from '../sessionTypes';
+
+export const SEA_MINE_HIT_NOTIFICATION = 'SEA_MINE_HIT_NOTIFICATION';
+export type SeaMineHitNotifyAction = {
+    type: typeof SEA_MINE_HIT_NOTIFICATION;
+    payload: {
+        positionsToHighlight: LIST_ALL_POSITIONS_TYPE[];
+    };
+};
+
+export const SEA_MINE_NOTIFY_CLEAR = 'SEA_MINE_NOTIFY_CLEAR';
+export type ClearSeaMineNotifyAction = {
+    type: typeof SEA_MINE_NOTIFY_CLEAR;
+    payload: {};
+};
+
+export const SAM_DELETED_PIECES = 'SAM_DELETED_PIECES';
+export type SamDeletedPiecesAction = {
+    type: typeof SAM_DELETED_PIECES;
+    payload: {
+        listOfDeletedPieces: PieceType[];
+    };
+};
+
+export const CLEAR_SAM_DELETE = 'CLEAR_SAM_DELETE';
+export type ClearSamDeleteAction = {
+    type: typeof CLEAR_SAM_DELETE;
+    payload: {
+        listOfDeletedPieces: PieceType[];
+    };
+};
+
+export const DRONE_SWARM_HIT_NOTIFICATION = 'DRONE_SWARM_HIT_NOTIFICATION';
+export type DroneSwarmHitNotifyAction = {
+    type: typeof DRONE_SWARM_HIT_NOTIFICATION;
+    payload: {
+        positionsToHighlight: LIST_ALL_POSITIONS_TYPE[];
+    };
+};
+
+export const DRONE_SWARM_NOTIFY_CLEAR = 'DRONE_SWARM_NOTIFY_CLEAR';
+export type ClearDroneSwarmMineNotifyAction = {
+    type: typeof DRONE_SWARM_NOTIFY_CLEAR;
+    payload: {};
+};
 
 export const RODS_FROM_GOD_SELECTING = 'RODS_FROM_GOD_SELECTING';
 export type RodsFromGodSelectingAction = {
