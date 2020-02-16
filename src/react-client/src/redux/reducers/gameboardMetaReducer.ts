@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { INV_MENU_INDEX, NO_MENU_INDEX, SHOP_MENU_INDEX } from '../../../../constants';
 // prettier-ignore
-import { ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GameboardMetaState, GOLDEN_EYE_SELECTING, HighlightPositionsAction, HIGHLIGHT_POSITIONS, INSURGENCY_SELECTING, MenuSelectAction, MENU_SELECT, MISSILE_DISRUPT_SELECTING, NEWS_PHASE, NUKE_SELECTING, PieceClickAction, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_PLACE, PIECE_PLACE_START, PLACE_PHASE, PLAN_WAS_CONFIRMED, PositionSelectAction, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING, INNER_PIECE_CLICK_ACTION } from '../../../../types';
+import { ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTING, CANCEL_CONTAINER_PLACEMENT, CANCEL_PLAN, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GameboardMetaState, GOLDEN_EYE_SELECTING, HighlightPositionsAction, HIGHLIGHT_POSITIONS, INNER_PIECE_CLICK_ACTION, INSURGENCY_SELECTING, MenuSelectAction, MENU_SELECT, MISSILE_DISRUPT_SELECTING, NEWS_PHASE, NUKE_SELECTING, PieceClickAction, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_PLACE, PIECE_PLACE_START, PLACE_PHASE, PLAN_WAS_CONFIRMED, PositionSelectAction, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING } from '../../../../types';
 
 const initialGameboardMeta: GameboardMetaState = {
     // TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
@@ -21,6 +21,7 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAc
             stateCopy.highlightedPositions = (action as HighlightPositionsAction).payload.highlightedPositions;
             return stateCopy;
 
+        case CANCEL_CONTAINER_PLACEMENT:
         case INNER_PIECE_CLICK_ACTION:
             stateCopy.highlightedPositions = [];
             return stateCopy;

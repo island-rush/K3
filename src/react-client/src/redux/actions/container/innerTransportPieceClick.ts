@@ -21,7 +21,7 @@ export const innerTransportPieceClick = (selectedPiece: PieceType, containerPiec
         const { gameInfo } = getState();
         const { gamePhase, gameSlice, gameStatus, gameControllers } = gameInfo;
 
-        if (gamePhase !== COMBAT_PHASE_ID && gameSlice !== SLICE_PLANNING_ID) {
+        if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
             dispatch(setUserfeedbackAction('wrong phase to enter container'));
             return;
         }

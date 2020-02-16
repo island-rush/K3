@@ -12,7 +12,8 @@ export const innerPieceClick = (selectedPiece: PieceType, containerPiece: PieceT
         const { gameInfo } = getState();
         const { gamePhase, gameSlice, gameControllers, gameStatus } = gameInfo;
 
-        if (gamePhase !== COMBAT_PHASE_ID && gameSlice !== SLICE_PLANNING_ID) {
+        // TODO: bug with && instead of ||, possibly safer to keep these if's separate for the other times this logic is used
+        if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
             dispatch(setUserfeedbackAction('wrong phase to enter container'));
             return;
         }
