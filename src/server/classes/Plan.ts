@@ -36,7 +36,7 @@ export class Plan implements PlanType {
     /**
      * Insert Plans into the database.
      */
-    static async insert(plansToInsert: any, pieceId: PieceType['pieceId']) {
+    static async insert(plansToInsert: number[][], pieceId: PieceType['pieceId']) {
         // just in case there was already plans
         const deleteString = 'DELETE FROM plans WHERE planPieceId = ?';
         const deleteInserts = [pieceId];
