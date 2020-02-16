@@ -240,28 +240,23 @@ export type ContainerState = {
     outerPieces: PieceType[];
 };
 
+// TODO: possibly put within ./types/battle
+export type BattlePieceStateType = {
+    piece: PieceType;
+    targetPiece: PieceType | null;
+    targetPieceIndex?: number;
+    win?: boolean;
+    diceRoll1?: 1 | 2 | 3 | 4 | 5 | 6;
+    diceRoll2?: 1 | 2 | 3 | 4 | 5 | 6;
+};
 export type BattleState = {
     isActive: boolean;
     isMinimized: boolean;
     selectedBattlePiece: any;
     selectedBattlePieceIndex: number; // helper to find the piece within the array
     masterRecord: MasterRecordType | null;
-    friendlyPieces: {
-        piece: PieceType;
-        targetPiece: PieceType | null;
-        targetPieceIndex?: number;
-        win?: boolean;
-        diceRoll1?: 1 | 2 | 3 | 4 | 5 | 6;
-        diceRoll2?: 1 | 2 | 3 | 4 | 5 | 6;
-    }[];
-    enemyPieces: {
-        piece: any;
-        targetPiece: PieceType | null;
-        targetPieceIndex?: number;
-        win?: boolean;
-        diceRoll1?: 1 | 2 | 3 | 4 | 5 | 6;
-        diceRoll2?: 1 | 2 | 3 | 4 | 5 | 6;
-    }[];
+    friendlyPieces: BattlePieceStateType[];
+    enemyPieces: BattlePieceStateType[];
 };
 
 export type NewsState = {

@@ -1,5 +1,6 @@
 import { GameboardPiecesDataType } from '../board';
 import { BattleState, GameInfoState } from '../reducerTypes';
+import { PieceType } from '../databaseTables';
 
 export const EVENT_BATTLE = 'EVENT_BATTLE';
 export type EventBattleAction = {
@@ -63,8 +64,8 @@ export type BattleSelectionsAction = {
 };
 
 export type MasterRecordType = {
-    attackPieceId: number;
-    targetPieceId?: number;
+    attackPieceId: PieceType['pieceId'];
+    targetPieceId?: PieceType['pieceId'];
     win?: boolean;
     diceRoll1?: 1 | 2 | 3 | 4 | 5 | 6;
     diceRoll2?: 1 | 2 | 3 | 4 | 5 | 6;

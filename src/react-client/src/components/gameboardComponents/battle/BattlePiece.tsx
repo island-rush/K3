@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { TYPE_NAMES, ATTACK_MATRIX } from '../../../../../constants';
-import { ARROW_IMAGE, DICE_IMAGES, TYPE_IMAGES, SELECTED_BORDERS } from '../../styleConstants';
+import { ATTACK_MATRIX, TYPE_NAMES } from '../../../../../constants';
+import { battlePieceClick, enemyBattlePieceClick, targetPieceClick } from '../../../redux';
+import { ARROW_IMAGE, DICE_IMAGES, SELECTED_BORDERS, TYPE_IMAGES } from '../../styleConstants';
+import { BattlePieceStateType } from '../../../../../types';
 
 const battlePieceStyle: any = {
     backgroundColor: 'white',
@@ -45,12 +47,12 @@ const diceBoxStyle: any = {
 
 interface Props {
     isFriendly: boolean;
-    battlePieceClick: any;
-    targetPieceClick: any;
-    enemyBattlePieceClick: any;
-    battlePiece: any;
-    battlePieceIndex: any;
     isSelected: boolean;
+    battlePieceClick: typeof battlePieceClick;
+    targetPieceClick: typeof targetPieceClick;
+    enemyBattlePieceClick: typeof enemyBattlePieceClick;
+    battlePiece: BattlePieceStateType;
+    battlePieceIndex: number;
 }
 
 export class BattlePiece extends Component<Props> {
@@ -94,12 +96,12 @@ export class BattlePiece extends Component<Props> {
 
         const diceBox1 =
             battlePiece.diceRoll1 == null ? null : (
-                <div title={battlePiece.diceRoll1} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll1] }} />
+                <div title={`${battlePiece.diceRoll1}`} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll1] }} />
             );
 
         const diceBox2 =
             battlePiece.diceRoll2 == null ? null : (
-                <div title={battlePiece.diceRoll2} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll2] }} />
+                <div title={`${battlePiece.diceRoll2}`} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll2] }} />
             );
 
         const neededValue =
