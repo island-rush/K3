@@ -51,6 +51,7 @@ export class GameProperties {
     airfield9: GameType['airfield9'];
 
     // This necessary to access this object using this['string'] for dynamic values -> ex: this[`flag${flagNum}`]
+    // TODO: get rid of this and use functions getStatus(gameTeam) or getFlag(flagNum) -> might have to do switch statements but better than :any ? (safer...)
     [key: string]: any;
 
     constructor(gameId: GameType['gameId']) {
