@@ -1,8 +1,8 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { Battle, InvItem, Piece, Plan } from '..';
 // prettier-ignore
-import { BLUE_TEAM_ID, NEWS_PHASE_ID, RED_TEAM_ID } from '../../../constants';
-import { BattleState, BlueOrRedTeamId, ControllerType, GameInitialStateAction, INITIAL_GAMESTATE, NewsType, PieceType } from '../../../types';
+import { BLUE_TEAM_ID, NEWS_PHASE_ID } from '../../../constants';
+import { BlueOrRedTeamId, ControllerType, GameInitialStateAction, INITIAL_GAMESTATE, NewsType } from '../../../types';
 import { pool } from '../../database';
 import { Capability } from '../Capability';
 import { ShopItem } from '../ShopItem';
@@ -90,74 +90,18 @@ export const initialStateAction = async (game: Game, gameTeam: BlueOrRedTeamId, 
         };
     }
 
-    // TODO: get these values from the database (potentially throw game into the event object)
-    // TODO: current event could be a refuel (or something else...need to handle all of them, and set other states as false...)
-    // TODO: don't have to check if not in the combat phase...(prevent these checks for added efficiency?)
     const battle = await Battle.getNext(game.gameId);
-
     if (battle) {
-        const friendlyPiecesList: any = await battle.getTeamItems(gameTeam === BLUE_TEAM_ID ? BLUE_TEAM_ID : RED_TEAM_ID);
-        const enemyPiecesList: any = await battle.getTeamItems(gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID);
-        const friendlyPieces: { piece: PieceType; targetPiece: PieceType; targetPieceIndex?: number }[] = [];
-        const enemyPieces: {
-            targetPiece: any | null;
-            targetPieceIndex: number;
-            piece: any;
-        }[] = [];
-
-        // formatting for the frontend
-        for (let x = 0; x < friendlyPiecesList.length; x++) {
-            // need to transform pieces and stuff...
-            const thisFriendlyPiece: BattleState['friendlyPieces'][0] = {
-                // TODO: is this type annotation correct for 'index of this array type'?
-                piece: {
-                    pieceId: friendlyPiecesList[x].pieceId,
-                    pieceGameId: friendlyPiecesList[x].pieceGameId,
-                    pieceTeamId: friendlyPiecesList[x].pieceTeamId,
-                    pieceTypeId: friendlyPiecesList[x].pieceTypeId,
-                    piecePositionId: friendlyPiecesList[x].piecePositionId,
-                    pieceVisible: friendlyPiecesList[x].pieceVisible,
-                    pieceMoves: friendlyPiecesList[x].pieceMoves,
-                    pieceFuel: friendlyPiecesList[x].pieceFuel,
-                    pieceContainerId: -1 // TODO: don't force these values to fit type, actually get them and put them here
-                },
-                targetPiece:
-                    friendlyPiecesList[x].tpieceId == null
-                        ? null
-                        : {
-                              pieceId: friendlyPiecesList[x].tpieceId,
-                              pieceGameId: friendlyPiecesList[x].tpieceGameId,
-                              pieceTeamId: friendlyPiecesList[x].tpieceTeamId,
-                              pieceTypeId: friendlyPiecesList[x].tpieceTypeId,
-                              piecePositionId: friendlyPiecesList[x].tpiecePositionId,
-                              pieceVisible: friendlyPiecesList[x].tpieceVisible,
-                              pieceMoves: friendlyPiecesList[x].tpieceMoves,
-                              pieceFuel: friendlyPiecesList[x].tpieceFuel,
-                              pieceContainerId: -1 // TODO: don't force these (same as above)
-                          }
-            };
-            friendlyPieces.push(thisFriendlyPiece);
-        }
-        for (let y = 0; y < enemyPiecesList.length; y++) {
-            enemyPieces.push({
-                targetPiece: null,
-                targetPieceIndex: -1,
-                piece: enemyPiecesList[y]
-            });
-        }
-
-        // now need to get the targetPieceIndex from the thing....if needed....
-        for (let z = 0; z < friendlyPieces.length; z++) {
-            if (friendlyPieces[z].targetPiece != null) {
-                const { pieceId } = friendlyPieces[z].targetPiece;
-
-                friendlyPieces[z].targetPieceIndex = enemyPieces.findIndex(enemyPieceThing => enemyPieceThing.piece.pieceId === pieceId);
-            }
-        }
+        const {
+            blueFriendlyBattlePieces,
+            redFriendlyBattlePieces,
+            blueFriendlyBattlePiecesNoTargets,
+            redFriendlyBattlePiecesNoTargets
+        } = await battle.getBattleState();
 
         serverAction.payload.battle = {
-            friendlyPieces,
-            enemyPieces
+            friendlyPieces: gameTeam === BLUE_TEAM_ID ? blueFriendlyBattlePieces : redFriendlyBattlePieces,
+            enemyPieces: gameTeam === BLUE_TEAM_ID ? redFriendlyBattlePiecesNoTargets : blueFriendlyBattlePiecesNoTargets
         };
     }
 

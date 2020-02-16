@@ -1,7 +1,7 @@
 // prettier-ignore
 import { BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, WAITING_STATUS } from '../../../constants';
 // prettier-ignore
-import { BattleResultsAction, BattleSelectionsAction, BattleState, BATTLE_FIGHT_RESULTS, BATTLE_SELECTIONS, ConfirmBattleSelectionRequestAction, PieceType, SocketSession, UpdateAirfieldAction, UpdateFlagAction, UPDATE_AIRFIELDS, UPDATE_FLAGS } from '../../../types';
+import { BattleResultsAction, BattleSelectionsAction, BATTLE_FIGHT_RESULTS, BATTLE_SELECTIONS, ConfirmBattleSelectionRequestAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction, UPDATE_AIRFIELDS, UPDATE_FLAGS } from '../../../types';
 import { Battle, Game } from '../../classes';
 import { redirectClient, sendToGame, sendToTeam, sendUserFeedback } from '../../helpers';
 import { giveNextBattle } from './giveNextBattle';
@@ -54,74 +54,15 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
     const thisBattle = await Battle.getNext(gameId);
     await thisBattle.bulkUpdateTargets(friendlyPieces);
 
-    // non-main controllers need to get the battle selections before the results
-    // TODO: this logic is repeated in initialStateAction (can clean up a lot of this eventually)
-    const friendlyPiecesList: any = await thisBattle.getTeamItems(gameTeam === BLUE_TEAM_ID ? BLUE_TEAM_ID : RED_TEAM_ID);
-    const enemyPiecesList: any = await thisBattle.getTeamItems(gameTeam === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID);
-    const newFriendlyPieces: { piece: PieceType; targetPiece: PieceType; targetPieceIndex?: number }[] = [];
-    const enemyPieces: {
-        targetPiece: any | null;
-        targetPieceIndex: number;
-        piece: any;
-    }[] = [];
-
-    // formatting for the frontend
-    for (let x = 0; x < friendlyPiecesList.length; x++) {
-        // need to transform pieces and stuff...
-        const thisFriendlyPiece: BattleState['friendlyPieces'][0] = {
-            // TODO: is this type annotation correct for 'index of this array type'?
-            piece: {
-                pieceId: friendlyPiecesList[x].pieceId,
-                pieceGameId: friendlyPiecesList[x].pieceGameId,
-                pieceTeamId: friendlyPiecesList[x].pieceTeamId,
-                pieceTypeId: friendlyPiecesList[x].pieceTypeId,
-                piecePositionId: friendlyPiecesList[x].piecePositionId,
-                pieceVisible: friendlyPiecesList[x].pieceVisible,
-                pieceMoves: friendlyPiecesList[x].pieceMoves,
-                pieceFuel: friendlyPiecesList[x].pieceFuel,
-                pieceContainerId: -1 // TODO: don't force these values to fit type, actually get them and put them here
-            },
-            targetPiece:
-                friendlyPiecesList[x].tpieceId == null
-                    ? null
-                    : {
-                          pieceId: friendlyPiecesList[x].tpieceId,
-                          pieceGameId: friendlyPiecesList[x].tpieceGameId,
-                          pieceTeamId: friendlyPiecesList[x].tpieceTeamId,
-                          pieceTypeId: friendlyPiecesList[x].tpieceTypeId,
-                          piecePositionId: friendlyPiecesList[x].tpiecePositionId,
-                          pieceVisible: friendlyPiecesList[x].tpieceVisible,
-                          pieceMoves: friendlyPiecesList[x].tpieceMoves,
-                          pieceFuel: friendlyPiecesList[x].tpieceFuel,
-                          pieceContainerId: -1 // TODO: don't force these (same as above)
-                      }
-        };
-        newFriendlyPieces.push(thisFriendlyPiece);
-    }
-    for (let y = 0; y < enemyPiecesList.length; y++) {
-        enemyPieces.push({
-            targetPiece: null,
-            targetPieceIndex: -1,
-            piece: enemyPiecesList[y]
-        });
-    }
-
-    // now need to get the targetPieceIndex from the thing....if needed....
-    for (let z = 0; z < newFriendlyPieces.length; z++) {
-        if (friendlyPieces[z].targetPiece != null) {
-            const { pieceId } = friendlyPieces[z].targetPiece;
-
-            friendlyPieces[z].targetPieceIndex = enemyPieces.findIndex(enemyPieceThing => enemyPieceThing.piece.pieceId === pieceId);
-        }
-    }
-
+    // format for frontend and send selections to entire team
+    const { blueFriendlyBattlePieces, redFriendlyBattlePieces } = await thisBattle.getBattleState();
     const battleSelectionsAction: BattleSelectionsAction = {
         type: BATTLE_SELECTIONS,
         payload: {
-            friendlyPieces,
-            enemyPieces
+            friendlyPieces: gameTeam === BLUE_TEAM_ID ? blueFriendlyBattlePieces : redFriendlyBattlePieces
         }
     };
+
     // TODO: we send the confirmed selections to all teams, then immediately send battle results if last to confirm....could cause errors if network delays cause results to come before confirmedSelections
     // to prevent weird (but unlikely) errors, need to either delay it (bad fix), or somehow send the confirmed selections along with the results (should probably do that anyways? -> replace the state entirely?)
     sendToTeam(gameId, gameTeam, battleSelectionsAction); // doesn't change anything for the main commander that just sent this
@@ -138,17 +79,18 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
     await thisGame.setStatus(otherTeam, NOT_WAITING_STATUS);
 
     // Wait to let battle selections go to all controllers on the team, then send the results (which right now depend on frontend already having selections?)
-    await new Promise(resolve => setTimeout(resolve, 50)); // TODO: get rid of this crap by refactoring above code to only send BATTLE_SELECTIONS action if waiting....timing is weird here so think it though
+    await new Promise(resolve => setTimeout(resolve, 50)); // TODO: get rid of this (most definately probably bad practice, this is bad code) by refactoring above code to only send BATTLE_SELECTIONS action if waiting....timing is weird here so think it though
 
-    // Do the fight!
-    const fightResults = await thisBattle.fight();
+    const masterRecord = await thisBattle.fight();
 
     // Send the results of the battle back to the client(s)
-    if (fightResults.atLeastOneBattle) {
+    if (masterRecord) {
         const serverAction: BattleResultsAction = {
             type: BATTLE_FIGHT_RESULTS,
             payload: {
-                masterRecord: fightResults.masterRecord
+                masterRecord,
+                blueFriendlyBattlePieces,
+                redFriendlyBattlePieces
             }
         };
 
@@ -156,6 +98,7 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
         return;
     }
 
+    // no fight results, indicates end of battle
     await thisBattle.delete();
 
     // Check for flag updates after the battle (enemy may no longer be there = capture the flag)

@@ -2,6 +2,7 @@ import { AnyAction, Store } from 'redux';
 import io from 'socket.io-client';
 import { SOCKET_CLIENT_SENDING_ACTION, SOCKET_SERVER_REDIRECT, SOCKET_SERVER_SENDING_ACTION } from '../../../constants';
 import { ALL_ERROR_TYPES } from '../../../server/';
+import { FullState } from './reducers';
 
 const socket: SocketIOClient.Socket = io(`${window.location.hostname}`, {
     transports: ['websocket', 'polling'],
@@ -15,6 +16,9 @@ const socket: SocketIOClient.Socket = io(`${window.location.hostname}`, {
  */
 export const init = (store: Store) => {
     socket.on(SOCKET_SERVER_SENDING_ACTION, (reduxAction: AnyAction) => {
+        const { gameInfo } = store.getState() as FullState;
+        const { gameTeam } = gameInfo;
+        reduxAction.gameTeam = gameTeam; // if need to distinguish between red/blue payload items
         store.dispatch(reduxAction);
     });
 

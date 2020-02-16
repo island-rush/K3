@@ -1,6 +1,6 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { ATTACK_MATRIX, PIECES_WITH_FUEL } from '../../constants';
-import { BattleQueueType, PieceType, GameType, BlueOrRedTeamId, BattlePieceType } from '../../types';
+import { ATTACK_MATRIX, BLUE_TEAM_ID, PIECES_WITH_FUEL, RED_TEAM_ID, UNABLE_TO_HIT } from '../../constants';
+import { BattlePieceStateType, BattlePieceType, BattleQueueType, BlueOrRedTeamId, GameType, MasterRecordType, PieceType } from '../../types';
 import { pool } from '../database';
 import { Piece } from './Piece';
 
@@ -69,11 +69,95 @@ export class Battle implements BattleQueueType {
      * getItems() but for a specific team.
      */
     async getTeamItems(gameTeam: BlueOrRedTeamId) {
+        type subQueryType = {
+            attackPieceId: PieceType['pieceId'];
+            attackPieceTypeId: PieceType['pieceTypeId'];
+            attackPiecePositionId: PieceType['piecePositionId'];
+            targetPieceId: PieceType['pieceId'] | null;
+            targetPieceTypeId: PieceType['pieceTypeId'] | null;
+            targetPiecePositionId: PieceType['piecePositionId'] | null;
+        };
         const queryString =
-            'SELECT * FROM (SELECT * FROM battlePieces NATUAL JOIN pieces WHERE battlePieceId = pieceId AND battleId = ? AND pieceTeamId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.battlePieceTargetId = b.tpieceId';
+            'SELECT pieceId as attackPieceId, pieceTypeId as attackPieceTypeId, piecePositionId as attackPiecePositionId, tpieceId as targetPieceId, tpieceTypeId as targetPieceTypeId, tpiecePositionId as targetPiecePositionId FROM (SELECT * FROM battlePieces NATUAL JOIN pieces WHERE battlePieceId = pieceId AND battleId = ? AND pieceTeamId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.battlePieceTargetId = b.tpieceId';
         const inserts = [this.battleId, gameTeam];
-        const [battleTeamItems] = await pool.query<RowDataPacket[]>(queryString, inserts); // TODO: weird data type here
+        const [battleTeamItems] = await pool.query<RowDataPacket[] & subQueryType[]>(queryString, inserts);
         return battleTeamItems; // TODO: do we need to return null explicitly? (this is an empty array ^^^ see getItems for difference (not sure why needed))
+    }
+
+    async getBattleState() {
+        const blueBattleEventItems = await this.getTeamItems(BLUE_TEAM_ID);
+        const redBattleEventItems = await this.getTeamItems(RED_TEAM_ID);
+        const blueFriendlyBattlePieces: BattlePieceStateType[] = [];
+        const redFriendlyBattlePieces: BattlePieceStateType[] = [];
+
+        // Format for frontend
+        for (let x = 0; x < blueBattleEventItems.length; x++) {
+            blueFriendlyBattlePieces.push({
+                piece: {
+                    pieceId: blueBattleEventItems[x].attackPieceId,
+                    pieceTypeId: blueBattleEventItems[x].attackPieceTypeId,
+                    piecePositionId: blueBattleEventItems[x].attackPiecePositionId
+                }
+            });
+        }
+        for (let y = 0; y < redBattleEventItems.length; y++) {
+            redFriendlyBattlePieces.push({
+                piece: {
+                    pieceId: redBattleEventItems[y].attackPieceId,
+                    pieceTypeId: redBattleEventItems[y].attackPieceTypeId,
+                    piecePositionId: redBattleEventItems[y].attackPiecePositionId
+                }
+            });
+        }
+
+        // Don't send enemy targetting on refresh (used in initialStateAction)
+        const blueFriendlyBattlePiecesNoTargets: typeof blueFriendlyBattlePieces = JSON.parse(JSON.stringify(blueFriendlyBattlePieces)); // don't fully understand value / reference, this is simple way of hard copying
+        const redFriendlyBattlePiecesNoTargets: typeof redFriendlyBattlePieces = JSON.parse(JSON.stringify(redFriendlyBattlePieces));
+
+        // Add the targets (same way added battlePieces above) (should be in same order with the array)
+        for (let x = 0; x < blueBattleEventItems.length; x++) {
+            if (blueBattleEventItems[x].targetPieceId !== null) {
+                blueFriendlyBattlePieces[x].targetPiece = {
+                    pieceId: blueBattleEventItems[x].targetPieceId,
+                    pieceTypeId: blueBattleEventItems[x].targetPieceTypeId,
+                    piecePositionId: blueBattleEventItems[x].targetPiecePositionId
+                };
+            }
+        }
+        for (let y = 0; y < redBattleEventItems.length; y++) {
+            if (redBattleEventItems[y].targetPieceId !== null) {
+                redFriendlyBattlePieces[y].targetPiece = {
+                    pieceId: redBattleEventItems[y].targetPieceId,
+                    pieceTypeId: redBattleEventItems[y].targetPieceTypeId,
+                    piecePositionId: redBattleEventItems[y].targetPiecePositionId
+                };
+            }
+        }
+
+        // Get the targetIndex if applicable
+        for (let z = 0; z < blueFriendlyBattlePieces.length; z++) {
+            if (blueFriendlyBattlePieces[z].targetPiece != null) {
+                const { pieceId } = blueFriendlyBattlePieces[z].targetPiece;
+                blueFriendlyBattlePieces[z].targetPieceIndex = redFriendlyBattlePieces.findIndex(
+                    enemyPieceThing => enemyPieceThing.piece.pieceId === pieceId
+                );
+            }
+        }
+        for (let z = 0; z < redFriendlyBattlePieces.length; z++) {
+            if (redFriendlyBattlePieces[z].targetPiece != null) {
+                const { pieceId } = redFriendlyBattlePieces[z].targetPiece;
+                redFriendlyBattlePieces[z].targetPieceIndex = blueFriendlyBattlePieces.findIndex(
+                    enemyPieceThing => enemyPieceThing.piece.pieceId === pieceId
+                );
+            }
+        }
+
+        return {
+            blueFriendlyBattlePieces,
+            blueFriendlyBattlePiecesNoTargets,
+            redFriendlyBattlePieces,
+            redFriendlyBattlePiecesNoTargets
+        };
     }
 
     /**
@@ -150,98 +234,91 @@ export class Battle implements BattleQueueType {
         }
     }
 
-    // prettier-ignore
     /**
      * Using battleItem targets, perform dice rolls between pieces and determine success or failure.
      */
     async fight() {
-        let queryString = 'SELECT * FROM (SELECT * FROM battlePieces NATUAL JOIN pieces WHERE battlePieceId = pieceId AND battleId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceGameId as tpieceGameId, pieceTeamId as tpieceTeamId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId, pieceContainerId as tpieceContainerId, pieceVisible as tpieceVisible, pieceMoves as tpieceMoves, pieceFuel as tpieceFuel FROM pieces) b ON a.battlePieceTargetId = b.tpieceId';
-        let inserts = [this.battleId];
-        const [battlePiecesWithTargets] = await pool.query<RowDataPacket[]>(queryString, inserts); // TODO: weird datatype here
+        type subQueryType = {
+            attackPieceId: PieceType['pieceId'];
+            attackPieceTypeId: PieceType['pieceTypeId'];
+            targetPieceId: PieceType['pieceId'] | null;
+            targetPiecePositionId: PieceType['piecePositionId'] | null;
+            targetPieceTypeId: PieceType['pieceTypeId'] | null;
+        };
 
-        // need to know if any battles, and if 0 battles, end the battle
-        let atLeastOneBattle = false;
+        let queryString =
+            'SELECT pieceId as attackPieceId, pieceTypeId as attackPieceTypeId, tpieceId as targetPieceId, tpieceTypeId as targetPieceTypeId, tpiecePositionId as targetPiecePositionId FROM (SELECT battlePieceTargetId, pieceId, pieceTypeId FROM battlePieces NATUAL JOIN pieces WHERE battlePieceId = pieceId AND battleId = ?) a LEFT JOIN (SELECT pieceId as tpieceId, pieceTypeId as tpieceTypeId, piecePositionId as tpiecePositionId FROM pieces) b ON a.battlePieceTargetId = b.tpieceId';
+        let inserts = [this.battleId];
+        const [battlePiecesWithTargets] = await pool.query<RowDataPacket[] & subQueryType[]>(queryString, inserts);
+
+        let atLeastOneTarget = false;
         for (let t = 0; t < battlePiecesWithTargets.length; t++) {
-            // assume that anything inserted into the database was legit (that piece had valid attack...etc)
-            if (battlePiecesWithTargets[t].tpieceId != null) {
-                atLeastOneBattle = true;
+            if (battlePiecesWithTargets[t].targetPieceId != null) {
+                atLeastOneTarget = true;
                 break;
             }
         }
 
-        const fightResults: any = {
-            atLeastOneBattle
-        };
+        if (!atLeastOneTarget) {
+            return null;
+        }
 
-        if (atLeastOneBattle) {
-            const piecesToDelete = [-1]; // need at least 1 value for sql to work?
-            const masterRecord = []; // for the client to handle...(future may do more things for client in advance...)
+        const piecesToDelete: PieceType['pieceId'][] = [];
+        const masterRecord: MasterRecordType = [];
 
-            for (let x = 0; x < battlePiecesWithTargets.length; x++) {
-                const thisBattleItem = battlePiecesWithTargets[x];
-                const { pieceId, pieceTypeId, tpieceId, tpieceTypeId } = thisBattleItem;
-                // is there a target?
-                if (tpieceId == null) {
-                    // nothing new, no dice...
-                    masterRecord.push({
-                        pieceId,
-                        targetId: null, // probably not needed....
-                        diceRoll: null,
-                        win: false
-                    });
-                } else {
-                    // do a dice roll
-                    // figure out needed value for success
-                    const neededValue = ATTACK_MATRIX[pieceTypeId][tpieceTypeId];
+        for (let x = 0; x < battlePiecesWithTargets.length; x++) {
+            const { attackPieceId, attackPieceTypeId, targetPieceId, targetPieceTypeId, targetPiecePositionId } = battlePiecesWithTargets[x];
 
-                    const diceRolledResult1 = Math.floor(Math.random() * 6) + 1;
-                    // const diceRolledResult1 = 1;
-                    const diceRolledResult2 = Math.floor(Math.random() * 6) + 1;
-                    // const diceRolledResult2 = 1;
-                    const diceRollValue = diceRolledResult1 + diceRolledResult2;
-
-                    // > or >=?
-                    if (diceRollValue >= neededValue && neededValue !== 0) {
-                        // something happens!, show dice, highlight probably
-                        // bulk update add? //bulk delete?
-                        piecesToDelete.push(tpieceId);
-                        masterRecord.push({
-                            pieceId,
-                            diceRoll: diceRollValue,
-                            targetId: tpieceId,
-                            win: true,
-                            diceRoll1: diceRolledResult1,
-                            diceRoll2: diceRolledResult2
-                        });
-                    } else {
-                        // nothing happens, show dice, don't highlight?
-                        masterRecord.push({
-                            pieceId,
-                            diceRoll: diceRollValue,
-                            targetId: tpieceId,
-                            win: false,
-                            diceRoll1: diceRolledResult1,
-                            diceRoll2: diceRolledResult2
-                        });
-                    }
-                }
+            if (targetPieceId == null || targetPieceTypeId == null) {
+                masterRecord.push({
+                    attackPieceId,
+                    targetPieceId: null
+                });
+                continue;
             }
 
-            // delete pieces if they are in the array (BULK DELETE QUERY)
-            // TODO: move this functionality to the piece class?
+            const neededValue = ATTACK_MATRIX[attackPieceTypeId][targetPieceTypeId];
+            const diceRoll1 = (Math.floor(Math.random() * 6) + 1) as 1 | 2 | 3 | 4 | 5 | 6;
+            const diceRoll2 = (Math.floor(Math.random() * 6) + 1) as 1 | 2 | 3 | 4 | 5 | 6;
+            // const diceRoll1 = 1 as 1 | 2 | 3 | 4 | 5 | 6; // for testing
+            // const diceRoll2 = 1 as 1 | 2 | 3 | 4 | 5 | 6;
+            const diceRollValue = diceRoll1 + diceRoll2;
+
+            const newRecord = {
+                attackPieceId,
+                targetPieceId,
+                diceRoll1,
+                diceRoll2
+            };
+
+            if (diceRollValue < neededValue || ATTACK_MATRIX[attackPieceTypeId][targetPieceTypeId] === UNABLE_TO_HIT) {
+                masterRecord.push({
+                    ...newRecord,
+                    win: false
+                });
+                continue;
+            }
+
+            masterRecord.push({
+                ...newRecord,
+                win: true,
+                targetPiecePositionId // will need to know where on the board to delete it (helper value)
+            });
+            piecesToDelete.push(targetPieceId);
+        }
+
+        if (piecesToDelete.length !== 0) {
             queryString = 'DELETE FROM pieces WHERE pieceId IN (?)';
             const inserts2 = [piecesToDelete];
             await pool.query(queryString, inserts2);
-
-            // prevents seeing previous attack from refresh*
-            queryString = 'UPDATE battlePieces SET battlePieceTargetId = -1 WHERE battleId = ?';
-            inserts = [this.battleId];
-            await pool.query(queryString, inserts);
-
-            // need to return the master record? and something else?
-            fightResults.masterRecord = masterRecord;
         }
 
-        return fightResults;
+        // prevents seeing previous attack from refresh*
+        // TODO: could store results with just 1 extra field on battlePieces, already storing the target....(but would need to delete actual pieces/targets after 'confirm' the results....)
+        queryString = 'UPDATE battlePieces SET battlePieceTargetId = -1 WHERE battleId = ?';
+        inserts = [this.battleId];
+        await pool.query(queryString, inserts);
+
+        return masterRecord;
     }
 }

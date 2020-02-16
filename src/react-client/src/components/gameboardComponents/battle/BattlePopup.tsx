@@ -1,6 +1,6 @@
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
-import { BattleState } from '../../../../../types';
+import { BattlePieceStateType, BattleState } from '../../../../../types';
 //prettier-ignore
 import { battlePieceClick, battlePopupMinimizeToggle, clearOldBattle, confirmBattleSelections, enemyBattlePieceClick, targetPieceClick } from "../../../redux";
 import { BATTLE_POPUP_IMAGES } from '../../styleConstants';
@@ -69,11 +69,11 @@ const invisibleStyle: any = {
 };
 
 interface Props {
+    battle: BattleState;
     battlePieceClick: any;
     enemyBattlePieceClick: any;
     targetPieceClick: any;
     confirmBattleSelections: any;
-    battle: BattleState;
     clearOldBattle: any;
     battlePopupMinimizeToggle: any;
 }
@@ -85,7 +85,7 @@ class BattlePopup extends Component<Props> {
 
         const { selectedBattlePiece, friendlyPieces, enemyPieces } = battle;
 
-        const friendlyBattlePieces = friendlyPieces.map((battlePiece: any, index: number) => (
+        const friendlyBattlePieces = friendlyPieces.map((battlePiece: BattlePieceStateType, index: number) => (
             <BattlePiece
                 isFriendly={true} //indicates left side battle piece functionality
                 battlePieceClick={battlePieceClick}
@@ -99,7 +99,7 @@ class BattlePopup extends Component<Props> {
         ));
 
         // TODO: refactor BattlePiece components to have variable props instead of passing everything to both friendly and enemy (or have different props (but they have almost exact same style))
-        const enemyBattlePieces = enemyPieces.map((battlePiece: any, index: number) => (
+        const enemyBattlePieces = enemyPieces.map((battlePiece: BattlePieceStateType, index: number) => (
             <BattlePiece
                 isFriendly={false} // indicates right side battle piece functionality
                 battlePieceClick={battlePieceClick}
