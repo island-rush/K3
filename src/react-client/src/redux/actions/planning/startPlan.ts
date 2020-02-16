@@ -21,6 +21,7 @@ export const startPlan = () => {
             dispatch(setUserfeedbackAction('Must select a piece to plan a move...'));
             return;
         }
+
         const { selectedPiece } = gameboardMeta;
         const { gamePhase, gameControllers, gameTeam, gameSlice } = gameInfo;
 
@@ -55,6 +56,11 @@ export const startPlan = () => {
 
         if (planning.isActive) {
             dispatch(setUserfeedbackAction('Already planning a move...'));
+            return;
+        }
+
+        if (planning.confirmedPlans[selectedPiece.pieceId]) {
+            dispatch(setUserfeedbackAction('Already has a plan, click the x button to get rid of the old plan first...'));
             return;
         }
 

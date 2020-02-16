@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../..';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_MAIN, WAITING_STATUS, TYPE_SEA } from '../../../../../constants';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_SEA, WAITING_STATUS } from '../../../../../constants';
 import { BombardmentSelectingAction, BOMBARDMENT_SELECTING, PieceType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 

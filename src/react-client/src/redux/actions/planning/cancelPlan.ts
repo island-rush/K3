@@ -1,6 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { CANCEL_PLAN, DeletePlanRequestAction, PreventPlanAction, SERVER_DELETE_PLAN } from '../../../../../types';
+// prettier-ignore
+import { CancelContainerPlaceAction, CANCEL_CONTAINER_PLACEMENT, CANCEL_PLAN, DeletePlanRequestAction, PreventPlanAction, SERVER_DELETE_PLAN } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 // TODO: rename cancelPlan to deletePlan to match the server side function (possibly match all client/server functions with each other...)
@@ -12,6 +13,16 @@ export const cancelPlan = () => {
         const { gameboardMeta, planning, container } = getState();
 
         if (planning.isActive || container.isSelectingHex) {
+            if (container.isSelectingHex) {
+                const cancelContainerPlaceAction: CancelContainerPlaceAction = {
+                    type: CANCEL_CONTAINER_PLACEMENT,
+                    payload: {}
+                };
+
+                dispatch(cancelContainerPlaceAction);
+                return;
+            }
+
             const preventPlanAction: PreventPlanAction = {
                 type: CANCEL_PLAN,
                 payload: {}

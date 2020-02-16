@@ -36,7 +36,12 @@ export class Plan implements PlanType {
     /**
      * Insert Plans into the database.
      */
-    static async insert(plansToInsert: any) {
+    static async insert(plansToInsert: any, pieceId: PieceType['pieceId']) {
+        // just in case there was already plans
+        const deleteString = 'DELETE FROM plans WHERE planPieceId = ?';
+        const deleteInserts = [pieceId];
+        await pool.query(deleteString, deleteInserts);
+
         const queryString = 'INSERT INTO plans (planGameId, planTeamId, planPieceId, planMovementOrder, planPositionId) VALUES ?';
         const inserts = [plansToInsert];
         await pool.query(queryString, inserts);
