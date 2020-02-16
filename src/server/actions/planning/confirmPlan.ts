@@ -112,7 +112,7 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
 
     // bulk insert (always insert bulk, don't really ever insert single stuff, since a 'plan' is a collection of moves, but the table is 'Plans')
     // TODO: could change the phrasing on Plan vs Moves (as far as inserting..function names...database entries??)
-    await Plan.insert(plansToInsert);
+    await Plan.insert(plansToInsert, pieceId);
 
     const serverAction: ConfirmPlanAction = {
         type: PLAN_WAS_CONFIRMED,

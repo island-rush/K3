@@ -75,3 +75,9 @@ export type ExitTransportContainerAction = {
         containerPiece: PieceType;
     };
 };
+
+export const CANCEL_CONTAINER_PLACEMENT = 'CANCEL_CONTAINER_PLACEMENT';
+export type CancelContainerPlaceAction = {
+    type: typeof CANCEL_CONTAINER_PLACEMENT;
+    payload: {};
+};

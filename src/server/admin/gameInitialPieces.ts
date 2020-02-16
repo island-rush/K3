@@ -40,6 +40,9 @@ export const gameInitialPieces = async (gameId: GameType['gameId']) => {
         piece(gameId, BLUE_TEAM_ID, SOF_TEAM_TYPE_ID, 34),
         piece(gameId, RED_TEAM_ID, SOF_TEAM_TYPE_ID, 21),
 
+        // testing container stuff
+        piece(gameId, RED_TEAM_ID, TRANSPORT_TYPE_ID, 120),
+
         // testing victory condition
         piece(gameId, RED_TEAM_ID, TANK_COMPANY_TYPE_ID, 652),
         piece(gameId, RED_TEAM_ID, TANK_COMPANY_TYPE_ID, 690),

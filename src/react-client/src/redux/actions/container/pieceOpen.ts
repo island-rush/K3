@@ -9,7 +9,12 @@ import { setUserfeedbackAction } from '../setUserfeedbackAction';
  */
 export const pieceOpen = (selectedPiece: PieceType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
-        const { gameboard, container, gameInfo } = getState();
+        const { gameboard, container, gameInfo, planning } = getState();
+
+        if (planning.isActive) {
+            dispatch(setUserfeedbackAction('cant open while planning active'));
+            return;
+        }
 
         const { pieceTypeId } = selectedPiece;
 

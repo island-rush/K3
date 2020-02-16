@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../..';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_SEA, WAITING_STATUS } from '../../../../../constants';
 import { MissileSelectingAction, MISSILE_SELECTING, PieceType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
@@ -10,7 +10,7 @@ import { setUserfeedbackAction } from '../setUserfeedbackAction';
 export const missileAttack = (piece: PieceType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameInfo } = getState();
-        const { gamePhase, gameSlice } = gameInfo;
+        const { gamePhase, gameSlice, gameStatus, gameControllers } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
             dispatch(setUserfeedbackAction('wrong phase for missile attack dude.'));
@@ -19,6 +19,16 @@ export const missileAttack = (piece: PieceType) => {
 
         if (gameSlice !== SLICE_PLANNING_ID) {
             dispatch(setUserfeedbackAction('must be in planning to use missile attack.'));
+            return;
+        }
+
+        if (gameStatus === WAITING_STATUS) {
+            dispatch(setUserfeedbackAction('already clicked to continue'));
+            return;
+        }
+
+        if (!gameControllers.includes(TYPE_SEA)) {
+            dispatch(setUserfeedbackAction('must be sea controller to use'));
             return;
         }
 
