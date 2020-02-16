@@ -105,7 +105,7 @@ export class BattlePiece extends Component<Props> {
             );
 
         const neededValue =
-            battlePiece.targetPiece == null || battlePiece.win != null ? null : (
+            battlePiece.targetPiece == null || battlePiece.win !== undefined ? null : (
                 <div>
                     {ATTACK_MATRIX[battlePiece.piece.pieceTypeId][battlePiece.targetPiece.pieceTypeId] !== 0
                         ? `Need: ${ATTACK_MATRIX[battlePiece.piece.pieceTypeId][battlePiece.targetPiece.pieceTypeId]}`

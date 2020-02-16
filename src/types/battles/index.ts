@@ -1,6 +1,6 @@
 import { GameboardPiecesDataType } from '../board';
-import { BattleState, GameInfoState } from '../reducerTypes';
 import { PieceType } from '../databaseTables';
+import { BattlePieceStateType, BattleState, GameInfoState } from '../reducerTypes';
 
 export const EVENT_BATTLE = 'EVENT_BATTLE';
 export type EventBattleAction = {
@@ -59,13 +59,13 @@ export type BattleSelectionsAction = {
     type: typeof BATTLE_SELECTIONS;
     payload: {
         friendlyPieces: BattleState['friendlyPieces'];
-        enemyPieces: BattleState['enemyPieces'];
     };
 };
 
 export type MasterRecordType = {
     attackPieceId: PieceType['pieceId'];
     targetPieceId?: PieceType['pieceId'];
+    targetPiecePositionId?: PieceType['piecePositionId'];
     win?: boolean;
     diceRoll1?: 1 | 2 | 3 | 4 | 5 | 6;
     diceRoll2?: 1 | 2 | 3 | 4 | 5 | 6;
@@ -76,6 +76,8 @@ export type BattleResultsAction = {
     type: typeof BATTLE_FIGHT_RESULTS;
     payload: {
         masterRecord: MasterRecordType;
+        redFriendlyBattlePieces: BattlePieceStateType[];
+        blueFriendlyBattlePieces: BattlePieceStateType[];
     };
 };
 

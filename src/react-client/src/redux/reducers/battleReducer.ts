@@ -1,6 +1,7 @@
 import { AnyAction } from 'redux';
 // prettier-ignore
-import { BattlePieceSelectAction, BATTLEPOPUP_MINIMIZE_TOGGLE, BattleResultsAction, BattleSelectionsAction, BattleState, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BATTLE_SELECTIONS, CLEAR_BATTLE, EnemyPieceSelectAction, ENEMY_PIECE_SELECT, EventBattleAction, EVENT_BATTLE, GameInitialStateAction, INITIAL_GAMESTATE, NO_MORE_BATTLES, TargetPieceClickAction, TARGET_PIECE_SELECT } from '../../../../types';
+import { BattlePieceSelectAction, BATTLEPOPUP_MINIMIZE_TOGGLE, BattleResultsAction, BattleSelectionsAction, BattleState, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BATTLE_SELECTIONS, CLEAR_BATTLE, EnemyPieceSelectAction, ENEMY_PIECE_SELECT, EventBattleAction, EVENT_BATTLE, GameInitialStateAction, INITIAL_GAMESTATE, NO_MORE_BATTLES, TargetPieceClickAction, TARGET_PIECE_SELECT, BlueOrRedTeamId } from '../../../../types';
+import { BLUE_TEAM_ID } from '../../../../constants';
 
 const initialBattleState: BattleState = {
     isMinimized: false,
@@ -54,7 +55,7 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
 
         case TARGET_PIECE_SELECT:
             //removing the target piece
-            stateCopy.friendlyPieces[(action as TargetPieceClickAction).payload.battlePieceIndex].targetPiece = null;
+            stateCopy.friendlyPieces[(action as TargetPieceClickAction).payload.battlePieceIndex].targetPiece = undefined;
             stateCopy.friendlyPieces[(action as TargetPieceClickAction).payload.battlePieceIndex].targetPieceIndex = -1;
             return stateCopy;
 
@@ -93,96 +94,78 @@ export function battleReducer(state = initialBattleState, action: AnyAction) {
         case BATTLE_FIGHT_RESULTS:
             stateCopy.selectedBattlePiece = -1;
             stateCopy.selectedBattlePieceIndex = -1;
+
+            const gameTeam: BlueOrRedTeamId = action.gameTeam; // given in websocket.ts
+            // prettier-ignore
+            stateCopy.friendlyPieces = gameTeam === BLUE_TEAM_ID ? (action as BattleResultsAction).payload.blueFriendlyBattlePieces : (action as BattleResultsAction).payload.redFriendlyBattlePieces;
+            // prettier-ignore
+            stateCopy.enemyPieces = gameTeam === BLUE_TEAM_ID ? (action as BattleResultsAction).payload.redFriendlyBattlePieces : (action as BattleResultsAction).payload.blueFriendlyBattlePieces;
+
             stateCopy.masterRecord = (action as BattleResultsAction).payload.masterRecord;
 
-            //now need more stuff handled for things...
+            // for each friendly and enemy battle piece, find the master record information and add it
             for (let x = 0; x < stateCopy.friendlyPieces.length; x++) {
-                //already knew the targets...
-                //which ones win or not gets handled
-
-                let currentRecord = (action as BattleResultsAction).payload.masterRecord.find(
+                const currentBattlePiece = stateCopy.friendlyPieces[x];
+                const currentRecord = (action as BattleResultsAction).payload.masterRecord.find(
                     (record: BattleResultsAction['payload']['masterRecord'][0], index: any) => {
-                        return record.attackPieceId === stateCopy.friendlyPieces[x].piece.pieceId;
+                        return record.attackPieceId === currentBattlePiece.piece.pieceId;
                     }
                 );
-
                 if (currentRecord !== undefined && currentRecord.targetPieceId !== undefined) {
                     stateCopy.friendlyPieces[x].win = currentRecord.win;
                     stateCopy.friendlyPieces[x].diceRoll1 = currentRecord.diceRoll1;
                     stateCopy.friendlyPieces[x].diceRoll2 = currentRecord.diceRoll2;
                 }
             }
-
-            for (let z = 0; z < stateCopy.enemyPieces.length; z++) {
-                //for each enemy piece that know (from battle.enemyPieces)
-                //add their target/dice information?
-
-                //every piece should have a record from the battle, even if it didn't do anything... (things will be null...(reference Event.js))
-                let currentRecord = (action as BattleResultsAction).payload.masterRecord.find(
-                    (record: BattleResultsAction['payload']['masterRecord'][0], index: number) => {
-                        return record.attackPieceId === stateCopy.enemyPieces[z].piece.pieceId;
+            for (let x = 0; x < stateCopy.enemyPieces.length; x++) {
+                const currentBattlePiece = stateCopy.enemyPieces[x];
+                const currentRecord = (action as BattleResultsAction).payload.masterRecord.find(
+                    (record: BattleResultsAction['payload']['masterRecord'][0], index: any) => {
+                        return record.attackPieceId === currentBattlePiece.piece.pieceId;
                     }
                 );
-
-                if (currentRecord !== undefined && currentRecord.targetPieceId) {
-                    const { attackPieceId, targetPieceId, win, diceRoll1, diceRoll2 } = currentRecord;
-
-                    //get the target information from the friendlyPieces
-                    // TODO: could refactor this to be better, lots of lookups probably not good
-                    let friendlyPieceIndex = stateCopy.friendlyPieces.findIndex(
-                        (friendlyBattlePiece: any) => friendlyBattlePiece.piece.pieceId === targetPieceId
-                    );
-                    let friendlyPiece = stateCopy.friendlyPieces[friendlyPieceIndex];
-                    let enemyPieceIndex = stateCopy.enemyPieces.findIndex(
-                        (enemyBattlePiece: any) => enemyBattlePiece.piece.pieceId === attackPieceId
-                    );
-                    stateCopy.enemyPieces[enemyPieceIndex].targetPiece = friendlyPiece.piece;
-                    stateCopy.enemyPieces[enemyPieceIndex].targetPieceIndex = friendlyPieceIndex;
-                    stateCopy.enemyPieces[enemyPieceIndex].win = win;
-                    stateCopy.enemyPieces[enemyPieceIndex].diceRoll1 = diceRoll1;
-                    stateCopy.enemyPieces[enemyPieceIndex].diceRoll2 = diceRoll2;
+                if (currentRecord !== undefined && currentRecord.targetPieceId !== undefined) {
+                    stateCopy.enemyPieces[x].win = currentRecord.win;
+                    stateCopy.enemyPieces[x].diceRoll1 = currentRecord.diceRoll1;
+                    stateCopy.enemyPieces[x].diceRoll2 = currentRecord.diceRoll2;
                 }
             }
 
             return stateCopy;
 
         case CLEAR_BATTLE:
-            //probably a more efficient way of removing elements from the master record/friendlyPieces/enemyPieces
+            // Ok to assume masterRecord exists if we ever call CLEAR_BATTLE
             if (!stateCopy.masterRecord) {
                 return stateCopy;
             }
 
-            for (let z = 0; z < stateCopy.masterRecord.length; z++) {
-                let thisRecord = stateCopy.masterRecord[z];
-                if (thisRecord.targetPieceId && thisRecord.win) {
-                    //need to delete that targetId from friendlyList or enemyList
+            // Delete pieces that lost
+            for (let x = 0; x < stateCopy.masterRecord.length; x++) {
+                const currentRecord = stateCopy.masterRecord[x];
+                if (currentRecord.win) {
+                    // don't know which list, try to delete from both
                     stateCopy.friendlyPieces = stateCopy.friendlyPieces.filter((battlePiece: any) => {
-                        return battlePiece.piece.pieceId !== thisRecord.targetPieceId;
+                        return battlePiece.piece.pieceId !== currentRecord.targetPieceId;
                     });
                     stateCopy.enemyPieces = stateCopy.enemyPieces.filter((battlePiece: any) => {
-                        return battlePiece.piece.pieceId !== thisRecord.targetPieceId;
+                        return battlePiece.piece.pieceId !== currentRecord.targetPieceId;
                     });
                 }
             }
 
+            delete stateCopy.masterRecord;
+
+            // Get rid of targetting / win / dice
             for (let x = 0; x < stateCopy.friendlyPieces.length; x++) {
-                //for each friendly piece, clear the dice roll and other stuff
-                stateCopy.friendlyPieces[x].targetPiece = null;
-                stateCopy.friendlyPieces[x].targetPieceIndex = -1;
-                delete stateCopy.friendlyPieces[x].win;
-                delete stateCopy.friendlyPieces[x].diceRoll1;
-                delete stateCopy.friendlyPieces[x].diceRoll2;
+                stateCopy.friendlyPieces[x] = {
+                    piece: stateCopy.friendlyPieces[x].piece
+                };
             }
             for (let x = 0; x < stateCopy.enemyPieces.length; x++) {
-                //for each friendly piece, clear the dice roll and other stuff
-                stateCopy.enemyPieces[x].targetPiece = null;
-                stateCopy.enemyPieces[x].targetPieceIndex = -1;
-                delete stateCopy.enemyPieces[x].win;
-                delete stateCopy.enemyPieces[x].diceRoll1;
-                delete stateCopy.enemyPieces[x].diceRoll2;
+                stateCopy.enemyPieces[x] = {
+                    piece: stateCopy.enemyPieces[x].piece
+                };
             }
-
-            delete stateCopy.masterRecord;
 
             return stateCopy;
 

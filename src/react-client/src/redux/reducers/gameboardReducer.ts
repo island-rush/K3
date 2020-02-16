@@ -1,7 +1,7 @@
 import { AnyAction } from 'redux';
 import { initialGameboardEmpty } from '../../../../constants';
 // prettier-ignore
-import { ClearBattleAction, CLEAR_BATTLE, CombatPhaseAction, COMBAT_PHASE, EnterContainerAction, EventBattleAction, EVENT_BATTLE, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, InvItemPlaceAction, NewRoundAction, NEW_ROUND, NoMoreBattlesAction, NO_MORE_BATTLES, OUTER_PIECE_CLICK_ACTION, PieceType, PIECE_PLACE, PlacePhaseAction, PLACE_PHASE, RaiseMoraleAction, RAISE_MORALE_SELECTED, REFUEL_RESULTS, RemoteSensingAction, RemoteSensingHitAction, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, SliceChangeAction, SLICE_CHANGE } from '../../../../types';
+import { ClearBattleAction, CLEAR_BATTLE, CombatPhaseAction, COMBAT_PHASE, EnterContainerAction, EventBattleAction, EVENT_BATTLE, ExitContainerAction, FuelResultsAction, GameboardState, GameInitialStateAction, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, InvItemPlaceAction, NewRoundAction, NEW_ROUND, NoMoreBattlesAction, NO_MORE_BATTLES, OUTER_PIECE_CLICK_ACTION, PIECE_PLACE, PlacePhaseAction, PLACE_PHASE, RaiseMoraleAction, RAISE_MORALE_SELECTED, REFUEL_RESULTS, RemoteSensingAction, RemoteSensingHitAction, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, SliceChangeAction, SLICE_CHANGE, PieceType } from '../../../../types';
 
 export function gameboardReducer(state = initialGameboardEmpty, action: AnyAction) {
     const { type } = action;
@@ -50,31 +50,19 @@ export function gameboardReducer(state = initialGameboardEmpty, action: AnyActio
             return stateCopy;
 
         case CLEAR_BATTLE:
-            //remove pieces from the masterRecord that won?
-            const { masterRecord, friendlyPieces, enemyPieces } = (action as ClearBattleAction).payload.battle;
+            const { masterRecord } = (action as ClearBattleAction).payload.battle;
 
+            // Ok to assume masterRecord exists if ever call CLEAR_BATTLE
             if (!masterRecord) {
                 return stateCopy;
             }
 
             for (let x = 0; x < masterRecord.length; x++) {
                 let currentRecord = masterRecord[x];
-                let { targetPieceId, win } = currentRecord;
-                if (targetPieceId && win) {
-                    //need to remove the piece from the board...
-                    let potentialPieceToRemove1 = friendlyPieces.find((battlePiece: any) => {
-                        return battlePiece.piece.pieceId === targetPieceId;
-                    });
-                    let potentialPieceToRemove2 = enemyPieces.find((battlePiece: any) => {
-                        return battlePiece.piece.pieceId === targetPieceId;
-                    });
-
-                    //don't know if was enemy or friendly (wasn't in the masterRecord (could change this to be more efficient...))
-                    let battlePieceToRemove = potentialPieceToRemove1 || potentialPieceToRemove2;
-                    let { pieceId, piecePositionId } = battlePieceToRemove!.piece; // TODO: don't do exclamation mark // TODO: enemyPieces .piece isn't a PieceType (should be)
-
-                    stateCopy[piecePositionId].pieces = stateCopy[piecePositionId].pieces.filter((piece: PieceType) => {
-                        return piece.pieceId !== pieceId;
+                let { win, targetPieceId, targetPiecePositionId } = currentRecord;
+                if (win && targetPieceId !== undefined && targetPiecePositionId !== undefined) {
+                    stateCopy[targetPiecePositionId].pieces = stateCopy[targetPiecePositionId].pieces.filter((piece: PieceType) => {
+                        return piece.pieceId !== targetPieceId;
                     });
                 }
             }

@@ -53,42 +53,15 @@ export const giveNextBattle = async (thisGame: Game) => {
     await thisGame.setStatus(BLUE_TEAM_ID, NOT_WAITING_STATUS);
     await thisGame.setStatus(RED_TEAM_ID, NOT_WAITING_STATUS);
 
-    // There is a battle to give
-    const blueBattleEventItems: any = await battle.getTeamItems(BLUE_TEAM_ID);
-    const redBattleEventItems: any = await battle.getTeamItems(RED_TEAM_ID);
+    // There is a battle to give (no targets given, battle just started)
+    const { blueFriendlyBattlePieces, redFriendlyBattlePieces } = await battle.getBattleState();
 
-    const blueFriendlyBattlePieces: any = [];
-    const blueEnemyBattlePieces: any = [];
-    const redFriendlyBattlePieces: any = [];
-    const redEnemyBattlePieces: any = [];
-
-    // Format for the client with extra properties
-    for (let x = 0; x < blueBattleEventItems.length; x++) {
-        const currentBlueBattlePiece: any = {
-            targetPiece: null,
-            targetPieceIndex: -1
-        };
-        currentBlueBattlePiece.piece = blueBattleEventItems[x];
-        blueFriendlyBattlePieces.push(currentBlueBattlePiece);
-        redEnemyBattlePieces.push(currentBlueBattlePiece);
-    }
-    for (let y = 0; y < redBattleEventItems.length; y++) {
-        const currentRedBattlePiece: any = {
-            targetPiece: null,
-            targetPieceIndex: -1
-        };
-        currentRedBattlePiece.piece = redBattleEventItems[y];
-        blueEnemyBattlePieces.push(currentRedBattlePiece);
-        redFriendlyBattlePieces.push(currentRedBattlePiece);
-    }
-
-    // Create Frontend Actions
     // TODO: get rid of 'event' phrasing, since now only battles
     const eventBattleActionBlue: EventBattleAction = {
         type: EVENT_BATTLE,
         payload: {
             friendlyPieces: blueFriendlyBattlePieces,
-            enemyPieces: blueEnemyBattlePieces,
+            enemyPieces: redFriendlyBattlePieces,
             gameboardPieces: await Piece.getVisiblePieces(gameId, BLUE_TEAM_ID),
             gameStatus: thisGame.getStatus(BLUE_TEAM_ID) // just set to 'not waiting' above
         }
@@ -97,7 +70,7 @@ export const giveNextBattle = async (thisGame: Game) => {
         type: EVENT_BATTLE,
         payload: {
             friendlyPieces: redFriendlyBattlePieces,
-            enemyPieces: redEnemyBattlePieces,
+            enemyPieces: blueFriendlyBattlePieces,
             gameboardPieces: await Piece.getVisiblePieces(gameId, RED_TEAM_ID),
             gameStatus: thisGame.getStatus(RED_TEAM_ID)
         }

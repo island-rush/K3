@@ -242,8 +242,16 @@ export type ContainerState = {
 
 // TODO: possibly put within ./types/battle
 export type BattlePieceStateType = {
-    piece: PieceType;
-    targetPiece: PieceType | null;
+    piece: {
+        pieceId: PieceType['pieceId'];
+        pieceTypeId: PieceType['pieceTypeId'];
+        piecePositionId: PieceType['piecePositionId'];
+    };
+    targetPiece?: {
+        pieceId: PieceType['pieceId'];
+        pieceTypeId: PieceType['pieceTypeId'];
+        piecePositionId: PieceType['piecePositionId'];
+    };
     targetPieceIndex?: number;
     win?: boolean;
     diceRoll1?: 1 | 2 | 3 | 4 | 5 | 6;
