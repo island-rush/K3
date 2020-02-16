@@ -17,6 +17,7 @@ export const ACTIVATED = 1;
 export const DEACTIVATED = 0;
 
 export const UNABLE_TO_SEE = -1;
+export const UNABLE_TO_HIT = 0;
 
 export const NO_PARENT_VALUE: null = null;
 

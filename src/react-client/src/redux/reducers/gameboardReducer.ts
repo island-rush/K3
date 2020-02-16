@@ -53,16 +53,20 @@ export function gameboardReducer(state = initialGameboardEmpty, action: AnyActio
             //remove pieces from the masterRecord that won?
             const { masterRecord, friendlyPieces, enemyPieces } = (action as ClearBattleAction).payload.battle;
 
+            if (!masterRecord) {
+                return stateCopy;
+            }
+
             for (let x = 0; x < masterRecord.length; x++) {
                 let currentRecord = masterRecord[x];
-                let { targetId, win } = currentRecord;
-                if (targetId && win) {
+                let { targetPieceId, win } = currentRecord;
+                if (targetPieceId && win) {
                     //need to remove the piece from the board...
                     let potentialPieceToRemove1 = friendlyPieces.find((battlePiece: any) => {
-                        return battlePiece.piece.pieceId === targetId;
+                        return battlePiece.piece.pieceId === targetPieceId;
                     });
                     let potentialPieceToRemove2 = enemyPieces.find((battlePiece: any) => {
-                        return battlePiece.piece.pieceId === targetId;
+                        return battlePiece.piece.pieceId === targetPieceId;
                     });
 
                     //don't know if was enemy or friendly (wasn't in the masterRecord (could change this to be more efficient...))

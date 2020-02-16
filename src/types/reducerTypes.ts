@@ -2,6 +2,7 @@
 import { AIRFIELD_TYPE, FLAG_TYPE, GAME_INFO_MENU_INDEX, INV_MENU_INDEX, LAND_TYPE, LIST_ALL_POSITIONS_TYPE, MISSILE_SILO_TYPE, NEUTRAL_TEAM_ID, NO_MENU_INDEX, SHOP_MENU_INDEX, SPACE_MENU_INDEX, WATER_TYPE } from '../constants';
 import { GameType, InvItemType, NewsType, PieceType, ShopItemType } from './databaseTables';
 import { GameSession } from './sessionTypes';
+import { MasterRecordType } from './battles';
 
 export type ShopState = ShopItemType[];
 
@@ -244,25 +245,22 @@ export type BattleState = {
     isMinimized: boolean;
     selectedBattlePiece: any;
     selectedBattlePieceIndex: number; // helper to find the piece within the array
-    masterRecord: any | null;
+    masterRecord: MasterRecordType | null;
     friendlyPieces: {
-        // TODO: refactor this without question marks
         piece: PieceType;
         targetPiece: PieceType | null;
         targetPieceIndex?: number;
-        diceRoll?: any;
-        win?: any;
-        diceRoll1?: any;
-        diceRoll2?: any;
+        win?: boolean;
+        diceRoll1?: 1 | 2 | 3 | 4 | 5 | 6;
+        diceRoll2?: 1 | 2 | 3 | 4 | 5 | 6;
     }[];
     enemyPieces: {
-        targetPiece: any | null;
-        targetPieceIndex: number;
         piece: any;
-        diceRoll?: any;
-        win?: any;
-        diceRoll1?: any;
-        diceRoll2?: any;
+        targetPiece: PieceType | null;
+        targetPieceIndex?: number;
+        win?: boolean;
+        diceRoll1?: 1 | 2 | 3 | 4 | 5 | 6;
+        diceRoll2?: 1 | 2 | 3 | 4 | 5 | 6;
     }[];
 };
 

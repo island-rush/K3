@@ -93,17 +93,17 @@ export class BattlePiece extends Component<Props> {
             );
 
         const diceBox1 =
-            battlePiece.diceRoll == null ? null : (
+            battlePiece.diceRoll1 == null ? null : (
                 <div title={battlePiece.diceRoll1} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll1] }} />
             );
 
         const diceBox2 =
-            battlePiece.diceRoll == null ? null : (
+            battlePiece.diceRoll2 == null ? null : (
                 <div title={battlePiece.diceRoll2} style={{ ...diceBoxStyle, ...DICE_IMAGES[battlePiece.diceRoll2] }} />
             );
 
         const neededValue =
-            battlePiece.targetPiece == null || battlePiece.diceRoll != null ? null : (
+            battlePiece.targetPiece == null || battlePiece.win != null ? null : (
                 <div>
                     {ATTACK_MATRIX[battlePiece.piece.pieceTypeId][battlePiece.targetPiece.pieceTypeId] !== 0
                         ? `Need: ${ATTACK_MATRIX[battlePiece.piece.pieceTypeId][battlePiece.targetPiece.pieceTypeId]}`

@@ -138,17 +138,17 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
     await thisGame.setStatus(otherTeam, NOT_WAITING_STATUS);
 
     // Wait to let battle selections go to all controllers on the team, then send the results (which right now depend on frontend already having selections?)
-    await new Promise(resolve => setTimeout(resolve, 50)); // TODO: get rid of this crap by refactoring above code to only send BATTLE_SELECTIONS action if waiting....timing is weird here so think it though
+    await new Promise(resolve => setTimeout(resolve, 50)); // TODO: get rid of this (most definately probably bad practice, this is bad code) by refactoring above code to only send BATTLE_SELECTIONS action if waiting....timing is weird here so think it though
 
     // Do the fight!
-    const fightResults = await thisBattle.fight();
+    const masterRecord = await thisBattle.fight();
 
     // Send the results of the battle back to the client(s)
-    if (fightResults.atLeastOneBattle) {
+    if (masterRecord) {
         const serverAction: BattleResultsAction = {
             type: BATTLE_FIGHT_RESULTS,
             payload: {
-                masterRecord: fightResults.masterRecord
+                masterRecord
             }
         };
 
@@ -156,6 +156,7 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
         return;
     }
 
+    // no fight results, indicates end of battle
     await thisBattle.delete();
 
     // Check for flag updates after the battle (enemy may no longer be there = capture the flag)

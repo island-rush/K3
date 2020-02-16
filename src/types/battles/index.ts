@@ -62,11 +62,19 @@ export type BattleSelectionsAction = {
     };
 };
 
+export type MasterRecordType = {
+    attackPieceId: number;
+    targetPieceId?: number;
+    win?: boolean;
+    diceRoll1?: 1 | 2 | 3 | 4 | 5 | 6;
+    diceRoll2?: 1 | 2 | 3 | 4 | 5 | 6;
+}[];
+
 export const BATTLE_FIGHT_RESULTS = 'BATTLE_FIGHT_RESULTS';
 export type BattleResultsAction = {
     type: typeof BATTLE_FIGHT_RESULTS;
     payload: {
-        masterRecord: BattleState['masterRecord'];
+        masterRecord: MasterRecordType;
     };
 };
 
