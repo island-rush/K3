@@ -1,6 +1,6 @@
 {
     "name": "island-rush-v3.3",
-    "version": "3.3.0",
+    "version": "3.3.1",
     "description": "Island Rush V3 is a Military Strategy Teaching Tool/Game.",
     "main": "./dist/server.js",
     "scripts": {
