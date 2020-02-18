@@ -85,8 +85,11 @@ Note there are several env variables used by the backend. These can be easily co
 -   DB_USERNAME = database user -> default is 'root'
 -   DB_PASSWORD = database password -> default is ''
 -   SESSION_SECRET = optional secret used by session cookies for security
--   SESSION_TYPE = Either 'azure' or 'loki', default is 'loki'.
+-   SESSION_TYPE = Either 'azure', 'loki', or 'redis', default is 'loki'.
 -   AZURE_STORAGE_CONNECTION_STRING = Azure Storage Table connection string (if using 'azure' sessions)
+-   REDIS_SOCKETS = If server will use redis to bridge sockets between several instances, default false
+-   REDISCACHEHOSTNAME = Redis Hostname (we usually use azure), default is '' (if using 'redis' sessions / sockets)
+-   REDISCACHEKEY = Redis Cache Key, default is '' (if using 'redis' sessions / sockets)
 -   NODE_ENV = 'production' or 'development'...this determines how the backend serves out the frontend
 -   NODE_OPTIONS = options for running node. (--max_old_space_size=4096)
 -   PORT = server port (typically pre-set in production environments) -> default is 80
@@ -99,9 +102,9 @@ Teacher Login form with the credentials used in the env variables. These are the
 -   Instructor: "Smith" -> Env value
 -   Password: "asdf" -> Env value (stores the md5 hash)
 
-Here you can click a button to insert the database tables ("INITIALIZE DATABASE"). This action must be done before all others.
+Here you can click a button to insert the database tables ("INITIALIZE DATABASE"). This action must be done before all others. If this fails (some external DBs don't allow multiple commands at once), you might need to manually execute the 'tableInsert.sql' file from whatever database editer you prefer (such as MySQL Workbench).
 
-The /courseDirector page is used for creating games, deleting games, and resetting teacher passwords. You must create a game here in order to play the game. It is recommended to create a game with the default values that are always loaded in the homepage. This will prevent typing in credentials everytime the client needs to login. ('m1a1', 'adolph', 'asdf').
+The /courseDirector page is used for creating games, deleting games, and resetting teacher passwords. You must create a game here in order to play the game. It is recommended to create a game with the default values that are always loaded in the homepage. This will prevent typing in credentials everytime the client needs to login. ('m1a1', 'adolph', 'asdf'). These values are only set to help speed up development.
 
 The password used when creating a game is the password used by teachers to login to their /teacher page. Teachers are able activate/deactivate their games, as well as reset the game to have initial pieces on the board. They can also reset team passwords, but simply leaving these as the defaults are fine when developing.
 
@@ -145,7 +148,7 @@ npm start
 
 A combination of the commands listed above can be configured inside an automated CICD pipeline, or manually executed on whatever production machine is in use. Please set env variables before executing, and ensure the database is accessible.
 
-Note: the ./web.config is currently being used to configure the environment to run on the Azure Cloud, with the contents of the ./dist directory also being moved to the root directory. This application should run as any typical node server, for which there are plenty of guides and configurations available online to help with deploying.
+Note: the ./web.config is currently being used to configure the environment to run on the Azure Cloud (IIS Node), with the contents of the ./dist directory also being moved to the root directory. This application should run as any typical node server, for which there are plenty of guides and configurations available online to help with deploying.
 
 ## Built With
 
