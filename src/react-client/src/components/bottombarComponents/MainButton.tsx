@@ -18,9 +18,10 @@ interface Props {
 export class MainButton extends Component<Props> {
     render() {
         const { mainButtonClick, gameInfo } = this.props;
+
         const { gameStatus, gamePhase, gameSlice } = gameInfo;
 
-        //TODO: clean this mess up
+        // TODO: this seems messy
         let buttonText;
         if (gameStatus === WAITING_STATUS) {
             buttonText = 'Waiting on other Team...';
@@ -47,12 +48,7 @@ export class MainButton extends Component<Props> {
                 style={mainButtonStyle}
                 onClick={event => {
                     event.preventDefault();
-                    // normally confirms are obtrusive UI, and should use something else TODO: confirm dialog box...
-                    if (gameStatus !== WAITING_STATUS) {
-                        if (window.confirm('Are you sure you want to move on?')) {
-                            mainButtonClick();
-                        }
-                    }
+                    mainButtonClick();
                     event.stopPropagation();
                 }}
             >

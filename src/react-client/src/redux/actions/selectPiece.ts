@@ -1,9 +1,8 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../';
+import { DRONE_SWARMS_TYPE_ID, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, SEA_MINES_TYPE_ID } from '../../../../constants';
 // prettier-ignore
-import { DRONE_SWARMS_TYPE_ID, MISSILE_LAUNCH_DISRUPTION_TYPE_ID, PIECE_CLICK, SEA_MINES_TYPE_ID, SERVER_BOMBARDMENT_CONFIRM, SERVER_DRONE_SWARM_CONFIRM, SERVER_MISSILE_CONFIRM, SERVER_MISSILE_DISRUPT_CONFIRM, SERVER_SEA_MINE_CONFIRM } from '../../../../constants';
-// prettier-ignore
-import { BombardmentRequestAction, DroneSwarmRequestAction, MissileDisruptRequestAction, MissileRequestAction, PieceClickAction, PieceType, SeaMineRequestAction } from '../../../../types';
+import { BombardmentRequestAction, DroneSwarmRequestAction, MissileDisruptRequestAction, MissileRequestAction, PieceClickAction, PieceType, PIECE_CLICK, SeaMineRequestAction, SERVER_BOMBARDMENT_CONFIRM, SERVER_DRONE_SWARM_CONFIRM, SERVER_MISSILE_CONFIRM, SERVER_MISSILE_DISRUPT_CONFIRM, SERVER_SEA_MINE_CONFIRM } from '../../../../types';
 
 /**
  * Change the state based on the piece that the user selected.
@@ -12,7 +11,7 @@ export const selectPiece = (selectedPiece: PieceType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { planning } = getState();
 
-        if (!planning.active) {
+        if (!planning.isActive) {
             const clientAction: PieceClickAction = {
                 type: PIECE_CLICK,
                 payload: {
@@ -27,6 +26,7 @@ export const selectPiece = (selectedPiece: PieceType) => {
         // else planning is active
 
         if (planning.missileSelecting) {
+            setTimeout(() => {});
             if (window.confirm('Are you sure you want to attack this piece?')) {
                 const clientAction: MissileRequestAction = {
                     type: SERVER_MISSILE_CONFIRM,
@@ -102,5 +102,7 @@ export const selectPiece = (selectedPiece: PieceType) => {
                 sendToServer(clientAction);
             }
         }
+
+        return;
     };
 };

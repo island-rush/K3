@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
+import { INV_MENU_INDEX, SHOP_MENU_INDEX, SPACE_MENU_INDEX, GAME_INFO_MENU_INDEX } from '../../../../constants';
 import { GameInfoState } from '../../../../types';
 import { menuSelect } from '../../redux';
 import { Gameinfo } from './Gameinfo';
@@ -51,8 +52,8 @@ const selectedButtonStyle = {
 };
 
 interface Props {
-    gameInfo: GameInfoState;
     selectedMenu: number;
+    gameInfo: GameInfoState;
     menuSelect: any;
 }
 
@@ -60,65 +61,71 @@ class Sidebar extends Component<Props> {
     render() {
         const { gameInfo, selectedMenu, menuSelect } = this.props;
 
+        const sidebarOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div
-                style={sidebarStyle}
-                onClick={event => {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }}
-            >
-                <ShopMenu selected={selectedMenu === 1} />
-                <InvMenu selected={selectedMenu === 2} />
-                <SpaceArea selected={selectedMenu === 3} />
-                <Gameinfo gameInfo={gameInfo} selected={selectedMenu === 4} />
+            <div style={sidebarStyle} onClick={sidebarOnClick}>
+                <ShopMenu isSelected={selectedMenu === SHOP_MENU_INDEX} />
+                <InvMenu isSelected={selectedMenu === INV_MENU_INDEX} />
+                <SpaceArea isSelected={selectedMenu === SPACE_MENU_INDEX} />
+                <Gameinfo gameInfo={gameInfo} isSelected={selectedMenu === GAME_INFO_MENU_INDEX} />
+
+                {/* Shop Menu Button */}
                 <div
                     onClick={event => {
                         event.preventDefault();
-                        menuSelect(1);
+                        menuSelect(SHOP_MENU_INDEX);
                         event.stopPropagation();
                     }}
                     style={{
                         ...buttonStyle,
                         ...shopButtonStyle,
-                        ...(selectedMenu === 1 ? selectedButtonStyle : '')
+                        ...(selectedMenu === SHOP_MENU_INDEX ? selectedButtonStyle : '')
                     }}
                 />
+
+                {/* Inv Menu Button */}
                 <div
                     onClick={event => {
                         event.preventDefault();
-                        menuSelect(2);
+                        menuSelect(INV_MENU_INDEX);
                         event.stopPropagation();
                     }}
                     style={{
                         ...buttonStyle,
                         ...invButtonStyle,
-                        ...(selectedMenu === 2 ? selectedButtonStyle : '')
+                        ...(selectedMenu === INV_MENU_INDEX ? selectedButtonStyle : '')
                     }}
                 />
 
+                {/* Space Menu Button */}
                 <div
                     onClick={event => {
                         event.preventDefault();
-                        menuSelect(3);
+                        menuSelect(SPACE_MENU_INDEX);
                         event.stopPropagation();
                     }}
                     style={{
                         ...buttonStyle,
                         ...spaceButtonStyle,
-                        ...(selectedMenu === 3 ? selectedButtonStyle : '')
+                        ...(selectedMenu === SPACE_MENU_INDEX ? selectedButtonStyle : '')
                     }}
                 />
+
+                {/* Game Info Menu Button */}
                 <div
                     onClick={event => {
                         event.preventDefault();
-                        menuSelect(4);
+                        menuSelect(GAME_INFO_MENU_INDEX);
                         event.stopPropagation();
                     }}
                     style={{
                         ...buttonStyle,
                         ...infoButtonStyle,
-                        ...(selectedMenu === 4 ? selectedButtonStyle : '')
+                        ...(selectedMenu === GAME_INFO_MENU_INDEX ? selectedButtonStyle : '')
                     }}
                 />
             </div>

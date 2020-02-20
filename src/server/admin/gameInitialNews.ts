@@ -1,9 +1,10 @@
+import { GameType, NewsType } from '../../types';
 import { pool } from '../database';
 
 /**
  * Helper function, generates array of inserts for gameInitialNews.
  */
-const news = (gameId: number, newsOrder: number, newsOptions: NewsOptions) => {
+const news = (gameId: GameType['gameId'], newsOrder: NewsType['newsOrder'], newsOptions: NewsOptions) => {
     const newsTitle = newsOptions.newsTitle === undefined ? 'Default Title' : newsOptions.newsTitle;
     const newsInfo = newsOptions.newsInfo === undefined ? 'Default Info' : newsOptions.newsInfo;
 
@@ -13,7 +14,7 @@ const news = (gameId: number, newsOrder: number, newsOptions: NewsOptions) => {
 /**
  * Inserts a list of pre-defined news alerts into a game.
  */
-export const gameInitialNews = async (gameId: number) => {
+export const gameInitialNews = async (gameId: GameType['gameId']) => {
     let newsOrder = 0;
 
     const allInserts = [

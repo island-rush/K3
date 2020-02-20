@@ -1,16 +1,15 @@
-import { INITIAL_GAMESTATE, NEWSPOPUP_MINIMIZE_TOGGLE, NEWS_PHASE, PURCHASE_PHASE } from '../../../../constants';
-import { GameInitialStateAction, NewsPhaseAction, NewsPopupToggleAction, NewsState, PurchasePhaseAction } from '../../../../types';
-
-type NewsReducerActions = GameInitialStateAction | NewsPhaseAction | PurchasePhaseAction | NewsPopupToggleAction;
+import { AnyAction } from 'redux';
+// prettier-ignore
+import { GameInitialStateAction, NewsPhaseAction, NewsState, INITIAL_GAMESTATE, NEWS_PHASE, PURCHASE_PHASE, NEWSPOPUP_MINIMIZE_TOGGLE } from '../../../../types';
 
 const initialNewsState: NewsState = {
+    isActive: false,
     isMinimized: false,
-    active: false,
     newsTitle: 'Loading Title...',
     newsInfo: 'Loading Info...'
 };
 
-export function newsReducer(state = initialNewsState, action: NewsReducerActions) {
+export function newsReducer(state = initialNewsState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: NewsState = JSON.parse(JSON.stringify(state));
@@ -20,7 +19,7 @@ export function newsReducer(state = initialNewsState, action: NewsReducerActions
             if ((action as GameInitialStateAction).payload.news) {
                 stateCopy.newsTitle = (action as GameInitialStateAction).payload.news!.newsTitle;
                 stateCopy.newsInfo = (action as GameInitialStateAction).payload.news!.newsInfo;
-                stateCopy.active = true;
+                stateCopy.isActive = true;
                 stateCopy.isMinimized = false;
             }
             return stateCopy;
@@ -29,7 +28,7 @@ export function newsReducer(state = initialNewsState, action: NewsReducerActions
             return (action as NewsPhaseAction).payload.news;
 
         case PURCHASE_PHASE:
-            stateCopy.active = false; //hide the popup
+            stateCopy.isActive = false;
             return stateCopy;
 
         case NEWSPOPUP_MINIMIZE_TOGGLE:
@@ -37,6 +36,7 @@ export function newsReducer(state = initialNewsState, action: NewsReducerActions
             return stateCopy;
 
         default:
+            // Do nothing
             return state;
     }
 }

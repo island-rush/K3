@@ -1,6 +1,6 @@
 // prettier-ignore
-import { BAD_REQUEST_TAG, BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, PURCHASE_PHASE_ID, SHOP_REFUND, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
-import { ShopRefundAction, ShopRefundRequestAction, SocketSession } from '../../../types';
+import { BAD_REQUEST_TAG, BLUE_TEAM_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, PURCHASE_PHASE_ID, TYPE_COSTS, TYPE_MAIN } from '../../../constants';
+import { ShopRefundAction, ShopRefundRequestAction, SHOP_REFUND, SocketSession } from '../../../types';
 import { Game, ShopItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -28,6 +28,12 @@ export const shopRefundRequest = async (session: SocketSession, action: ShopRefu
 
     if (gamePhase !== PURCHASE_PHASE_ID) {
         sendUserFeedback(socketId, 'Not the right phase...');
+        return;
+    }
+
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 

@@ -1,38 +1,7 @@
+import { AnyAction } from 'redux';
+import { ANTI_SAT_MISSILE_ROUNDS } from '../../../../constants';
 // prettier-ignore
-import { ANTISAT_HIT_ACTION, ANTISAT_SELECTED, ANTI_SAT_MISSILE_ROUNDS, ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, BOMBARDMENT_SELECTED, COMM_INTERRUP_SELECTED, CYBER_DEFENSE_SELECTED, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, DRONE_SWARM_SELECTED, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, MISSILE_DISRUPT_SELECTED, MISSILE_SELECTED, NEW_ROUND, NO_MORE_EVENTS, NUKE_SELECTED, PLACE_PHASE, RAISE_MORALE_SELECTED, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SLICE_CHANGE } from '../../../../constants';
-// prettier-ignore
-import { AntiSatAction, AntiSatHitAction, AtcScrambleAction, BioWeaponsAction, BombardmentAction, CapabilitiesState, ClearDroneSwarmMineNotifyAction, ClearSeaMineNotifyAction, CommInterruptAction, CyberDefenseAction, DroneSwarmAction, DroneSwarmHitNotifyAction, EventBattleAction, EventRefuelAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, MissileAction, MissileDisruptAction, NewRoundAction, NoMoreEventsAction, NukeAction, PlacePhaseAction, RaiseMoraleAction, RemoteSensingAction, RemoteSensingHitAction, RodsFromGodAction, SeaMineAction, SeaMineHitNotifyAction, SliceChangeAction } from '../../../../types';
-
-type CapabilityReducerActions =
-    | GameInitialStateAction
-    | NewRoundAction
-    | PlacePhaseAction
-    | AntiSatAction
-    | RaiseMoraleAction
-    | RodsFromGodAction
-    | CommInterruptAction
-    | InsurgencyAction
-    | MissileAction
-    | BombardmentAction
-    | MissileDisruptAction
-    | RemoteSensingAction
-    | GoldenEyeAction
-    | CyberDefenseAction
-    | SliceChangeAction
-    | RemoteSensingHitAction
-    | AntiSatHitAction
-    | EventBattleAction
-    | SeaMineAction
-    | AtcScrambleAction
-    | NukeAction
-    | DroneSwarmAction
-    | ClearSeaMineNotifyAction
-    | SeaMineHitNotifyAction
-    | DroneSwarmHitNotifyAction
-    | ClearDroneSwarmMineNotifyAction
-    | NoMoreEventsAction
-    | EventRefuelAction
-    | BioWeaponsAction;
+import { AntiSatHitAction, ANTISAT_HIT_ACTION, ANTISAT_SELECTED, AtcScrambleAction, ATC_SCRAMBLE_SELECTED, BioWeaponsAction, BIO_WEAPON_SELECTED, BombardmentAction, BOMBARDMENT_SELECTED, CapabilitiesState, ClearSamDeleteAction, CLEAR_SAM_DELETE, CommInterruptAction, COMM_INTERRUP_SELECTED, CYBER_DEFENSE_SELECTED, DroneSwarmAction, DroneSwarmHitNotifyAction, DRONE_SWARM_HIT_NOTIFICATION, DRONE_SWARM_NOTIFY_CLEAR, DRONE_SWARM_SELECTED, EVENT_BATTLE, GameInitialStateAction, GoldenEyeAction, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, InsurgencyAction, INSURGENCY_SELECTED, MissileAction, MissileDisruptAction, MISSILE_DISRUPT_SELECTED, MISSILE_SELECTED, NewRoundAction, NEW_ROUND, NO_MORE_BATTLES, NukeAction, NUKE_SELECTED, PlacePhaseAction, PLACE_PHASE, RaiseMoraleAction, RAISE_MORALE_SELECTED, RemoteSensingAction, RemoteSensingHitAction, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, RodsFromGodAction, RODS_FROM_GOD_SELECTED, SamDeletedPiecesAction, SAM_DELETED_PIECES, SeaMineAction, SeaMineHitNotifyAction, SEA_MINE_HIT_NOTIFICATION, SEA_MINE_NOTIFY_CLEAR, SEA_MINE_SELECTED, SliceChangeAction, SLICE_CHANGE } from '../../../../types';
 
 const initialCapabilitiesState: CapabilitiesState = {
     confirmedRods: [],
@@ -55,10 +24,11 @@ const initialCapabilitiesState: CapabilitiesState = {
     confirmedAntiSat: [],
     confirmedAntiSatHitPos: [],
     confirmedMissileDisrupts: [],
-    cyberDefenseIsActive: false
+    isCyberDefenseActive: false,
+    samHitPos: []
 };
 
-export function capabilitiesReducer(state = initialCapabilitiesState, action: CapabilityReducerActions) {
+export function capabilitiesReducer(state = initialCapabilitiesState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: CapabilitiesState = JSON.parse(JSON.stringify(state));
@@ -82,7 +52,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedNukes = (action as NewRoundAction).payload.confirmedNukes;
             stateCopy.confirmedAntiSat = (action as NewRoundAction).payload.confirmedAntiSat;
             stateCopy.confirmedMissileDisrupts = (action as NewRoundAction).payload.confirmedMissileDisrupts;
-            stateCopy.cyberDefenseIsActive = (action as NewRoundAction).payload.cyberDefenseIsActive;
+            stateCopy.isCyberDefenseActive = (action as NewRoundAction).payload.cyberDefenseIsActive;
             return stateCopy;
 
         case PLACE_PHASE:
@@ -95,7 +65,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.confirmedNukes = (action as PlacePhaseAction).payload.confirmedNukes;
             stateCopy.confirmedAntiSat = (action as PlacePhaseAction).payload.confirmedAntiSat;
             stateCopy.confirmedMissileDisrupts = (action as PlacePhaseAction).payload.confirmedMissileDisrupts;
-            stateCopy.cyberDefenseIsActive = (action as PlacePhaseAction).payload.cyberDefenseIsActive;
+            stateCopy.isCyberDefenseActive = (action as PlacePhaseAction).payload.cyberDefenseIsActive;
             stateCopy.confirmedRods = [];
             stateCopy.confirmedInsurgency = [];
             stateCopy.confirmedMissileHitPos = [];
@@ -126,7 +96,6 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             return stateCopy;
 
         case REMOTE_SENSING_HIT_ACTION:
-            stateCopy.confirmedAntiSatHitPos.push((action as RemoteSensingHitAction).payload.positionOfRemoteHit);
             stateCopy.confirmedRemoteSense = stateCopy.confirmedRemoteSense.filter(pos => {
                 return pos !== (action as RemoteSensingHitAction).payload.positionOfRemoteHit;
             });
@@ -172,7 +141,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             return stateCopy;
 
         case CYBER_DEFENSE_SELECTED:
-            stateCopy.cyberDefenseIsActive = true;
+            stateCopy.isCyberDefenseActive = true;
             return stateCopy;
 
         case DRONE_SWARM_SELECTED:
@@ -201,6 +170,26 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             stateCopy.seaMineHits = [];
             return stateCopy;
 
+        case SAM_DELETED_PIECES:
+            for (let x = 0; x < (action as SamDeletedPiecesAction).payload.listOfDeletedPieces.length; x++) {
+                const thisPiece = (action as SamDeletedPiecesAction).payload.listOfDeletedPieces[x];
+                const { piecePositionId } = thisPiece;
+                stateCopy.samHitPos.push(piecePositionId);
+            }
+            return stateCopy;
+
+        case CLEAR_SAM_DELETE:
+            // need to filter out pieces in the payload
+            for (let x = 0; x < (action as ClearSamDeleteAction).payload.listOfDeletedPieces.length; x++) {
+                const thisPiece = (action as ClearSamDeleteAction).payload.listOfDeletedPieces[x];
+                const { piecePositionId } = thisPiece;
+                const indexOfNumber = stateCopy.samHitPos.indexOf(piecePositionId);
+                if (indexOfNumber > -1) {
+                    stateCopy.samHitPos.splice(indexOfNumber, 1);
+                }
+            }
+            return stateCopy;
+
         case DRONE_SWARM_NOTIFY_CLEAR:
             stateCopy.droneSwarmHits = [];
             return stateCopy;
@@ -225,8 +214,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             return stateCopy;
 
         case EVENT_BATTLE:
-        case NO_MORE_EVENTS:
-        case EVENT_REFUEL:
+        case NO_MORE_BATTLES:
             stateCopy.confirmedRods = [];
             stateCopy.confirmedInsurgency = [];
             stateCopy.confirmedBombardmentHitPos = [];
@@ -235,6 +223,7 @@ export function capabilitiesReducer(state = initialCapabilitiesState, action: Ca
             return stateCopy;
 
         default:
+            // Do nothing
             return state;
     }
 }

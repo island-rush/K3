@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { CONTAINER_TYPES, PIECE_OPEN_ACTION } from '../../../../../constants';
-import { PieceOpenAction, PieceType } from '../../../../../types';
+import { CONTAINER_TYPES } from '../../../../../constants';
+import { PieceCloseAction, PieceOpenAction, PieceType, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
@@ -9,17 +9,39 @@ import { setUserfeedbackAction } from '../setUserfeedbackAction';
  */
 export const pieceOpen = (selectedPiece: PieceType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
-        const { gameboard } = getState();
+        const { gameboard, container, gameInfo, planning } = getState();
+
+        if (planning.isActive) {
+            dispatch(setUserfeedbackAction('cant open while planning active'));
+            return;
+        }
 
         const { pieceTypeId } = selectedPiece;
 
-        //TODO: only show pieces that could go inside this container (specify that to the reducer?)
-        //TODO: do these checks on the backend as well
-        //TODO: are there any situations when we would not want players to look inside containers? (not likely)
+        // TODO: only show pieces that could go inside this container (specify that to the reducer?)
 
         //don't want to open pieces that aren't container types
         if (!CONTAINER_TYPES.includes(pieceTypeId)) {
             dispatch(setUserfeedbackAction('Not a piece that can hold other pieces...'));
+            return;
+        }
+
+        if (selectedPiece.pieceTeamId !== gameInfo.gameTeam) {
+            dispatch(setUserfeedbackAction('Piece does not belong to you.'));
+            return;
+        }
+
+        // TODO: get rid of ! here
+        // double click the same piece to close again (isActive should mean there is a containerPiece (not null))
+        if (container.isActive && container.containerPiece!.pieceId === selectedPiece.pieceId) {
+            const clientAction: PieceCloseAction = {
+                type: PIECE_CLOSE_ACTION,
+                payload: {
+                    selectedPiece
+                }
+            };
+
+            dispatch(clientAction);
             return;
         }
 
@@ -32,5 +54,6 @@ export const pieceOpen = (selectedPiece: PieceType) => {
         };
 
         dispatch(clientAction);
+        return;
     };
 };

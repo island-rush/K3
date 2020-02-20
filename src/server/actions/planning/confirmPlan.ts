@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, PLAN_WAS_CONFIRMED, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
-import { ConfirmPlanAction, ConfirmPlanRequestAction, SocketSession } from '../../../types';
+import { COMBAT_PHASE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, NOT_WAITING_STATUS, SLICE_PLANNING_ID, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { ConfirmPlanAction, ConfirmPlanRequestAction, PLAN_WAS_CONFIRMED, SocketSession } from '../../../types';
 import { Game, Piece, Plan } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -34,6 +34,12 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
         return;
     }
 
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
+        return;
+    }
+
     // Does the piece exist?
     const thisPiece = await new Piece(pieceId).init();
     if (!thisPiece) {
@@ -41,7 +47,7 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
         return;
     }
 
-    const { piecePositionId, pieceTypeId, pieceGameId, pieceTeamId, pieceMoves, pieceDisabled } = thisPiece;
+    const { piecePositionId, pieceTypeId, pieceGameId, pieceTeamId, pieceMoves, isPieceDisabled } = thisPiece;
 
     // Is this piece ours? (TODO: could also check pieceType with gameControllers)
     if (pieceGameId !== gameId || pieceTeamId !== gameTeam) {
@@ -63,7 +69,7 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
         return;
     }
 
-    if (pieceDisabled) {
+    if (isPieceDisabled) {
         sendUserFeedback(socketId, 'Piece is disabled from game effect (probably golden eye)');
         return;
     }
@@ -72,7 +78,7 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
     let previousPosition = piecePositionId;
     let trueMoveCount = 0;
     for (let x = 0; x < plan.length; x++) {
-        const { positionId } = plan[x];
+        const positionId = plan[x];
 
         const positionTerrain = initialGameboardEmpty[positionId].type;
 
@@ -100,14 +106,13 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
     // prepare the bulk insert
     const plansToInsert = [];
     for (let movementOrder = 0; movementOrder < plan.length; movementOrder++) {
-        const { positionId } = plan[movementOrder];
-        const specialFlag = 0; // 0 = normal movement, use other numbers for future move types...
-        plansToInsert.push([pieceGameId, pieceTeamId, pieceId, movementOrder, positionId, specialFlag]);
+        const positionId = plan[movementOrder];
+        plansToInsert.push([pieceGameId, pieceTeamId, pieceId, movementOrder, positionId]);
     }
 
     // bulk insert (always insert bulk, don't really ever insert single stuff, since a 'plan' is a collection of moves, but the table is 'Plans')
     // TODO: could change the phrasing on Plan vs Moves (as far as inserting..function names...database entries??)
-    await Plan.insert(plansToInsert);
+    await Plan.insert(plansToInsert, pieceId);
 
     const serverAction: ConfirmPlanAction = {
         type: PLAN_WAS_CONFIRMED,

@@ -1,10 +1,10 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, START_PLAN, TYPE_OWNERS } from '../../../../../constants';
-import { StartPlanAction } from '../../../../../types';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_OWNERS } from '../../../../../constants';
+import { StartPlanAction, START_PLAN } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
-//TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)
+// TODO: need more checks on all the frontend planning functions (gamePhase/gameSlice...)
 /**
  * Action to set gamestate in a planning state to click positions for a plan for a piece.
  */
@@ -12,10 +12,16 @@ export const startPlan = () => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameboardMeta, gameInfo, planning } = getState();
 
+        if (planning.bombardmentSelecting !== null || planning.missileSelecting !== null || planning.isUsingCapability) {
+            dispatch(setUserfeedbackAction("Button doesn't apply to capability"));
+            return;
+        }
+
         if (gameboardMeta.selectedPiece == null) {
             dispatch(setUserfeedbackAction('Must select a piece to plan a move...'));
             return;
         }
+
         const { selectedPiece } = gameboardMeta;
         const { gamePhase, gameControllers, gameTeam, gameSlice } = gameInfo;
 
@@ -43,13 +49,18 @@ export const startPlan = () => {
             return;
         }
 
-        if (selectedPiece.pieceDisabled) {
+        if (selectedPiece.isPieceDisabled) {
             dispatch(setUserfeedbackAction('Piece is disabled from something (probably goldeneye)'));
             return;
         }
 
-        if (planning.active) {
+        if (planning.isActive) {
             dispatch(setUserfeedbackAction('Already planning a move...'));
+            return;
+        }
+
+        if (planning.confirmedPlans[selectedPiece.pieceId]) {
+            dispatch(setUserfeedbackAction('Already has a plan, click the x button to get rid of the old plan first...'));
             return;
         }
 
@@ -59,5 +70,6 @@ export const startPlan = () => {
         };
 
         dispatch(startPlanAction);
+        return;
     };
 };

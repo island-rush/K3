@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, GOLDEN_EYE_SELECTED, GOLDEN_EYE_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
-import { GoldenEyeAction, GoldenEyeRequestAction, SocketSession } from '../../../types';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, GOLDEN_EYE_TYPE_ID, LIST_ALL_POSITIONS, NOT_WAITING_STATUS, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { GoldenEyeAction, GoldenEyeRequestAction, GOLDEN_EYE_SELECTED, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -45,6 +45,12 @@ export const goldenEyeConfirm = async (session: SocketSession, action: GoldenEye
         return;
     }
 
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
+        return;
+    }
+
     // Only the main controller (0) can use golden eye
     if (!gameControllers.includes(TYPE_MAIN)) {
         sendUserFeedback(socketId, 'Not the main controller (0)...');
@@ -68,8 +74,8 @@ export const goldenEyeConfirm = async (session: SocketSession, action: GoldenEye
     }
 
     // does the position make sense?
-    if (selectedPositionId < 0) {
-        sendUserFeedback(socketId, 'got a negative position for golden eye.');
+    if (!LIST_ALL_POSITIONS.includes(selectedPositionId)) {
+        sendUserFeedback(socketId, 'got a bad position for golden eye.');
         return;
     }
 

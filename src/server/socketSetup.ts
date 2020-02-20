@@ -1,7 +1,8 @@
 import { Socket } from 'socket.io';
 // prettier-ignore
-import { BAD_SESSION, GAME_DOES_NOT_EXIST, LOGGED_IN_VALUE, NOT_LOGGED_IN_TAG, NOT_LOGGED_IN_VALUE, SERVER_ANTISAT_CONFIRM, SERVER_ATC_SCRAMBLE_CONFIRM, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_BOMBARDMENT_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_CYBER_DEFENSE_CHECK, SERVER_CYBER_DEFENSE_CONFIRM, SERVER_DELETE_PLAN, SERVER_DRONE_SWARM_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_MAIN_BUTTON_CLICK, SERVER_MISSILE_CONFIRM, SERVER_MISSILE_DISRUPT_CONFIRM, SERVER_NUKE_CONFIRM, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SERVER_SEA_MINE_CONFIRM, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SOCKET_CLIENT_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from '../constants';
-import { GameInitialStateAction, GameSession, SocketSession } from '../types';
+import { BAD_SESSION, GAME_DOES_NOT_EXIST, LOGGED_IN_VALUE, NOT_LOGGED_IN_TAG, NOT_LOGGED_IN_VALUE, SOCKET_CLIENT_SENDING_ACTION, SOCKET_SERVER_REDIRECT } from '../constants';
+// prettier-ignore
+import { GameInitialStateAction, GameSession, SERVER_ANTISAT_CONFIRM, SERVER_ATC_SCRAMBLE_CONFIRM, SERVER_BIOLOGICAL_WEAPONS_CONFIRM, SERVER_BOMBARDMENT_CONFIRM, SERVER_COMM_INTERRUPT_CONFIRM, SERVER_CONFIRM_BATTLE_SELECTION, SERVER_CONFIRM_FUEL_SELECTION, SERVER_CONFIRM_PLAN, SERVER_CYBER_DEFENSE_CHECK, SERVER_CYBER_DEFENSE_CONFIRM, SERVER_DELETE_PLAN, SERVER_DRONE_SWARM_CONFIRM, SERVER_GOLDEN_EYE_CONFIRM, SERVER_INNER_PIECE_CLICK, SERVER_INNER_TRANSPORT_PIECE_CLICK, SERVER_INSURGENCY_CONFIRM, SERVER_MAIN_BUTTON_CLICK, SERVER_MISSILE_CONFIRM, SERVER_MISSILE_DISRUPT_CONFIRM, SERVER_NUKE_CONFIRM, SERVER_OUTER_PIECE_CLICK, SERVER_PIECE_PLACE, SERVER_RAISE_MORALE_CONFIRM, SERVER_REMOTE_SENSING_CONFIRM, SERVER_RODS_FROM_GOD_CONFIRM, SERVER_SEA_MINE_CONFIRM, SERVER_SHOP_CONFIRM_PURCHASE, SERVER_SHOP_PURCHASE_REQUEST, SERVER_SHOP_REFUND_REQUEST, SocketSession } from '../types';
 // prettier-ignore
 import { antiSatConfirm, atcScrambleConfirm, biologicalWeaponsConfirm, bombardmentConfirm, checkCyberDefense, commInterruptConfirm, confirmBattleSelection, confirmFuelSelection, confirmPlan, cyberDefenseConfirm, deletePlan, droneSwarmConfirm, enterContainer, exitContainer, exitTransportContainer, goldenEyeConfirm, insurgencyConfirm, mainButtonClick, missileAttackConfirm, missileDisruptConfirm, nukeConfirm, piecePlace, raiseMoraleConfirm, remoteSensingConfirm, rodsFromGodConfirm, seaMineConfirm, sendUserFeedback, shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from './actions';
 import { Game } from './classes';
@@ -21,7 +22,7 @@ export const socketSetup = async (socket: Socket) => {
     const { gameId, gameTeam, gameControllers } = socket.handshake.session.ir3 as GameSession;
 
     // Get the game
-    const thisGame = await new Game(gameId).init();
+    const thisGame = await new Game(gameId).init(); // TODO: may need try catches on all async functions (possibly at lowest level of functions -> where .init() is declared?)
     if (!thisGame) {
         redirectClient(socket.id, GAME_DOES_NOT_EXIST);
         return;
@@ -64,96 +65,97 @@ export const socketSetup = async (socket: Socket) => {
     }
 
     // Setup the socket functions to respond to client requests
-    // TODO: combine all possible payloads into a type and use that instead of any, could also combine other types and use instead of string
     socket.on(SOCKET_CLIENT_SENDING_ACTION, ({ type, payload }: { type: string; payload: any }) => {
         try {
+            const userSession = socket.handshake.session as SocketSession;
+
             switch (type) {
                 case SERVER_SHOP_PURCHASE_REQUEST:
-                    shopPurchaseRequest(socket.handshake.session as SocketSession, { type, payload });
+                    shopPurchaseRequest(userSession, { type, payload });
                     break;
                 case SERVER_SHOP_REFUND_REQUEST:
-                    shopRefundRequest(socket.handshake.session as SocketSession, { type, payload });
+                    shopRefundRequest(userSession, { type, payload });
                     break;
                 case SERVER_SHOP_CONFIRM_PURCHASE:
-                    shopConfirmPurchase(socket.handshake.session as SocketSession);
+                    shopConfirmPurchase(userSession);
                     break;
                 case SERVER_CONFIRM_PLAN:
-                    confirmPlan(socket.handshake.session as SocketSession, { type, payload });
+                    confirmPlan(userSession, { type, payload });
                     break;
                 case SERVER_DELETE_PLAN:
-                    deletePlan(socket.handshake.session as SocketSession, { type, payload });
+                    deletePlan(userSession, { type, payload });
                     break;
                 case SERVER_PIECE_PLACE:
-                    piecePlace(socket.handshake.session as SocketSession, { type, payload });
+                    piecePlace(userSession, { type, payload });
                     break;
                 case SERVER_MAIN_BUTTON_CLICK:
-                    mainButtonClick(socket.handshake.session as SocketSession);
+                    mainButtonClick(userSession);
                     break;
                 case SERVER_CONFIRM_BATTLE_SELECTION:
-                    confirmBattleSelection(socket.handshake.session as SocketSession, { type, payload });
+                    confirmBattleSelection(userSession, { type, payload });
                     break;
                 case SERVER_CONFIRM_FUEL_SELECTION:
-                    confirmFuelSelection(socket.handshake.session as SocketSession, { type, payload });
+                    confirmFuelSelection(userSession, { type, payload });
                     break;
                 case SERVER_RODS_FROM_GOD_CONFIRM:
-                    rodsFromGodConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    rodsFromGodConfirm(userSession, { type, payload });
                     break;
                 case SERVER_REMOTE_SENSING_CONFIRM:
-                    remoteSensingConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    remoteSensingConfirm(userSession, { type, payload });
                     break;
                 case SERVER_INSURGENCY_CONFIRM:
-                    insurgencyConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    insurgencyConfirm(userSession, { type, payload });
                     break;
                 case SERVER_BIOLOGICAL_WEAPONS_CONFIRM:
-                    biologicalWeaponsConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    biologicalWeaponsConfirm(userSession, { type, payload });
                     break;
                 case SERVER_RAISE_MORALE_CONFIRM:
-                    raiseMoraleConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    raiseMoraleConfirm(userSession, { type, payload });
                     break;
                 case SERVER_COMM_INTERRUPT_CONFIRM:
-                    commInterruptConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    commInterruptConfirm(userSession, { type, payload });
                     break;
                 case SERVER_GOLDEN_EYE_CONFIRM:
-                    goldenEyeConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    goldenEyeConfirm(userSession, { type, payload });
                     break;
                 case SERVER_SEA_MINE_CONFIRM:
-                    seaMineConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    seaMineConfirm(userSession, { type, payload });
                     break;
                 case SERVER_DRONE_SWARM_CONFIRM:
-                    droneSwarmConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    droneSwarmConfirm(userSession, { type, payload });
                     break;
                 case SERVER_OUTER_PIECE_CLICK:
-                    enterContainer(socket.handshake.session as SocketSession, { type, payload });
+                    enterContainer(userSession, { type, payload });
                     break;
                 case SERVER_INNER_PIECE_CLICK:
-                    exitContainer(socket.handshake.session as SocketSession, { type, payload });
+                    exitContainer(userSession, { type, payload });
                     break;
                 case SERVER_INNER_TRANSPORT_PIECE_CLICK:
-                    exitTransportContainer(socket.handshake.session as SocketSession, { type, payload });
+                    exitTransportContainer(userSession, { type, payload });
                     break;
                 case SERVER_ATC_SCRAMBLE_CONFIRM:
-                    atcScrambleConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    atcScrambleConfirm(userSession, { type, payload });
                     break;
                 case SERVER_NUKE_CONFIRM:
-                    nukeConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    nukeConfirm(userSession, { type, payload });
                     break;
                 case SERVER_MISSILE_CONFIRM:
-                    missileAttackConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    missileAttackConfirm(userSession, { type, payload });
                     break;
                 case SERVER_BOMBARDMENT_CONFIRM:
-                    bombardmentConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    bombardmentConfirm(userSession, { type, payload });
                     break;
                 case SERVER_ANTISAT_CONFIRM:
-                    antiSatConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    antiSatConfirm(userSession, { type, payload });
                     break;
                 case SERVER_MISSILE_DISRUPT_CONFIRM:
-                    missileDisruptConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    missileDisruptConfirm(userSession, { type, payload });
                     break;
                 case SERVER_CYBER_DEFENSE_CONFIRM:
-                    cyberDefenseConfirm(socket.handshake.session as SocketSession, { type, payload });
+                    cyberDefenseConfirm(userSession, { type, payload });
                     break;
                 case SERVER_CYBER_DEFENSE_CHECK:
-                    checkCyberDefense(socket.handshake.session as SocketSession, { type, payload });
+                    checkCyberDefense(userSession, { type, payload });
                     break;
                 default:
                     sendUserFeedback(socket.id, 'Did not recognize client socket request type');

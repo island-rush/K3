@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NUCLEAR_STRIKE_TYPE_ID, NUKE_SELECTED, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
-import { NukeAction, NukeRequestAction, SocketSession } from '../../../types';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, NUCLEAR_STRIKE_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { NukeAction, NukeRequestAction, NUKE_SELECTED, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -45,6 +45,12 @@ export const nukeConfirm = async (session: SocketSession, action: NukeRequestAct
         return;
     }
 
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
+        return;
+    }
+
     // Only the main controller (0)
     if (!gameControllers.includes(TYPE_MAIN)) {
         sendUserFeedback(socketId, 'Not the COCOM. (0)');
@@ -68,10 +74,11 @@ export const nukeConfirm = async (session: SocketSession, action: NukeRequestAct
     }
 
     // verify position is not within 2 hexes of main island
-    // TODO: verify position
-
     if (!(await Capability.insertNuke(gameId, gameTeam, selectedPositionId))) {
-        sendUserFeedback(socketId, 'db failed to insert nuke, likely already an entry for that position. Or within 2 hexes of main islands.');
+        sendUserFeedback(
+            socketId,
+            'db failed to insert nuke, likely already an entry for that position. Or within 2 hexes of main islands. (cant nuke main flags)'
+        );
         return;
     }
 

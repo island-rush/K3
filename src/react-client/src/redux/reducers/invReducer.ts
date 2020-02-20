@@ -1,50 +1,10 @@
-//prettier-ignore
-import { ANTISAT_SELECTED, ATC_SCRAMBLE_SELECTED, BIO_WEAPON_SELECTED, COMM_INTERRUP_SELECTED, CYBER_DEFENSE_CHECK, CYBER_DEFENSE_SELECTED, DRONE_SWARM_SELECTED, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, INSURGENCY_SELECTED, MISSILE_DISRUPT_SELECTED, NUKE_SELECTED, PIECE_PLACE, RAISE_MORALE_SELECTED, REMOTE_SENSING_SELECTED, RODS_FROM_GOD_SELECTED, SEA_MINE_SELECTED, SHOP_TRANSFER } from "../../../../constants";
+import { AnyAction } from 'redux';
 // prettier-ignore
-import { AntiSatAction, AtcScrambleAction, BioWeaponsAction, CommInterruptAction, CyberDefenseAction, CyberDefenseCheckAction, DroneSwarmAction, GameInitialStateAction, GoldenEyeAction, InsurgencyAction, InvItemPlaceAction, InvItemType, InvState, MissileDisruptAction, NukeAction, RaiseMoraleAction, RemoteSensingAction, RodsFromGodAction, SeaMineAction, ShopConfirmPurchaseAction } from '../../../../types';
-
-type InvReducerActions =
-    | GameInitialStateAction
-    | ShopConfirmPurchaseAction
-    | InvItemPlaceAction
-    | RodsFromGodAction
-    | RemoteSensingAction
-    | InsurgencyAction
-    | BioWeaponsAction
-    | CyberDefenseAction
-    | SeaMineAction
-    | CyberDefenseCheckAction
-    | DroneSwarmAction
-    | AntiSatAction
-    | MissileDisruptAction
-    | NukeAction
-    | AtcScrambleAction
-    | RaiseMoraleAction
-    | GoldenEyeAction
-    | CommInterruptAction;
-
-type InvItemsPayloadAction = GameInitialStateAction | ShopConfirmPurchaseAction;
-
-type InvItemCapabilityAction =
-    | RodsFromGodAction
-    | RemoteSensingAction
-    | InsurgencyAction
-    | BioWeaponsAction
-    | RaiseMoraleAction
-    | CyberDefenseAction
-    | CyberDefenseCheckAction
-    | MissileDisruptAction
-    | SeaMineAction
-    | AntiSatAction
-    | DroneSwarmAction
-    | NukeAction
-    | AtcScrambleAction
-    | GoldenEyeAction
-    | CommInterruptAction;
+import { AntiSatAction, ANTISAT_SELECTED, AtcScrambleAction, ATC_SCRAMBLE_SELECTED, BioWeaponsAction, BIO_WEAPON_SELECTED, CommInterruptAction, COMM_INTERRUP_SELECTED, CyberDefenseAction, CyberDefenseCheckAction, CYBER_DEFENSE_CHECK, CYBER_DEFENSE_SELECTED, DroneSwarmAction, DRONE_SWARM_SELECTED, GameInitialStateAction, GoldenEyeAction, GOLDEN_EYE_SELECTED, INITIAL_GAMESTATE, InsurgencyAction, INSURGENCY_SELECTED, InvItemPlaceAction, InvItemType, InvState, MissileDisruptAction, MISSILE_DISRUPT_SELECTED, NukeAction, NUKE_SELECTED, PIECE_PLACE, RaiseMoraleAction, RAISE_MORALE_SELECTED, RemoteSensingAction, REMOTE_SENSING_SELECTED, RodsFromGodAction, RODS_FROM_GOD_SELECTED, SeaMineAction, SEA_MINE_SELECTED, ShopConfirmPurchaseAction, SHOP_TRANSFER } from '../../../../types';
 
 const initialInvState: InvState = [];
 
-export function invReducer(state = initialInvState, action: InvReducerActions) {
+export function invReducer(state = initialInvState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: InvState = JSON.parse(JSON.stringify(state));
@@ -52,13 +12,9 @@ export function invReducer(state = initialInvState, action: InvReducerActions) {
     switch (type) {
         case INITIAL_GAMESTATE:
         case SHOP_TRANSFER:
-            return (action as InvItemsPayloadAction).payload.invItems;
+            return (action as InvItemsPayloadActions).payload.invItems;
 
         case PIECE_PLACE:
-            return stateCopy.filter((invItem: InvItemType) => {
-                return invItem.invItemId !== (action as InvItemPlaceAction).payload.invItemId;
-            });
-
         case RODS_FROM_GOD_SELECTED:
         case REMOTE_SENSING_SELECTED:
         case INSURGENCY_SELECTED:
@@ -75,10 +31,31 @@ export function invReducer(state = initialInvState, action: InvReducerActions) {
         case ATC_SCRAMBLE_SELECTED:
         case COMM_INTERRUP_SELECTED:
             return stateCopy.filter((invItem: InvItemType) => {
-                return invItem.invItemId !== (action as InvItemCapabilityAction).payload.invItem.invItemId;
+                return invItem.invItemId !== (action as InvItemCombinedActions).payload.invItem.invItemId;
             });
 
         default:
+            // Do nothing
             return state;
     }
 }
+
+type InvItemsPayloadActions = GameInitialStateAction | ShopConfirmPurchaseAction;
+
+type InvItemCombinedActions =
+    | RodsFromGodAction
+    | RemoteSensingAction
+    | InsurgencyAction
+    | BioWeaponsAction
+    | RaiseMoraleAction
+    | CyberDefenseAction
+    | CyberDefenseCheckAction
+    | MissileDisruptAction
+    | SeaMineAction
+    | AntiSatAction
+    | DroneSwarmAction
+    | InvItemPlaceAction
+    | NukeAction
+    | AtcScrambleAction
+    | GoldenEyeAction
+    | CommInterruptAction;

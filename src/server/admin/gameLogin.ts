@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
 import md5 from 'md5';
+// prettier-ignore
 import { ALREADY_IN_TAG, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LOGGED_IN_VALUE, LOGIN_TAG } from '../../constants';
-import { GameSession } from '../../types';
+import { BlueOrRedTeamId, ControllerType, GameSession, GameType } from '../../types';
 import { Game } from '../classes';
 
 /**
@@ -21,7 +22,7 @@ export const gameLogin = async (req: Request, res: Response) => {
     const { gameSection, gameInstructor, gameTeam, gameTeamPassword, gameControllers }: GameLoginRequest = req.body;
 
     // Get game info
-    const gameIdFromSearch = await Game.getId(gameSection, gameInstructor);
+    const gameIdFromSearch = await Game.getId(gameSection.toLowerCase(), gameInstructor.toLowerCase());
     if (!gameIdFromSearch) {
         res.redirect(`/index.html?error=${GAME_DOES_NOT_EXIST}`);
         return;
@@ -47,7 +48,7 @@ export const gameLogin = async (req: Request, res: Response) => {
 
     // Are any of the controllers already logged in?
     for (const gameController of gameControllers) {
-        if (thisGame.getLoggedIn(gameTeam, gameController) !== 0) {
+        if (thisGame.getLoggedIn(gameTeam, gameController)) {
             const gameControllerTexts = ['COCOM', 'JFACC', 'JFLCC', 'JFMCC', 'JFSOC'];
             res.redirect(`/index.html?error=${ALREADY_IN_TAG}&playerType=${gameControllerTexts[gameController]}`);
             return;
@@ -70,9 +71,9 @@ export const gameLogin = async (req: Request, res: Response) => {
  * All the values that should be a part of a game login attempt.
  */
 type GameLoginRequest = {
-    gameSection: string;
-    gameInstructor: string;
-    gameTeam: number;
+    gameSection: GameType['gameSection'];
+    gameInstructor: GameType['gameSection'];
+    gameTeam: BlueOrRedTeamId;
     gameTeamPassword: string;
-    gameControllers: number[];
+    gameControllers: ControllerType[];
 };

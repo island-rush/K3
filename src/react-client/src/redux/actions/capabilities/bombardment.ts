@@ -1,7 +1,7 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../..';
-import { BOMBARDMENT_SELECTING, COMBAT_PHASE_ID, SLICE_PLANNING_ID } from '../../../../../constants';
-import { BombardmentSelectingAction, PieceType } from '../../../../../types';
+import { COMBAT_PHASE_ID, SLICE_PLANNING_ID, TYPE_SEA, WAITING_STATUS } from '../../../../../constants';
+import { BombardmentSelectingAction, BOMBARDMENT_SELECTING, PieceType } from '../../../../../types';
 import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
@@ -10,7 +10,7 @@ import { setUserfeedbackAction } from '../setUserfeedbackAction';
 export const bombardment = (piece: PieceType) => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
         const { gameInfo } = getState();
-        const { gamePhase, gameSlice } = gameInfo;
+        const { gamePhase, gameSlice, gameStatus, gameControllers } = gameInfo;
 
         if (gamePhase !== COMBAT_PHASE_ID) {
             dispatch(setUserfeedbackAction('wrong phase for bombardment attack dude.'));
@@ -22,11 +22,19 @@ export const bombardment = (piece: PieceType) => {
             return;
         }
 
+        if (gameStatus === WAITING_STATUS) {
+            dispatch(setUserfeedbackAction('already clicked to continue'));
+            return;
+        }
+
+        if (!gameControllers.includes(TYPE_SEA)) {
+            dispatch(setUserfeedbackAction('must be sea controller to use'));
+            return;
+        }
+
         // TODO: could check that attack doesn't already exist for this piece (stored in capabilities)
 
         // TODO: should highlight the range of bombardment (max value in the ranges constant)
-
-        // TODO: need a way to de-select this capability (currently can only refresh to exit)
 
         //dispatch that the player is currently selecting which position to select
         const bombardmentSelectingAction: BombardmentSelectingAction = {
@@ -37,5 +45,6 @@ export const bombardment = (piece: PieceType) => {
         };
 
         dispatch(bombardmentSelectingAction);
+        return;
     };
 };

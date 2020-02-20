@@ -1,7 +1,6 @@
 import { AnyAction } from 'redux';
 //prettier-ignore
-import { AIRCRAFT_CLICK, ANTISAT_HIT_ACTION, ANTISAT_SELECTED, ATC_SCRAMBLE_SELECTED, ATC_SCRAMBLE_SELECTING, BATTLE_FIGHT_RESULTS, BATTLE_PIECE_SELECT, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, BOMBARDMENT_SELECTED, BOMBARDMENT_SELECTING, CANCEL_PLAN, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, CYBER_DEFENSE_SELECTED, DELETE_PLAN, DRONE_SWARM_SELECTED, DRONE_SWARM_SELECTING, ENEMY_PIECE_SELECT, EVENT_BATTLE, EVENT_REFUEL, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MAIN_BUTTON_CLICK, MISSILE_DISRUPT_SELECTED, MISSILE_DISRUPT_SELECTING, MISSILE_SELECTED, MISSILE_SELECTING, NEWS_PHASE, NEW_ROUND, NO_MORE_EVENTS, NUKE_SELECTED, NUKE_SELECTING, OUTER_PIECE_CLICK_ACTION, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, PLACE_PHASE, PLAN_WAS_CONFIRMED, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, TARGET_PIECE_SELECT, UPDATE_FLAGS, CYBER_DEFENSE_CHECK } from "../../../../constants";
-import { UserfeedbackAction, UserfeedbackState, CyberDefenseCheckAction } from '../../../../types';
+import { ANTISAT_HIT_ACTION, ANTISAT_SELECTED, ATC_SCRAMBLE_SELECTED, ATC_SCRAMBLE_SELECTING, BATTLE_FIGHT_RESULTS, BIO_WEAPON_SELECTED, BIO_WEAPON_SELECTING, BOMBARDMENT_SELECTED, BOMBARDMENT_SELECTING, CANCEL_PLAN, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, COMM_INTERRUP_SELECTED, CyberDefenseCheckAction, CYBER_DEFENSE_CHECK, CYBER_DEFENSE_SELECTED, DELETE_PLAN, DRONE_SWARM_SELECTED, DRONE_SWARM_SELECTING, EVENT_BATTLE, GOLDEN_EYE_SELECTED, GOLDEN_EYE_SELECTING, INITIAL_GAMESTATE, INSURGENCY_SELECTED, INSURGENCY_SELECTING, MAIN_BUTTON_CLICK, MISSILE_DISRUPT_SELECTED, MISSILE_DISRUPT_SELECTING, MISSILE_SELECTED, MISSILE_SELECTING, NEWS_PHASE, NEW_ROUND, NO_MORE_BATTLES, NUKE_SELECTED, NUKE_SELECTING, PLACE_PHASE, PLAN_WAS_CONFIRMED, PURCHASE_PHASE, RAISE_MORALE_SELECTED, RAISE_MORALE_SELECTING, REMOTE_SENSING_HIT_ACTION, REMOTE_SENSING_SELECTED, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTED, SEA_MINE_SELECTING, SET_USERFEEDBACK, SHOP_PURCHASE, SHOP_REFUND, SHOP_TRANSFER, SLICE_CHANGE, START_PLAN, UserfeedbackAction, UserfeedbackState } from '../../../../types';
 
 const initialUserFeedback: UserfeedbackState = 'Loading...';
 
@@ -24,9 +23,6 @@ export function userFeedbackReducer(state = initialUserFeedback, action: AnyActi
 
         case SHOP_REFUND:
             return 'Refunded the purchase!';
-
-        case INNER_TRANSPORT_PIECE_CLICK_ACTION:
-            return 'Clicked a piece that was in a transport piece';
 
         case SHOP_PURCHASE:
             return 'Purchased the item!';
@@ -139,9 +135,6 @@ export function userFeedbackReducer(state = initialUserFeedback, action: AnyActi
         case GOLDEN_EYE_SELECTING:
             return "Now select an area to 'golden eye' thing";
 
-        case AIRCRAFT_CLICK:
-            return 'transferring fuel planned...';
-
         case PLAN_WAS_CONFIRMED:
             return 'Plan was confirmed!';
 
@@ -150,9 +143,6 @@ export function userFeedbackReducer(state = initialUserFeedback, action: AnyActi
 
         case PURCHASE_PHASE:
             return 'Switched to the purchase phase....check out the shop and buy stuff...';
-
-        case UPDATE_FLAGS:
-            return 'island was captured btw';
 
         case COMBAT_PHASE:
             return 'Switched to the combat phase...start to plan your turn by clicking on pieces!';
@@ -169,16 +159,7 @@ export function userFeedbackReducer(state = initialUserFeedback, action: AnyActi
         case PLACE_PHASE:
             return 'Place troops onto the board from inventory...';
 
-        case BATTLE_PIECE_SELECT:
-            return 'Selected Piece to attack with...';
-
-        case TARGET_PIECE_SELECT:
-            return 'Target piece clicked?';
-
-        case ENEMY_PIECE_SELECT:
-            return 'Enemy piece clicked?';
-
-        case NO_MORE_EVENTS:
+        case NO_MORE_BATTLES:
             return 'ready to execute next step!';
 
         case BATTLE_FIGHT_RESULTS:
@@ -187,22 +168,8 @@ export function userFeedbackReducer(state = initialUserFeedback, action: AnyActi
         case EVENT_BATTLE:
             return 'battle has started!';
 
-        case EVENT_REFUEL:
-            return 'got a refuel event for ya, please handle it...';
-
-        case OUTER_PIECE_CLICK_ACTION:
-            return 'clicked outer piece';
-
-        case PIECE_OPEN_ACTION:
-            return 'openned the piece container thing.';
-
-        case PIECE_CLOSE_ACTION:
-            return 'closed the piece container thing.';
-
-        case INNER_PIECE_CLICK_ACTION:
-            return 'clicked inner piece';
-
         default:
+            // Do nothing
             return state;
     }
 }

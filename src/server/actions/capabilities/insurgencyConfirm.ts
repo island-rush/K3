@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, INSURGENCY_SELECTED, INSURGENCY_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
-import { InsurgencyAction, InsurgencyRequestAction, SocketSession } from '../../../types';
+import { ALL_LAND_POSITIONS, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, INSURGENCY_TYPE_ID, LIST_ALL_POSITIONS, NOT_WAITING_STATUS, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { InsurgencyAction, InsurgencyRequestAction, INSURGENCY_SELECTED, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -45,6 +45,12 @@ export const insurgencyConfirm = async (session: SocketSession, action: Insurgen
         return;
     }
 
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
+        return;
+    }
+
     // Only the main controller (0) can use insurgency
     if (!gameControllers.includes(TYPE_MAIN)) {
         sendUserFeedback(socketId, 'Not the main controller (0)...');
@@ -68,8 +74,13 @@ export const insurgencyConfirm = async (session: SocketSession, action: Insurgen
     }
 
     // does the position make sense?
-    if (selectedPositionId < 0) {
-        sendUserFeedback(socketId, 'got a negative position for insurgency.');
+    if (!LIST_ALL_POSITIONS.includes(selectedPositionId)) {
+        sendUserFeedback(socketId, 'got a bad position for insurgency.');
+        return;
+    }
+
+    if (!ALL_LAND_POSITIONS.includes(selectedPositionId)) {
+        sendUserFeedback(socketId, 'doesnt make much sense to cause uprising in the middle of da ocean');
         return;
     }
 

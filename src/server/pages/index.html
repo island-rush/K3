@@ -92,12 +92,12 @@
         </style>
     </head>
     <body>
-        <h1>Island Rush V3.3.0</h1>
+        <h1>Island Rush V3.3.1</h1>
         <nav>
             <a class="active" href="./">Home</a>
             <a href="troubleshoot.html">Troubleshoot</a>
             <a href="credits.html">Credits</a>
-            <a href="https://gitreports.com/issue/island-rush/K3.3" target="_blank" style="float: right">Report an Issue</a>
+            <a href="https://gitreports.com/issue/island-rush/K3" target="_blank" style="float: right">Report an Issue</a>
             <a href="https://github.com/island-rush/K3/wiki" target="_blank" style="float: right">Wiki</a>
         </nav>
         <div id="mainContentContainer">
@@ -203,7 +203,7 @@
             if (this.readyState == 4) {
                 document.getElementById('DatabaseConnectionTag').innerHTML = 'Database: ' + this.response;
 
-                //TODO: fade this out slowly
+                // TODO: fade this out slowly
                 setTimeout(() => {
                     if (this.response == 'Connected') {
                         document.getElementById('DatabaseConnectionTag').innerHTML = '';

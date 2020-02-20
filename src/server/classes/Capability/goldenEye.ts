@@ -1,15 +1,15 @@
 import { RowDataPacket } from 'mysql2';
 import { pool } from '../../';
 // prettier-ignore
-import { ACTIVATED, BLUE_TEAM_ID, DEACTIVATED, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, RED_TEAM_ID, TYPE_AIR_PIECES, TYPE_GROUND_PIECES } from '../../../constants';
-import { GoldenEyeType } from '../../../types';
+import { ACTIVATED, BLUE_TEAM_ID, DEACTIVATED, distanceMatrix, GOLDEN_EYE_RANGE, GOLDEN_EYE_ROUNDS, RED_TEAM_ID, TYPE_AIR_PIECES, TYPE_GROUND_PIECES, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
+import { GoldenEyeType, GameType, BlueOrRedTeamId } from '../../../types';
 
-export const getGoldenEye = async (gameId: any, gameTeam: any) => {
+export const getGoldenEye = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM goldenEye WHERE gameId = ? AND (activated = ? OR teamId = ?)';
     const inserts = [gameId, ACTIVATED, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
 
-    const listOfGoldenEye = [];
+    const listOfGoldenEye: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < results.length; x++) {
         listOfGoldenEye.push(results[x].positionId);
     }
@@ -17,7 +17,7 @@ export const getGoldenEye = async (gameId: any, gameTeam: any) => {
     return listOfGoldenEye;
 };
 
-export const insertGoldenEye = async (gameId: number, gameTeam: number, selectedPositionId: number) => {
+export const insertGoldenEye = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
     let queryString = 'SELECT * FROM goldenEye WHERE gameId = ? AND teamId = ? AND positionId = ?';
     let inserts = [gameId, gameTeam, selectedPositionId];
     const [results] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
@@ -34,7 +34,7 @@ export const insertGoldenEye = async (gameId: number, gameTeam: number, selected
 };
 
 // TODO: could use more bulk sql statements for better efficiency (future task, efficient enough for now)
-export const useGoldenEye = async (gameId: number) => {
+export const useGoldenEye = async (gameId: GameType['gameId']) => {
     let queryString = 'UPDATE goldenEye SET activated = ? WHERE gameId = ?';
     let inserts = [ACTIVATED, gameId];
     await pool.query(queryString, inserts);
@@ -47,7 +47,7 @@ export const useGoldenEye = async (gameId: number) => {
         return [];
     }
 
-    const listOfEffectedPositions = [];
+    const listOfEffectedPositions: LIST_ALL_POSITIONS_TYPE[] = [];
 
     for (let x = 0; x < allGoldenEye.length; x++) {
         const thisGoldenEye = allGoldenEye[x];
@@ -88,7 +88,7 @@ export const useGoldenEye = async (gameId: number) => {
     return listOfEffectedPositions;
 };
 
-export const decreaseGoldenEye = async (gameId: number) => {
+export const decreaseGoldenEye = async (gameId: GameType['gameId']) => {
     let queryString = 'UPDATE goldenEye SET roundsLeft = roundsLeft - 1 WHERE gameId = ? AND activated = ?';
     const inserts = [gameId, ACTIVATED];
     await pool.query(queryString, inserts);

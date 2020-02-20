@@ -1,6 +1,6 @@
 // prettier-ignore
-import { ALL_AIRFIELD_LOCATIONS, ALL_POSITIONS, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, MISSILE_TYPE_ID, PIECE_PLACE, PLACE_PHASE_ID, RADAR_TYPE_ID, TEAM_MAIN_ISLAND_STARTING_POSITIONS, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
-import { InvItemPlaceAction, InvItemPlaceRequestAction, SocketSession } from '../../../types';
+import { ALL_AIRFIELD_LOCATIONS, BAD_REQUEST_TAG, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIST_ALL_POSITIONS, MISSILE_TYPE_ID, NOT_WAITING_STATUS, PLACE_PHASE_ID, RADAR_TYPE_ID, TEAM_MAIN_ISLAND_STARTING_POSITIONS, TYPE_AIR_PIECES, TYPE_OWNERS, TYPE_TERRAIN } from '../../../constants';
+import { InvItemPlaceAction, InvItemPlaceRequestAction, PIECE_PLACE, SocketSession } from '../../../types';
 import { Game, InvItem, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -34,6 +34,12 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
         return;
     }
 
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
+        return;
+    }
+
     // Grab the InvItem
     const thisInvItem = await new InvItem(invItemId).init();
     if (!thisInvItem) {
@@ -64,7 +70,7 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
     }
 
     // valid position on the board?
-    if (!ALL_POSITIONS.includes(selectedPosition)) {
+    if (!LIST_ALL_POSITIONS.includes(selectedPosition)) {
         sendUserFeedback(socketId, 'Not a valid position on the board.');
         return;
     }
@@ -115,7 +121,7 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
     const serverAction: InvItemPlaceAction = {
         type: PIECE_PLACE,
         payload: {
-            invItemId,
+            invItem: thisInvItem,
             positionId: selectedPosition,
             newPiece
         }

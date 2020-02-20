@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { TRANSPORT_TYPE_ID } from '../../../../../constants';
 import { ContainerState, PieceType } from '../../../../../types';
 import { ContainerPiece } from './ContainerPiece';
@@ -65,7 +65,6 @@ export class ContainerPopup extends Component<Props> {
     render() {
         const { container, pieceClose, outerPieceClick, innerPieceClick, innerTransportPieceClick } = this.props;
 
-        //Don't need to check for null (probably should) since empty array is still valid
         const outsidePieces = container.outerPieces.map((piece: PieceType, index: number) => (
             <ContainerPiece key={index} piece={piece} container={container} clickFunction={outerPieceClick} />
         ));
@@ -78,14 +77,18 @@ export class ContainerPopup extends Component<Props> {
                           key={index}
                           piece={piece}
                           container={container}
-                          //could need extra stuff for tanks in transport (need extra step to select the hex to go in)
                           // TODO: try not to use these exclamations when possible (should properly check for nulls/undefineds)
                           clickFunction={container.containerPiece!.pieceTypeId === TRANSPORT_TYPE_ID ? innerTransportPieceClick : innerPieceClick}
                       />
                   ));
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={container.active && !container.isSelectingHex ? containerPopupStyle : invisibleStyle}>
+            <div style={container.isActive && !container.isSelectingHex ? containerPopupStyle : invisibleStyle} onClick={standardOnClick}>
                 <div style={leftSectionStyle}>
                     <div>Outer Pieces</div>
                     {outsidePieces}

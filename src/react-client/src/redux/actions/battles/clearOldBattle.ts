@@ -1,7 +1,6 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { CLEAR_BATTLE } from '../../../../../constants';
-import { ClearBattleAction } from '../../../../../types';
+import { ClearBattleAction, CLEAR_BATTLE } from '../../../../../types';
 
 export const clearOldBattle = () => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
@@ -15,5 +14,6 @@ export const clearOldBattle = () => {
         };
 
         dispatch(clearBattleAction);
+        return;
     };
 };

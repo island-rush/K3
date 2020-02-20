@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { AIR_REFUELING_SQUADRON_ID, TYPE_FUEL } from '../../../../../constants';
 import { TYPE_IMAGES } from '../../styleConstants';
 
@@ -38,6 +38,7 @@ interface Props {
 export class AircraftPiece extends Component<Props> {
     render() {
         const { aircraftPiece, aircraftPieceIndex, aircraftClick, undoFuelSelection } = this.props;
+
         const { pieceFuel, pieceTypeId } = aircraftPiece;
 
         const tankerDisplay =
@@ -56,8 +57,13 @@ export class AircraftPiece extends Component<Props> {
 
         const fuelToAdd = aircraftPiece.tankerPieceIndex == null ? 0 : TYPE_FUEL[aircraftPiece.pieceTypeId] - aircraftPiece.pieceFuel;
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={aircraftPieceStyle}>
+            <div style={aircraftPieceStyle} onClick={standardOnClick}>
                 <div
                     style={{
                         ...boxStyle,

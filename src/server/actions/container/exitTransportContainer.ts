@@ -1,6 +1,6 @@
 // prettier-ignore
-import { ALL_GROUND_TYPES, COMBAT_PHASE_ID, CONTAINER_TYPES, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
-import { ExitContainerAction, ExitTransportContainerRequestAction, SocketSession } from '../../../types';
+import { ALL_GROUND_TYPES, COMBAT_PHASE_ID, CONTAINER_TYPES, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, NOT_WAITING_STATUS, SLICE_PLANNING_ID, TYPE_OWNERS } from '../../../constants';
+import { ExitContainerAction, ExitTransportContainerRequestAction, INNER_PIECE_CLICK_ACTION, SocketSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -28,13 +28,14 @@ export const exitTransportContainer = async (session: SocketSession, action: Exi
         return;
     }
 
-    if (!gameControllers.includes(TYPE_MAIN)) {
-        sendUserFeedback(socketId, 'Not the right controller type for this action...');
+    if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
+        sendUserFeedback(socketId, 'Not the right phase/slice for container entering.');
         return;
     }
 
-    if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
-        sendUserFeedback(socketId, 'Not the right phase/slice for container entering.');
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 
@@ -42,6 +43,20 @@ export const exitTransportContainer = async (session: SocketSession, action: Exi
     const thisSelectedPiece = await new Piece(selectedPiece.pieceId).init();
     if (!thisSelectedPiece) {
         sendUserFeedback(socketId, 'Selected Piece did not exists...refresh page probably');
+        return;
+    }
+
+    // Controller must own the piece
+    let atLeast1Owner = false;
+    for (const gameController of gameControllers) {
+        if (TYPE_OWNERS[gameController].includes(thisSelectedPiece.pieceTypeId)) {
+            atLeast1Owner = true;
+            break;
+        }
+    }
+
+    if (!atLeast1Owner) {
+        sendUserFeedback(socketId, "Piece doesn't fall under your control");
         return;
     }
 

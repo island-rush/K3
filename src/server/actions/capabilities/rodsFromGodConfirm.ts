@@ -1,6 +1,6 @@
 // prettier-ignore
-import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RODS_FROM_GOD_SELECTED, RODS_FROM_GOD_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
-import { RodsFromGodAction, RodsFromGodRequestAction, SocketSession } from '../../../types';
+import { COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, LIST_ALL_POSITIONS, NOT_WAITING_STATUS, RODS_FROM_GOD_TYPE_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+import { RodsFromGodAction, RodsFromGodRequestAction, RODS_FROM_GOD_SELECTED, SocketSession } from '../../../types';
 import { Capability, Game, InvItem } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -46,6 +46,13 @@ export const rodsFromGodConfirm = async (session: SocketSession, action: RodsFro
         return;
     }
 
+    // already confirmed done
+    // TODO: makes better sense with === WAITING_STATUS, change on other functions
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
+        return;
+    }
+
     // Only the main controller (0) can use rods from god
     if (!gameControllers.includes(TYPE_MAIN)) {
         sendUserFeedback(socketId, 'Not the main controller (0)...');
@@ -69,8 +76,8 @@ export const rodsFromGodConfirm = async (session: SocketSession, action: RodsFro
     }
 
     // does the position make sense?
-    if (selectedPositionId < 0) {
-        sendUserFeedback(socketId, 'got a negative position for rods from god.');
+    if (!LIST_ALL_POSITIONS.includes(selectedPositionId)) {
+        sendUserFeedback(socketId, 'got a bad position for rods from god.');
         return;
     }
 

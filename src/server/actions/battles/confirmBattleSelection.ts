@@ -1,10 +1,10 @@
 // prettier-ignore
-import { BATTLE_FIGHT_RESULTS, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, UPDATE_AIRFIELDS, UPDATE_FLAGS, WAITING_STATUS } from '../../../constants';
+import { BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, TYPE_MAIN, WAITING_STATUS } from '../../../constants';
 // prettier-ignore
-import { BattleResultsAction, ConfirmBattleSelectionRequestAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction } from '../../../types';
-import { Event, Game } from '../../classes';
-import { redirectClient, sendToGame, sendUserFeedback } from '../../helpers';
-import { giveNextEvent } from '../giveNextEvent';
+import { BattleResultsAction, BattleSelectionsAction, BATTLE_FIGHT_RESULTS, BATTLE_SELECTIONS, ConfirmBattleSelectionRequestAction, SocketSession, UpdateAirfieldAction, UpdateFlagAction, UPDATE_AIRFIELDS, UPDATE_FLAGS } from '../../../types';
+import { Battle, Game } from '../../classes';
+import { redirectClient, sendToGame, sendToTeam, sendUserFeedback } from '../../helpers';
+import { giveNextBattle } from './giveNextBattle';
 
 /**
  * User request to confirm their battle selections. (what pieces are attacking what other pieces)
@@ -36,7 +36,7 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
     }
 
     if (!gameControllers.includes(TYPE_MAIN)) {
-        sendUserFeedback(socketId, 'Need to be air commander.');
+        sendUserFeedback(socketId, 'Need to be main commander.');
         return;
     }
 
@@ -44,14 +44,28 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
     const thisTeamStatus = gameTeam === BLUE_TEAM_ID ? gameBlueStatus : gameRedStatus;
     const otherTeamStatus = otherTeam === BLUE_TEAM_ID ? gameBlueStatus : gameRedStatus;
 
+    // TODO: perhaps a better way of checking if they already submitted plans, status checks seem buggy (although bugs for status seem very rare, refreshing fixed whatever was wrong)
     if (thisTeamStatus === WAITING_STATUS && otherTeamStatus === NOT_WAITING_STATUS) {
         sendUserFeedback(socketId, 'still waiting stupid...');
         return;
     }
 
     // confirm the selections
-    const thisTeamsCurrentEvent = await Event.getNext(gameId, gameTeam);
-    await thisTeamsCurrentEvent.bulkUpdateTargets(friendlyPieces);
+    const thisBattle = await Battle.getNext(gameId);
+    await thisBattle.bulkUpdateTargets(friendlyPieces);
+
+    // format for frontend and send selections to entire team
+    const { blueFriendlyBattlePieces, redFriendlyBattlePieces } = await thisBattle.getBattleState();
+    const battleSelectionsAction: BattleSelectionsAction = {
+        type: BATTLE_SELECTIONS,
+        payload: {
+            friendlyPieces: gameTeam === BLUE_TEAM_ID ? blueFriendlyBattlePieces : redFriendlyBattlePieces
+        }
+    };
+
+    // TODO: we send the confirmed selections to all teams, then immediately send battle results if last to confirm....could cause errors if network delays cause results to come before confirmedSelections
+    // to prevent weird (but unlikely) errors, need to either delay it (bad fix), or somehow send the confirmed selections along with the results (should probably do that anyways? -> replace the state entirely?)
+    sendToTeam(gameId, gameTeam, battleSelectionsAction); // doesn't change anything for the main commander that just sent this
 
     // are we waiting for the other client?
     // and if thisTeamStatus == NOT_WAITING....(maybe make explicit here <-TODO:
@@ -61,18 +75,22 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
         return;
     }
 
-    // if get here, other team was already waiting, need to set them to 0 and handle stuff
+    // if get here, other team was already waiting and we were not waiting, need to set them to 0 and handle stuff
     await thisGame.setStatus(otherTeam, NOT_WAITING_STATUS);
 
-    // Do the fight!
-    const fightResults = await thisTeamsCurrentEvent.fight();
+    // Wait to let battle selections go to all controllers on the team, then send the results (which right now depend on frontend already having selections?)
+    await new Promise(resolve => setTimeout(resolve, 50)); // TODO: get rid of this (most definately probably bad practice, this is bad code) by refactoring above code to only send BATTLE_SELECTIONS action if waiting....timing is weird here so think it though
+
+    const masterRecord = await thisBattle.fight();
 
     // Send the results of the battle back to the client(s)
-    if (fightResults.atLeastOneBattle) {
+    if (masterRecord) {
         const serverAction: BattleResultsAction = {
             type: BATTLE_FIGHT_RESULTS,
             payload: {
-                masterRecord: fightResults.masterRecord
+                masterRecord,
+                blueFriendlyBattlePieces,
+                redFriendlyBattlePieces
             }
         };
 
@@ -80,7 +98,8 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
         return;
     }
 
-    await thisTeamsCurrentEvent.delete();
+    // no fight results, indicates end of battle
+    await thisBattle.delete();
 
     // Check for flag updates after the battle (enemy may no longer be there = capture the flag)
     const didUpdateFlags = await thisGame.updateFlags();
@@ -131,6 +150,5 @@ export const confirmBattleSelection = async (session: SocketSession, action: Con
         sendToGame(gameId, updateAirfieldAction);
     }
 
-    await giveNextEvent(session, { thisGame, gameTeam: 0 }); // not putting executingStep in options to let it know not to send pieceMove
-    await giveNextEvent(session, { thisGame, gameTeam: 1 }); // not putting executingStep in options to let it know not to send pieceMove
+    await giveNextBattle(thisGame);
 };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { ShopItemType } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
 
@@ -14,8 +14,8 @@ const shopItemStyle = {
 };
 
 interface Props {
-    refund: any;
     shopItem: ShopItemType;
+    refund: any;
 }
 
 export const ShopItem = ({ refund, shopItem }: Props) => {
@@ -24,7 +24,7 @@ export const ShopItem = ({ refund, shopItem }: Props) => {
         ...TYPE_IMAGES[shopItem.shopItemTypeId]
     };
 
-    const onClick = (event: any) => {
+    const onClick = (event: MouseEvent) => {
         event.preventDefault();
         refund(shopItem);
         event.stopPropagation();

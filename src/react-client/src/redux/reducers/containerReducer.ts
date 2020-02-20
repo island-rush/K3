@@ -1,39 +1,37 @@
+import { AnyAction } from 'redux';
+import { ALL_GROUND_TYPES, distanceMatrix, initialGameboardEmpty, TRANSPORT_TYPE_ID } from '../../../../constants';
 // prettier-ignore
-import { ALL_GROUND_TYPES, distanceMatrix, initialGameboardEmpty, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, OUTER_PIECE_CLICK_ACTION, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION, TRANSPORT_TYPE_ID } from '../../../../constants';
-// prettier-ignore
-import { ContainerState, EnterContainerAction, ExitContainerAction, ExitTransportContainerAction, PieceCloseAction, PieceOpenAction, PieceType } from '../../../../types';
-
-type ContainerReducerActions = PieceOpenAction | PieceCloseAction | ExitTransportContainerAction | EnterContainerAction | ExitContainerAction;
+import { CANCEL_CONTAINER_PLACEMENT, ContainerState, EnterContainerAction, ExitContainerAction, ExitTransportContainerAction, INNER_PIECE_CLICK_ACTION, INNER_TRANSPORT_PIECE_CLICK_ACTION, OUTER_PIECE_CLICK_ACTION, PieceOpenAction, PieceType, PIECE_CLOSE_ACTION, PIECE_OPEN_ACTION } from '../../../../types';
 
 const initialContainerState: ContainerState = {
-    active: false,
+    isActive: false,
     isSelectingHex: false,
     innerPieceToDrop: null,
     containerPiece: null,
     outerPieces: []
 };
 
-export function containerReducer(state = initialContainerState, action: ContainerReducerActions) {
+export function containerReducer(state = initialContainerState, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: ContainerState = JSON.parse(JSON.stringify(state));
 
     switch (type) {
         case PIECE_OPEN_ACTION:
-            stateCopy.active = true;
+            stateCopy.isActive = true;
             stateCopy.containerPiece = (action as PieceOpenAction).payload.selectedPiece;
             let selectedPiecePosition = (action as PieceOpenAction).payload.selectedPiece.piecePositionId;
             let selectedPieceTypeId = (action as PieceOpenAction).payload.selectedPiece.pieceTypeId;
 
             //outerPieces is dependent on selectedPieceTypeId (surrounding land if transport...)
-            //TODO: this can be cleaned up with modern for.each syntact -> for (let x of y)? something like that (it was used somewhere else so search for it)
+            // TODO: this can be cleaned up with modern for.each syntact -> for (let x of y)? something like that (it was used somewhere else so search for it)
             if (selectedPieceTypeId === TRANSPORT_TYPE_ID) {
                 for (let x = 0; x < distanceMatrix[selectedPiecePosition].length; x++) {
-                    //TODO: do we need a constant for '1'? transports can only pick up pieces from 1 hex away seems obvious
+                    // TODO: do we need a constant for '1'? transports can only pick up pieces from 1 hex away seems obvious
                     if (distanceMatrix[selectedPiecePosition][x] <= 1 && ALL_GROUND_TYPES.includes(initialGameboardEmpty[x].type)) {
-                        //TODO: better way of combining arrays (no internet while i'm coding this mid-flight)
+                        // TODO: better way of combining arrays (no internet while i'm coding this mid-flight)
                         for (let y = 0; y < (action as PieceOpenAction).payload.gameboard[x].pieces.length; y++) {
-                            //TODO: only put pieces here if they are able to get onto transport pieces
+                            // TODO: only put pieces here if they are able to get onto transport pieces
                             if (
                                 (action as PieceOpenAction).payload.gameboard[x].pieces[y].pieceId ===
                                 (action as PieceOpenAction).payload.selectedPiece.pieceId
@@ -46,7 +44,7 @@ export function containerReducer(state = initialContainerState, action: Containe
 
                 //now for each of those positions...
             } else {
-                //other container types only look in their own position (probably...//TODO: write down the rules for this later )
+                //other container types only look in their own position (probably...// TODO: write down the rules for this later )
 
                 stateCopy.outerPieces = (action as PieceOpenAction).payload.gameboard[selectedPiecePosition].pieces.filter(
                     (piece: PieceType, index: number) => {
@@ -57,7 +55,7 @@ export function containerReducer(state = initialContainerState, action: Containe
             return stateCopy;
 
         case PIECE_CLOSE_ACTION:
-            stateCopy.active = false;
+            stateCopy.isActive = false;
             stateCopy.containerPiece = null;
             stateCopy.outerPieces = [];
             stateCopy.isSelectingHex = false;
@@ -95,7 +93,14 @@ export function containerReducer(state = initialContainerState, action: Containe
             stateCopy.outerPieces.push((action as ExitContainerAction).payload.selectedPiece);
             return stateCopy;
 
+        case CANCEL_CONTAINER_PLACEMENT:
+            stateCopy.isActive = true;
+            stateCopy.isSelectingHex = false;
+            stateCopy.innerPieceToDrop = null;
+            return stateCopy;
+
         default:
+            // Do nothing
             return state;
     }
 }

@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
-import { BattleState } from '../../../../../types';
+import { BattlePieceStateType, BattleState } from '../../../../../types';
 //prettier-ignore
 import { battlePieceClick, battlePopupMinimizeToggle, clearOldBattle, confirmBattleSelections, enemyBattlePieceClick, targetPieceClick } from "../../../redux";
 import { BATTLE_POPUP_IMAGES } from '../../styleConstants';
@@ -34,7 +34,7 @@ const battlePopupMinimizeStyle: any = {
 
 const isMinimizedStyle: any = {
     border: '2px solid red',
-    top: '35%',
+    top: '50%',
     margin: '2%'
 };
 
@@ -69,29 +69,23 @@ const invisibleStyle: any = {
 };
 
 interface Props {
+    battle: BattleState;
     battlePieceClick: any;
     enemyBattlePieceClick: any;
     targetPieceClick: any;
     confirmBattleSelections: any;
-    battle: BattleState;
     clearOldBattle: any;
     battlePopupMinimizeToggle: any;
 }
 
 class BattlePopup extends Component<Props> {
     render() {
-        const {
-            battlePieceClick,
-            enemyBattlePieceClick,
-            targetPieceClick,
-            confirmBattleSelections,
-            battle,
-            clearOldBattle,
-            battlePopupMinimizeToggle
-        } = this.props;
+        // prettier-ignore
+        const { battlePieceClick, enemyBattlePieceClick, targetPieceClick, confirmBattleSelections, battle, clearOldBattle, battlePopupMinimizeToggle } = this.props;
+
         const { selectedBattlePiece, friendlyPieces, enemyPieces } = battle;
 
-        const friendlyBattlePieces = friendlyPieces.map((battlePiece: any, index: number) => (
+        const friendlyBattlePieces = friendlyPieces.map((battlePiece: BattlePieceStateType, index: number) => (
             <BattlePiece
                 isFriendly={true} //indicates left side battle piece functionality
                 battlePieceClick={battlePieceClick}
@@ -104,21 +98,29 @@ class BattlePopup extends Component<Props> {
             />
         ));
 
-        const enemyBattlePieces = enemyPieces.map((battlePiece: any, index: number) => (
+        // TODO: refactor BattlePiece components to have variable props instead of passing everything to both friendly and enemy (or have different props (but they have almost exact same style))
+        const enemyBattlePieces = enemyPieces.map((battlePiece: BattlePieceStateType, index: number) => (
             <BattlePiece
-                isFriendly={false} //indicates right side battle piece functionality
+                isFriendly={false} // indicates right side battle piece functionality
                 battlePieceClick={battlePieceClick}
                 targetPieceClick={targetPieceClick}
                 enemyBattlePieceClick={enemyBattlePieceClick}
-                isSelected={false} //never selected
+                isSelected={false} // never selected for that side
                 key={index}
                 battlePiece={battlePiece}
                 battlePieceIndex={index}
             />
         ));
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={battle.active ? null : invisibleStyle}>
+            // Overall Component
+            <div style={battle.isActive ? null : invisibleStyle} onClick={standardOnClick}>
+                {/* Popup */}
                 <div style={!battle.isMinimized ? battlePopupStyle : invisibleStyle}>
                     <div style={leftBattleStyle}>Friend{friendlyBattlePieces}</div>
                     <div style={rightBattleStyle}>Foe{enemyBattlePieces}</div>
@@ -145,6 +147,8 @@ class BattlePopup extends Component<Props> {
                         style={{ ...battlePopupMinimizeStyle, ...BATTLE_POPUP_IMAGES.minIcon }}
                     />
                 </div>
+
+                {/* Minimize Button on Left Side */}
                 <div
                     style={{
                         ...(battle.isMinimized ? battlePopupMinimizeStyle : invisibleStyle),

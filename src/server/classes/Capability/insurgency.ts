@@ -1,10 +1,10 @@
 import { RowDataPacket } from 'mysql2/promise';
 import { pool } from '../../';
-import { BLUE_TEAM_ID, RED_TEAM_ID } from '../../../constants';
-import { InsurgencyType, PieceType } from '../../../types';
+import { BLUE_TEAM_ID, RED_TEAM_ID, LIST_ALL_POSITIONS_TYPE } from '../../../constants';
+import { GameType, InsurgencyType, PieceType, BlueOrRedTeamId } from '../../../types';
 
 // TODO: better naming convention for these methods
-export const insurgencyInsert = async (gameId: number, gameTeam: number, selectedPositionId: number) => {
+export const insurgencyInsert = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
     // TODO: this could be 1 query if efficient and do something with UNIQUE or INSERT IGNORE or REPLACE
     let queryString = 'SELECT * FROM insurgency WHERE gameId = ? AND teamId = ? AND positionId = ?';
     const inserts = [gameId, gameTeam, selectedPositionId];
@@ -20,12 +20,12 @@ export const insurgencyInsert = async (gameId: number, gameTeam: number, selecte
     return true;
 };
 
-export const getInsurgency = async (gameId: number, gameTeam: number) => {
+export const getInsurgency = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) => {
     const queryString = 'SELECT * FROM insurgency WHERE gameId = ? AND teamId = ?';
     const inserts = [gameId, gameTeam];
     const [results] = await pool.query<RowDataPacket[] & InsurgencyType[]>(queryString, inserts);
 
-    const listOfPositions = [];
+    const listOfPositions: LIST_ALL_POSITIONS_TYPE[] = [];
     for (let x = 0; x < results.length; x++) {
         listOfPositions.push(results[x].positionId);
     }
@@ -33,16 +33,16 @@ export const getInsurgency = async (gameId: number, gameTeam: number) => {
     return listOfPositions;
 };
 
-export const useInsurgency = async (gameId: number) => {
+export const useInsurgency = async (gameId: GameType['gameId']) => {
     let queryString = 'SELECT * FROM insurgency WHERE gameId = ?';
     let inserts = [gameId];
     const [results] = await pool.query<RowDataPacket[] & InsurgencyType[]>(queryString, inserts);
 
     // TODO: make this more efficient using bulk selects/updates/deletes
 
-    const listOfPiecesToKill: any = [];
-    const listOfPieceIdsToKill: any = [];
-    const listOfEffectedPositions: any = [];
+    const listOfPiecesToKill: PieceType[] = [];
+    const listOfPieceIdsToKill: PieceType['pieceId'][] = [];
+    const listOfEffectedPositions: LIST_ALL_POSITIONS_TYPE[] = [];
 
     if (results.length === 0) {
         return { listOfPiecesToKill, listOfEffectedPositions };
@@ -55,7 +55,7 @@ export const useInsurgency = async (gameId: number) => {
         const otherTeam = teamId === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
 
         queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ?';
-        inserts = [gameId, otherTeam, positionId];
+        const inserts = [gameId, otherTeam, positionId];
         const [pieceResults] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts);
 
         // for each piece
@@ -74,7 +74,7 @@ export const useInsurgency = async (gameId: number) => {
 
     if (listOfPieceIdsToKill.length > 0) {
         queryString = 'DELETE FROM pieces WHERE pieceId in (?)';
-        inserts = [listOfPieceIdsToKill];
+        const inserts = [listOfPieceIdsToKill];
         await pool.query(queryString, inserts);
     }
 

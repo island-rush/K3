@@ -26,8 +26,8 @@ These commands will get you a working copy of this repository, and set up all de
 Clone the reposority.
 
 ```
-git clone https://github.com/island-rush/K3.3.git
-cd K3.3
+git clone https://github.com/island-rush/K3.git
+cd K3
 ```
 
 Install node modules for the server.
@@ -161,7 +161,7 @@ Please Contact Owners for Information.
 
 ## Version
 
-Version 3.3.0
+Version 3.3.1
 
 ---
 

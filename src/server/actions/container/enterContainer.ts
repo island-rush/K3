@@ -1,6 +1,6 @@
 // prettier-ignore
-import { AIRFIELD_TYPE, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, OUTER_PIECE_CLICK_ACTION, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_MAIN } from '../../../constants';
-import { EnterContainerAction, EnterContainerRequestAction, PieceType, SocketSession } from '../../../types';
+import { AIRFIELD_TYPE, ALL_AIRFIELD_LOCATIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, COMBAT_PHASE_ID, C_130_TYPE_ID, distanceMatrix, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, initialGameboardEmpty, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, MARINE_INFANTRY_COMPANY_TYPE_ID, NOT_WAITING_STATUS, SAM_SITE_TYPE_ID, SLICE_PLANNING_ID, SOF_TEAM_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_OWNERS } from '../../../constants';
+import { EnterContainerAction, EnterContainerRequestAction, OUTER_PIECE_CLICK_ACTION, PieceType, SocketSession } from '../../../types';
 import { Game, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -28,14 +28,14 @@ export const enterContainer = async (session: SocketSession, action: EnterContai
         return;
     }
 
-    // TODO: rename TYPE_MAIN into COCOM_TYPE_ID probably, that way rulebook is more reflected in the code...
-    if (!gameControllers.includes(TYPE_MAIN)) {
-        sendUserFeedback(socketId, 'Not the right controller type for this action...');
+    if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
+        sendUserFeedback(socketId, 'Not the right phase/slice for container entering.');
         return;
     }
 
-    if (gamePhase !== COMBAT_PHASE_ID || gameSlice !== SLICE_PLANNING_ID) {
-        sendUserFeedback(socketId, 'Not the right phase/slice for container entering.');
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
         return;
     }
 
@@ -43,6 +43,20 @@ export const enterContainer = async (session: SocketSession, action: EnterContai
     const thisSelectedPiece = await new Piece(selectedPiece.pieceId).init();
     if (!thisSelectedPiece) {
         sendUserFeedback(socketId, 'Selected Piece did not exists...refresh page probably');
+        return;
+    }
+
+    // Controller must own the piece
+    let atLeast1Owner = false;
+    for (const gameController of gameControllers) {
+        if (TYPE_OWNERS[gameController].includes(thisSelectedPiece.pieceTypeId)) {
+            atLeast1Owner = true;
+            break;
+        }
+    }
+
+    if (!atLeast1Owner) {
+        sendUserFeedback(socketId, "Piece doesn't fall under your control");
         return;
     }
 
@@ -72,6 +86,13 @@ export const enterContainer = async (session: SocketSession, action: EnterContai
 
             if (initialGameboardEmpty[thisContainerPiece.piecePositionId].type !== AIRFIELD_TYPE) {
                 sendUserFeedback(socketId, 'Must be on an airfield spot to transfer troops into tactical airlift.');
+                return;
+            }
+
+            const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisContainerPiece.piecePositionId);
+            const airfieldOwner = thisGame.getAirfield(airfieldNum);
+            if (gameTeam !== airfieldOwner) {
+                sendUserFeedback(socketId, 'must own the airfield to land the aircraft and board things into it.');
                 return;
             }
 
@@ -137,6 +158,14 @@ export const enterContainer = async (session: SocketSession, action: EnterContai
 
             if (initialGameboardEmpty[thisContainerPiece.piecePositionId].type !== AIRFIELD_TYPE) {
                 sendUserFeedback(socketId, 'Must enter from within an airfield.');
+                return;
+            }
+
+            // TODO: repeated from above, don't use airfieldNum2 if possible
+            const airfieldNum2 = ALL_AIRFIELD_LOCATIONS.indexOf(thisContainerPiece.piecePositionId);
+            const airfieldOwner2 = thisGame.getAirfield(airfieldNum2);
+            if (gameTeam !== airfieldOwner2) {
+                sendUserFeedback(socketId, 'must own the airfield to land the aircraft and board things into it.');
                 return;
             }
 

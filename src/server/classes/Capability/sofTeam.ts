@@ -54,7 +54,7 @@ export const sofTakeoutAirfieldsAndSilos = async (game: Game) => {
 
             if (ALL_AIRFIELD_LOCATIONS.includes(thisSofTeam.piecePositionId)) {
                 const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisSofTeam.piecePositionId);
-                const airfieldOwner = game[`airfield${airfieldNum}`];
+                const airfieldOwner: Game['airfield0'] = game[`airfield${airfieldNum}`];
                 if (thisSofTeam.pieceTeamId === RED_TEAM_ID && airfieldOwner === BLUE_TEAM_ID) {
                     // also need to check ownership of the airfield, can only attack if the enemy has it (blue team here)
                     listOfBlueAirfieldsToHit.push(thisSofTeam.piecePositionId);

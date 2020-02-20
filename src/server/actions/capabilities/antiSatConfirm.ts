@@ -1,6 +1,7 @@
 // prettier-ignore
-import { ANTISAT_HIT_ACTION, ANTISAT_SELECTED, ANTISAT_TIME_TO_HIT, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, RED_TEAM_ID, REMOTE_SENSING_HIT_ACTION, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
-import { AntiSatAction, AntiSatHitAction, AntiSatRequestAction, RemoteSensingHitAction, SocketSession } from '../../../types';
+import { ANTISAT_TIME_TO_HIT, BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NOT_WAITING_STATUS, RED_TEAM_ID, SLICE_PLANNING_ID, TYPE_MAIN } from '../../../constants';
+// prettier-ignore
+import { AntiSatAction, AntiSatHitAction, AntiSatRequestAction, ANTISAT_HIT_ACTION, ANTISAT_SELECTED, RemoteSensingHitAction, REMOTE_SENSING_HIT_ACTION, SocketSession } from '../../../types';
 import { Capability, Game, InvItem, Piece } from '../../classes';
 import { redirectClient, sendToTeam, sendUserFeedback } from '../../helpers';
 
@@ -45,6 +46,12 @@ export const antiSatConfirm = async (session: SocketSession, action: AntiSatRequ
         return;
     }
 
+    // already confirmed done
+    if (thisGame.getStatus(gameTeam) !== NOT_WAITING_STATUS) {
+        sendUserFeedback(socketId, 'You already confirmed you were done. Stop sending plans and stuff.');
+        return;
+    }
+
     // Only the main controller
     if (!gameControllers.includes(TYPE_MAIN)) {
         sendUserFeedback(socketId, 'Not the main controller (0)...');
@@ -68,7 +75,7 @@ export const antiSatConfirm = async (session: SocketSession, action: AntiSatRequ
     const serverAction: AntiSatAction = {
         type: ANTISAT_SELECTED,
         payload: {
-            invItem: thisInvItem
+            invItem: thisInvItem // TODO: check that methods aren't getting send to server as well, only need the data
         }
     };
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { TYPE_COSTS, TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { TYPE_IMAGES } from '../styleConstants';
 
@@ -32,7 +32,7 @@ export const PurchaseableItem = ({ typeId, purchase }: Props) => {
 
     const title = `${name}${costText}${movesText}${fuelText}`;
 
-    const onClick = (event: any) => {
+    const onClick = (event: MouseEvent) => {
         event.preventDefault();
         purchase(typeId);
         event.stopPropagation();

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { ANTI_SATELLITE_MISSILES_TYPE_ID } from '../../../../constants';
 import { CapabilitiesState } from '../../../../types';
@@ -39,26 +39,33 @@ const invisibleStyle = {
 };
 
 interface Props {
-    selected: boolean;
+    isSelected: boolean;
     capabilities: CapabilitiesState;
 }
 
 class SpaceArea extends Component<Props> {
     render() {
-        const { selected, capabilities } = this.props;
+        const { isSelected, capabilities } = this.props;
 
-        const { cyberDefenseIsActive } = capabilities;
+        const { isCyberDefenseActive } = capabilities;
 
         const antiSatelliteMissilesItemItemComponents = capabilities.confirmedAntiSat.map((antiSatRoundsLeft: number, index: number) => (
             <div style={{ ...antiSatBoxStyle, ...TYPE_IMAGES[ANTI_SATELLITE_MISSILES_TYPE_ID] }}>{antiSatRoundsLeft}</div>
         ));
 
-        const cyberDefenseDiv = cyberDefenseIsActive ? <div>Cyber defense is active.</div> : null;
+        const cyberDefenseDiv = isCyberDefenseActive ? <div>Cyber defense is active.</div> : null;
+
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
 
         return (
-            <div style={selected ? spaceAreaStyle : invisibleStyle}>
+            <div style={isSelected ? spaceAreaStyle : invisibleStyle} onClick={standardOnClick}>
                 <div>Space Area Capabilities</div>
+
                 {cyberDefenseDiv}
+
                 <div style={antiSatelliteMissilesContainerStyle}>
                     <div>Anti Satellite Missiles</div>
                     {antiSatelliteMissilesItemItemComponents}

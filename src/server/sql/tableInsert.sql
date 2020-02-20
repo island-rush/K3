@@ -80,11 +80,12 @@ CREATE TABLE IF NOT EXISTS pieces (
     pieceTeamId INT(1) NOT NULL,
     pieceTypeId INT(2) NOT NULL,
     piecePositionId INT(4) NOT NULL,
-    pieceContainerId INT(8) NOT NULL,
+    pieceContainerId INT(8),
     pieceVisible INT(1) NOT NULL,
     pieceMoves INT(2) NOT NULL,
     pieceFuel INT(2) NOT NULL,
-    FOREIGN KEY (pieceGameId) REFERENCES games (gameId) ON DELETE CASCADE
+    FOREIGN KEY (pieceGameId) REFERENCES games (gameId) ON DELETE CASCADE,
+    FOREIGN KEY (pieceContainerId) REFERENCES pieces (pieceId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS plans(
@@ -93,7 +94,6 @@ CREATE TABLE IF NOT EXISTS plans(
     planPieceId INT(8) NOT NULL,
     planMovementOrder INT(2) NOT NULL,
     planPositionId INT(4) NOT NULL,
-    planSpecialFlag INT(1) NOT NULL DEFAULT 0,
     FOREIGN KEY (planGameId) REFERENCES games (gameId) ON DELETE CASCADE,
     FOREIGN KEY (planPieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
     PRIMARY KEY (planPieceId, planMovementOrder)
@@ -108,43 +108,41 @@ CREATE TABLE IF NOT EXISTS news(
     FOREIGN KEY (newsGameId) REFERENCES games (gameId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS eventQueue(
-	eventId INT(8) PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    eventGameId INT(4) NOT NULL,
-    eventTeamId INT(1) NOT NULL, -- 0,1 or 2 for both
-    eventTypeId INT(2) NOT NULL, -- 0 = battle
-    eventPosA INT(4) NOT NULL DEFAULT -1,
-    eventPosB INT(4) NOT NULL DEFAULT -1,
-    FOREIGN KEY (eventGameId) REFERENCES games (gameId) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS battleQueue(
+	battleId INT(8) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    battleGameId INT(4) NOT NULL,
+    battlePosA INT(4) NOT NULL DEFAULT -1,
+    battlePosB INT(4) NOT NULL DEFAULT -1,
+    FOREIGN KEY (battleGameId) REFERENCES games (gameId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS eventItems(
-	eventId INT(8) NOT NULL,
-    eventPieceId INT(8) NOT NULL,
-    eventItemTarget INT(8) DEFAULT -1,
-    FOREIGN KEY (eventId) REFERENCES eventQueue (eventId) ON DELETE CASCADE,
-    FOREIGN KEY (eventPieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
-    PRIMARY KEY (eventId, eventPieceId)
+CREATE TABLE IF NOT EXISTS battlePieces(
+	battleId INT(8) NOT NULL,
+    battlePieceId INT(8) NOT NULL,
+    battlePieceTargetId INT(8) DEFAULT -1,
+    FOREIGN KEY (battleId) REFERENCES battleQueue (battleId) ON DELETE CASCADE,
+    FOREIGN KEY (battlePieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
+    PRIMARY KEY (battleId, battlePieceId)
 );
 
-CREATE TABLE IF NOT EXISTS eventItemsTemp(
-    eventPieceId INT(8) PRIMARY KEY NOT NULL,
-    eventItemGameId INT(4) NOT NULL,
-    eventPosA INT(4) NOT NULL DEFAULT -1,
-    eventPosB INT(4) NOT NULL DEFAULT -1,
-    FOREIGN KEY (eventPieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
-    FOREIGN KEY (eventItemGameId) REFERENCES games (gameId) ON DELETE CASCADE
+CREATE TABLE IF NOT EXISTS battleItemsTemp(
+    battlePieceId INT(8) PRIMARY KEY NOT NULL,
+    gameId INT(4) NOT NULL,
+    battlePosA INT(4) NOT NULL DEFAULT -1,
+    battlePosB INT(4) NOT NULL DEFAULT -1,
+    FOREIGN KEY (battlePieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
+    FOREIGN KEY (gameId) REFERENCES games (gameId) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS eventItemsTargetsTemp(
-	eventId INT(8) NOT NULL,
-    eventPieceId INT(8) NOT NULL,
-    eventItemTarget INT(8) DEFAULT -1,
-    eventItemGameId INT(4) NOT NULL DEFAULT -1,
-    FOREIGN KEY (eventId) REFERENCES eventQueue (eventId) ON DELETE CASCADE,
-    FOREIGN KEY (eventPieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
-    FOREIGN KEY (eventItemGameId) REFERENCES games (gameId) ON DELETE CASCADE,
-    PRIMARY KEY (eventId, eventPieceId)
+CREATE TABLE IF NOT EXISTS battleItemsTargetsTemp(
+	battleId INT(8) NOT NULL,
+    battlePieceId INT(8) NOT NULL,
+    battlePieceTargetId INT(8) DEFAULT -1,
+    gameId INT(4) NOT NULL DEFAULT -1,
+    FOREIGN KEY (battleId) REFERENCES battleQueue (battleId) ON DELETE CASCADE,
+    FOREIGN KEY (battlePieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
+    FOREIGN KEY (gameId) REFERENCES games (gameId) ON DELETE CASCADE,
+    PRIMARY KEY (battleId, battlePieceId)
 );
 
 -- starting to not use the naming convention as much, keeps it simple (easier to understand)

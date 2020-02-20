@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL } from '../../../../../constants';
 import { PlanningState } from '../../../../../types';
 
@@ -32,11 +32,17 @@ interface Props {
 }
 
 export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, planning }: Props) => {
-    const { raiseMoralePopupActive } = planning;
+    const { isSelectingCommander } = planning;
+
+    const standardOnClick = (event: MouseEvent) => {
+        event.preventDefault();
+        event.stopPropagation();
+    };
 
     return (
-        <div style={raiseMoralePopupActive ? popupStyle : invisibleStyle}>
+        <div style={isSelectingCommander ? popupStyle : invisibleStyle} onClick={standardOnClick}>
             <div style={titleStyle}>Select a commander type to boost.</div>
+
             <div
                 style={buttonStyle}
                 onClick={event => {
@@ -47,6 +53,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
             >
                 Air
             </div>
+
             <div
                 style={buttonStyle}
                 onClick={event => {
@@ -57,6 +64,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
             >
                 Land
             </div>
+
             <div
                 style={buttonStyle}
                 onClick={event => {
@@ -67,6 +75,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
             >
                 Sea
             </div>
+
             <div
                 style={buttonStyle}
                 onClick={event => {

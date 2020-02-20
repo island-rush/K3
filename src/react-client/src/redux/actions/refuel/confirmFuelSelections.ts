@@ -1,23 +1,34 @@
 import { Dispatch } from 'redux';
 import { emit, FullState } from '../../';
-import { SERVER_CONFIRM_FUEL_SELECTION } from '../../../../../constants';
-import { ConfirmFuelSelectionRequestAction } from '../../../../../types';
+import { ConfirmFuelSelectionRequestAction, SERVER_CONFIRM_FUEL_SELECTION } from '../../../../../types';
+import { TYPE_AIR, COMBAT_PHASE_ID, WAITING_STATUS } from '../../../../../constants';
+import { setUserfeedbackAction } from '../setUserfeedbackAction';
 
 /**
  * Action to confirm all fuel selections from specific tankers to specific aircraft.
  */
 export const confirmFuelSelections = () => {
     return (dispatch: Dispatch, getState: () => FullState, sendToServer: typeof emit) => {
-        //check the local state before sending to the server
-        // const { gameboardMeta } = getState();
+        const { gameInfo, refuel } = getState();
 
-        //prevent sending to server if client doesn't have good data, or we know somehow its a bad time to confirm
-        //(ex: not actively refueling...)
+        const { gameControllers, gameStatus, gamePhase } = gameInfo;
 
-        // const { tankers, aircraft } = gameboardMeta.refuel;
-        //need to send to the server what selections were made, for it to handle it...
+        if (!gameControllers.includes(TYPE_AIR)) {
+            dispatch(setUserfeedbackAction('must be air commander to do refueling'));
+            return;
+        }
 
-        const { refuel } = getState();
+        if (gamePhase !== COMBAT_PHASE_ID) {
+            dispatch(setUserfeedbackAction('must be combat phase to open air refuel.'));
+            return;
+        }
+
+        if (gameStatus === WAITING_STATUS) {
+            dispatch(setUserfeedbackAction('already confirmed waiting for other team.'));
+            return;
+        }
+
+        // TODO: could do more fuel transfer checking (prevent malicious data if possible?)
         const { aircraft, tankers } = refuel;
 
         const clientAction: ConfirmFuelSelectionRequestAction = {
@@ -29,5 +40,6 @@ export const confirmFuelSelections = () => {
         };
 
         sendToServer(clientAction);
+        return;
     };
 };

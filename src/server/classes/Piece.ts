@@ -1,8 +1,9 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX } from '../../constants';
-import { AtcScrambleType, BiologicalWeaponsType, GoldenEyeType, NukeType, PieceType, RemoteSensingType } from '../../types';
+import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, LIST_ALL_POSITIONS_TYPE, NO_PARENT_VALUE } from '../../constants';
+// prettier-ignore
+import { AtcScrambleType, BiologicalWeaponsType, BlueOrRedTeamId, GameType, GoldenEyeType, NukeType, PieceType, PlanType, RemoteSensingType } from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
 
@@ -10,19 +11,19 @@ import { Game } from './Game';
  * Represents a row in the pieces database table.
  */
 export class Piece implements PieceType {
-    pieceId: number;
-    pieceGameId: number;
-    pieceTeamId: number;
-    pieceTypeId: number;
-    piecePositionId: number;
-    pieceContainerId: number;
-    pieceVisible: number;
-    pieceMoves: number;
-    pieceFuel: number;
-    pieceContents?: { pieces: PieceType[] };
-    pieceDisabled?: boolean;
+    pieceId: PieceType['pieceId'];
+    pieceGameId: PieceType['pieceGameId'];
+    pieceTeamId: PieceType['pieceTeamId'];
+    pieceTypeId: PieceType['pieceTypeId'];
+    piecePositionId: PieceType['piecePositionId'];
+    pieceContainerId: PieceType['pieceContainerId'];
+    pieceVisible: PieceType['pieceVisible'];
+    pieceMoves: PieceType['pieceMoves'];
+    pieceFuel: PieceType['pieceFuel'];
+    pieceContents?: PieceType['pieceContents'];
+    isPieceDisabled?: PieceType['isPieceDisabled'];
 
-    constructor(pieceId: number) {
+    constructor(pieceId: PieceType['pieceId']) {
         this.pieceId = pieceId;
     }
 
@@ -44,7 +45,7 @@ export class Piece implements PieceType {
         inserts = [this.pieceId];
         const [goldenRows] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
 
-        this.pieceDisabled = goldenRows.length !== 0;
+        this.isPieceDisabled = goldenRows.length !== 0;
 
         return this;
     }
@@ -83,7 +84,7 @@ export class Piece implements PieceType {
     /**
      * Globally update each piece's visibility based on it's surroundings for this game.
      */
-    static async updateVisibilities(gameId: number) {
+    static async updateVisibilities(gameId: GameType['gameId']) {
         const conn = await pool.getConnection();
 
         // set all to invisible
@@ -157,8 +158,9 @@ export class Piece implements PieceType {
         // Bulk update for all visibilities
         // TODO: update for radar and missile pieces
         // TODO: change this into something readable? (could also change the double array into a double object...)
-        queryString = 'UPDATE pieces SET pieceVisible = 1 WHERE pieceGameId = ? AND ((pieceTeamId = 0 AND pieceTypeId = 0 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 1 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 2 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 3 AND piecePositionId IN (?)) OR (pieceTeamId = 4 AND pieceTypeId = 1 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 5 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 6 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 7 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 8 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 9 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 10 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 11 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 12 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 13 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 14 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 15 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 16 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 17 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 18 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 19 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 20 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 21 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 0 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 1 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 2 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 3 AND piecePositionId IN (?)) OR (pieceTeamId = 4 AND pieceTypeId = 1 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 5 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 6 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 7 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 8 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 9 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 10 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 11 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 12 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 13 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 14 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 15 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 16 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 17 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 18 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 19 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 20 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 21 AND piecePositionId IN (?)))';
-        const inserts4 = [gameId, posTypesVisible[BLUE_TEAM_ID][BOMBER_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][STEALTH_BOMBER_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][STEALTH_FIGHTER_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][AIR_REFUELING_SQUADRON_ID], posTypesVisible[BLUE_TEAM_ID][TACTICAL_AIRLIFT_SQUADRON_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][AIRBORN_ISR_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][ARMY_INFANTRY_COMPANY_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][ARTILLERY_BATTERY_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][TANK_COMPANY_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][MARINE_INFANTRY_COMPANY_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][ATTACK_HELICOPTER_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][SAM_SITE_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][DESTROYER_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][A_C_CARRIER_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][SUBMARINE_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][TRANSPORT_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][MC_12_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][C_130_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][SOF_TEAM_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][RADAR_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][MISSILE_TYPE_ID], posTypesVisible[RED_TEAM_ID][BOMBER_TYPE_ID], posTypesVisible[RED_TEAM_ID][STEALTH_BOMBER_TYPE_ID], posTypesVisible[RED_TEAM_ID][STEALTH_FIGHTER_TYPE_ID], posTypesVisible[RED_TEAM_ID][AIR_REFUELING_SQUADRON_ID], posTypesVisible[RED_TEAM_ID][TACTICAL_AIRLIFT_SQUADRON_TYPE_ID], posTypesVisible[RED_TEAM_ID][AIRBORN_ISR_TYPE_ID], posTypesVisible[RED_TEAM_ID][ARMY_INFANTRY_COMPANY_TYPE_ID], posTypesVisible[RED_TEAM_ID][ARTILLERY_BATTERY_TYPE_ID], posTypesVisible[RED_TEAM_ID][TANK_COMPANY_TYPE_ID], posTypesVisible[RED_TEAM_ID][MARINE_INFANTRY_COMPANY_TYPE_ID], posTypesVisible[RED_TEAM_ID][ATTACK_HELICOPTER_TYPE_ID], posTypesVisible[RED_TEAM_ID][LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID], posTypesVisible[RED_TEAM_ID][SAM_SITE_TYPE_ID], posTypesVisible[RED_TEAM_ID][DESTROYER_TYPE_ID], posTypesVisible[RED_TEAM_ID][A_C_CARRIER_TYPE_ID], posTypesVisible[RED_TEAM_ID][SUBMARINE_TYPE_ID], posTypesVisible[RED_TEAM_ID][TRANSPORT_TYPE_ID], posTypesVisible[RED_TEAM_ID][MC_12_TYPE_ID], posTypesVisible[RED_TEAM_ID][C_130_TYPE_ID], posTypesVisible[RED_TEAM_ID][SOF_TEAM_TYPE_ID], posTypesVisible[RED_TEAM_ID][RADAR_TYPE_ID], posTypesVisible[RED_TEAM_ID][MISSILE_TYPE_ID]];
+        // TODO: change in a way that allows for constant (which pieces are revealed by remote sense...)
+        queryString = 'UPDATE pieces SET pieceVisible = 1 WHERE pieceGameId = ? AND pieceContainerId IS NULL AND ((pieceTeamId = 0 AND pieceTypeId = 0 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 3 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 5 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 6 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 7 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 8 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 9 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 10 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 11 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 12 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 13 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 14 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 16 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 17 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 18 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 20 AND piecePositionId IN (?)) OR (pieceTeamId = 0 AND pieceTypeId = 21 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 0 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 3 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 5 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 6 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 7 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 8 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 9 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 10 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 11 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 12 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 13 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 14 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 16 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 17 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 18 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 20 AND piecePositionId IN (?)) OR (pieceTeamId = 1 AND pieceTypeId = 21 AND piecePositionId IN (?)))';
+        const inserts4 = [gameId, posTypesVisible[BLUE_TEAM_ID][BOMBER_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][AIR_REFUELING_SQUADRON_ID], posTypesVisible[BLUE_TEAM_ID][TACTICAL_AIRLIFT_SQUADRON_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][AIRBORN_ISR_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][ARMY_INFANTRY_COMPANY_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][ARTILLERY_BATTERY_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][TANK_COMPANY_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][MARINE_INFANTRY_COMPANY_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][ATTACK_HELICOPTER_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][SAM_SITE_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][DESTROYER_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][A_C_CARRIER_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][TRANSPORT_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][MC_12_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][C_130_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][RADAR_TYPE_ID], posTypesVisible[BLUE_TEAM_ID][MISSILE_TYPE_ID], posTypesVisible[RED_TEAM_ID][BOMBER_TYPE_ID], posTypesVisible[RED_TEAM_ID][AIR_REFUELING_SQUADRON_ID], posTypesVisible[RED_TEAM_ID][TACTICAL_AIRLIFT_SQUADRON_TYPE_ID], posTypesVisible[RED_TEAM_ID][AIRBORN_ISR_TYPE_ID], posTypesVisible[RED_TEAM_ID][ARMY_INFANTRY_COMPANY_TYPE_ID], posTypesVisible[RED_TEAM_ID][ARTILLERY_BATTERY_TYPE_ID], posTypesVisible[RED_TEAM_ID][TANK_COMPANY_TYPE_ID], posTypesVisible[RED_TEAM_ID][MARINE_INFANTRY_COMPANY_TYPE_ID], posTypesVisible[RED_TEAM_ID][ATTACK_HELICOPTER_TYPE_ID], posTypesVisible[RED_TEAM_ID][LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID], posTypesVisible[RED_TEAM_ID][SAM_SITE_TYPE_ID], posTypesVisible[RED_TEAM_ID][DESTROYER_TYPE_ID], posTypesVisible[RED_TEAM_ID][A_C_CARRIER_TYPE_ID], posTypesVisible[RED_TEAM_ID][TRANSPORT_TYPE_ID], posTypesVisible[RED_TEAM_ID][MC_12_TYPE_ID], posTypesVisible[RED_TEAM_ID][C_130_TYPE_ID], posTypesVisible[RED_TEAM_ID][RADAR_TYPE_ID], posTypesVisible[RED_TEAM_ID][MISSILE_TYPE_ID]];
         await conn.query(queryString, inserts4);
 
         conn.release();
@@ -167,19 +169,19 @@ export class Piece implements PieceType {
     /**
      * Globally move all pieces according to their plans for this game.
      */
-    static async move(gameId: number, movementOrder: number) {
+    static async move(gameId: GameType['gameId'], movementOrder: PlanType['planMovementOrder']) {
         // movement based on plans (for this order/step)
         const conn = await pool.getConnection();
 
         const inserts = [gameId, movementOrder];
         const movePiecesQuery =
-            'UPDATE pieces, plans SET pieces.piecePositionId = plans.planPositionId, pieces.pieceMoves = pieces.pieceMoves - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ? AND plans.planSpecialFlag = 0';
+            'UPDATE pieces, plans SET pieces.piecePositionId = plans.planPositionId, pieces.pieceMoves = pieces.pieceMoves - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ?';
         await conn.query(movePiecesQuery, inserts);
 
         // update fuel (only for pieces that are restricted by fuel (air pieces))
         const inserts2 = [gameId, movementOrder, TYPE_AIR_PIECES];
         const removeFuel =
-            'UPDATE pieces, plans SET pieces.pieceFuel = pieces.pieceFuel - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ? AND plans.planSpecialFlag = 0 AND pieces.pieceTypeId in (?)';
+            'UPDATE pieces, plans SET pieces.pieceFuel = pieces.pieceFuel - 1 WHERE pieces.pieceId = plans.planPieceId AND planGameId = ? AND plans.planMovementOrder = ? AND pieces.pieceTypeId in (?)';
         await conn.query(removeFuel, inserts2);
 
         const updateContents =
@@ -189,7 +191,7 @@ export class Piece implements PieceType {
         await conn.query(updateContents, newinserts); // do it twice for containers within containers contained pieces to get updated (GENIUS LEVEL CODING RIGHT HERE)
 
         // TODO: referencing another table here...(could change to put into the plans class)
-        const deletePlansQuery = 'DELETE FROM plans WHERE planGameId = ? AND planMovementOrder = ? AND planSpecialFlag = 0';
+        const deletePlansQuery = 'DELETE FROM plans WHERE planGameId = ? AND planMovementOrder = ?';
         await conn.query(deletePlansQuery, inserts);
 
         // handle if the pieces moved into a bio / nuclear place
@@ -228,14 +230,14 @@ export class Piece implements PieceType {
         conn.release();
     }
 
-    static async deletePlanesWithoutFuel(gameId: number) {
+    static async deletePlanesWithoutFuel(gameId: GameType['gameId']) {
         // TODO: 0 fuel should possibly be a constant, since it used to be -1 but changed
         const queryString = 'DELETE FROM pieces WHERE pieceGameId = ? AND pieceFuel < 1 AND pieceTypeId in (?)';
         const inserts = [gameId, PIECES_WITH_FUEL];
         await pool.query(queryString, inserts);
     }
 
-    static async giveFuelToHelisOverLand(gameId: number) {
+    static async giveFuelToHelisOverLand(gameId: GameType['gameId']) {
         const queryString = 'UPDATE pieces SET pieceFuel = ? WHERE pieceGameId = ? AND piecePositionId in (?) AND pieceTypeId = ?';
         const inserts = [TYPE_FUEL[ATTACK_HELICOPTER_TYPE_ID], gameId, ALL_LAND_POSITIONS, ATTACK_HELICOPTER_TYPE_ID];
         await pool.query(queryString, inserts);
@@ -244,7 +246,7 @@ export class Piece implements PieceType {
     /**
      * Get dictionary of positions and the pieces those positions contain.
      */
-    static async getVisiblePieces(gameId: number, gameTeam: number) {
+    static async getVisiblePieces(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         let queryString =
             'SELECT * FROM pieces WHERE pieceGameId = ? AND (pieceTeamId = ? OR pieceVisible = 1) ORDER BY pieceContainerId, pieceTeamId ASC';
         let inserts = [gameId, gameTeam];
@@ -265,24 +267,25 @@ export class Piece implements PieceType {
         for (let x = 0; x < results.length; x++) {
             const currentPiece = results[x];
             if (allPieceIdsStuck.includes(currentPiece.pieceId)) {
-                currentPiece.pieceDisabled = true;
+                currentPiece.isPieceDisabled = true;
             } else {
-                currentPiece.pieceDisabled = false;
+                currentPiece.isPieceDisabled = false;
             }
             currentPiece.pieceContents = { pieces: [] };
             if (!allPieces[currentPiece.piecePositionId]) {
                 allPieces[currentPiece.piecePositionId] = [];
             }
-            // TODO: constant instead of -1
-            if (currentPiece.pieceContainerId === -1) {
+            // TODO: constant instead of null
+            if (currentPiece.pieceContainerId === NO_PARENT_VALUE) {
                 allPieces[currentPiece.piecePositionId].push(currentPiece);
-            } else {
+            } else if (currentPiece.pieceTeamId === gameTeam) {
                 const indexOfParent = allPieces[currentPiece.piecePositionId].findIndex(
                     (piece: PieceType) => piece.pieceId === currentPiece.pieceContainerId
                 );
                 if (indexOfParent === -1) {
                     // need to find grandparent, and find parent within pieceContents
                     // loop through all grandparent children to find actual parent?
+                    // TODO: would this logic break if grandparent has a lower pieceId or pieceContainerId than its child? (we assume some things because we order by pieceContainerId....)
                     // TODO: probably cleaner way of doing this logic, should also break from outer loop to be more efficient, since we are done
                     for (let x = 0; x < allPieces[currentPiece.piecePositionId].length; x++) {
                         const potentialGrandparent = allPieces[currentPiece.piecePositionId][x];
@@ -307,10 +310,10 @@ export class Piece implements PieceType {
      * Get sql results querying positions that should cause refuel event.
      * These positions are tankers + any same team aircraft.
      */
-    static async getPositionRefuels(gameId: number, gameTeam: number) {
+    static async getPositionRefuels(gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId) {
         // TODO: constant for 'outside container' instead of -1?
         const queryString =
-            'SELECT tnkr.pieceId as tnkrPieceId, tnkr.pieceTypeId as tnkrPieceTypeId, tnkr.piecePositionId as tnkrPiecePositionId, tnkr.pieceMoves as tnkrPieceMoves, tnkr.pieceFuel as tnkrPieceFuel, arcft.pieceId as arcftPieceId, arcft.pieceTypeId as arcftPieceTypeId, arcft.piecePositionId as arcftPiecePositionId, arcft.pieceMoves as arcftPieceMoves, arcft.pieceFuel as arcftPieceFuel FROM (SELECT * FROM pieces WHERE pieceTypeId = 3 AND pieceGameId = ? AND pieceTeamId = ?) as tnkr JOIN (SELECT * FROM pieces WHERE pieceTypeId in (0, 1, 2, 4, 5, 17, 18) AND pieceGameId = ? AND pieceTeamId = ?) as arcft ON tnkr.piecePositionId = arcft.piecePositionId WHERE arcft.pieceContainerId = -1';
+            'SELECT tnkr.pieceId as tnkrPieceId, tnkr.pieceTypeId as tnkrPieceTypeId, tnkr.piecePositionId as tnkrPiecePositionId, tnkr.pieceMoves as tnkrPieceMoves, tnkr.pieceFuel as tnkrPieceFuel, arcft.pieceId as arcftPieceId, arcft.pieceTypeId as arcftPieceTypeId, arcft.piecePositionId as arcftPiecePositionId, arcft.pieceMoves as arcftPieceMoves, arcft.pieceFuel as arcftPieceFuel FROM (SELECT * FROM pieces WHERE pieceTypeId = 3 AND pieceGameId = ? AND pieceTeamId = ?) as tnkr JOIN (SELECT * FROM pieces WHERE pieceTypeId in (0, 1, 2, 4, 5, 17, 18) AND pieceGameId = ? AND pieceTeamId = ?) as arcft ON tnkr.piecePositionId = arcft.piecePositionId WHERE arcft.pieceContainerId IS NULL';
         const inserts = [gameId, gameTeam, gameId, gameTeam];
         const [results] = await pool.query<RowDataPacket[]>(queryString, inserts); // TODO: weird data type with query
 
@@ -341,9 +344,9 @@ export class Piece implements PieceType {
     /**
      * Put 1 piece outside of it's parent piece.
      */
-    static async putOutsideContainer(selectedPieceId: number, newPositionId: number) {
+    static async putOutsideContainer(selectedPieceId: PieceType['pieceId'], newPositionId: number) {
         // TODO: deal with inner transport pieces (need to also set the piecePositionId)
-        const queryString = 'UPDATE pieces SET pieceContainerId = -1, piecePositionId = ? WHERE pieceId = ?';
+        const queryString = 'UPDATE pieces SET pieceContainerId = NULL, piecePositionId = ? WHERE pieceId = ?';
         const inserts = [newPositionId, selectedPieceId];
         await pool.query(queryString, inserts);
     }
@@ -353,14 +356,14 @@ export class Piece implements PieceType {
      * Insert a single piece into the database for this game's team.
      */
     static async insert(
-        pieceGameId: number,
-        pieceTeamId: number,
-        pieceTypeId: number,
-        piecePositionId: number,
-        pieceContainerId: number,
-        pieceVisible: number,
-        pieceMoves: number,
-        pieceFuel: number
+        pieceGameId: PieceType['pieceGameId'],
+        pieceTeamId: PieceType['pieceTeamId'],
+        pieceTypeId: PieceType['pieceTypeId'],
+        piecePositionId: PieceType['piecePositionId'],
+        pieceContainerId: PieceType['pieceContainerId'],
+        pieceVisible: PieceType['pieceVisible'],
+        pieceMoves: PieceType['pieceMoves'],
+        pieceFuel: PieceType['pieceFuel']
     ) {
         const queryString =
             'INSERT INTO pieces (pieceGameId, pieceTeamId, pieceTypeId, piecePositionId, pieceContainerId, pieceVisible, pieceMoves, pieceFuel) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
@@ -383,7 +386,7 @@ export class Piece implements PieceType {
     /**
      * Globally reset moves for all pieces in this game.
      */
-    static async resetMoves(gameId: number) {
+    static async resetMoves(gameId: GameType['gameId']) {
         const testquery =
             'UPDATE pieces SET pieceMoves = CASE WHEN pieceTypeId = 0 THEN ? WHEN pieceTypeId = 1 THEN ? WHEN pieceTypeId = 2 THEN ? WHEN pieceTypeId = 3 THEN ? WHEN pieceTypeId = 4 THEN ? WHEN pieceTypeId = 5 THEN ? WHEN pieceTypeId = 6 THEN ? WHEN pieceTypeId = 7 THEN ? WHEN pieceTypeId = 8 THEN ? WHEN pieceTypeId = 9 THEN ? WHEN pieceTypeId = 10 THEN ? WHEN pieceTypeId = 11 THEN ? WHEN pieceTypeId = 12 THEN ? WHEN pieceTypeId = 13 THEN ? WHEN pieceTypeId = 14 THEN ? WHEN pieceTypeId = 15 THEN ? WHEN pieceTypeId = 16 THEN ? WHEN pieceTypeId = 17 THEN ? WHEN pieceTypeId = 18 THEN ? WHEN pieceTypeId = 19 THEN ? END WHERE pieceGameId = ?';
         const inserts = [
@@ -415,7 +418,7 @@ export class Piece implements PieceType {
     /**
      * Removing fuel from pieces that don't have any plans (and already have some amount of fuel (not -1))
      */
-    static async removeFuelForLoitering(gameId: number) {
+    static async removeFuelForLoitering(gameId: GameType['gameId']) {
         // TODO: don't remove fuel for planes over airfields? (or cover it with another refuel call)
         const queryString =
             'UPDATE pieces LEFT JOIN plans ON pieceId = planPieceId SET pieceFuel = pieceFuel - 1 WHERE planPieceId IS NULL AND pieceFuel != -1 AND pieceGameId = 1;';
@@ -459,7 +462,7 @@ export class Piece implements PieceType {
         }
     }
 
-    static async ableToPlaceRadar(thisGame: Game, gameTeam: number, selectedPositionId: number) {
+    static async ableToPlaceRadar(thisGame: Game, gameTeam: PieceType['pieceTeamId'], selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         // TODO: could make this into 1 request instead of 2
         const queryString = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND piecePositionId = ? AND pieceTypeId in (?)';
         const inserts = [thisGame.gameId, gameTeam, selectedPositionId, TYPE_GROUND_PIECES];
@@ -555,7 +558,7 @@ export class Piece implements PieceType {
         return completelyOwnsIsland;
     }
 
-    static async ableToPlaceMissile(thisGame: Game, gameTeam: number, selectedPositionId: number) {
+    static async ableToPlaceMissile(thisGame: Game, gameTeam: PieceType['pieceTeamId'], selectedPositionId: LIST_ALL_POSITIONS_TYPE) {
         // what are the rules for placement with missiles (does it need to have friendly pieces there?)
 
         // TODO: could make this into 1 request instead of 2
@@ -653,5 +656,170 @@ export class Piece implements PieceType {
         }
 
         return completelyOwnsIsland;
+    }
+
+    static async samFire(thisGame: Game) {
+        // need to try and hit planes within range for sams
+        // different ranges / visibilities
+        // all the same chance hit?
+        // prioritize closer things, but still random which one is hit?
+        // don't hit 'landed' planes when they are over airfields they control...
+
+        // TODO: a lot of this could be refactored (could use sub functions to make it cleaner...)
+
+        // TODO: this is a very expensive operation, consider possible refactors----look into selecting all pieces from the game (maybe specific selection) and just looping through it (less requests, but bigger data)
+        // keeping it expensive for simplicity for now
+
+        const samQuery = 'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTypeId = ?';
+        const samInserts = [thisGame.gameId, SAM_SITE_TYPE_ID];
+        const [samResults] = await pool.query<RowDataPacket[] & PieceType[]>(samQuery, samInserts);
+
+        const listOfDeletedPieces: PieceType[] = [];
+
+        // for each sam
+        // TODO: we know all the sam positions, therefore we can figure out all possible enemy positions, and do a combined network request for all enemies in all those positions
+        // ^^^^ logic below would still work cause it's still checking distance matrix for priority, and any outside will be skipped.... (list of range for each piece still needs to happen....)
+        for (let x = 0; x < samResults.length; x++) {
+            const thisSam = samResults[x];
+
+            // what positions are within range?
+            const listOfInRangePositions = [];
+            for (let z = 0; z < distanceMatrix[thisSam.piecePositionId].length; z++) {
+                if (
+                    distanceMatrix[thisSam.piecePositionId][z] === 0 ||
+                    distanceMatrix[thisSam.piecePositionId][z] === 1 ||
+                    distanceMatrix[thisSam.piecePositionId][z] === 2 ||
+                    distanceMatrix[thisSam.piecePositionId][z] === 3
+                ) {
+                    listOfInRangePositions.push(z);
+                }
+            }
+
+            // find the area around the sam that it could target...
+            // TODO: make a constant for visible / invisible values (1, 0)
+            const queryString =
+                'SELECT * FROM pieces WHERE pieceGameId = ? AND pieceTeamId = ? AND pieceTypeId IN (?) AND piecePositionId IN (?) AND pieceVisible = 1';
+            const inserts = [
+                thisGame.gameId,
+                thisSam.pieceTeamId === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID,
+                PIECES_WITH_FUEL,
+                listOfInRangePositions
+            ];
+            const [enemyPlanes] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts); // TODO: bad to do queries within for loop.....(more reason to just accept bigger data, fewer requests... (or find a sql trick (unlikely)))
+
+            const listOfRange0Enemies = [];
+            const listOfRange1Enemies = [];
+            const listOfRange2Enemies = [];
+            const listOfRange3Enemies = [];
+
+            for (let b = 0; b < enemyPlanes.length; b++) {
+                const thisEnemyPlane = enemyPlanes[b];
+                // duplicate code here and below..
+                if (distanceMatrix[thisSam.piecePositionId][thisEnemyPlane.piecePositionId] === 0) {
+                    if (ALL_AIRFIELD_LOCATIONS.includes(thisEnemyPlane.piecePositionId)) {
+                        const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisEnemyPlane.piecePositionId);
+                        const airfieldOwner = thisGame[`airfield${airfieldNum}`];
+                        if (airfieldOwner !== thisEnemyPlane.pieceTeamId) {
+                            listOfRange0Enemies.push(thisEnemyPlane);
+                        }
+                    } else {
+                        // not over an airfield
+                        listOfRange0Enemies.push(thisEnemyPlane);
+                    }
+                } else if (distanceMatrix[thisSam.piecePositionId][thisEnemyPlane.piecePositionId] === 1) {
+                    // don't add if over it's own airfield
+                    if (ALL_AIRFIELD_LOCATIONS.includes(thisEnemyPlane.piecePositionId)) {
+                        const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisEnemyPlane.piecePositionId);
+                        const airfieldOwner = thisGame[`airfield${airfieldNum}`];
+                        if (airfieldOwner !== thisEnemyPlane.pieceTeamId) {
+                            listOfRange1Enemies.push(thisEnemyPlane);
+                        }
+                    } else {
+                        // not over an airfield
+                        listOfRange1Enemies.push(thisEnemyPlane);
+                    }
+                } else if (
+                    distanceMatrix[thisSam.piecePositionId][thisEnemyPlane.piecePositionId] === 2 &&
+                    ![STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID].includes(thisEnemyPlane.pieceTypeId)
+                ) {
+                    if (ALL_AIRFIELD_LOCATIONS.includes(thisEnemyPlane.piecePositionId)) {
+                        const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisEnemyPlane.piecePositionId);
+                        const airfieldOwner = thisGame[`airfield${airfieldNum}`];
+                        if (airfieldOwner !== thisEnemyPlane.pieceTeamId) {
+                            listOfRange2Enemies.push(thisEnemyPlane);
+                        }
+                    } else {
+                        listOfRange2Enemies.push(thisEnemyPlane);
+                    }
+                } else if (
+                    distanceMatrix[thisSam.piecePositionId][thisEnemyPlane.piecePositionId] === 3 &&
+                    ![STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID].includes(thisEnemyPlane.pieceTypeId)
+                ) {
+                    if (ALL_AIRFIELD_LOCATIONS.includes(thisEnemyPlane.piecePositionId)) {
+                        const airfieldNum = ALL_AIRFIELD_LOCATIONS.indexOf(thisEnemyPlane.piecePositionId);
+                        const airfieldOwner = thisGame[`airfield${airfieldNum}`];
+                        if (airfieldOwner !== thisEnemyPlane.pieceTeamId) {
+                            listOfRange3Enemies.push(thisEnemyPlane);
+                        }
+                    } else {
+                        listOfRange3Enemies.push(thisEnemyPlane);
+                    }
+                }
+            }
+
+            // first check things that are within range 1? (skip range 0 due to battles already handling it)
+            if (listOfRange0Enemies.length !== 0) {
+                // pick a random enemy in this list to hit with x chance
+                const randomIndex = Math.floor(Math.random() * listOfRange0Enemies.length);
+                const randomEnemy = listOfRange0Enemies[randomIndex];
+                const randomChance = Math.floor(Math.random() * 100) + 1;
+                if (randomChance < 75) {
+                    // need to delete the piece
+                    listOfDeletedPieces.push(randomEnemy);
+                }
+            } else if (listOfRange1Enemies.length !== 0) {
+                // pick a random enemy in this list to hit with x chance
+                const randomIndex = Math.floor(Math.random() * listOfRange1Enemies.length);
+                const randomEnemy = listOfRange1Enemies[randomIndex];
+                const randomChance = Math.floor(Math.random() * 100) + 1;
+                if (randomChance < 50) {
+                    // need to delete the piece
+                    listOfDeletedPieces.push(randomEnemy);
+                }
+            } else if (listOfRange2Enemies.length !== 0) {
+                // pick a random enemy in this list to hit with x chance
+                const randomIndex = Math.floor(Math.random() * listOfRange2Enemies.length);
+                const randomEnemy = listOfRange2Enemies[randomIndex];
+                const randomChance = Math.floor(Math.random() * 100) + 1;
+                if (randomChance < 25) {
+                    // need to delete the piece
+                    listOfDeletedPieces.push(randomEnemy);
+                }
+            } else if (listOfRange3Enemies.length !== 0) {
+                // pick a random enemy in this list to hit with x chance
+                const randomIndex = Math.floor(Math.random() * listOfRange3Enemies.length);
+                const randomEnemy = listOfRange3Enemies[randomIndex];
+                const randomChance = Math.floor(Math.random() * 100) + 1;
+                if (randomChance < 13) {
+                    // TODO: better constants and refactoring, but should make it clear that at range 3 it's half the attack value
+                    // need to delete the piece
+                    listOfDeletedPieces.push(randomEnemy);
+                }
+            }
+        }
+
+        if (listOfDeletedPieces.length !== 0) {
+            const listOfDeletedPieceIds: PieceType['pieceId'][] = [];
+            for (const deletedPiece of listOfDeletedPieces) {
+                if (!listOfDeletedPieceIds.includes(deletedPiece.pieceId)) {
+                    listOfDeletedPieceIds.push(deletedPiece.pieceId);
+                }
+            }
+            const deleteQuery = 'DELETE FROM pieces WHERE pieceId IN (?)';
+            const deleteInserts = [listOfDeletedPieceIds];
+            await pool.query(deleteQuery, deleteInserts);
+        }
+
+        return listOfDeletedPieces;
     }
 }

@@ -1,39 +1,17 @@
+import { AnyAction } from 'redux';
+import { INV_MENU_INDEX, NO_MENU_INDEX, SHOP_MENU_INDEX } from '../../../../constants';
 // prettier-ignore
-import { ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTING, CANCEL_PLAN, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GOLDEN_EYE_SELECTING, HIGHLIGHT_POSITIONS, INSURGENCY_SELECTING, MENU_SELECT, MISSILE_DISRUPT_SELECTING, NUKE_SELECTING, PIECE_CLEAR_SELECTION, PIECE_CLICK, PLAN_WAS_CONFIRMED, POSITION_SELECT, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING } from '../../../../constants';
-// prettier-ignore
-import { AtcScrambleSelectingAction, BioWeaponSelectingAction, CommInterruptSelectingAction, ConfirmPlanAction, DeletePlanAction, DroneSwarmSelectingAction, GameboardMetaState, GoldenEyeSelectingAction, HighlightPositionsAction, InsurgencySelectingAction, MenuSelectAction, MissileDisruptSelectingAction, NukeSelectingAction, PieceClearAction, PieceClickAction, PositionSelectAction, PreventPlanAction, RaiseMoraleSelectingAction, RemoteSenseSelectingAction, RodsFromGodSelectingAction, SeaMineSelectingAction } from '../../../../types';
-
-type GameboardMetaReducerActions =
-    | HighlightPositionsAction
-    | MenuSelectAction
-    | PositionSelectAction
-    | PieceClickAction
-    | PieceClearAction
-    | RaiseMoraleSelectingAction
-    | InsurgencySelectingAction
-    | BioWeaponSelectingAction
-    | NukeSelectingAction
-    | CommInterruptSelectingAction
-    | MissileDisruptSelectingAction
-    | RodsFromGodSelectingAction
-    | GoldenEyeSelectingAction
-    | RemoteSenseSelectingAction
-    | PreventPlanAction
-    | ConfirmPlanAction
-    | SeaMineSelectingAction
-    | DroneSwarmSelectingAction
-    | AtcScrambleSelectingAction
-    | DeletePlanAction;
+import { ATC_SCRAMBLE_SELECTING, BIO_WEAPON_SELECTING, CANCEL_CONTAINER_PLACEMENT, CANCEL_PLAN, COMBAT_PHASE, COMM_INTERRUPT_SELECTING, DELETE_PLAN, DRONE_SWARM_SELECTING, GameboardMetaState, GOLDEN_EYE_SELECTING, HighlightPositionsAction, HIGHLIGHT_POSITIONS, INNER_PIECE_CLICK_ACTION, INSURGENCY_SELECTING, MenuSelectAction, MENU_SELECT, MISSILE_DISRUPT_SELECTING, NEWS_PHASE, NUKE_SELECTING, PieceClickAction, PIECE_CLEAR_SELECTION, PIECE_CLICK, PIECE_PLACE, PIECE_PLACE_START, PLACE_PHASE, PLAN_WAS_CONFIRMED, PositionSelectAction, POSITION_SELECT, PURCHASE_PHASE, RAISE_MORALE_SELECTING, REMOTE_SENSING_SELECTING, RODS_FROM_GOD_SELECTING, SEA_MINE_SELECTING } from '../../../../types';
 
 const initialGameboardMeta: GameboardMetaState = {
-    //TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
-    selectedPosition: -1, //TODO: constant for 'NOTHING_SELECTED_VALUE' = -1
+    // TODO: change to selectedPositionId and selectedPieceId to better represent the values (ints) (and also selectedBattlePiece -> selectedBattlePieceId)
+    selectedPosition: -1, // TODO: constant for 'NOTHING_SELECTED_VALUE' = -1
     highlightedPositions: [],
     selectedPiece: null,
-    selectedMenuId: 0 //TODO: should probably 0 index this instead of 1 index (make -1 == no menu open)
+    selectedMenuId: NO_MENU_INDEX
 };
 
-export function gameboardMetaReducer(state = initialGameboardMeta, action: GameboardMetaReducerActions) {
+export function gameboardMetaReducer(state = initialGameboardMeta, action: AnyAction) {
     const { type } = action;
 
     let stateCopy: GameboardMetaState = JSON.parse(JSON.stringify(state));
@@ -43,30 +21,36 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: Gameb
             stateCopy.highlightedPositions = (action as HighlightPositionsAction).payload.highlightedPositions;
             return stateCopy;
 
+        case CANCEL_CONTAINER_PLACEMENT:
+        case INNER_PIECE_CLICK_ACTION:
+            stateCopy.highlightedPositions = [];
+            return stateCopy;
+
         case MENU_SELECT:
             stateCopy.selectedMenuId =
                 (action as MenuSelectAction).payload.selectedMenuId !== stateCopy.selectedMenuId
                     ? (action as MenuSelectAction).payload.selectedMenuId
-                    : 0;
+                    : NO_MENU_INDEX;
+            return stateCopy;
+
+        case PIECE_PLACE_START:
+            stateCopy.selectedMenuId = NO_MENU_INDEX;
+            return stateCopy;
+
+        case PIECE_PLACE:
+            stateCopy.selectedMenuId = INV_MENU_INDEX;
             return stateCopy;
 
         case POSITION_SELECT:
             stateCopy.selectedPosition = (action as PositionSelectAction).payload.selectedPositionId;
-            // stateCopy.highlightedPositions = [];
+            stateCopy.selectedPiece = null;
             return stateCopy;
 
         case PIECE_CLICK:
             stateCopy.selectedPiece = (action as PieceClickAction).payload.selectedPiece;
             return stateCopy;
 
-        case PIECE_CLEAR_SELECTION:
-            stateCopy.selectedPiece = null;
-            return stateCopy;
-
         case RAISE_MORALE_SELECTING:
-            stateCopy.selectedMenuId = 0;
-            return stateCopy;
-
         case INSURGENCY_SELECTING:
         case BIO_WEAPON_SELECTING:
         case COMM_INTERRUPT_SELECTING:
@@ -75,25 +59,28 @@ export function gameboardMetaReducer(state = initialGameboardMeta, action: Gameb
         case SEA_MINE_SELECTING:
         case MISSILE_DISRUPT_SELECTING:
         case NUKE_SELECTING:
+        case NEWS_PHASE:
+        case COMBAT_PHASE:
+        case PLACE_PHASE:
         case DRONE_SWARM_SELECTING:
         case ATC_SCRAMBLE_SELECTING:
         case REMOTE_SENSING_SELECTING:
-            stateCopy.selectedMenuId = 0;
+            stateCopy.selectedMenuId = NO_MENU_INDEX;
             return stateCopy;
 
+        case PURCHASE_PHASE:
+            stateCopy.selectedMenuId = SHOP_MENU_INDEX;
+            return stateCopy;
+
+        case PIECE_CLEAR_SELECTION:
         case CANCEL_PLAN:
-            stateCopy.selectedPiece = null;
-            return stateCopy;
-
         case PLAN_WAS_CONFIRMED:
-            stateCopy.selectedPiece = null;
-            return stateCopy;
-
         case DELETE_PLAN:
             stateCopy.selectedPiece = null;
             return stateCopy;
 
         default:
+            // Do nothing
             return state;
     }
 }

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { LIST_ALL_CAPABILITIES, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../../../constants';
 import { GameInfoState, ShopItemType, ShopState } from '../../../../types';
@@ -39,17 +39,17 @@ const purchaseableItemsContainerStyle: any = {
 };
 
 interface Props {
+    isSelected: boolean;
+    points: number;
     shopItems: ShopState;
-    selected: boolean;
     purchase: any;
     refund: any;
-    points: number;
     confirmPurchase: any;
 }
 
 class ShopMenu extends Component<Props> {
     render() {
-        const { shopItems, selected, purchase, refund, points, confirmPurchase } = this.props;
+        const { shopItems, isSelected, purchase, refund, points, confirmPurchase } = this.props;
 
         const airShopComponents = TYPE_OWNERS[TYPE_AIR].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
@@ -63,7 +63,7 @@ class ShopMenu extends Component<Props> {
         const specialShopComponents = TYPE_OWNERS[TYPE_SPECIAL].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
         ));
-        const capabilityShopComponents = LIST_ALL_CAPABILITIES.map((typeId, index) => (
+        const capabilityShopComponents = Object.values(LIST_ALL_CAPABILITIES).map((typeId, index) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
         ));
 
@@ -71,34 +71,46 @@ class ShopMenu extends Component<Props> {
             <ShopItem key={index} shopItem={shopItem} refund={(shopItemId: number) => refund(shopItemId)} />
         ));
 
+        const standardOnClick = (event: MouseEvent) => {
+            event.preventDefault();
+            event.stopPropagation();
+        };
+
         return (
-            <div style={selected ? shopStyle : invisibleStyle}>
+            <div style={isSelected ? shopStyle : invisibleStyle} onClick={standardOnClick}>
                 <div>Shop Menu</div>
                 <div>Points: {points}</div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Air</div>
                     {airShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Land</div>
                     {landShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Maritime</div>
                     {seaShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>SOF</div>
                     {specialShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Capabilities</div>
                     {capabilityShopComponents}
                 </div>
+
                 <div style={purchaseableItemsContainerStyle}>
                     <div>Cart</div>
                     {shopItemComponents}
                 </div>
+
                 <div
                     style={purchaseButtonStyle}
                     onClick={event => {
