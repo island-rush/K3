@@ -125,7 +125,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Teacher Last Name</td>
+                            <td>Instructor Last Name</td>
                             <td>
                                 <input name="gameInstructor" type="text" id="gameInstructor" placeholder="ex: Smith" value="adolph" required />
                             </td>
@@ -168,7 +168,7 @@
                 </h3>
             </div>
             <div id="teacherLogin">
-                <h3>Teacher Login</h3>
+                <h3>Instructor Login</h3>
                 <form name="adminLogin" method="post" id="adminLogin" action="/adminLoginVerify">
                     <table>
                         <tr>
@@ -178,7 +178,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td>Teacher Last Name</td>
+                            <td>Instructor Last Name</td>
                             <td>
                                 <input name="adminInstructor" type="text" id="adminInstructor" placeholder="ex: Smith" required />
                             </td>
@@ -245,7 +245,7 @@
                 document.getElementById('formFeedback').innerHTML = 'Bad Request was Given';
                 break;
             case 'gameNotActive':
-                document.getElementById('formFeedback').innerHTML = 'Teacher has Disabled the Game';
+                document.getElementById('formFeedback').innerHTML = 'Instructor has Disabled the Game';
                 break;
             case 'alreadyLoggedIn':
                 document.getElementById('formFeedback').innerHTML = 'That controller is already logged in.';
