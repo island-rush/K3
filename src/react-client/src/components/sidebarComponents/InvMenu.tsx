@@ -17,10 +17,6 @@ const inventoryStyle: any = {
     padding: '1%'
 };
 
-const invisibleStyle: any = {
-    display: 'none'
-};
-
 const airpieceItemsContainerStyle: any = {
     backgroundColor: '#b9b9b9',
     position: 'absolute',
@@ -97,6 +93,10 @@ class InvMenu extends Component<Props> {
         //prettier-ignore
         const { invPieceClick, cyberDefenseCheck, confirmedRaiseMorale, isSelected, invItems, atcScramble, cyberDominance, missileLaunchDisruption, communicationsInterruption, remoteSensing, rodsFromGod, antiSatelliteMissiles, goldenEye, nuclearStrike, biologicalWeapons, seaMines, droneSwarms, insurgency, raiseMorale } = this.props;
 
+        if (!isSelected) {
+            return null;
+        }
+
         // TODO: change this to call a central redux capability function which then determined which sub-capability (these) to call
         let capabilityFunctions: any = {};
         capabilityFunctions[ATC_SCRAMBLE_TYPE_ID] = atcScramble;
@@ -162,7 +162,7 @@ class InvMenu extends Component<Props> {
         };
 
         return (
-            <div style={isSelected ? inventoryStyle : invisibleStyle} onClick={standardOnClick}>
+            <div style={inventoryStyle} onClick={standardOnClick}>
                 <div>Inventory Section for Purchased Items</div>
 
                 <div style={airpieceItemsContainerStyle}>

@@ -57,6 +57,10 @@ interface Props {
 }
 
 export const NewsPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
+    if (!news.isActive) {
+        return null;
+    }
+
     const minimizeClick = (event: MouseEvent) => {
         event.preventDefault();
         newsPopupMinimizeToggle();
@@ -70,7 +74,7 @@ export const NewsPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
 
     return (
         // Overall Component
-        <div style={news.isActive ? null : invisibleStyle} onClick={standardOnClick}>
+        <div onClick={standardOnClick}>
             {/* Popup */}
             <div style={!news.isMinimized ? newsPopupStyle : invisibleStyle}>
                 <div style={popupTitleStyle}>NEWS ALERT!</div>

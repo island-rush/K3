@@ -58,10 +58,6 @@ const confirmButtonStyle: any = {
     right: '2%'
 };
 
-const invisibleStyle: any = {
-    display: 'none'
-};
-
 interface Props {
     refuel: RefuelState;
     confirmFuelSelections: any;
@@ -75,7 +71,11 @@ class RefuelPopup extends Component<Props> {
     render() {
         const { refuel, confirmFuelSelections, aircraftClick, tankerClick, undoFuelSelection, refuelPopupMinimizeToggle } = this.props;
 
-        const { tankers, aircraft, selectedTankerPieceId } = refuel;
+        const { tankers, aircraft, selectedTankerPieceId, isActive } = refuel;
+
+        if (!isActive) {
+            return null;
+        }
 
         const tankerPieces = tankers.map((tankerPiece: any, index: number) => (
             <TankerPiece
@@ -104,7 +104,7 @@ class RefuelPopup extends Component<Props> {
 
         return (
             // Overall Component
-            <div style={refuel.isActive ? refuelPopupStyle : invisibleStyle} onClick={standardOnClick}>
+            <div style={refuelPopupStyle} onClick={standardOnClick}>
                 <div style={leftSectionStyle}>
                     Aircraft
                     {aircraftPieces}

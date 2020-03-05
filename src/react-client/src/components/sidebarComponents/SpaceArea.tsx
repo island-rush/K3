@@ -34,10 +34,6 @@ const antiSatBoxStyle: any = {
     backgroundRepeat: 'no-repeat'
 };
 
-const invisibleStyle = {
-    display: 'none'
-};
-
 interface Props {
     isSelected: boolean;
     capabilities: CapabilitiesState;
@@ -47,13 +43,17 @@ class SpaceArea extends Component<Props> {
     render() {
         const { isSelected, capabilities } = this.props;
 
-        const { isCyberDefenseActive } = capabilities;
+        if (!isSelected) {
+            return null;
+        }
 
-        const antiSatelliteMissilesItemItemComponents = capabilities.confirmedAntiSat.map((antiSatRoundsLeft: number, index: number) => (
+        const { isCyberDefenseActive, confirmedAntiSat } = capabilities;
+
+        const cyberDefenseDiv = isCyberDefenseActive ? <div>Cyber defense IS active.</div> : <div>Cyber defense is NOT active.</div>;
+
+        const antiSatelliteMissilesItemItemComponents = confirmedAntiSat.map((antiSatRoundsLeft: number, index: number) => (
             <div style={{ ...antiSatBoxStyle, ...TYPE_IMAGES[ANTI_SATELLITE_MISSILES_TYPE_ID] }}>{antiSatRoundsLeft}</div>
         ));
-
-        const cyberDefenseDiv = isCyberDefenseActive ? <div>Cyber defense is active.</div> : null;
 
         const standardOnClick = (event: MouseEvent) => {
             event.preventDefault();
@@ -61,7 +61,7 @@ class SpaceArea extends Component<Props> {
         };
 
         return (
-            <div style={isSelected ? spaceAreaStyle : invisibleStyle} onClick={standardOnClick}>
+            <div style={spaceAreaStyle} onClick={standardOnClick}>
                 <div>Space Area Capabilities</div>
 
                 {cyberDefenseDiv}

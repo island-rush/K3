@@ -22,10 +22,6 @@ const buttonStyle: any = {
     padding: '5%'
 };
 
-const invisibleStyle: any = {
-    display: 'none'
-};
-
 interface Props {
     raiseMoraleSelectCommanderType: any;
     planning: PlanningState;
@@ -34,13 +30,17 @@ interface Props {
 export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, planning }: Props) => {
     const { isSelectingCommander } = planning;
 
+    if (!isSelectingCommander) {
+        return null;
+    }
+
     const standardOnClick = (event: MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
     };
 
     return (
-        <div style={isSelectingCommander ? popupStyle : invisibleStyle} onClick={standardOnClick}>
+        <div style={popupStyle} onClick={standardOnClick}>
             <div style={titleStyle}>Select a commander type to boost.</div>
 
             <div

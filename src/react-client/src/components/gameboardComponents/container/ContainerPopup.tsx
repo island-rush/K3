@@ -49,10 +49,6 @@ const confirmButtonStyle: any = {
     backgroundRepeat: 'no-repeat'
 };
 
-const invisibleStyle: any = {
-    display: 'none'
-};
-
 interface Props {
     container: ContainerState;
     pieceClose: any;
@@ -64,6 +60,10 @@ interface Props {
 export class ContainerPopup extends Component<Props> {
     render() {
         const { container, pieceClose, outerPieceClick, innerPieceClick, innerTransportPieceClick } = this.props;
+
+        if (!container.isActive || container.isSelectingHex) {
+            return null;
+        }
 
         const outsidePieces = container.outerPieces.map((piece: PieceType, index: number) => (
             <ContainerPiece key={index} piece={piece} container={container} clickFunction={outerPieceClick} />
@@ -88,7 +88,7 @@ export class ContainerPopup extends Component<Props> {
         };
 
         return (
-            <div style={container.isActive && !container.isSelectingHex ? containerPopupStyle : invisibleStyle} onClick={standardOnClick}>
+            <div style={containerPopupStyle} onClick={standardOnClick}>
                 <div style={leftSectionStyle}>
                     <div>Outer Pieces</div>
                     {outsidePieces}

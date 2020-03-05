@@ -15,10 +15,6 @@ const shopStyle: any = {
     marginTop: '20%'
 };
 
-const invisibleStyle = {
-    display: 'none'
-};
-
 const purchaseButtonStyle: any = {
     position: 'absolute',
     bottom: '1%',
@@ -51,6 +47,10 @@ class ShopMenu extends Component<Props> {
     render() {
         const { shopItems, isSelected, purchase, refund, points, confirmPurchase } = this.props;
 
+        if (!isSelected) {
+            return null;
+        }
+
         const airShopComponents = TYPE_OWNERS[TYPE_AIR].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
         ));
@@ -77,7 +77,7 @@ class ShopMenu extends Component<Props> {
         };
 
         return (
-            <div style={isSelected ? shopStyle : invisibleStyle} onClick={standardOnClick}>
+            <div style={shopStyle} onClick={standardOnClick}>
                 <div>Shop Menu</div>
                 <div>Points: {points}</div>
 

@@ -1,13 +1,6 @@
 import React, { Component, MouseEvent } from 'react';
-import {
-    ALL_AIRFIELD_LOCATIONS,
-    DESTROYER_TYPE_ID,
-    LIST_ALL_AIRFIELD_PIECES,
-    MISSILE_TYPE_ID,
-    TYPE_MOVES,
-    TYPE_NAMES,
-    AIR_REFUELING_SQUADRON_ID
-} from '../../../../constants';
+// prettier-ignore
+import { AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, DESTROYER_TYPE_ID, LIST_ALL_AIRFIELD_PIECES, MISSILE_TYPE_ID, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { CapabilitiesState, GameInfoState, PieceType } from '../../../../types';
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../styleConstants';
 

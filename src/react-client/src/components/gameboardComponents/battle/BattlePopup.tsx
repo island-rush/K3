@@ -83,7 +83,11 @@ class BattlePopup extends Component<Props> {
         // prettier-ignore
         const { battlePieceClick, enemyBattlePieceClick, targetPieceClick, confirmBattleSelections, battle, clearOldBattle, battlePopupMinimizeToggle } = this.props;
 
-        const { selectedBattlePiece, friendlyPieces, enemyPieces } = battle;
+        const { selectedBattlePiece, friendlyPieces, enemyPieces, isActive } = battle;
+
+        if (!isActive) {
+            return null;
+        }
 
         const friendlyBattlePieces = friendlyPieces.map((battlePiece: BattlePieceStateType, index: number) => (
             <BattlePiece
@@ -119,7 +123,7 @@ class BattlePopup extends Component<Props> {
 
         return (
             // Overall Component
-            <div style={battle.isActive ? null : invisibleStyle} onClick={standardOnClick}>
+            <div onClick={standardOnClick}>
                 {/* Popup */}
                 <div style={!battle.isMinimized ? battlePopupStyle : invisibleStyle}>
                     <div style={leftBattleStyle}>Friend{friendlyBattlePieces}</div>
