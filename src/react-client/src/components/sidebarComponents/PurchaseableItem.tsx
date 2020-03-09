@@ -27,16 +27,14 @@ export const PurchaseableItem = ({ typeId, purchase }: Props) => {
 
     const style = { ...purchaseableItemStyle, ...TYPE_IMAGES[typeId], ...(isHoveringOver ? hoverOverStyle : null) };
 
-    const name = TYPE_NAMES[typeId];
-    const cost = TYPE_COSTS[typeId];
     const moves = TYPE_MOVES[typeId];
     const fuel = TYPE_FUEL[typeId];
 
-    const costText = `\nCost: ${cost}`;
+    const costText = `\nCost: ${TYPE_COSTS[typeId]}`;
     const movesText = moves !== undefined && moves !== 0 ? `\nMoves: ${moves}` : '';
     const fuelText = fuel !== undefined && fuel !== -1 ? `\nFuel: ${fuel}` : '';
 
-    const title = `${name}${costText}${movesText}${fuelText}`;
+    const title = `${TYPE_NAMES[typeId]}${costText}${movesText}${fuelText}`;
 
     const onClick = (event: MouseEvent) => {
         event.preventDefault();
