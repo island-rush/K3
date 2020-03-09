@@ -23,7 +23,7 @@ interface Props {
 }
 
 export const PurchaseableItem = ({ typeId, purchase }: Props) => {
-    const [isHoveringOver, setIsHoveringOver] = useState(false);
+    const [isHoveringOver, setIsHovering] = useState(false);
 
     const style = {
         ...purchaseableItemStyle,
@@ -48,13 +48,13 @@ export const PurchaseableItem = ({ typeId, purchase }: Props) => {
 
     const onMouseOver = (event: MouseEvent) => {
         event.preventDefault();
-        setIsHoveringOver(true);
+        setIsHovering(true);
         event.stopPropagation();
     };
 
     const onMouseLeave = (event: MouseEvent) => {
         event.preventDefault();
-        setIsHoveringOver(false);
+        setIsHovering(false);
         event.stopPropagation();
     };
 
