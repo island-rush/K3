@@ -1,4 +1,4 @@
-import React, { MouseEvent } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import { TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { InvItemType } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
@@ -14,12 +14,18 @@ const invItemStyle = {
     backgroundRepeat: 'no-repeat'
 };
 
+const hoverStyle = {
+    backgroundColor: 'black'
+};
+
 interface Props {
     invItem: InvItemType;
     invItemClick: (invItem: InvItemType) => void;
 }
 
 export const InvItem = ({ invItem, invItemClick }: Props) => {
+    const [isHovering, setIsHovering] = useState(false);
+
     const { invItemTypeId } = invItem;
 
     const name = TYPE_NAMES[invItemTypeId];
@@ -28,7 +34,8 @@ export const InvItem = ({ invItem, invItemClick }: Props) => {
 
     const style = {
         ...invItemStyle,
-        ...TYPE_IMAGES[invItemTypeId]
+        ...TYPE_IMAGES[invItemTypeId],
+        ...(isHovering ? hoverStyle : null)
     };
 
     const movesText = moves !== undefined && moves !== 0 ? `\nMoves: ${moves}` : '';
@@ -42,5 +49,17 @@ export const InvItem = ({ invItem, invItemClick }: Props) => {
         event.stopPropagation();
     };
 
-    return <div style={style} title={title} onClick={onClick} />;
+    const onMouseOver = (event: MouseEvent) => {
+        event.preventDefault();
+        setIsHovering(true);
+        event.stopPropagation();
+    };
+
+    const onMouseLeave = (event: MouseEvent) => {
+        event.preventDefault();
+        setIsHovering(false);
+        event.stopPropagation();
+    };
+
+    return <div style={style} title={title} onClick={onClick} onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} />;
 };

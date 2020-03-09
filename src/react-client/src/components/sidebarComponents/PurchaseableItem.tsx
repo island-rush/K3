@@ -25,7 +25,11 @@ interface Props {
 export const PurchaseableItem = ({ typeId, purchase }: Props) => {
     const [isHoveringOver, setIsHoveringOver] = useState(false);
 
-    const style = { ...purchaseableItemStyle, ...TYPE_IMAGES[typeId], ...(isHoveringOver ? hoverOverStyle : null) };
+    const style = {
+        ...purchaseableItemStyle,
+        ...TYPE_IMAGES[typeId],
+        ...(isHoveringOver ? hoverOverStyle : null)
+    };
 
     const moves = TYPE_MOVES[typeId];
     const fuel = TYPE_FUEL[typeId];
