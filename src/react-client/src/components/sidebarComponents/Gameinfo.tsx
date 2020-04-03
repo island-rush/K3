@@ -1,14 +1,15 @@
+import { Properties } from 'csstype';
 import React, { MouseEvent } from 'react';
-import { TYPE_OWNER_NAMES, PHASE_NAMES, SLICE_NAMES } from '../../../../constants';
+import { PHASE_NAMES, SLICE_NAMES, TYPE_OWNER_NAMES } from '../../../../constants';
 import { GameInfoState } from '../../../../types';
 
-const gameinfoStyle: any = {
+const gameinfoStyle: Properties = {
     backgroundColor: 'Yellow',
     position: 'absolute',
     height: '80%',
     width: '700%',
     marginLeft: '200%',
-    marginTop: '20%'
+    marginTop: '20%',
 };
 
 interface Props {

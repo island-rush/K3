@@ -1,13 +1,14 @@
+import { Properties } from 'csstype';
 import React, { FC, MouseEvent } from 'react';
 import { UserfeedbackState } from '../../../../types';
 
-const userfeedbackStyle: any = {
+const userfeedbackStyle: Properties = {
     background: 'grey',
     height: '80%',
     width: '60%',
     position: 'relative',
     float: 'left',
-    margin: '.5%'
+    margin: '.5%',
 };
 
 interface Props {

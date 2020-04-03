@@ -1,16 +1,17 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { NOT_SELECTED_INDEX, SELECTED_BORDERS, SELECTED_INDEX, TYPE_IMAGES } from '../../styleConstants';
 
-const tankerPieceStyle = {
+const tankerPieceStyle: Properties = {
     backgroundColor: 'white',
     height: '15%',
     width: '96%',
     margin: '1%',
     padding: '1%',
-    borderRadius: '2%'
+    borderRadius: '2%',
 };
 
-const boxStyle = {
+const boxStyle: Properties = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: '90% 90%',
     backgroundPosition: 'center',
@@ -19,7 +20,7 @@ const boxStyle = {
     width: '23%',
     float: 'left',
     margin: '.5%',
-    position: 'relative'
+    position: 'relative',
 };
 
 interface Props {
@@ -48,9 +49,9 @@ export class TankerPiece extends Component<Props> {
                     style={{
                         ...boxStyle,
                         ...TYPE_IMAGES[tankerPiece.pieceTypeId],
-                        ...SELECTED_BORDERS[isSelected ? SELECTED_INDEX : NOT_SELECTED_INDEX]
+                        ...SELECTED_BORDERS[isSelected ? SELECTED_INDEX : NOT_SELECTED_INDEX],
                     }}
-                    onClick={event => {
+                    onClick={(event) => {
                         event.preventDefault();
                         tankerClick(tankerPiece, tankerPieceIndex);
                         event.stopPropagation();

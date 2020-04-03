@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { LIST_ALL_CAPABILITIES, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../../../constants';
@@ -6,32 +7,32 @@ import { shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from '../
 import { PurchaseableItem } from './PurchaseableItem';
 import { ShopItem } from './ShopItem';
 
-const shopStyle: any = {
+const shopStyle: Properties = {
     backgroundColor: 'Yellow',
     position: 'absolute',
     height: '170%',
     width: '1800%',
     marginLeft: '150%',
-    marginTop: '20%'
+    marginTop: '20%',
 };
 
-const purchaseButtonStyle: any = {
+const purchaseButtonStyle: Properties = {
     position: 'absolute',
     bottom: '1%',
     right: '1%',
     height: '5%',
     width: '10%',
-    backgroundColor: 'red'
+    backgroundColor: 'red',
 };
 
-const purchaseableItemsContainerStyle: any = {
+const purchaseableItemsContainerStyle: Properties = {
     backgroundColor: '#b9b9b9',
     position: 'relative',
     width: '15%',
     height: '80%',
     float: 'left',
     top: '2.5%',
-    margin: '.5%'
+    margin: '.5%',
 };
 
 interface Props {
@@ -113,7 +114,7 @@ class ShopMenu extends Component<Props> {
 
                 <div
                     style={purchaseButtonStyle}
-                    onClick={event => {
+                    onClick={(event) => {
                         event.preventDefault();
                         confirmPurchase();
                         event.stopPropagation();
@@ -128,13 +129,13 @@ class ShopMenu extends Component<Props> {
 
 const mapStateToProps = ({ shopItems, gameInfo }: { shopItems: ShopState; gameInfo: GameInfoState }) => ({
     shopItems,
-    points: gameInfo.gamePoints
+    points: gameInfo.gamePoints,
 });
 
 const mapActionsToProps = {
     purchase: shopPurchaseRequest,
     refund: shopRefundRequest,
-    confirmPurchase: shopConfirmPurchase
+    confirmPurchase: shopConfirmPurchase,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(ShopMenu);

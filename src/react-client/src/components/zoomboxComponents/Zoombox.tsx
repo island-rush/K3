@@ -1,21 +1,22 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { DRONE_SWARMS_TYPE_ID, LIST_ALL_POSITIONS_TYPE, SEA_MINES_TYPE_ID } from '../../../../constants';
 import { CapabilitiesState, GameboardMetaState, GameboardState, GameInfoState, PieceType } from '../../../../types';
-import { bombardment, clearPieceSelection, missileAttack, pieceOpen, selectPiece, refuelOpen } from '../../redux';
+import { bombardment, clearPieceSelection, missileAttack, pieceOpen, refuelOpen, selectPiece } from '../../redux';
 import { TYPE_IMAGES, ZOOMBOX_BACKGROUNDS } from '../styleConstants';
 import { Piece } from './Piece';
 
-const zoomboxStyle = {
+const zoomboxStyle: Properties = {
     position: 'absolute',
     left: '0%',
     bottom: '0%',
     height: '29%',
     width: '24%',
-    boxShadow: '0px 0px 0px 2px rgba(0, 0, 0, 1) inset'
+    boxShadow: '0px 0px 0px 2px rgba(0, 0, 0, 1) inset',
 };
 
-const seaMineStyle = {
+const seaMineStyle: Properties = {
     backgroundColor: 'grey',
     margin: '1%',
     float: 'left',
@@ -25,10 +26,10 @@ const seaMineStyle = {
     width: '15%',
     height: '24%',
     boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset', // disabled style (for pieces)
-    ...TYPE_IMAGES[SEA_MINES_TYPE_ID]
+    ...TYPE_IMAGES[SEA_MINES_TYPE_ID],
 };
 
-const droneSwarmStyle = {
+const droneSwarmStyle: Properties = {
     backgroundColor: 'grey',
     margin: '1%',
     float: 'left',
@@ -38,7 +39,7 @@ const droneSwarmStyle = {
     width: '15%',
     height: '24%',
     boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset', // disabled style (for pieces)
-    ...TYPE_IMAGES[DRONE_SWARMS_TYPE_ID]
+    ...TYPE_IMAGES[DRONE_SWARMS_TYPE_ID],
 };
 
 interface Props {
@@ -130,7 +131,7 @@ const mapActionsToProps = {
     pieceOpen,
     missileAttack,
     bombardment,
-    refuelOpen
+    refuelOpen,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Zoombox);

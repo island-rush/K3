@@ -1,17 +1,18 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { AIR_REFUELING_SQUADRON_ID, TYPE_FUEL } from '../../../../../constants';
 import { TYPE_IMAGES } from '../../styleConstants';
 
-const aircraftPieceStyle: any = {
+const aircraftPieceStyle: Properties = {
     backgroundColor: 'white',
     height: '15%',
     width: '96%',
     margin: '1%',
     padding: '1%',
-    borderRadius: '2%'
+    borderRadius: '2%',
 };
 
-const boxStyle: any = {
+const boxStyle: Properties = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: '90% 90%',
     backgroundPosition: 'center',
@@ -20,12 +21,12 @@ const boxStyle: any = {
     width: '23%',
     float: 'left',
     margin: '.5%',
-    position: 'relative'
+    position: 'relative',
 };
 
-const textDivStyle: any = {
+const textDivStyle: Properties = {
     position: 'relative',
-    float: 'left'
+    float: 'left',
 };
 
 interface Props {
@@ -45,7 +46,7 @@ export class AircraftPiece extends Component<Props> {
             aircraftPiece.tankerPieceIndex == null ? null : (
                 <div
                     style={{ ...boxStyle, ...TYPE_IMAGES[AIR_REFUELING_SQUADRON_ID] }}
-                    onClick={event => {
+                    onClick={(event) => {
                         event.preventDefault();
                         undoFuelSelection(aircraftPiece, aircraftPieceIndex);
                         event.stopPropagation();
@@ -67,9 +68,9 @@ export class AircraftPiece extends Component<Props> {
                 <div
                     style={{
                         ...boxStyle,
-                        ...TYPE_IMAGES[aircraftPiece.pieceTypeId]
+                        ...TYPE_IMAGES[aircraftPiece.pieceTypeId],
                     }}
-                    onClick={event => {
+                    onClick={(event) => {
                         event.preventDefault();
                         aircraftClick(aircraftPiece, aircraftPieceIndex);
                         event.stopPropagation();

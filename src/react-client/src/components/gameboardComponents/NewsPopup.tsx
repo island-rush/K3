@@ -1,17 +1,18 @@
+import { Properties } from 'csstype';
 import React, { MouseEvent } from 'react';
 import { NewsState } from '../../../../types';
 import { NEWS_POPUP_IMAGES } from '../styleConstants';
 
-const newsPopupStyle: any = {
+const newsPopupStyle: Properties = {
     backgroundColor: 'white',
     width: '50%',
     height: '50%',
     top: '25%',
     right: '25%',
-    position: 'absolute'
+    position: 'absolute',
 };
 
-const newsPopupMinimizeStyle: any = {
+const newsPopupMinimizeStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '7%',
@@ -21,34 +22,34 @@ const newsPopupMinimizeStyle: any = {
     backgroundColor: 'white',
     border: '2px solid black',
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
 };
 
-const isMinimizedStyle: any = {
+const isMinimizedStyle: Properties = {
     border: '2px solid red',
     top: '45%',
-    margin: '2%'
+    margin: '2%',
 };
 
-const invisibleStyle: any = {
-    display: 'none'
+const invisibleStyle: Properties = {
+    display: 'none',
 };
 
-const popupTitleStyle: any = {
+const popupTitleStyle: Properties = {
     textAlign: 'center',
-    fontSize: '200%'
+    fontSize: '200%',
 };
 
-const newsTitleStyle: any = {
+const newsTitleStyle: Properties = {
     textAlign: 'center',
-    fontSize: '150%'
+    fontSize: '150%',
 };
 
-const newsInfoStyle: any = {
+const newsInfoStyle: Properties = {
     textAlign: 'left',
     fontSize: '100%',
     margin: '1%',
-    padding: '2%'
+    padding: '2%',
 };
 
 interface Props {

@@ -2,8 +2,9 @@ import React, { MouseEvent } from 'react';
 import { TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { InvItemType } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
+import { Properties } from 'csstype';
 
-const invItemStyle = {
+const invItemStyle: Properties = {
     position: 'relative',
     backgroundColor: 'blue',
     width: '20%',
@@ -11,7 +12,7 @@ const invItemStyle = {
     margin: '1%',
     float: 'left',
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
 };
 
 interface Props {
@@ -28,7 +29,7 @@ export const InvItem = ({ invItem, invItemClick }: Props) => {
 
     const style = {
         ...invItemStyle,
-        ...TYPE_IMAGES[invItemTypeId]
+        ...TYPE_IMAGES[invItemTypeId],
     };
 
     const movesText = moves !== undefined && moves !== 0 ? `\nMoves: ${moves}` : '';

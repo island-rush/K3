@@ -1,8 +1,9 @@
+import { Properties } from 'csstype';
 import React, { MouseEvent } from 'react';
 import { ShopItemType } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
 
-const shopItemStyle = {
+const shopItemStyle: Properties = {
     backgroundColor: 'green',
     position: 'relative',
     width: '23%',
@@ -10,7 +11,7 @@ const shopItemStyle = {
     margin: '1%',
     float: 'left',
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
 };
 
 interface Props {
@@ -21,7 +22,7 @@ interface Props {
 export const ShopItem = ({ refund, shopItem }: Props) => {
     const style = {
         ...shopItemStyle,
-        ...TYPE_IMAGES[shopItem.shopItemTypeId]
+        ...TYPE_IMAGES[shopItem.shopItemTypeId],
     };
 
     const onClick = (event: MouseEvent) => {

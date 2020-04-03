@@ -1,29 +1,30 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { ANTI_SATELLITE_MISSILES_TYPE_ID } from '../../../../constants';
 import { CapabilitiesState } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
 
-const spaceAreaStyle: any = {
+const spaceAreaStyle: Properties = {
     backgroundColor: 'Yellow',
     position: 'absolute',
     height: '170%',
     width: '1800%',
     marginLeft: '150%',
     marginTop: '20%',
-    padding: '1%'
+    padding: '1%',
 };
 
-const antiSatelliteMissilesContainerStyle: any = {
+const antiSatelliteMissilesContainerStyle: Properties = {
     backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
     right: '41%',
-    top: '10%'
+    top: '10%',
 };
 
-const antiSatBoxStyle: any = {
+const antiSatBoxStyle: Properties = {
     position: 'relative',
     backgroundColor: 'blue',
     width: '20%',
@@ -31,7 +32,7 @@ const antiSatBoxStyle: any = {
     margin: '1%',
     float: 'left',
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
 };
 
 interface Props {
@@ -76,7 +77,7 @@ class SpaceArea extends Component<Props> {
 }
 
 const mapStateToProps = ({ capabilities }: { capabilities: CapabilitiesState }) => ({
-    capabilities
+    capabilities,
 });
 
 export default connect(mapStateToProps)(SpaceArea);
