@@ -5,3 +5,4 @@ export * from './InvItem';
 export * from './Piece';
 export * from './Plan';
 export * from './ShopItem';
+export * from './News';

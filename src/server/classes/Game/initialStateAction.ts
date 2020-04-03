@@ -1,5 +1,5 @@
 import { RowDataPacket } from 'mysql2/promise';
-import { Battle, InvItem, Piece, Plan } from '..';
+import { Battle, InvItem, Piece, Plan, receiveNews } from '..';
 // prettier-ignore
 import { BLUE_TEAM_ID, NEWS_PHASE_ID } from '../../../constants';
 import { BlueOrRedTeamId, ControllerType, GameInitialStateAction, INITIAL_GAMESTATE, NewsType } from '../../../types';
@@ -83,11 +83,13 @@ export const initialStateAction = async (game: Game, gameTeam: BlueOrRedTeamId, 
         const queryString = 'SELECT * FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
         const inserts = [game.gameId];
         const [resultNews] = await pool.query<RowDataPacket[] & NewsType[]>(queryString, inserts);
-
+        const { newsTitle } = resultNews[0];
         serverAction.payload.news = {
             newsTitle: resultNews[0] !== undefined ? resultNews[0].newsTitle : 'No More News',
             newsInfo: resultNews[0] !== undefined ? resultNews[0].newsInfo : 'Click to continue'
         };
+
+        receiveNews(newsTitle, game.gameId);
     }
 
     const battle = await Battle.getNext(game.gameId);

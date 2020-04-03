@@ -7,6 +7,8 @@ import { gameInitialNews, gameInitialPieces } from '../../admin';
 import { pool } from '../../database';
 import { GameProperties } from './GameProperties';
 import { initialStateAction } from './initialStateAction';
+// eslint-disable-next-line import/no-useless-path-segments
+import { receiveNews } from '../../classes';
 
 /**
  * Represents a row in the games table in the database.
@@ -62,6 +64,8 @@ export class Game extends GameProperties implements GameType {
             resultNews[0] !== undefined
                 ? resultNews[0]
                 : { newsTitle: 'No More News', newsInfo: "Obviously you've been playing this game too long..." };
+
+        receiveNews(newsTitle, this.gameId);
 
         return {
             isMinimized: false,
