@@ -9,7 +9,7 @@ const gameinfoStyle: Properties = {
     height: '80%',
     width: '700%',
     marginLeft: '200%',
-    marginTop: '20%',
+    marginTop: '20%'
 };
 
 interface Props {

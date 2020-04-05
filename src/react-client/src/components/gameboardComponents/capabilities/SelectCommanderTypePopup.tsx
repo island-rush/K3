@@ -9,18 +9,18 @@ const popupStyle: Properties = {
     height: '30%',
     top: '25%',
     right: '25%',
-    position: 'absolute',
+    position: 'absolute'
 };
 
 const titleStyle: Properties = {
-    textAlign: 'center',
+    textAlign: 'center'
 };
 
 const buttonStyle: Properties = {
     float: 'left',
     backgroundColor: 'grey',
     margin: '5%',
-    padding: '5%',
+    padding: '5%'
 };
 
 interface Props {
@@ -46,7 +46,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
 
             <div
                 style={buttonStyle}
-                onClick={(event) => {
+                onClick={event => {
                     event.preventDefault();
                     raiseMoraleSelectCommanderType(TYPE_AIR);
                     event.stopPropagation();
@@ -57,7 +57,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
 
             <div
                 style={buttonStyle}
-                onClick={(event) => {
+                onClick={event => {
                     event.preventDefault();
                     raiseMoraleSelectCommanderType(TYPE_LAND);
                     event.stopPropagation();
@@ -68,7 +68,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
 
             <div
                 style={buttonStyle}
-                onClick={(event) => {
+                onClick={event => {
                     event.preventDefault();
                     raiseMoraleSelectCommanderType(TYPE_SEA);
                     event.stopPropagation();
@@ -79,7 +79,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
 
             <div
                 style={buttonStyle}
-                onClick={(event) => {
+                onClick={event => {
                     event.preventDefault();
                     raiseMoraleSelectCommanderType(TYPE_SPECIAL);
                     event.stopPropagation();

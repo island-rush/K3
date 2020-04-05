@@ -8,7 +8,7 @@ const mainButtonStyle: Properties = {
     height: '80%',
     width: '16%',
     margin: '.5%',
-    float: 'left',
+    float: 'left'
 };
 
 interface Props {
@@ -47,7 +47,7 @@ export class MainButton extends Component<Props> {
         return (
             <div
                 style={mainButtonStyle}
-                onClick={(event) => {
+                onClick={event => {
                     event.preventDefault();
                     mainButtonClick();
                     event.stopPropagation();

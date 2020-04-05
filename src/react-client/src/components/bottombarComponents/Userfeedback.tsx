@@ -8,7 +8,7 @@ const userfeedbackStyle: Properties = {
     width: '60%',
     position: 'relative',
     float: 'left',
-    margin: '.5%',
+    margin: '.5%'
 };
 
 interface Props {

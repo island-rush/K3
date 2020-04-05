@@ -13,15 +13,15 @@ const pieceStyle: Properties = {
     backgroundRepeat: 'no-repeat',
     position: 'relative',
     width: '15%',
-    height: '24%',
+    height: '24%'
 };
 
 const selectedStyle: Properties = {
-    boxShadow: '0px 0px 0px 2px rgba(255, 255, 255, 0.8) inset',
+    boxShadow: '0px 0px 0px 2px rgba(255, 255, 255, 0.8) inset'
 };
 
 const disabledStyle: Properties = {
-    boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset',
+    boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset'
 };
 
 interface Props {
@@ -49,7 +49,7 @@ export class Piece extends Component<Props> {
             ...TYPE_IMAGES[piece.pieceTypeId],
             ...TYPE_TEAM_BORDERS[piece.pieceTeamId],
             ...(isSelected ? selectedStyle : ''),
-            ...(piece.isPieceDisabled ? disabledStyle : ''),
+            ...(piece.isPieceDisabled ? disabledStyle : '')
         };
 
         const disabledText = piece.isPieceDisabled ? `\nDisabled` : '';

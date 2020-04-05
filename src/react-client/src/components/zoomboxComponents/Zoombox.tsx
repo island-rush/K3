@@ -13,7 +13,7 @@ const zoomboxStyle: Properties = {
     bottom: '0%',
     height: '29%',
     width: '24%',
-    boxShadow: '0px 0px 0px 2px rgba(0, 0, 0, 1) inset',
+    boxShadow: '0px 0px 0px 2px rgba(0, 0, 0, 1) inset'
 };
 
 const seaMineStyle: Properties = {
@@ -26,7 +26,7 @@ const seaMineStyle: Properties = {
     width: '15%',
     height: '24%',
     boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset', // disabled style (for pieces)
-    ...TYPE_IMAGES[SEA_MINES_TYPE_ID],
+    ...TYPE_IMAGES[SEA_MINES_TYPE_ID]
 };
 
 const droneSwarmStyle: Properties = {
@@ -39,7 +39,7 @@ const droneSwarmStyle: Properties = {
     width: '15%',
     height: '24%',
     boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset', // disabled style (for pieces)
-    ...TYPE_IMAGES[DRONE_SWARMS_TYPE_ID],
+    ...TYPE_IMAGES[DRONE_SWARMS_TYPE_ID]
 };
 
 interface Props {
@@ -131,7 +131,7 @@ const mapActionsToProps = {
     pieceOpen,
     missileAttack,
     bombardment,
-    refuelOpen,
+    refuelOpen
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Zoombox);

@@ -13,7 +13,7 @@ const containerPieceStyle: Properties = {
     width: '15%',
     float: 'left',
     margin: '.5%',
-    position: 'relative',
+    position: 'relative'
 };
 
 interface Props {
@@ -26,7 +26,7 @@ export function ContainerPiece({ piece, container, clickFunction }: Props) {
     return (
         <div
             style={{ ...containerPieceStyle, ...TYPE_IMAGES[piece.pieceTypeId], ...TYPE_TEAM_BORDERS[piece.pieceTeamId] }}
-            onClick={(event) => {
+            onClick={event => {
                 event.preventDefault();
                 clickFunction(piece, container.containerPiece);
                 event.stopPropagation();

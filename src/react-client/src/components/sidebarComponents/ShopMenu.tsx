@@ -13,7 +13,7 @@ const shopStyle: Properties = {
     height: '170%',
     width: '1800%',
     marginLeft: '150%',
-    marginTop: '20%',
+    marginTop: '20%'
 };
 
 const purchaseButtonStyle: Properties = {
@@ -22,7 +22,7 @@ const purchaseButtonStyle: Properties = {
     right: '1%',
     height: '5%',
     width: '10%',
-    backgroundColor: 'red',
+    backgroundColor: 'red'
 };
 
 const purchaseableItemsContainerStyle: Properties = {
@@ -32,7 +32,7 @@ const purchaseableItemsContainerStyle: Properties = {
     height: '80%',
     float: 'left',
     top: '2.5%',
-    margin: '.5%',
+    margin: '.5%'
 };
 
 interface Props {
@@ -114,7 +114,7 @@ class ShopMenu extends Component<Props> {
 
                 <div
                     style={purchaseButtonStyle}
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         confirmPurchase();
                         event.stopPropagation();
@@ -129,13 +129,13 @@ class ShopMenu extends Component<Props> {
 
 const mapStateToProps = ({ shopItems, gameInfo }: { shopItems: ShopState; gameInfo: GameInfoState }) => ({
     shopItems,
-    points: gameInfo.gamePoints,
+    points: gameInfo.gamePoints
 });
 
 const mapActionsToProps = {
     purchase: shopPurchaseRequest,
     refund: shopRefundRequest,
-    confirmPurchase: shopConfirmPurchase,
+    confirmPurchase: shopConfirmPurchase
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(ShopMenu);

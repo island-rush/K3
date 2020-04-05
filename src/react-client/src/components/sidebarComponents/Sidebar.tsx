@@ -15,7 +15,7 @@ const sidebarStyle: Properties = {
     top: '0%',
     left: '0%',
     height: '40%',
-    width: '5%',
+    width: '5%'
 };
 
 const buttonStyle: Properties = {
@@ -25,31 +25,31 @@ const buttonStyle: Properties = {
     backgroundColor: 'maroon',
     left: '15%',
     width: '70%',
-    paddingTop: '70%',
+    paddingTop: '70%'
 };
 
 const shopButtonStyle: Properties = {
     backgroundImage: 'url("./images/graphics/shop.png")',
-    top: '4%',
+    top: '4%'
 };
 
 const invButtonStyle: Properties = {
     backgroundImage: 'url("./images/graphics/inventory.png")',
-    top: '28%',
+    top: '28%'
 };
 
 const spaceButtonStyle: Properties = {
     backgroundImage: 'url("./images/graphics/space.png")',
-    top: '52%',
+    top: '52%'
 };
 
 const infoButtonStyle: Properties = {
     backgroundImage: 'url("./images/graphics/infoIcon.png")',
-    top: '76%',
+    top: '76%'
 };
 
 const selectedButtonStyle: Properties = {
-    backgroundColor: 'white',
+    backgroundColor: 'white'
 };
 
 interface Props {
@@ -76,7 +76,7 @@ class Sidebar extends Component<Props> {
 
                 {/* Shop Menu Button */}
                 <div
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         menuSelect(SHOP_MENU_INDEX);
                         event.stopPropagation();
@@ -84,13 +84,13 @@ class Sidebar extends Component<Props> {
                     style={{
                         ...buttonStyle,
                         ...shopButtonStyle,
-                        ...(selectedMenu === SHOP_MENU_INDEX ? selectedButtonStyle : ''),
+                        ...(selectedMenu === SHOP_MENU_INDEX ? selectedButtonStyle : '')
                     }}
                 />
 
                 {/* Inv Menu Button */}
                 <div
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         menuSelect(INV_MENU_INDEX);
                         event.stopPropagation();
@@ -98,13 +98,13 @@ class Sidebar extends Component<Props> {
                     style={{
                         ...buttonStyle,
                         ...invButtonStyle,
-                        ...(selectedMenu === INV_MENU_INDEX ? selectedButtonStyle : ''),
+                        ...(selectedMenu === INV_MENU_INDEX ? selectedButtonStyle : '')
                     }}
                 />
 
                 {/* Space Menu Button */}
                 <div
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         menuSelect(SPACE_MENU_INDEX);
                         event.stopPropagation();
@@ -112,13 +112,13 @@ class Sidebar extends Component<Props> {
                     style={{
                         ...buttonStyle,
                         ...spaceButtonStyle,
-                        ...(selectedMenu === SPACE_MENU_INDEX ? selectedButtonStyle : ''),
+                        ...(selectedMenu === SPACE_MENU_INDEX ? selectedButtonStyle : '')
                     }}
                 />
 
                 {/* Game Info Menu Button */}
                 <div
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         menuSelect(GAME_INFO_MENU_INDEX);
                         event.stopPropagation();
@@ -126,7 +126,7 @@ class Sidebar extends Component<Props> {
                     style={{
                         ...buttonStyle,
                         ...infoButtonStyle,
-                        ...(selectedMenu === GAME_INFO_MENU_INDEX ? selectedButtonStyle : ''),
+                        ...(selectedMenu === GAME_INFO_MENU_INDEX ? selectedButtonStyle : '')
                     }}
                 />
             </div>
@@ -135,11 +135,11 @@ class Sidebar extends Component<Props> {
 }
 
 const mapStateToProps = ({ gameInfo }: { gameInfo: GameInfoState }) => ({
-    gameInfo,
+    gameInfo
 });
 
 const mapActionsToProps = {
-    menuSelect,
+    menuSelect
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Sidebar);

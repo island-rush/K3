@@ -8,7 +8,7 @@ const leftcontrolsStyle: Properties = {
     width: '19%',
     position: 'relative',
     float: 'left',
-    margin: '.5%',
+    margin: '.5%'
 };
 
 const buttonStyle: Properties = {
@@ -19,7 +19,7 @@ const buttonStyle: Properties = {
     margin: '1%',
     marginTop: '2%',
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat',
+    backgroundRepeat: 'no-repeat'
 };
 
 const buttonTitles: { [key: string]: string } = {
@@ -27,7 +27,7 @@ const buttonTitles: { [key: string]: string } = {
     undo: 'Undo a Planned Move',
     cancel: 'Cancel a Plan',
     confirm: 'Confirm a Plan',
-    container: 'Open Container Controls Or Something Idk',
+    container: 'Open Container Controls Or Something Idk'
 };
 
 interface Props {
@@ -51,7 +51,7 @@ export class Leftcontrols extends Component<Props> {
                 <div
                     title={buttonTitles.start}
                     style={{ ...buttonStyle, ...LEFT_CONTROLS_IMAGES.start }}
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         startPlan();
                         event.stopPropagation();
@@ -61,7 +61,7 @@ export class Leftcontrols extends Component<Props> {
                 <div
                     title={buttonTitles.cancel}
                     style={{ ...buttonStyle, ...LEFT_CONTROLS_IMAGES.cancel }}
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         cancelPlan();
                         event.stopPropagation();
@@ -71,7 +71,7 @@ export class Leftcontrols extends Component<Props> {
                 <div
                     title={buttonTitles.undo}
                     style={{ ...buttonStyle, ...LEFT_CONTROLS_IMAGES.undo }}
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         undoMove();
                         event.stopPropagation();
@@ -81,7 +81,7 @@ export class Leftcontrols extends Component<Props> {
                 <div
                     title={buttonTitles.confirm}
                     style={{ ...buttonStyle, ...LEFT_CONTROLS_IMAGES.confirm }}
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         confirmPlan();
                         event.stopPropagation();

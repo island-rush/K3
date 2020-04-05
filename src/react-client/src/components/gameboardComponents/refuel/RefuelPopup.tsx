@@ -16,7 +16,7 @@ const refuelPopupStyle: Properties = {
     right: '10%',
     backgroundColor: 'white',
     border: '2px solid black',
-    zIndex: 4,
+    zIndex: 4
 };
 
 const refuelPopupMinimizeStyle: Properties = {
@@ -30,7 +30,7 @@ const refuelPopupMinimizeStyle: Properties = {
     border: '2px solid black',
     zIndex: 4,
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat',
+    backgroundRepeat: 'no-repeat'
 };
 
 const leftSectionStyle: Properties = {
@@ -40,7 +40,7 @@ const leftSectionStyle: Properties = {
     backgroundColor: 'grey',
     height: '96%',
     width: '48%',
-    margin: '1%',
+    margin: '1%'
 };
 
 const rightSectionStyle: Properties = {
@@ -50,13 +50,13 @@ const rightSectionStyle: Properties = {
     height: '96%',
     width: '48%',
     float: 'right',
-    margin: '1%',
+    margin: '1%'
 };
 
 const confirmButtonStyle: Properties = {
     position: 'absolute',
     bottom: '-7%',
-    right: '2%',
+    right: '2%'
 };
 
 interface Props {
@@ -115,7 +115,7 @@ class RefuelPopup extends Component<Props> {
                     {tankerPieces}
                 </div>
                 <button
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         confirmFuelSelections();
                         event.stopPropagation();
@@ -125,7 +125,7 @@ class RefuelPopup extends Component<Props> {
                     Confirm Fuel Selections
                 </button>
                 <div
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         refuelPopupMinimizeToggle();
                         event.stopPropagation();
@@ -138,7 +138,7 @@ class RefuelPopup extends Component<Props> {
 }
 
 const mapStateToProps = ({ refuel }: { refuel: RefuelState }) => ({
-    refuel,
+    refuel
 });
 
 const mapActionsToProps = {
@@ -146,7 +146,7 @@ const mapActionsToProps = {
     tankerClick,
     aircraftClick,
     undoFuelSelection,
-    refuelPopupMinimizeToggle,
+    refuelPopupMinimizeToggle
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(RefuelPopup);

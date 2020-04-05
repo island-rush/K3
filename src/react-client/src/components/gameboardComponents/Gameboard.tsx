@@ -24,12 +24,12 @@ const gameboardStyle: Properties = {
     height: '88%',
     top: '0%',
     right: '0%',
-    position: 'absolute',
+    position: 'absolute'
 };
 
 const subDivStyle: Properties = {
     height: '100%',
-    width: '100%',
+    width: '100%'
 };
 
 //These functions organize the hexagons into the proper rows/columns to make the shape of the board (based on the index of the position (0->726))
@@ -212,7 +212,7 @@ class Gameboard extends Component<Props> {
             pieceClose,
             outerPieceClick,
             innerPieceClick,
-            innerTransportPieceClick,
+            innerTransportPieceClick
         } = this.props;
 
         //prettier-ignore
@@ -405,7 +405,7 @@ const mapStateToProps = ({
     planning,
     battle,
     container,
-    news,
+    news
 }: {
     gameboard: GameboardState;
     gameboardMeta: GameboardMetaState;
@@ -423,7 +423,7 @@ const mapStateToProps = ({
     planning,
     battle,
     container,
-    news,
+    news
 });
 
 const mapActionsToProps = {
@@ -433,7 +433,7 @@ const mapActionsToProps = {
     pieceClose,
     outerPieceClick,
     innerPieceClick,
-    innerTransportPieceClick,
+    innerTransportPieceClick
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Gameboard);

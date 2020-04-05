@@ -13,7 +13,7 @@ const bottombarStyle: Properties = {
     height: '10%',
     width: '73%',
     bottom: '0%',
-    right: '0%',
+    right: '0%'
 };
 
 interface Props {
@@ -47,7 +47,7 @@ class Bottombar extends Component<Props> {
 
 const mapStateToProps = ({ userFeedback, gameInfo }: { userFeedback: UserfeedbackState; gameInfo: GameInfoState }) => ({
     userFeedback,
-    gameInfo,
+    gameInfo
 });
 
 const mapActionsToProps = {
@@ -55,7 +55,7 @@ const mapActionsToProps = {
     startPlan,
     cancelPlan,
     confirmPlan,
-    undoMove,
+    undoMove
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Bottombar);

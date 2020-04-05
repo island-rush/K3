@@ -8,7 +8,7 @@ const tankerPieceStyle: Properties = {
     width: '96%',
     margin: '1%',
     padding: '1%',
-    borderRadius: '2%',
+    borderRadius: '2%'
 };
 
 const boxStyle: Properties = {
@@ -20,7 +20,7 @@ const boxStyle: Properties = {
     width: '23%',
     float: 'left',
     margin: '.5%',
-    position: 'relative',
+    position: 'relative'
 };
 
 interface Props {
@@ -49,9 +49,9 @@ export class TankerPiece extends Component<Props> {
                     style={{
                         ...boxStyle,
                         ...TYPE_IMAGES[tankerPiece.pieceTypeId],
-                        ...SELECTED_BORDERS[isSelected ? SELECTED_INDEX : NOT_SELECTED_INDEX],
+                        ...SELECTED_BORDERS[isSelected ? SELECTED_INDEX : NOT_SELECTED_INDEX]
                     }}
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         tankerClick(tankerPiece, tankerPieceIndex);
                         event.stopPropagation();

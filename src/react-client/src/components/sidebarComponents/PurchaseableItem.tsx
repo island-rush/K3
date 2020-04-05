@@ -11,11 +11,11 @@ const purchaseableItemStyle: Properties = {
     margin: '2.5%',
     float: 'left',
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat',
+    backgroundRepeat: 'no-repeat'
 };
 
 const hoverOverStyle: Properties = {
-    backgroundColor: 'green',
+    backgroundColor: 'green'
 };
 
 interface Props {

@@ -9,7 +9,7 @@ const aircraftPieceStyle: Properties = {
     width: '96%',
     margin: '1%',
     padding: '1%',
-    borderRadius: '2%',
+    borderRadius: '2%'
 };
 
 const boxStyle: Properties = {
@@ -21,12 +21,12 @@ const boxStyle: Properties = {
     width: '23%',
     float: 'left',
     margin: '.5%',
-    position: 'relative',
+    position: 'relative'
 };
 
 const textDivStyle: Properties = {
     position: 'relative',
-    float: 'left',
+    float: 'left'
 };
 
 interface Props {
@@ -46,7 +46,7 @@ export class AircraftPiece extends Component<Props> {
             aircraftPiece.tankerPieceIndex == null ? null : (
                 <div
                     style={{ ...boxStyle, ...TYPE_IMAGES[AIR_REFUELING_SQUADRON_ID] }}
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         undoFuelSelection(aircraftPiece, aircraftPieceIndex);
                         event.stopPropagation();
@@ -68,9 +68,9 @@ export class AircraftPiece extends Component<Props> {
                 <div
                     style={{
                         ...boxStyle,
-                        ...TYPE_IMAGES[aircraftPiece.pieceTypeId],
+                        ...TYPE_IMAGES[aircraftPiece.pieceTypeId]
                     }}
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         aircraftClick(aircraftPiece, aircraftPieceIndex);
                         event.stopPropagation();

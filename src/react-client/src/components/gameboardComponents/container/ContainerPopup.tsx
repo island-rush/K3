@@ -13,7 +13,7 @@ const containerPopupStyle: Properties = {
     right: '10%',
     backgroundColor: 'white',
     border: '2px solid black',
-    zIndex: 4,
+    zIndex: 4
 };
 
 const leftSectionStyle: Properties = {
@@ -23,7 +23,7 @@ const leftSectionStyle: Properties = {
     backgroundColor: 'grey',
     height: '96%',
     width: '48%',
-    margin: '1%',
+    margin: '1%'
 };
 
 const rightSectionStyle: Properties = {
@@ -33,7 +33,7 @@ const rightSectionStyle: Properties = {
     height: '96%',
     width: '48%',
     float: 'right',
-    margin: '1%',
+    margin: '1%'
 };
 
 const confirmButtonStyle: Properties = {
@@ -47,7 +47,7 @@ const confirmButtonStyle: Properties = {
     border: '2px solid black',
     zIndex: 4,
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat',
+    backgroundRepeat: 'no-repeat'
 };
 
 interface Props {
@@ -99,7 +99,7 @@ export class ContainerPopup extends Component<Props> {
                     {innerPieces}
                 </div>
                 <div
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         pieceClose();
                         event.stopPropagation();

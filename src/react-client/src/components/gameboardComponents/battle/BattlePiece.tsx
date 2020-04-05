@@ -11,15 +11,15 @@ const battlePieceStyle: Properties = {
     width: '96%',
     margin: '1%',
     padding: '1%',
-    borderRadius: '2%',
+    borderRadius: '2%'
 };
 
 // TODO: could probably refactor how this is called to a cleaner way...
 const battlePieceWonStyle: Properties[] = [
     {},
     {
-        border: '2px solid red',
-    },
+        border: '2px solid red'
+    }
 ];
 
 const boxStyle: Properties = {
@@ -31,7 +31,7 @@ const boxStyle: Properties = {
     width: '23%',
     float: 'left',
     margin: '.5%',
-    position: 'relative',
+    position: 'relative'
 };
 
 const diceBoxStyle: Properties = {
@@ -43,7 +43,7 @@ const diceBoxStyle: Properties = {
     width: '15%',
     float: 'left',
     margin: '.5%',
-    position: 'relative',
+    position: 'relative'
 };
 
 interface Props {
@@ -63,7 +63,7 @@ export class BattlePiece extends Component<Props> {
         const battlePieceBox = (
             <div
                 title={TYPE_NAMES[battlePiece.piece.pieceTypeId]}
-                onClick={(event) => {
+                onClick={event => {
                     event.preventDefault();
                     isFriendly ? battlePieceClick(battlePiece, battlePieceIndex) : enemyBattlePieceClick(battlePiece, battlePieceIndex);
                     event.stopPropagation();
@@ -71,7 +71,7 @@ export class BattlePiece extends Component<Props> {
                 style={{
                     ...boxStyle,
                     ...TYPE_IMAGES[battlePiece.piece.pieceTypeId],
-                    ...SELECTED_BORDERS[isSelected ? 0 : 1],
+                    ...SELECTED_BORDERS[isSelected ? 0 : 1]
                 }}
             >
                 {battlePieceIndex}
@@ -84,7 +84,7 @@ export class BattlePiece extends Component<Props> {
             battlePiece.targetPiece == null ? null : (
                 <div
                     title={TYPE_NAMES[battlePiece.targetPiece.pieceTypeId]}
-                    onClick={(event) => {
+                    onClick={event => {
                         event.preventDefault();
                         targetPieceClick(battlePiece, battlePieceIndex);
                         event.stopPropagation();

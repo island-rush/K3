@@ -15,7 +15,7 @@ const inventoryStyle: Properties = {
     width: '1800%',
     marginLeft: '150%',
     marginTop: '20%',
-    padding: '1%',
+    padding: '1%'
 };
 
 const airpieceItemsContainerStyle: Properties = {
@@ -24,7 +24,7 @@ const airpieceItemsContainerStyle: Properties = {
     width: '18%',
     height: '80%',
     right: '81%',
-    top: '10%',
+    top: '10%'
 };
 
 const landpieceItemsContainerStyle: Properties = {
@@ -33,7 +33,7 @@ const landpieceItemsContainerStyle: Properties = {
     width: '18%',
     height: '80%',
     right: '61%',
-    top: '10%',
+    top: '10%'
 };
 
 const seapieceItemsContainerStyle: Properties = {
@@ -42,7 +42,7 @@ const seapieceItemsContainerStyle: Properties = {
     width: '18%',
     height: '80%',
     right: '41%',
-    top: '10%',
+    top: '10%'
 };
 
 const specialpieceItemsContainerStyle: Properties = {
@@ -51,7 +51,7 @@ const specialpieceItemsContainerStyle: Properties = {
     width: '18%',
     height: '80%',
     right: '21%',
-    top: '10%',
+    top: '10%'
 };
 
 const warfareItemsContainerStyle: Properties = {
@@ -60,7 +60,7 @@ const warfareItemsContainerStyle: Properties = {
     width: '18%',
     height: '80%',
     left: '81%',
-    top: '10%',
+    top: '10%'
 };
 
 const itemCount = (array: any, value: any) => {
@@ -201,7 +201,7 @@ class InvMenu extends Component<Props> {
 
 const mapStateToProps = ({ invItems, capabilities }: { invItems: InvState; capabilities: CapabilitiesState }) => ({
     invItems,
-    confirmedRaiseMorale: capabilities.confirmedRaiseMorale,
+    confirmedRaiseMorale: capabilities.confirmedRaiseMorale
 });
 
 const mapActionsToProps = {
@@ -220,7 +220,7 @@ const mapActionsToProps = {
     droneSwarms,
     insurgency,
     raiseMorale,
-    cyberDefenseCheck,
+    cyberDefenseCheck
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(InvMenu);

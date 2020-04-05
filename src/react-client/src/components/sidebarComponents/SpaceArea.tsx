@@ -12,7 +12,7 @@ const spaceAreaStyle: Properties = {
     width: '1800%',
     marginLeft: '150%',
     marginTop: '20%',
-    padding: '1%',
+    padding: '1%'
 };
 
 const antiSatelliteMissilesContainerStyle: Properties = {
@@ -21,7 +21,7 @@ const antiSatelliteMissilesContainerStyle: Properties = {
     width: '18%',
     height: '80%',
     right: '41%',
-    top: '10%',
+    top: '10%'
 };
 
 const antiSatBoxStyle: Properties = {
@@ -32,7 +32,7 @@ const antiSatBoxStyle: Properties = {
     margin: '1%',
     float: 'left',
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat',
+    backgroundRepeat: 'no-repeat'
 };
 
 interface Props {
@@ -77,7 +77,7 @@ class SpaceArea extends Component<Props> {
 }
 
 const mapStateToProps = ({ capabilities }: { capabilities: CapabilitiesState }) => ({
-    capabilities,
+    capabilities
 });
 
 export default connect(mapStateToProps)(SpaceArea);
