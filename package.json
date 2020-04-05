@@ -23,7 +23,11 @@
         "type": "git",
         "url": "git+https://github.com/island-rush/K3.git"
     },
-    "author": "Spencer Adolph",
+    "author": {
+        "name": "Spencer Adolph",
+        "email": "spenceradolph@ymail.com",
+        "url": "https://www.spenceradolph.com"
+    },
     "license": "MIT",
     "bugs": {
         "url": "https://github.com/island-rush/K3/issues"
