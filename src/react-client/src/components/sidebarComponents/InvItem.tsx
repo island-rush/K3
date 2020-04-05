@@ -2,8 +2,9 @@ import React, { MouseEvent, useState } from 'react';
 import { TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { InvItemType } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
+import { Properties } from 'csstype';
 
-const invItemStyle = {
+const invItemStyle: Properties = {
     position: 'relative',
     backgroundColor: 'blue',
     width: '20%',

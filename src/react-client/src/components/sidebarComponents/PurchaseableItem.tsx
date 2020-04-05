@@ -1,8 +1,9 @@
+import { Properties } from 'csstype';
 import React, { MouseEvent, useState } from 'react';
 import { TYPE_COSTS, TYPE_FUEL, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { TYPE_IMAGES } from '../styleConstants';
 
-const purchaseableItemStyle = {
+const purchaseableItemStyle: Properties = {
     backgroundColor: 'grey',
     position: 'relative',
     width: '28%',
@@ -10,11 +11,11 @@ const purchaseableItemStyle = {
     margin: '2.5%',
     float: 'left',
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
 };
 
-const hoverOverStyle = {
-    backgroundColor: 'green'
+const hoverOverStyle: Properties = {
+    backgroundColor: 'green',
 };
 
 interface Props {

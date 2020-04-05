@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { GameInfoState, UserfeedbackState } from '../../../../types';
@@ -6,13 +7,13 @@ import { Leftcontrols } from './Leftcontrols';
 import { MainButton } from './MainButton';
 import { Userfeedback } from './Userfeedback';
 
-const bottombarStyle: any = {
+const bottombarStyle: Properties = {
     backgroundColor: 'Green',
     position: 'absolute',
     height: '10%',
     width: '73%',
     bottom: '0%',
-    right: '0%'
+    right: '0%',
 };
 
 interface Props {
@@ -46,7 +47,7 @@ class Bottombar extends Component<Props> {
 
 const mapStateToProps = ({ userFeedback, gameInfo }: { userFeedback: UserfeedbackState; gameInfo: GameInfoState }) => ({
     userFeedback,
-    gameInfo
+    gameInfo,
 });
 
 const mapActionsToProps = {
@@ -54,7 +55,7 @@ const mapActionsToProps = {
     startPlan,
     cancelPlan,
     confirmPlan,
-    undoMove
+    undoMove,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(Bottombar);

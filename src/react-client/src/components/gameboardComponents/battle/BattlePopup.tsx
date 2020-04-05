@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { BattlePieceStateType, BattleState } from '../../../../../types';
@@ -6,7 +7,7 @@ import { battlePieceClick, battlePopupMinimizeToggle, clearOldBattle, confirmBat
 import { BATTLE_POPUP_IMAGES } from '../../styleConstants';
 import { BattlePiece } from './BattlePiece';
 
-const battlePopupStyle: any = {
+const battlePopupStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '80%',
@@ -15,10 +16,10 @@ const battlePopupStyle: any = {
     right: '10%',
     backgroundColor: 'white',
     border: '2px solid black',
-    zIndex: 4
+    zIndex: 4,
 };
 
-const battlePopupMinimizeStyle: any = {
+const battlePopupMinimizeStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '7%',
@@ -29,43 +30,43 @@ const battlePopupMinimizeStyle: any = {
     border: '2px solid black',
     zIndex: 4,
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
 };
 
-const isMinimizedStyle: any = {
+const isMinimizedStyle: Properties = {
     border: '2px solid red',
     top: '50%',
-    margin: '2%'
+    margin: '2%',
 };
 
-const leftBattleStyle: any = {
+const leftBattleStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     float: 'left',
     backgroundColor: 'grey',
     height: '96%',
     width: '48%',
-    margin: '1%'
+    margin: '1%',
 };
 
-const rightBattleStyle: any = {
+const rightBattleStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     backgroundColor: 'grey',
     height: '96%',
     width: '48%',
     float: 'right',
-    margin: '1%'
+    margin: '1%',
 };
 
-const battleButtonStyle: any = {
+const battleButtonStyle: Properties = {
     position: 'absolute',
     bottom: '-7%',
-    right: '2%'
+    right: '2%',
 };
 
-const invisibleStyle: any = {
-    display: 'none'
+const invisibleStyle: Properties = {
+    display: 'none',
 };
 
 interface Props {
@@ -129,7 +130,7 @@ class BattlePopup extends Component<Props> {
                     <div style={leftBattleStyle}>Friend{friendlyBattlePieces}</div>
                     <div style={rightBattleStyle}>Foe{enemyBattlePieces}</div>
                     <button
-                        onClick={event => {
+                        onClick={(event) => {
                             event.preventDefault();
                             if (battle.masterRecord != null) {
                                 clearOldBattle();
@@ -143,7 +144,7 @@ class BattlePopup extends Component<Props> {
                         {battle.masterRecord == null ? 'Confirm Selections' : 'Return to Battle'}
                     </button>
                     <div
-                        onClick={event => {
+                        onClick={(event) => {
                             event.preventDefault();
                             battlePopupMinimizeToggle();
                             event.stopPropagation();
@@ -157,9 +158,9 @@ class BattlePopup extends Component<Props> {
                     style={{
                         ...(battle.isMinimized ? battlePopupMinimizeStyle : invisibleStyle),
                         ...BATTLE_POPUP_IMAGES.minIcon,
-                        ...isMinimizedStyle
+                        ...isMinimizedStyle,
                     }}
-                    onClick={event => {
+                    onClick={(event) => {
                         event.preventDefault();
                         battlePopupMinimizeToggle();
                         event.stopPropagation();
@@ -171,7 +172,7 @@ class BattlePopup extends Component<Props> {
 }
 
 const mapStateToProps = ({ battle }: { battle: BattleState }) => ({
-    battle
+    battle,
 });
 
 const mapActionsToProps = {
@@ -180,7 +181,7 @@ const mapActionsToProps = {
     targetPieceClick,
     confirmBattleSelections,
     clearOldBattle,
-    battlePopupMinimizeToggle
+    battlePopupMinimizeToggle,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(BattlePopup);

@@ -1,10 +1,11 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 // prettier-ignore
 import { AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, DESTROYER_TYPE_ID, LIST_ALL_AIRFIELD_PIECES, MISSILE_TYPE_ID, TYPE_MOVES, TYPE_NAMES } from '../../../../constants';
 import { CapabilitiesState, GameInfoState, PieceType } from '../../../../types';
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../styleConstants';
 
-const pieceStyle = {
+const pieceStyle: Properties = {
     backgroundColor: 'grey',
     margin: '1%',
     float: 'left',
@@ -12,15 +13,15 @@ const pieceStyle = {
     backgroundRepeat: 'no-repeat',
     position: 'relative',
     width: '15%',
-    height: '24%'
+    height: '24%',
 };
 
-const selectedStyle = {
-    boxShadow: '0px 0px 0px 2px rgba(255, 255, 255, 0.8) inset'
+const selectedStyle: Properties = {
+    boxShadow: '0px 0px 0px 2px rgba(255, 255, 255, 0.8) inset',
 };
 
-const disabledStyle = {
-    boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset'
+const disabledStyle: Properties = {
+    boxShadow: '0px 0px 0px 2px rgba(70, 60, 50, .5) inset',
 };
 
 interface Props {
@@ -48,7 +49,7 @@ export class Piece extends Component<Props> {
             ...TYPE_IMAGES[piece.pieceTypeId],
             ...TYPE_TEAM_BORDERS[piece.pieceTeamId],
             ...(isSelected ? selectedStyle : ''),
-            ...(piece.isPieceDisabled ? disabledStyle : '')
+            ...(piece.isPieceDisabled ? disabledStyle : ''),
         };
 
         const disabledText = piece.isPieceDisabled ? `\nDisabled` : '';

@@ -1,25 +1,26 @@
+import { Properties } from 'csstype';
 import React, { MouseEvent } from 'react';
 import { TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL } from '../../../../../constants';
 import { PlanningState } from '../../../../../types';
 
-const popupStyle: any = {
+const popupStyle: Properties = {
     backgroundColor: 'white',
     width: '50%',
     height: '30%',
     top: '25%',
     right: '25%',
-    position: 'absolute'
+    position: 'absolute',
 };
 
-const titleStyle: any = {
-    textAlign: 'center'
+const titleStyle: Properties = {
+    textAlign: 'center',
 };
 
-const buttonStyle: any = {
+const buttonStyle: Properties = {
     float: 'left',
     backgroundColor: 'grey',
     margin: '5%',
-    padding: '5%'
+    padding: '5%',
 };
 
 interface Props {
@@ -45,7 +46,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
 
             <div
                 style={buttonStyle}
-                onClick={event => {
+                onClick={(event) => {
                     event.preventDefault();
                     raiseMoraleSelectCommanderType(TYPE_AIR);
                     event.stopPropagation();
@@ -56,7 +57,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
 
             <div
                 style={buttonStyle}
-                onClick={event => {
+                onClick={(event) => {
                     event.preventDefault();
                     raiseMoraleSelectCommanderType(TYPE_LAND);
                     event.stopPropagation();
@@ -67,7 +68,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
 
             <div
                 style={buttonStyle}
-                onClick={event => {
+                onClick={(event) => {
                     event.preventDefault();
                     raiseMoraleSelectCommanderType(TYPE_SEA);
                     event.stopPropagation();
@@ -78,7 +79,7 @@ export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, plann
 
             <div
                 style={buttonStyle}
-                onClick={event => {
+                onClick={(event) => {
                     event.preventDefault();
                     raiseMoraleSelectCommanderType(TYPE_SPECIAL);
                     event.stopPropagation();

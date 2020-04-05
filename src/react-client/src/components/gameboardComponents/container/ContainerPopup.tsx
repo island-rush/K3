@@ -1,9 +1,10 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { TRANSPORT_TYPE_ID } from '../../../../../constants';
 import { ContainerState, PieceType } from '../../../../../types';
 import { ContainerPiece } from './ContainerPiece';
 
-const containerPopupStyle: any = {
+const containerPopupStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '80%',
@@ -12,30 +13,30 @@ const containerPopupStyle: any = {
     right: '10%',
     backgroundColor: 'white',
     border: '2px solid black',
-    zIndex: 4
+    zIndex: 4,
 };
 
-const leftSectionStyle: any = {
+const leftSectionStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     float: 'left',
     backgroundColor: 'grey',
     height: '96%',
     width: '48%',
-    margin: '1%'
+    margin: '1%',
 };
 
-const rightSectionStyle: any = {
+const rightSectionStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     backgroundColor: 'grey',
     height: '96%',
     width: '48%',
     float: 'right',
-    margin: '1%'
+    margin: '1%',
 };
 
-const confirmButtonStyle: any = {
+const confirmButtonStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '7%',
@@ -46,7 +47,7 @@ const confirmButtonStyle: any = {
     border: '2px solid black',
     zIndex: 4,
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
 };
 
 interface Props {
@@ -98,7 +99,7 @@ export class ContainerPopup extends Component<Props> {
                     {innerPieces}
                 </div>
                 <div
-                    onClick={event => {
+                    onClick={(event) => {
                         event.preventDefault();
                         pieceClose();
                         event.stopPropagation();

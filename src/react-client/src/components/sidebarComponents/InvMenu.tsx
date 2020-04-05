@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
@@ -7,59 +8,59 @@ import { CapabilitiesState, InvItemType, InvState } from '../../../../types';
 import { antiSatelliteMissiles, atcScramble, biologicalWeapons, communicationsInterruption, cyberDefenseCheck, cyberDominance, droneSwarms, goldenEye, insurgency, invPieceClick, missileLaunchDisruption, nuclearStrike, raiseMorale, remoteSensing, rodsFromGod, seaMines } from "../../redux";
 import { InvItem } from './InvItem';
 
-const inventoryStyle: any = {
+const inventoryStyle: Properties = {
     backgroundColor: 'Yellow',
     position: 'absolute',
     height: '170%',
     width: '1800%',
     marginLeft: '150%',
     marginTop: '20%',
-    padding: '1%'
+    padding: '1%',
 };
 
-const airpieceItemsContainerStyle: any = {
+const airpieceItemsContainerStyle: Properties = {
     backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
     right: '81%',
-    top: '10%'
+    top: '10%',
 };
 
-const landpieceItemsContainerStyle: any = {
+const landpieceItemsContainerStyle: Properties = {
     backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
     right: '61%',
-    top: '10%'
+    top: '10%',
 };
 
-const seapieceItemsContainerStyle: any = {
+const seapieceItemsContainerStyle: Properties = {
     backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
     right: '41%',
-    top: '10%'
+    top: '10%',
 };
 
-const specialpieceItemsContainerStyle: any = {
+const specialpieceItemsContainerStyle: Properties = {
     backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
     right: '21%',
-    top: '10%'
+    top: '10%',
 };
 
-const warfareItemsContainerStyle: any = {
+const warfareItemsContainerStyle: Properties = {
     backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
     height: '80%',
     left: '81%',
-    top: '10%'
+    top: '10%',
 };
 
 const itemCount = (array: any, value: any) => {
@@ -200,7 +201,7 @@ class InvMenu extends Component<Props> {
 
 const mapStateToProps = ({ invItems, capabilities }: { invItems: InvState; capabilities: CapabilitiesState }) => ({
     invItems,
-    confirmedRaiseMorale: capabilities.confirmedRaiseMorale
+    confirmedRaiseMorale: capabilities.confirmedRaiseMorale,
 });
 
 const mapActionsToProps = {
@@ -219,7 +220,7 @@ const mapActionsToProps = {
     droneSwarms,
     insurgency,
     raiseMorale,
-    cyberDefenseCheck
+    cyberDefenseCheck,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(InvMenu);

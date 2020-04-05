@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { RefuelState } from '../../../../../types';
@@ -6,7 +7,7 @@ import { LEFT_CONTROLS_IMAGES } from '../../styleConstants';
 import { AircraftPiece } from './AircraftPiece';
 import { TankerPiece } from './TankerPiece';
 
-const refuelPopupStyle: any = {
+const refuelPopupStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '80%',
@@ -15,10 +16,10 @@ const refuelPopupStyle: any = {
     right: '10%',
     backgroundColor: 'white',
     border: '2px solid black',
-    zIndex: 4
+    zIndex: 4,
 };
 
-const refuelPopupMinimizeStyle: any = {
+const refuelPopupMinimizeStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '7%',
@@ -29,33 +30,33 @@ const refuelPopupMinimizeStyle: any = {
     border: '2px solid black',
     zIndex: 4,
     backgroundSize: '100% 100%',
-    backgroundRepeat: 'no-repeat'
+    backgroundRepeat: 'no-repeat',
 };
 
-const leftSectionStyle: any = {
+const leftSectionStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     float: 'left',
     backgroundColor: 'grey',
     height: '96%',
     width: '48%',
-    margin: '1%'
+    margin: '1%',
 };
 
-const rightSectionStyle: any = {
+const rightSectionStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     backgroundColor: 'grey',
     height: '96%',
     width: '48%',
     float: 'right',
-    margin: '1%'
+    margin: '1%',
 };
 
-const confirmButtonStyle: any = {
+const confirmButtonStyle: Properties = {
     position: 'absolute',
     bottom: '-7%',
-    right: '2%'
+    right: '2%',
 };
 
 interface Props {
@@ -114,7 +115,7 @@ class RefuelPopup extends Component<Props> {
                     {tankerPieces}
                 </div>
                 <button
-                    onClick={event => {
+                    onClick={(event) => {
                         event.preventDefault();
                         confirmFuelSelections();
                         event.stopPropagation();
@@ -124,7 +125,7 @@ class RefuelPopup extends Component<Props> {
                     Confirm Fuel Selections
                 </button>
                 <div
-                    onClick={event => {
+                    onClick={(event) => {
                         event.preventDefault();
                         refuelPopupMinimizeToggle();
                         event.stopPropagation();
@@ -137,7 +138,7 @@ class RefuelPopup extends Component<Props> {
 }
 
 const mapStateToProps = ({ refuel }: { refuel: RefuelState }) => ({
-    refuel
+    refuel,
 });
 
 const mapActionsToProps = {
@@ -145,7 +146,7 @@ const mapActionsToProps = {
     tankerClick,
     aircraftClick,
     undoFuelSelection,
-    refuelPopupMinimizeToggle
+    refuelPopupMinimizeToggle,
 };
 
 export default connect(mapStateToProps, mapActionsToProps)(RefuelPopup);

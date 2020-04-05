@@ -1,8 +1,9 @@
+import { Properties } from 'csstype';
 import React, { MouseEvent, useState } from 'react';
 import { ShopItemType } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
 
-const shopItemStyle = {
+const shopItemStyle: Properties = {
     backgroundColor: 'green',
     position: 'relative',
     width: '23%',
