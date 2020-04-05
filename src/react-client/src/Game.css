@@ -32,7 +32,7 @@ svg :hover {
 }
 svg g polygon {
     stroke: rgb(0, 0, 0);
-    stroke-width: 0.15;
+    stroke-width: 0.12;
 }
 .selectedPos polygon {
     /* z-index: 10; */

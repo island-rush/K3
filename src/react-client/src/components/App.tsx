@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { NO_MENU_INDEX, NO_POSITION } from '../../../constants';
@@ -8,14 +9,14 @@ import Gameboard from './gameboardComponents/Gameboard';
 import Sidebar from './sidebarComponents/Sidebar';
 import Zoombox from './zoomboxComponents/Zoombox';
 
-const appStyle: any = {
+const appStyle: Properties = {
     position: 'relative',
     backgroundColor: '#b9b9b9',
     height: '100%',
     width: '100%'
 };
 
-const isPlanningStyle: any = {
+const isPlanningStyle: Properties = {
     backgroundColor: 'yellow'
 };
 

@@ -1,8 +1,9 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { AIR_REFUELING_SQUADRON_ID, TYPE_FUEL } from '../../../../../constants';
 import { TYPE_IMAGES } from '../../styleConstants';
 
-const aircraftPieceStyle: any = {
+const aircraftPieceStyle: Properties = {
     backgroundColor: 'white',
     height: '15%',
     width: '96%',
@@ -11,7 +12,7 @@ const aircraftPieceStyle: any = {
     borderRadius: '2%'
 };
 
-const boxStyle: any = {
+const boxStyle: Properties = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: '90% 90%',
     backgroundPosition: 'center',
@@ -23,7 +24,7 @@ const boxStyle: any = {
     position: 'relative'
 };
 
-const textDivStyle: any = {
+const textDivStyle: Properties = {
     position: 'relative',
     float: 'left'
 };

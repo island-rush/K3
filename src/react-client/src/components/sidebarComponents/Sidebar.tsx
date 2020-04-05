@@ -1,6 +1,7 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
-import { INV_MENU_INDEX, SHOP_MENU_INDEX, SPACE_MENU_INDEX, GAME_INFO_MENU_INDEX } from '../../../../constants';
+import { GAME_INFO_MENU_INDEX, INV_MENU_INDEX, SHOP_MENU_INDEX, SPACE_MENU_INDEX } from '../../../../constants';
 import { GameInfoState } from '../../../../types';
 import { menuSelect } from '../../redux';
 import { Gameinfo } from './Gameinfo';
@@ -8,7 +9,7 @@ import InvMenu from './InvMenu';
 import ShopMenu from './ShopMenu';
 import SpaceArea from './SpaceArea';
 
-const sidebarStyle: any = {
+const sidebarStyle: Properties = {
     backgroundColor: 'Red',
     position: 'absolute',
     top: '0%',
@@ -17,7 +18,7 @@ const sidebarStyle: any = {
     width: '5%'
 };
 
-const buttonStyle: any = {
+const buttonStyle: Properties = {
     position: 'absolute',
     backgroundSize: '100% 100%',
     backgroundRepeat: 'no-repeat',
@@ -27,27 +28,27 @@ const buttonStyle: any = {
     paddingTop: '70%'
 };
 
-const shopButtonStyle = {
+const shopButtonStyle: Properties = {
     backgroundImage: 'url("./images/graphics/shop.png")',
     top: '4%'
 };
 
-const invButtonStyle = {
+const invButtonStyle: Properties = {
     backgroundImage: 'url("./images/graphics/inventory.png")',
     top: '28%'
 };
 
-const spaceButtonStyle = {
+const spaceButtonStyle: Properties = {
     backgroundImage: 'url("./images/graphics/space.png")',
     top: '52%'
 };
 
-const infoButtonStyle = {
+const infoButtonStyle: Properties = {
     backgroundImage: 'url("./images/graphics/infoIcon.png")',
     top: '76%'
 };
 
-const selectedButtonStyle = {
+const selectedButtonStyle: Properties = {
     backgroundColor: 'white'
 };
 

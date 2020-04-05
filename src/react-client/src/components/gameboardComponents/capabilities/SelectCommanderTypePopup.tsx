@@ -1,8 +1,9 @@
+import { Properties } from 'csstype';
 import React, { MouseEvent } from 'react';
 import { TYPE_AIR, TYPE_LAND, TYPE_SEA, TYPE_SPECIAL } from '../../../../../constants';
 import { PlanningState } from '../../../../../types';
 
-const popupStyle: any = {
+const popupStyle: Properties = {
     backgroundColor: 'white',
     width: '50%',
     height: '30%',
@@ -11,19 +12,15 @@ const popupStyle: any = {
     position: 'absolute'
 };
 
-const titleStyle: any = {
+const titleStyle: Properties = {
     textAlign: 'center'
 };
 
-const buttonStyle: any = {
+const buttonStyle: Properties = {
     float: 'left',
     backgroundColor: 'grey',
     margin: '5%',
     padding: '5%'
-};
-
-const invisibleStyle: any = {
-    display: 'none'
 };
 
 interface Props {
@@ -34,13 +31,17 @@ interface Props {
 export const SelectCommanderTypePopup = ({ raiseMoraleSelectCommanderType, planning }: Props) => {
     const { isSelectingCommander } = planning;
 
+    if (!isSelectingCommander) {
+        return null;
+    }
+
     const standardOnClick = (event: MouseEvent) => {
         event.preventDefault();
         event.stopPropagation();
     };
 
     return (
-        <div style={isSelectingCommander ? popupStyle : invisibleStyle} onClick={standardOnClick}>
+        <div style={popupStyle} onClick={standardOnClick}>
             <div style={titleStyle}>Select a commander type to boost.</div>
 
             <div

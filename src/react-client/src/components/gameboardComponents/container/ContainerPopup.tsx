@@ -1,9 +1,10 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { TRANSPORT_TYPE_ID } from '../../../../../constants';
 import { ContainerState, PieceType } from '../../../../../types';
 import { ContainerPiece } from './ContainerPiece';
 
-const containerPopupStyle: any = {
+const containerPopupStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '80%',
@@ -15,7 +16,7 @@ const containerPopupStyle: any = {
     zIndex: 4
 };
 
-const leftSectionStyle: any = {
+const leftSectionStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     float: 'left',
@@ -25,7 +26,7 @@ const leftSectionStyle: any = {
     margin: '1%'
 };
 
-const rightSectionStyle: any = {
+const rightSectionStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     backgroundColor: 'grey',
@@ -35,7 +36,7 @@ const rightSectionStyle: any = {
     margin: '1%'
 };
 
-const confirmButtonStyle: any = {
+const confirmButtonStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '7%',
@@ -49,10 +50,6 @@ const confirmButtonStyle: any = {
     backgroundRepeat: 'no-repeat'
 };
 
-const invisibleStyle: any = {
-    display: 'none'
-};
-
 interface Props {
     container: ContainerState;
     pieceClose: any;
@@ -64,6 +61,10 @@ interface Props {
 export class ContainerPopup extends Component<Props> {
     render() {
         const { container, pieceClose, outerPieceClick, innerPieceClick, innerTransportPieceClick } = this.props;
+
+        if (!container.isActive || container.isSelectingHex) {
+            return null;
+        }
 
         const outsidePieces = container.outerPieces.map((piece: PieceType, index: number) => (
             <ContainerPiece key={index} piece={piece} container={container} clickFunction={outerPieceClick} />
@@ -88,7 +89,7 @@ export class ContainerPopup extends Component<Props> {
         };
 
         return (
-            <div style={container.isActive && !container.isSelectingHex ? containerPopupStyle : invisibleStyle} onClick={standardOnClick}>
+            <div style={containerPopupStyle} onClick={standardOnClick}>
                 <div style={leftSectionStyle}>
                     <div>Outer Pieces</div>
                     {outsidePieces}

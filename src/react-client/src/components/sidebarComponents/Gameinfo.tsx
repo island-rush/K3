@@ -1,18 +1,15 @@
+import { Properties } from 'csstype';
 import React, { MouseEvent } from 'react';
-import { TYPE_OWNER_NAMES, PHASE_NAMES, SLICE_NAMES } from '../../../../constants';
+import { PHASE_NAMES, SLICE_NAMES, TYPE_OWNER_NAMES } from '../../../../constants';
 import { GameInfoState } from '../../../../types';
 
-const gameinfoStyle: any = {
+const gameinfoStyle: Properties = {
     backgroundColor: 'Yellow',
     position: 'absolute',
     height: '80%',
     width: '700%',
     marginLeft: '200%',
     marginTop: '20%'
-};
-
-const invisibleStyle = {
-    display: 'none'
 };
 
 interface Props {
@@ -22,6 +19,10 @@ interface Props {
 
 export const Gameinfo = ({ isSelected, gameInfo }: Props) => {
     const { gameSection, gameInstructor, gameControllers, gamePhase, gameRound, gameSlice } = gameInfo;
+
+    if (!isSelected) {
+        return null;
+    }
 
     let gameControllerText = '';
     for (let x = 0; x < gameControllers.length; x++) {
@@ -37,7 +38,7 @@ export const Gameinfo = ({ isSelected, gameInfo }: Props) => {
     };
 
     return (
-        <div style={isSelected ? gameinfoStyle : invisibleStyle} onClick={standardOnClick}>
+        <div style={gameinfoStyle} onClick={standardOnClick}>
             <h1>Game Info</h1>
             <div>GameSection: {gameSection}</div>
             <div>GameInstructor: {gameInstructor}</div>

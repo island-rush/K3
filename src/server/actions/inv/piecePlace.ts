@@ -82,19 +82,19 @@ export const piecePlace = async (session: SocketSession, action: InvItemPlaceReq
         return;
     }
 
-//    if (!TEAM_MAIN_ISLAND_STARTING_POSITIONS[gameTeam].includes(selectedPosition) && ![RADAR_TYPE_ID, MISSILE_TYPE_ID].includes(invItemTypeId)) {
-//        // radar and missile only need to be placed in either silo or next to friendly piece
-//        sendUserFeedback(socketId, 'Must place piece on/around main island.');
-//        return;
-//    }
+    if (!TEAM_MAIN_ISLAND_STARTING_POSITIONS[gameTeam].includes(selectedPosition) && ![RADAR_TYPE_ID, MISSILE_TYPE_ID].includes(invItemTypeId)) {
+        // radar and missile only need to be placed in either silo or next to friendly piece
+        sendUserFeedback(socketId, 'Must place piece on/around main island.');
+        return;
+    }
 
     // TODO: could also check that they own the airfield? already check that this is on the main island...
-//    if (TYPE_AIR_PIECES.includes(invItemTypeId)) {
-//        if (!ALL_AIRFIELD_LOCATIONS.includes(selectedPosition)) {
-//            sendUserFeedback(socketId, 'Must place air unit on airfield.');
-//            return;
-//        }
-//    }
+    if (TYPE_AIR_PIECES.includes(invItemTypeId)) {
+        if (!ALL_AIRFIELD_LOCATIONS.includes(selectedPosition)) {
+            sendUserFeedback(socketId, 'Must place air unit on airfield.');
+            return;
+        }
+    }
 
     if (invItemTypeId === RADAR_TYPE_ID) {
         // at least 1 ground and no enemies there

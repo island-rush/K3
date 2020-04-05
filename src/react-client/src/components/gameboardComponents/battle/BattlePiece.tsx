@@ -1,10 +1,11 @@
+import { Properties } from 'csstype';
 import React, { Component } from 'react';
 import { ATTACK_MATRIX, TYPE_NAMES } from '../../../../../constants';
+import { BattlePieceStateType } from '../../../../../types';
 import { battlePieceClick, enemyBattlePieceClick, targetPieceClick } from '../../../redux';
 import { ARROW_IMAGE, DICE_IMAGES, SELECTED_BORDERS, TYPE_IMAGES } from '../../styleConstants';
-import { BattlePieceStateType } from '../../../../../types';
 
-const battlePieceStyle: any = {
+const battlePieceStyle: Properties = {
     backgroundColor: 'white',
     height: '15%',
     width: '96%',
@@ -14,14 +15,14 @@ const battlePieceStyle: any = {
 };
 
 // TODO: could probably refactor how this is called to a cleaner way...
-const battlePieceWonStyle: any = [
+const battlePieceWonStyle: Properties[] = [
     {},
     {
         border: '2px solid red'
     }
 ];
 
-const boxStyle: any = {
+const boxStyle: Properties = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: '90% 90%',
     backgroundPosition: 'center',
@@ -33,7 +34,7 @@ const boxStyle: any = {
     position: 'relative'
 };
 
-const diceBoxStyle: any = {
+const diceBoxStyle: Properties = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: '90% 90%',
     backgroundPosition: 'center',

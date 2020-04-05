@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { BattlePieceStateType, BattleState } from '../../../../../types';
@@ -6,7 +7,7 @@ import { battlePieceClick, battlePopupMinimizeToggle, clearOldBattle, confirmBat
 import { BATTLE_POPUP_IMAGES } from '../../styleConstants';
 import { BattlePiece } from './BattlePiece';
 
-const battlePopupStyle: any = {
+const battlePopupStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '80%',
@@ -18,7 +19,7 @@ const battlePopupStyle: any = {
     zIndex: 4
 };
 
-const battlePopupMinimizeStyle: any = {
+const battlePopupMinimizeStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '7%',
@@ -32,13 +33,13 @@ const battlePopupMinimizeStyle: any = {
     backgroundRepeat: 'no-repeat'
 };
 
-const isMinimizedStyle: any = {
+const isMinimizedStyle: Properties = {
     border: '2px solid red',
     top: '50%',
     margin: '2%'
 };
 
-const leftBattleStyle: any = {
+const leftBattleStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     float: 'left',
@@ -48,7 +49,7 @@ const leftBattleStyle: any = {
     margin: '1%'
 };
 
-const rightBattleStyle: any = {
+const rightBattleStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     backgroundColor: 'grey',
@@ -58,13 +59,13 @@ const rightBattleStyle: any = {
     margin: '1%'
 };
 
-const battleButtonStyle: any = {
+const battleButtonStyle: Properties = {
     position: 'absolute',
     bottom: '-7%',
     right: '2%'
 };
 
-const invisibleStyle: any = {
+const invisibleStyle: Properties = {
     display: 'none'
 };
 
@@ -83,7 +84,11 @@ class BattlePopup extends Component<Props> {
         // prettier-ignore
         const { battlePieceClick, enemyBattlePieceClick, targetPieceClick, confirmBattleSelections, battle, clearOldBattle, battlePopupMinimizeToggle } = this.props;
 
-        const { selectedBattlePiece, friendlyPieces, enemyPieces } = battle;
+        const { selectedBattlePiece, friendlyPieces, enemyPieces, isActive } = battle;
+
+        if (!isActive) {
+            return null;
+        }
 
         const friendlyBattlePieces = friendlyPieces.map((battlePiece: BattlePieceStateType, index: number) => (
             <BattlePiece
@@ -119,7 +124,7 @@ class BattlePopup extends Component<Props> {
 
         return (
             // Overall Component
-            <div style={battle.isActive ? null : invisibleStyle} onClick={standardOnClick}>
+            <div onClick={standardOnClick}>
                 {/* Popup */}
                 <div style={!battle.isMinimized ? battlePopupStyle : invisibleStyle}>
                     <div style={leftBattleStyle}>Friend{friendlyBattlePieces}</div>

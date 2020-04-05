@@ -1,8 +1,9 @@
+import { Properties } from 'csstype';
 import React, { Component } from 'react';
 import { COMBAT_PHASE_ID, NEWS_PHASE_ID, PLACE_PHASE_ID, PURCHASE_PHASE_ID, SLICE_PLANNING_ID, WAITING_STATUS } from '../../../../constants';
 import { GameInfoState } from '../../../../types';
 
-const mainButtonStyle: any = {
+const mainButtonStyle: Properties = {
     backgroundColor: 'grey',
     height: '80%',
     width: '16%',

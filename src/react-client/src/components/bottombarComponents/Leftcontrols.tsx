@@ -1,7 +1,8 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { LEFT_CONTROLS_IMAGES } from '../styleConstants';
 
-const leftcontrolsStyle: any = {
+const leftcontrolsStyle: Properties = {
     background: 'grey',
     height: '80%',
     width: '19%',
@@ -10,7 +11,7 @@ const leftcontrolsStyle: any = {
     margin: '.5%'
 };
 
-const buttonStyle: any = {
+const buttonStyle: Properties = {
     background: 'white',
     height: '80%',
     width: '23%',
@@ -21,7 +22,7 @@ const buttonStyle: any = {
     backgroundRepeat: 'no-repeat'
 };
 
-const buttonTitles: any = {
+const buttonTitles: { [key: string]: string } = {
     start: 'Start Planning a Move for a Piece',
     undo: 'Undo a Planned Move',
     cancel: 'Cancel a Plan',

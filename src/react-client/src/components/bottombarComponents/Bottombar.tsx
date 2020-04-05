@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { GameInfoState, UserfeedbackState } from '../../../../types';
@@ -6,7 +7,7 @@ import { Leftcontrols } from './Leftcontrols';
 import { MainButton } from './MainButton';
 import { Userfeedback } from './Userfeedback';
 
-const bottombarStyle: any = {
+const bottombarStyle: Properties = {
     backgroundColor: 'Green',
     position: 'absolute',
     height: '10%',
