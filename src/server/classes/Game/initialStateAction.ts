@@ -83,13 +83,13 @@ export const initialStateAction = async (game: Game, gameTeam: BlueOrRedTeamId, 
         const queryString = 'SELECT * FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
         const inserts = [game.gameId];
         const [resultNews] = await pool.query<RowDataPacket[] & NewsType[]>(queryString, inserts);
-        const { newsTitle } = resultNews[0];
+        const { newsTitle, newsId } = resultNews[0];
         serverAction.payload.news = {
             newsTitle: resultNews[0] !== undefined ? resultNews[0].newsTitle : 'No More News',
             newsInfo: resultNews[0] !== undefined ? resultNews[0].newsInfo : 'Click to continue'
         };
 
-        receiveNews(newsTitle, game.gameId);
+        receiveNews(newsTitle, game.gameId, newsId);
     }
 
     const battle = await Battle.getNext(game.gameId);

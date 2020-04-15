@@ -1,23 +1,53 @@
-import { RowDataPacket } from 'mysql2/promise';
+import { RowDataPacket, OkPacket } from 'mysql2/promise';
+import { LIST_ALL_POSITIONS_TYPE } from '../../constants';
 // eslint-disable-next-line import/no-useless-path-segments
 import { pool } from '../';
+import { Piece } from '.';
 // import { LIST_ALL_POSITIONS_TYPE } from '../../constants';
-import { GameType, PieceType } from '../../types';
+import { GameType, PieceType, NewsEffectType } from '../../types';
 
-// gets pieces by team const gameboardPieces = await Piece.getVisiblePieces(game.gameId, gameTeam)
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let currentNewsId = -1;
 let typhoonCalled = false;
-const percentageCalc = (percentage: number) => {
-    let retVal = false;
-    const result = Math.floor(Math.random() * 100);
-    if (result < percentage) {
-        retVal = true;
-    }
-    return retVal;
+const TYPHOON_ROUNDS = 3;
+// const percentageCalc = (percentage: number) => {
+//     let retVal = false;
+//     const result = Math.floor(Math.random() * 100);
+//     if (result < percentage) {
+//         retVal = true;
+//     }
+//     return retVal;
+// };
+
+export const getNewsEffect = async () => {
+    const listOfNewsEffet: LIST_ALL_POSITIONS_TYPE[] = [];
+
+    return listOfNewsEffet;
 };
 
-const checkTyphoonHit = async (gameId: GameType['gameId']) => {
-    const listOfTyphoon: number[] = [];
+// insert isPieceDisabled pieces into the newsEffectPieces database table
+const disableEffectedPiece = async (pieceId: number, newsEffectId: Promise<number[]>) => {
+    const inserts = [newsEffectId, pieceId];
+    const queryString = 'INSERT INTO newsEffectPieces (newsEffectId, pieceId) VALUES (?,?)';
+    const [results] = await pool.query<OkPacket>(queryString, inserts);
+    console.log(results);
+};
+
+// insert newsEffect into NewsEffect table before possibly inserting disabled pieces into newsEffectPieces table
+const insertNewsEffect = async (newsEffectGameId: GameType['gameId'], newsId: number, roundsLeft: number) => {
+    type QueryResult = {
+        newsEffectId: NewsEffectType['newsEffectId'];
+        newsId: NewsEffectType['newsId'];
+    };
+    const inserts = [newsId, newsEffectGameId, roundsLeft];
+    const queryString = 'INSERT INTO newsEffects (newsId, newsEffectGameId, roundsLeft) VALUES (?,?,?)';
+    const [results] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
+    const newsEffectId = [results[0].newsEffectId];
+    return newsEffectId;
+};
+
+const checkTyphoonHit = async (gameId: GameType['gameId'], newsId: number) => {
+    const listOfTyphoon: LIST_ALL_POSITIONS_TYPE[] = [];
     if (typhoonCalled === false) {
         typhoonCalled = true;
         // const queryString = 'SELECT pieceId, piecePositionId FROM pieces WHERE pieceGameId = ?';
@@ -33,15 +63,27 @@ const checkTyphoonHit = async (gameId: GameType['gameId']) => {
         };
         const [results] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
 
+        // Disable selected pieces for
+        const newsEffectId = insertNewsEffect(gameId, newsId, TYPHOON_ROUNDS);
         if (results.length !== 0) {
             for (let x = 0; x < results.length; x++) {
-                // each piece inside of the typhoon area has a ten percent chance of being deleted
-                if (percentageCalc(10)) {
-                    listOfTyphoon.push(results[x].pieceId);
-                    const queryString = 'DELETE FROM pieces WHERE pieceId = ?';
-                    const inserts = [results[x].pieceId];
-                    await pool.query(queryString, inserts);
+                listOfTyphoon.push(results[x].piecePositionId);
+                const { pieceId } = results[x];
+                disableEffectedPiece(pieceId, newsEffectId);
+                // init sets isPieceDisabled value
+                const thisPiece = await new Piece(pieceId).init();
+                if (thisPiece !== undefined) {
+                    // disableEffectedPiece(pieceId, newsEffectId);
+                    console.log(`Piece ${pieceId} isPieceDisabled set to ${thisPiece.isPieceDisabled}`);
                 }
+
+                // // each piece inside of the typhoon area has the percentage chance entered of being deleted
+                // if (percentageCalc(5)) {
+                //     listOfTyphoon.push(results[x].pieceId);
+                //     const queryString = 'DELETE FROM pieces WHERE pieceId = ?';
+                //     const inserts = [results[x].pieceId];
+                //     await pool.query(queryString, inserts);
+                // }
             }
         }
     }
@@ -49,15 +91,18 @@ const checkTyphoonHit = async (gameId: GameType['gameId']) => {
     return listOfTyphoon;
 };
 
-export const receiveNews = async (newsTitle: string, gameId: number) => {
-    let retVal: any = [];
+export const receiveNews = async (newsTitle: string, gameId: number, newsId: number) => {
+    let retVal: any;
+    currentNewsId = newsId;
     switch (newsTitle) {
         case 'Apollo, Oh No! Solar Flare causes disruption.':
+            retVal = checkTyphoonHit(gameId, newsId);
             return retVal;
         case 'Typhoon Lagoon':
-            retVal = checkTyphoonHit(gameId);
+            retVal = checkTyphoonHit(gameId, newsId);
             return retVal;
         case 'Tsunami!':
+            retVal = checkTyphoonHit(gameId, newsId);
             return retVal;
         case 'April Showers Bring... Terror?':
             return retVal;
@@ -96,55 +141,27 @@ export const receiveNews = async (newsTitle: string, gameId: number) => {
     }
 };
 
-// export const checkTyphoonHit = async (gameId: GameType['gameId']): Promise<LIST_ALL_POSITIONS_TYPE[]> => {
-//     const queryString =
-//         'SELECT droneSwarmId, pieceId, positionId FROM droneSwarms INNER JOIN plans ON positionId = planPositionId INNER JOIN pieces ON planPieceId = pieceId WHERE pieceGameId = ? AND pieceTypeId in (?)';
-//     const inserts = [gameId, [...LIST_ALL_PIECES]];
-//     type QueryResult = {
-//         droneSwarmId: DroneSwarmType['droneSwarmId'];
-//         pieceId: PieceType['pieceId'];
-//         positionId: PieceType['piecePositionId'];
-//     };
-//     const [results] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
+// export const insertNewsEffect = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
+//     let queryString = 'SELECT * FROM goldenEye WHERE gameId = ? AND teamId = ? AND positionId = ?';
+//     let inserts = [gameId, gameTeam, selectedPositionId];
+//     const [results] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
 
+//     // prevent duplicate entries if possible
 //     if (results.length !== 0) {
-//         // delete the piece and try again
-//         const pieceToDelete = await new Piece(results[0].pieceId).init();
-//         pieceToDelete.delete();
-
-//         const queryString = 'DELETE FROM droneSwarms WHERE droneSwarmId = ?';
-//         const inserts = [results[0].droneSwarmId];
-//         await pool.query(queryString, inserts);
-
-//         const arrayOfPos = await checkDroneSwarmHit(gameId); // TODO: probably a better way instead of recursive, but makes sense here since we keep calling it until results.length == 0
-//         arrayOfPos.push(results[0].positionId);
-//         return arrayOfPos;
+//         return false;
 //     }
 
-//     return []; // base case
+//     queryString = 'INSERT INTO goldenEye (gameId, teamId, positionId, roundsLeft, activated) VALUES (?, ?, ?, ?, ?)';
+//     inserts = [gameId, gameTeam, selectedPositionId, GOLDEN_EYE_ROUNDS, DEACTIVATED];
+//     await pool.query(queryString, inserts);
+//     return true;
 // };
 
-        // // only need to check distinct pieces, (100 red tanks in same position == 1 red tank in same position)
-        // queryString = 'SELECT DISTINCT pieceTeamId, pieceTypeId, piecePositionId FROM pieces WHERE pieceGameId = ?';
-        // inserts = [gameId];
-        // const [pieces] = await conn.query<RowDataPacket[] & SubPieceType[]>(queryString, inserts);
+export const decreaseNewsEffect = async (gameId: GameType['gameId']) => {
+    let queryString = 'UPDATE newEffect SET roundsLeft = roundsLeft - 1 WHERE gameId = ?';
+    const inserts = [gameId];
+    await pool.query(queryString, inserts);
 
-        // let otherTeam;
-        // for (let x = 0; x < pieces.length; x++) {
-        //     const { pieceTeamId, pieceTypeId, piecePositionId } = pieces[x]; // TODO: pieces inside containers can't see rule?
-
-        //     for (let type = 0; type < LIST_ALL_PIECES.length; type++) { // check each type
-        //         const currentPieceType = LIST_ALL_PIECES[type];
-        //         if (VISIBILITY_MATRIX[pieceTypeId][currentPieceType] !== -1) { // could it ever see this type?
-        //             for (let position = 0; position < distanceMatrix[piecePositionId].length; position++) { // for all positions
-        //                 if (distanceMatrix[piecePositionId][position] <= VISIBILITY_MATRIX[pieceTypeId][currentPieceType]) { // is this position in range for that type?
-        //                     otherTeam = pieceTeamId === BLUE_TEAM_ID ? RED_TEAM_ID : BLUE_TEAM_ID;
-
-        //                     if (!posTypesVisible[otherTeam][type].includes(position)) { // add this position if not already added by another piece somewhere else
-        //                         posTypesVisible[otherTeam][type].push(position);
-        //                     }
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
+    queryString = 'DELETE FROM newEffect WHERE roundsLeft = 0';
+    await pool.query(queryString);
+};

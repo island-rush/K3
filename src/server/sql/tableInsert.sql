@@ -84,6 +84,7 @@ CREATE TABLE IF NOT EXISTS pieces (
     pieceVisible INT(1) NOT NULL,
     pieceMoves INT(2) NOT NULL,
     pieceFuel INT(2) NOT NULL,
+    pieceIsDisabled INT(1) NOT NULL,
     FOREIGN KEY (pieceGameId) REFERENCES games (gameId) ON DELETE CASCADE,
     FOREIGN KEY (pieceContainerId) REFERENCES pieces (pieceId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
@@ -312,3 +313,19 @@ CREATE TABLE IF NOT EXISTS cyberDefenses(
     roundsLeft INT(4) NOT NULL,
     FOREIGN KEY (gameId) REFERENCES games (gameId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS newsEffects (
+    newsEffectId INT(8) PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    newsId INT(8) NOT NULL,
+    newsEffectGameId INT(8) NOT NULL,
+    roundsLeft INT(4) NOT NULL,
+    FOREIGN KEY (newsId) REFERENCES news (newsId) ON DELETE CASCADE
+) AUTO_INCREMENT=1;
+
+CREATE TABLE IF NOT EXISTS newsEffectPieces(
+	newsEffectId INT(8) NOT NULL,
+    pieceId INT(8) NOT NULL,
+    FOREIGN KEY (newsEffectId) REFERENCES newsEffects (newsEffectId) ON DELETE CASCADE,
+    FOREIGN KEY (pieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
+    PRIMARY KEY (newsEffectId, pieceId)
+);

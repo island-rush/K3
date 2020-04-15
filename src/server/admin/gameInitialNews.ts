@@ -65,7 +65,7 @@ export const gameInitialNews = async (gameId: GameType['gameId']) => {
             newsInfo: 'Due to logistics oversight, plastic cone adaptor needed for compatability were not purchased to replace failing parts.'
         }),
         news(gameId, newsOrder++, {
-            newsTitle: '***Breaking***',
+            newsTitle: 'A Major Shake-up',
             newsInfo:
                 'Following other seismic activity in the region, massive earthquake hits capital. Geologists warn of possible aftershocks due to unstable tetonic plates.'
         }),

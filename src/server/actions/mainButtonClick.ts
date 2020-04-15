@@ -2,7 +2,7 @@
 import { BLUE_TEAM_ID, COMBAT_PHASE_ID, GAME_DOES_NOT_EXIST, GAME_INACTIVE_TAG, NEWS_PHASE_ID, NOT_WAITING_STATUS, PURCHASE_PHASE_ID, RED_TEAM_ID, SLICE_EXECUTING_ID, TYPE_MAIN, WAITING_STATUS } from '../../constants';
 // prettier-ignore
 import { CombatPhaseAction, COMBAT_PHASE, MainButtonClickAction, MAIN_BUTTON_CLICK, NewsPhaseAction, NEWS_PHASE, PurchasePhaseAction, PURCHASE_PHASE, SliceChangeAction, SLICE_CHANGE, SocketSession } from '../../types';
-import { Battle, Capability, Game, Piece } from '../classes';
+import { Battle, Capability, Game, Piece, decreaseNewsEffect } from '../classes';
 import { redirectClient, sendToClient, sendToGame, sendToTeam, sendUserFeedback } from '../helpers';
 import { executeStep } from './executeStep';
 
@@ -147,6 +147,7 @@ export const mainButtonClick = async (session: SocketSession) => {
 
     await thisGame.addPoints();
     await thisGame.setPhase(NEWS_PHASE_ID);
+    await decreaseNewsEffect(gameId);
 
     const newsPhaseAction: NewsPhaseAction = {
         type: NEWS_PHASE,

@@ -21,7 +21,7 @@ export class Piece implements PieceType {
     pieceMoves: PieceType['pieceMoves'];
     pieceFuel: PieceType['pieceFuel'];
     pieceContents?: PieceType['pieceContents'];
-    isPieceDisabled?: PieceType['isPieceDisabled'];
+    isPieceDisabled: PieceType['isPieceDisabled'];
 
     constructor(pieceId: PieceType['pieceId']) {
         this.pieceId = pieceId;
@@ -45,8 +45,50 @@ export class Piece implements PieceType {
         inserts = [this.pieceId];
         const [goldenRows] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
 
-        this.isPieceDisabled = goldenRows.length !== 0;
+        const goldenEyeIds: number[] = goldenRows.map(a => a.goldenEyeId);
 
+        // get rounds left for goldeye and newseffect pieces
+        const goldeneyeRows: RowDataPacket[] & GoldenEyeType[] = [];
+        if (goldenEyeIds.length > 0) {
+            queryString = 'SELECT * FROM goldenEye WHERE goldenEyeId IN (?)';
+            const goldenInserts = [goldenEyeIds];
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const [goldeneyeRows] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, goldenInserts);
+        }
+
+
+        // TODO: find maximum rounds left for goldeneye
+        // const goldenEyeRoundsLeft: number[] = goldeneyeRows.map(a => a.roundsLeft);
+
+        // NewsEffects
+        queryString = 'SELECT * FROM newsEffectPieces WHERE pieceId = ?';
+        inserts = [this.pieceId];
+        const [newsEffectPieceRows] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
+
+        const newsEffectIds: number[] = newsEffectPieceRows.map(a => a.newsEffectId);
+
+        const newsEffectRows: RowDataPacket[] & GoldenEyeType[] = [];
+        if (newsEffectIds.length > 0) {
+            queryString = 'SELECT * FROM newsEffects WHERE pieceId IN (?)';
+            const newsEffectInserts = [newsEffectIds];
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const [newsEffectRows] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, newsEffectInserts);
+        }
+
+
+        // TODO: find maximum rounds left for newsEffects
+
+        // TODO: Compare maximum rounds left and assign goldeneyeId or NewsEffectId to isPieceDisabled Value
+
+        // this.isPieceDisabled = goldenRows.length !== 0;
+        if (goldeneyeRows.length !== 0) {
+            this.isPieceDisabled = goldenRows[0].goldenEyeId;
+        }
+
+        // this.isPieceDisabled = goldenRows.length !== 0;
+        if (newsEffectRows.length !== 0) {
+            this.isPieceDisabled = newsEffectRows[0].newsEffectId;
+        }
         return this;
     }
 
@@ -254,22 +296,28 @@ export class Piece implements PieceType {
 
         // TODO: dealing with weird datatype with join...
         queryString =
-            'SELECT pieceId FROM goldenEyePieces NATURAL JOIN pieces WHERE goldenEyePieces.pieceId = pieces.pieceId AND pieces.pieceGameId = ?';
+            'SELECT pieceId, goldenEyeId FROM goldenEyePieces NATURAL JOIN pieces WHERE goldenEyePieces.pieceId = pieces.pieceId AND pieces.pieceGameId = ?';
         inserts = [gameId];
-        const [pieceIdsStuck] = await pool.query<RowDataPacket[]>(queryString, inserts);
-        const allPieceIdsStuck = [];
-        for (let x = 0; x < pieceIdsStuck.length; x++) {
-            allPieceIdsStuck.push(pieceIdsStuck[x].pieceId);
+        type QueryResult = {
+            pieceId: PieceType['pieceId'];
+            goldenEyeId: GoldenEyeType['goldenEyeId'];
+        };
+        const [piecesStuck] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
+        const allPiecesStuck = [];
+        for (let x = 0; x < piecesStuck.length; x++) {
+            allPiecesStuck.push(piecesStuck[x]);
         }
 
         // format for the client state
         const allPieces: { [positionIndex: number]: PieceType[] } = {};
         for (let x = 0; x < results.length; x++) {
             const currentPiece = results[x];
-            if (allPieceIdsStuck.includes(currentPiece.pieceId)) {
-                currentPiece.isPieceDisabled = true;
+            const stuckPiece = allPiecesStuck.find(obj => obj.pieceId === currentPiece.pieceId);
+            if (stuckPiece !== undefined) {
+                currentPiece.isPieceDisabled = stuckPiece.goldenEyeId;
             } else {
-                currentPiece.isPieceDisabled = false;
+                // set to false or not stuck
+                currentPiece.isPieceDisabled = 0;
             }
             currentPiece.pieceContents = { pieces: [] };
             if (!allPieces[currentPiece.piecePositionId]) {
@@ -821,5 +869,15 @@ export class Piece implements PieceType {
         }
 
         return listOfDeletedPieces;
+    }
+
+    async updateNewsEffects(gameId: GameType['gameId'], effectId: number) {
+        const conn = await pool.getConnection();
+
+        if (this.isPieceDisabled === 0) {
+            const queryString = 'UPDATE pieces SET pieceIsDisabled = ? WHERE pieceGameId = ? AND pieceId = ?';
+            const inserts = [effectId, gameId, this.pieceId];
+            await conn.query(queryString, inserts);
+        }
     }
 }
