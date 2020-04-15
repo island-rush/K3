@@ -4,7 +4,7 @@ import { LIST_ALL_POSITIONS_TYPE } from '../../constants';
 import { pool } from '../';
 import { Piece } from '.';
 // import { LIST_ALL_POSITIONS_TYPE } from '../../constants';
-import { GameType, PieceType, NewsEffectType } from '../../types';
+import { GameType, PieceType } from '../../types';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 let currentNewsId = -1;
@@ -26,7 +26,7 @@ export const getNewsEffect = async () => {
 };
 
 // insert isPieceDisabled pieces into the newsEffectPieces database table
-const disableEffectedPiece = async (pieceId: number, newsEffectId: Promise<number[]>) => {
+const disableEffectedPiece = async (pieceId: number, newsEffectId: Promise<number>) => {
     const inserts = [newsEffectId, pieceId];
     const queryString = 'INSERT INTO newsEffectPieces (newsEffectId, pieceId) VALUES (?,?)';
     const [results] = await pool.query<OkPacket>(queryString, inserts);
@@ -35,15 +35,10 @@ const disableEffectedPiece = async (pieceId: number, newsEffectId: Promise<numbe
 
 // insert newsEffect into NewsEffect table before possibly inserting disabled pieces into newsEffectPieces table
 const insertNewsEffect = async (newsEffectGameId: GameType['gameId'], newsId: number, roundsLeft: number) => {
-    type QueryResult = {
-        newsEffectId: NewsEffectType['newsEffectId'];
-        newsId: NewsEffectType['newsId'];
-    };
-    const inserts = [newsId, newsEffectGameId, roundsLeft];
     const queryString = 'INSERT INTO newsEffects (newsId, newsEffectGameId, roundsLeft) VALUES (?,?,?)';
-    const [results] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
-    const newsEffectId = [results[0].newsEffectId];
-    return newsEffectId;
+    const inserts = [newsId, newsEffectGameId, roundsLeft];
+    const [results] = await pool.query<OkPacket>(queryString, inserts);
+    return results.insertId;
 };
 
 const checkTyphoonHit = async (gameId: GameType['gameId'], newsId: number) => {
