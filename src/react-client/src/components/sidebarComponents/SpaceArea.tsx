@@ -1,10 +1,11 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { ANTI_SATELLITE_MISSILES_TYPE_ID } from '../../../../constants';
 import { CapabilitiesState } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
 
-const spaceAreaStyle: any = {
+const spaceAreaStyle: Properties = {
     backgroundColor: 'Yellow',
     position: 'absolute',
     height: '170%',
@@ -14,7 +15,7 @@ const spaceAreaStyle: any = {
     padding: '1%'
 };
 
-const antiSatelliteMissilesContainerStyle: any = {
+const antiSatelliteMissilesContainerStyle: Properties = {
     backgroundColor: '#b9b9b9',
     position: 'absolute',
     width: '18%',
@@ -23,7 +24,7 @@ const antiSatelliteMissilesContainerStyle: any = {
     top: '10%'
 };
 
-const antiSatBoxStyle: any = {
+const antiSatBoxStyle: Properties = {
     position: 'relative',
     backgroundColor: 'blue',
     width: '20%',
@@ -32,10 +33,6 @@ const antiSatBoxStyle: any = {
     float: 'left',
     backgroundSize: '100% 100%',
     backgroundRepeat: 'no-repeat'
-};
-
-const invisibleStyle = {
-    display: 'none'
 };
 
 interface Props {
@@ -47,13 +44,17 @@ class SpaceArea extends Component<Props> {
     render() {
         const { isSelected, capabilities } = this.props;
 
-        const { isCyberDefenseActive } = capabilities;
+        if (!isSelected) {
+            return null;
+        }
 
-        const antiSatelliteMissilesItemItemComponents = capabilities.confirmedAntiSat.map((antiSatRoundsLeft: number, index: number) => (
+        const { isCyberDefenseActive, confirmedAntiSat } = capabilities;
+
+        const cyberDefenseDiv = isCyberDefenseActive ? <div>Cyber defense IS active.</div> : <div>Cyber defense is NOT active.</div>;
+
+        const antiSatelliteMissilesItemItemComponents = confirmedAntiSat.map((antiSatRoundsLeft: number, index: number) => (
             <div style={{ ...antiSatBoxStyle, ...TYPE_IMAGES[ANTI_SATELLITE_MISSILES_TYPE_ID] }}>{antiSatRoundsLeft}</div>
         ));
-
-        const cyberDefenseDiv = isCyberDefenseActive ? <div>Cyber defense is active.</div> : null;
 
         const standardOnClick = (event: MouseEvent) => {
             event.preventDefault();
@@ -61,7 +62,7 @@ class SpaceArea extends Component<Props> {
         };
 
         return (
-            <div style={isSelected ? spaceAreaStyle : invisibleStyle} onClick={standardOnClick}>
+            <div style={spaceAreaStyle} onClick={standardOnClick}>
                 <div>Space Area Capabilities</div>
 
                 {cyberDefenseDiv}

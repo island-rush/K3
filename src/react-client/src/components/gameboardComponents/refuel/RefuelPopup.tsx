@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { RefuelState } from '../../../../../types';
@@ -6,7 +7,7 @@ import { LEFT_CONTROLS_IMAGES } from '../../styleConstants';
 import { AircraftPiece } from './AircraftPiece';
 import { TankerPiece } from './TankerPiece';
 
-const refuelPopupStyle: any = {
+const refuelPopupStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '80%',
@@ -18,7 +19,7 @@ const refuelPopupStyle: any = {
     zIndex: 4
 };
 
-const refuelPopupMinimizeStyle: any = {
+const refuelPopupMinimizeStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '7%',
@@ -32,7 +33,7 @@ const refuelPopupMinimizeStyle: any = {
     backgroundRepeat: 'no-repeat'
 };
 
-const leftSectionStyle: any = {
+const leftSectionStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     float: 'left',
@@ -42,7 +43,7 @@ const leftSectionStyle: any = {
     margin: '1%'
 };
 
-const rightSectionStyle: any = {
+const rightSectionStyle: Properties = {
     position: 'relative',
     overflow: 'scroll',
     backgroundColor: 'grey',
@@ -52,14 +53,10 @@ const rightSectionStyle: any = {
     margin: '1%'
 };
 
-const confirmButtonStyle: any = {
+const confirmButtonStyle: Properties = {
     position: 'absolute',
     bottom: '-7%',
     right: '2%'
-};
-
-const invisibleStyle: any = {
-    display: 'none'
 };
 
 interface Props {
@@ -75,7 +72,11 @@ class RefuelPopup extends Component<Props> {
     render() {
         const { refuel, confirmFuelSelections, aircraftClick, tankerClick, undoFuelSelection, refuelPopupMinimizeToggle } = this.props;
 
-        const { tankers, aircraft, selectedTankerPieceId } = refuel;
+        const { tankers, aircraft, selectedTankerPieceId, isActive } = refuel;
+
+        if (!isActive) {
+            return null;
+        }
 
         const tankerPieces = tankers.map((tankerPiece: any, index: number) => (
             <TankerPiece
@@ -104,7 +105,7 @@ class RefuelPopup extends Component<Props> {
 
         return (
             // Overall Component
-            <div style={refuel.isActive ? refuelPopupStyle : invisibleStyle} onClick={standardOnClick}>
+            <div style={refuelPopupStyle} onClick={standardOnClick}>
                 <div style={leftSectionStyle}>
                     Aircraft
                     {aircraftPieces}

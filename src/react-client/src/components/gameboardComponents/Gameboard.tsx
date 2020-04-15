@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 //prettier-ignore
@@ -17,7 +18,7 @@ const { HexGrid, Layout, Hexagon, Pattern } = require('react-hexgrid'); // TODO:
 const imageSize = { x: 3.4, y: 2.75 };
 const positionImagesPath = './images/positionImages/';
 
-const gameboardStyle: any = {
+const gameboardStyle: Properties = {
     backgroundColor: 'b9b9b9',
     width: '94%',
     height: '88%',
@@ -26,7 +27,7 @@ const gameboardStyle: any = {
     position: 'absolute'
 };
 
-const subDivStyle = {
+const subDivStyle: Properties = {
     height: '100%',
     width: '100%'
 };
@@ -221,11 +222,11 @@ class Gameboard extends Component<Props> {
 
         const { confirmedPlans } = planning;
 
-        let planningPositions: any = []; //all of the positions part of a plan
-        let battlePositions: any = []; //position(s) involved in a battle
-        let remoteSensedPositions: any = [];
-        let commInterruptPositions: any = [];
-        let goldenEyePositions: any = [];
+        let planningPositions: number[] = []; //all of the positions part of a plan
+        let battlePositions: number[] = []; //position(s) involved in a battle
+        let remoteSensedPositions: number[] = [];
+        let commInterruptPositions: number[] = [];
+        let goldenEyePositions: number[] = [];
 
         for (let x = 0; x < planning.moves.length; x++) {
             const positionId = planning.moves[x];

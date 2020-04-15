@@ -1,7 +1,8 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { NOT_SELECTED_INDEX, SELECTED_BORDERS, SELECTED_INDEX, TYPE_IMAGES } from '../../styleConstants';
 
-const tankerPieceStyle = {
+const tankerPieceStyle: Properties = {
     backgroundColor: 'white',
     height: '15%',
     width: '96%',
@@ -10,7 +11,7 @@ const tankerPieceStyle = {
     borderRadius: '2%'
 };
 
-const boxStyle = {
+const boxStyle: Properties = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: '90% 90%',
     backgroundPosition: 'center',

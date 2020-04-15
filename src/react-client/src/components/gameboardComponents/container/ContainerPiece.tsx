@@ -1,9 +1,10 @@
+import { Properties } from 'csstype';
 import React from 'react';
 import { TYPE_NAMES } from '../../../../../constants';
 import { ContainerState, PieceType } from '../../../../../types';
 import { TYPE_IMAGES, TYPE_TEAM_BORDERS } from '../../styleConstants';
 
-const containerPieceStyle: any = {
+const containerPieceStyle: Properties = {
     backgroundRepeat: 'no-repeat',
     backgroundSize: '90% 90%',
     backgroundPosition: 'center',

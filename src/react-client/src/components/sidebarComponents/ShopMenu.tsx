@@ -1,3 +1,4 @@
+import { Properties } from 'csstype';
 import React, { Component, MouseEvent } from 'react';
 import { connect } from 'react-redux';
 import { LIST_ALL_CAPABILITIES, TYPE_AIR, TYPE_LAND, TYPE_OWNERS, TYPE_SEA, TYPE_SPECIAL } from '../../../../constants';
@@ -6,7 +7,7 @@ import { shopConfirmPurchase, shopPurchaseRequest, shopRefundRequest } from '../
 import { PurchaseableItem } from './PurchaseableItem';
 import { ShopItem } from './ShopItem';
 
-const shopStyle: any = {
+const shopStyle: Properties = {
     backgroundColor: 'Yellow',
     position: 'absolute',
     height: '170%',
@@ -15,11 +16,7 @@ const shopStyle: any = {
     marginTop: '20%'
 };
 
-const invisibleStyle = {
-    display: 'none'
-};
-
-const purchaseButtonStyle: any = {
+const purchaseButtonStyle: Properties = {
     position: 'absolute',
     bottom: '1%',
     right: '1%',
@@ -28,7 +25,7 @@ const purchaseButtonStyle: any = {
     backgroundColor: 'red'
 };
 
-const purchaseableItemsContainerStyle: any = {
+const purchaseableItemsContainerStyle: Properties = {
     backgroundColor: '#b9b9b9',
     position: 'relative',
     width: '15%',
@@ -50,6 +47,10 @@ interface Props {
 class ShopMenu extends Component<Props> {
     render() {
         const { shopItems, isSelected, purchase, refund, points, confirmPurchase } = this.props;
+
+        if (!isSelected) {
+            return null;
+        }
 
         const airShopComponents = TYPE_OWNERS[TYPE_AIR].map((typeId: number, index: number) => (
             <PurchaseableItem key={index} purchase={purchase} typeId={typeId} />
@@ -77,7 +78,7 @@ class ShopMenu extends Component<Props> {
         };
 
         return (
-            <div style={isSelected ? shopStyle : invisibleStyle} onClick={standardOnClick}>
+            <div style={shopStyle} onClick={standardOnClick}>
                 <div>Shop Menu</div>
                 <div>Points: {points}</div>
 

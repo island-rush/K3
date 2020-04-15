@@ -1,8 +1,9 @@
+import { Properties } from 'csstype';
 import React, { MouseEvent } from 'react';
 import { NewsState } from '../../../../types';
 import { NEWS_POPUP_IMAGES } from '../styleConstants';
 
-const newsPopupStyle: any = {
+const newsPopupStyle: Properties = {
     backgroundColor: 'white',
     width: '50%',
     height: '50%',
@@ -11,7 +12,7 @@ const newsPopupStyle: any = {
     position: 'absolute'
 };
 
-const newsPopupMinimizeStyle: any = {
+const newsPopupMinimizeStyle: Properties = {
     position: 'absolute',
     display: 'block',
     width: '7%',
@@ -24,27 +25,27 @@ const newsPopupMinimizeStyle: any = {
     backgroundRepeat: 'no-repeat'
 };
 
-const isMinimizedStyle: any = {
+const isMinimizedStyle: Properties = {
     border: '2px solid red',
     top: '45%',
     margin: '2%'
 };
 
-const invisibleStyle: any = {
+const invisibleStyle: Properties = {
     display: 'none'
 };
 
-const popupTitleStyle: any = {
+const popupTitleStyle: Properties = {
     textAlign: 'center',
     fontSize: '200%'
 };
 
-const newsTitleStyle: any = {
+const newsTitleStyle: Properties = {
     textAlign: 'center',
     fontSize: '150%'
 };
 
-const newsInfoStyle: any = {
+const newsInfoStyle: Properties = {
     textAlign: 'left',
     fontSize: '100%',
     margin: '1%',
@@ -57,6 +58,10 @@ interface Props {
 }
 
 export const NewsPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
+    if (!news.isActive) {
+        return null;
+    }
+
     const minimizeClick = (event: MouseEvent) => {
         event.preventDefault();
         newsPopupMinimizeToggle();
@@ -70,7 +75,7 @@ export const NewsPopup = ({ news, newsPopupMinimizeToggle }: Props) => {
 
     return (
         // Overall Component
-        <div style={news.isActive ? null : invisibleStyle} onClick={standardOnClick}>
+        <div onClick={standardOnClick}>
             {/* Popup */}
             <div style={!news.isMinimized ? newsPopupStyle : invisibleStyle}>
                 <div style={popupTitleStyle}>NEWS ALERT!</div>

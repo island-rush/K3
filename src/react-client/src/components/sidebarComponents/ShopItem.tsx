@@ -1,8 +1,9 @@
-import React, { MouseEvent } from 'react';
+import { Properties } from 'csstype';
+import React, { MouseEvent, useState } from 'react';
 import { ShopItemType } from '../../../../types';
 import { TYPE_IMAGES } from '../styleConstants';
 
-const shopItemStyle = {
+const shopItemStyle: Properties = {
     backgroundColor: 'green',
     position: 'relative',
     width: '23%',
@@ -13,15 +14,22 @@ const shopItemStyle = {
     backgroundRepeat: 'no-repeat'
 };
 
+const hoverStyle = {
+    backgroundColor: 'black'
+};
+
 interface Props {
     shopItem: ShopItemType;
     refund: any;
 }
 
 export const ShopItem = ({ refund, shopItem }: Props) => {
+    const [isHovering, setIsHovering] = useState(false);
+
     const style = {
         ...shopItemStyle,
-        ...TYPE_IMAGES[shopItem.shopItemTypeId]
+        ...TYPE_IMAGES[shopItem.shopItemTypeId],
+        ...(isHovering ? hoverStyle : null)
     };
 
     const onClick = (event: MouseEvent) => {
@@ -30,5 +38,17 @@ export const ShopItem = ({ refund, shopItem }: Props) => {
         event.stopPropagation();
     };
 
-    return <div style={style} onClick={onClick} />;
+    const onMouseOver = (event: MouseEvent) => {
+        event.preventDefault();
+        setIsHovering(true);
+        event.stopPropagation();
+    };
+
+    const onMouseLeave = (event: MouseEvent) => {
+        event.preventDefault();
+        setIsHovering(false);
+        event.stopPropagation();
+    };
+
+    return <div style={style} onClick={onClick} onMouseOver={onMouseOver} onMouseLeave={onMouseLeave} />;
 };
