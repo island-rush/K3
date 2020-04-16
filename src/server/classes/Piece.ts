@@ -69,8 +69,8 @@ export class Piece implements PieceType {
 
         const newsEffectRows: RowDataPacket[] & GoldenEyeType[] = [];
         if (newsEffectIds.length > 0) {
-            queryString = 'SELECT * FROM newsEffects WHERE pieceId IN (?)';
-            const newsEffectInserts = [newsEffectIds];
+            queryString = 'SELECT * FROM newsEffect WHERE newsEffectId IN (?)';
+            const newsEffectInserts = [newsEffectIds[0]];
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const [newsEffectRows] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, newsEffectInserts);
         }
