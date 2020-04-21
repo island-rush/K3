@@ -31,6 +31,7 @@ const disableEffectedPiece = async (pieceId: number, newsEffectId: number) => {
         const inserts = [newsEffectId, pieceId];
         const queryString = 'INSERT INTO newsEffectPieces (newsEffectId, pieceId) VALUES (?,?)';
         const [results] = await pool.query<OkPacket>(queryString, inserts);
+        await new Piece(pieceId).init();
         console.log(results);
     }
 };
@@ -38,14 +39,14 @@ const disableEffectedPiece = async (pieceId: number, newsEffectId: number) => {
 // insert newsEffect into NewsEffect table before possibly inserting disabled pieces into newsEffectPieces table
 const insertNewsEffect = async (newsEffectGameId: GameType['gameId'], newsId: number, roundsLeft: number) => {
     // check if newsEffect exists
-    type QueryResult = {
-        newsId: NewsEffectType['newsId'];
-        newsEffectGameId: NewsEffectType['newsEffectGameId'];
-        roundsLeft: NewsEffectType['roundsLeft'];
-    };
-    const checkQueryString = 'SELECT newsId, newsEffectGameId, roundsLeft FROM newsEffects WHERE newsId = ? & newsEffectGameId = ?';
+    // type QueryResult = {
+    //     newsId: NewsEffectType['newsId'];
+    //     newsEffectGameId: NewsEffectType['newsEffectGameId'];
+    //     roundsLeft: NewsEffectType['roundsLeft'];
+    // };
+    const checkQueryString = 'SELECT * FROM newsEffects WHERE newsId = ? AND newsEffectGameId = ?';
     const checkInserts = [newsId, newsEffectGameId];
-    const [checkResults] = await pool.query<RowDataPacket[] & QueryResult[]>(checkQueryString, checkInserts);
+    const [checkResults] = await pool.query<RowDataPacket[] & NewsEffectType[]>(checkQueryString, checkInserts);
 
     if (checkResults.length === 0) {
         const queryString = 'INSERT INTO newsEffects (newsId, newsEffectGameId, roundsLeft) VALUES (?,?,?)';
@@ -92,10 +93,10 @@ const checkTyphoonHit = async (gameId: GameType['gameId'], newsId: number, newsE
                 const { pieceId } = resultItem;
                 await disableEffectedPiece(pieceId, newsEffectId);
                 // init sets isPieceDisabled value
-                const thisPiece = await new Piece(pieceId).init();
-                if (thisPiece !== undefined) {
-                    console.log(`Piece ${pieceId} isPieceDisabled set to ${thisPiece.isPieceDisabled}`);
-                }
+                // const thisPiece = await new Piece(pieceId).init();
+                // if (thisPiece !== undefined) {
+                //     console.log(`Piece ${pieceId} isPieceDisabled set to ${thisPiece.isPieceDisabled}`);
+                // }
             });
         }
     }

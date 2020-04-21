@@ -88,6 +88,11 @@ export type InvItemType = {
 
 export type PieceVisibleTypes = 0 | 1; // TODO: constant for this
 
+export type NewsEffectPieceType = {
+    newsEffectId: number;
+    pieceId: number;
+};
+
 export type NewsEffectType = {
     newsEffectId: number;
     newsId: number;
