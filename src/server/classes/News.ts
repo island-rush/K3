@@ -36,23 +36,28 @@ const disableEffectedPiece = async (pieceId: number, newsEffectId: number) => {
     }
 };
 
+const getNewsIds = (checkResults: RowDataPacket[] & NewsEffectType[]) => {
+    const newsIds = [];
+    for (let x = 0; x < checkResults.length; x++) {
+        newsIds.push(checkResults[x].newsId);
+    }
+    return newsIds;
+};
+
 // insert newsEffect into NewsEffect table before possibly inserting disabled pieces into newsEffectPieces table
 const insertNewsEffect = async (newsEffectGameId: GameType['gameId'], newsId: number, roundsLeft: number) => {
-    // check if newsEffect exists
-    // type QueryResult = {
-    //     newsId: NewsEffectType['newsId'];
-    //     newsEffectGameId: NewsEffectType['newsEffectGameId'];
-    //     roundsLeft: NewsEffectType['roundsLeft'];
-    // };
     const checkQueryString = 'SELECT * FROM newsEffects WHERE newsId = ? AND newsEffectGameId = ?';
     const checkInserts = [newsId, newsEffectGameId];
     const [checkResults] = await pool.query<RowDataPacket[] & NewsEffectType[]>(checkQueryString, checkInserts);
 
-    if (checkResults.length === 0) {
-        const queryString = 'INSERT INTO newsEffects (newsId, newsEffectGameId, roundsLeft) VALUES (?,?,?)';
-        const inserts = [newsId, newsEffectGameId, roundsLeft];
-        const [results] = await pool.query<OkPacket>(queryString, inserts);
-        return results.insertId;
+    if (checkResults.length > 0) {
+        const newsIds = getNewsIds(checkResults);
+        if (!newsIds.includes(newsId)) {
+            const queryString = 'INSERT INTO newsEffects (newsId, newsEffectGameId, roundsLeft) VALUES (?,?,?)';
+            const inserts = [newsId, newsEffectGameId, roundsLeft];
+            const [results] = await pool.query<OkPacket>(queryString, inserts);
+            return results.insertId;
+        }
     }
     return -1;
 };
@@ -122,6 +127,8 @@ export const receiveNews = async (newsTitle: string, gameId: number, newsId: num
             retVal = checkTyphoonHit(gameId, newsId, newsEffectId);
             return retVal;
         case 'April Showers Bring... Terror?':
+            newsEffectId = await insertNewsEffect(gameId, newsId, TYPHOON_ROUNDS);
+            // loseSixPoints(gameId);
             return retVal;
         case 'Who Put Coke in the JP-8?':
             return retVal;
@@ -158,27 +165,17 @@ export const receiveNews = async (newsTitle: string, gameId: number, newsId: num
     }
 };
 
-// export const insertNewsEffect = async (gameId: GameType['gameId'], gameTeam: BlueOrRedTeamId, selectedPositionId: LIST_ALL_POSITIONS_TYPE) => {
-//     let queryString = 'SELECT * FROM goldenEye WHERE gameId = ? AND teamId = ? AND positionId = ?';
-//     let inserts = [gameId, gameTeam, selectedPositionId];
-//     const [results] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
-
-//     // prevent duplicate entries if possible
-//     if (results.length !== 0) {
-//         return false;
-//     }
-
-//     queryString = 'INSERT INTO goldenEye (gameId, teamId, positionId, roundsLeft, activated) VALUES (?, ?, ?, ?, ?)';
-//     inserts = [gameId, gameTeam, selectedPositionId, GOLDEN_EYE_ROUNDS, DEACTIVATED];
-//     await pool.query(queryString, inserts);
-//     return true;
-// };
-
+// need to call for each round not just at the beginning of each turn
 export const decreaseNewsEffect = async (gameId: GameType['gameId']) => {
-    let queryString = 'UPDATE newEffect SET roundsLeft = roundsLeft - 1 WHERE gameId = ?';
+    let queryString = 'UPDATE newsEffects SET roundsLeft = roundsLeft - 1 WHERE gameId = ?';
     const inserts = [gameId];
     await pool.query(queryString, inserts);
 
-    queryString = 'DELETE FROM newEffect WHERE roundsLeft = 0';
-    await pool.query(queryString);
+    queryString = 'SELECT newsEffectId FROM newsEffect WHERE roundsLeft = 0';
+    await pool.query(queryString)
+        .then(rows => {
+            if (rows.length > 0) {
+                pool.query('DELETE FROM newsEffect WHERE roundsLeft = 0', rows[0]);
+            }
+        });
 };

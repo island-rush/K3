@@ -117,7 +117,7 @@ export type PieceType = {
     pieceContents?: { pieces: PieceType[] };
 
     /**
-     * True = Stuck in place, False = Free to move/make plans
+     * Not 0 (number of game effect) = Stuck in place, 0= Free to move/make plans
      */
     // isPieceDisabled?: boolean; // TODO: store in the database, don't calculate (store by storing the event id that is disabling it? (the one with longest rounds left? (could be multiple things....)))
     // is true if it is anything other than 0

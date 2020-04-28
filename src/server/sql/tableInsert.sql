@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS pieces (
     pieceVisible INT(1) NOT NULL,
     pieceMoves INT(2) NOT NULL,
     pieceFuel INT(2) NOT NULL,
-    pieceIsDisabled INT(1) NOT NULL,
+    isPieceDisabled INT(1) NOT NULL,
     FOREIGN KEY (pieceGameId) REFERENCES games (gameId) ON DELETE CASCADE,
     FOREIGN KEY (pieceContainerId) REFERENCES pieces (pieceId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
