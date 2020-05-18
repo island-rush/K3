@@ -20,7 +20,7 @@ export const gameInitialNews = async (gameId: GameType['gameId']) => {
     const allInserts = [
         news(gameId, newsOrder++, {
             newsTitle: 'Apollo, Oh No! Solar Flare causes disruption.',
-            newsInfo: 'Rising coronal activity sends large amounts of radioation earthbound knocking out satellite systems.'
+            newsInfo: 'Rising coronal activity sends large amounts of radioation earthbound knocking out satellite systems.',
         }),
         news(gameId, newsOrder++, {
             newsTitle: 'Typhoon Lagoon',

@@ -6,3 +6,4 @@ export * from './capabilities';
 export * from './visibility';
 export * from './attack';
 export * from './errorTypes';
+export * from './news';

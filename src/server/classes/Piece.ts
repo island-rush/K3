@@ -3,7 +3,7 @@ import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
 import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, LIST_ALL_POSITIONS_TYPE, NO_PARENT_VALUE } from '../../constants';
 // prettier-ignore
-import { AtcScrambleType, BiologicalWeaponsType, BlueOrRedTeamId, GameType, GoldenEyeType, GoldenEyePieceType, NukeType, PieceType, PlanType, RemoteSensingType, NewsEffectType } from '../../types';
+import { AtcScrambleType, BiologicalWeaponsType, BlueOrRedTeamId, GameType, GoldenEyeType, NukeType, PieceType, PlanType, RemoteSensingType, NewsEffectType } from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
 
@@ -41,24 +41,12 @@ export class Piece implements PieceType {
 
         Object.assign(this, pieceRows[0]);
 
+        // Set initial value
+        this.isPieceDisabled = 0;
+
+        // select any active effects on this piece then add them to activeEffects
         const [goldeneyeRows] = await pool.query<RowDataPacket[] & GoldenEyeType[]>('SELECT * FROM goldenEye WHERE goldeneyeId IN (SELECT goldeneyeId FROM goldeneyePieces WHERE pieceId = ?)', this.pieceId);
         const [newsEffectRows] = await pool.query<RowDataPacket[] & NewsEffectType[]>('SELECT * FROM newsEffects WHERE newsEffectId IN (SELECT newsEffectId FROM newsEffectPieces WHERE pieceId = ?)', this.pieceId);
-
-        // if (goldeneyeRows.length > 0 || newsEffectRows.length > 0) {
-        //     if (goldeneyeRows.length > 0 && newsEffectRows.length > 0) {
-        //         if (goldeneyeRows[0].roundsLeft > newsEffectRows[0].roundsLeft) {
-        //             this.isPieceDisabled = goldenRows[0].goldenEyeId;
-        //         } else if (goldeneyeRows[0].roundsLeft < newsEffectRows[0].roundsLeft) {
-        //             this.isPieceDisabled = newsRows[0].newsEffectId;
-        //         }
-        //     } else if (goldeneyeRows.length > 0 && newsEffectRows.length === 0) {
-        //         this.isPieceDisabled = goldenRows[0].goldenEyeId;
-        //     } else if (goldeneyeRows.length === 0 && newsEffectRows.length > 0) {
-        //         this.isPieceDisabled = newsRows[0].newsEffectId;
-        //     }
-        // } else {
-        //     this.isPieceDisabled = 0;
-        // }
 
         const activeEffects: { id: number; rounds: number; }[] = [];
         if (goldeneyeRows.length > 0) {
@@ -80,8 +68,10 @@ export class Piece implements PieceType {
 
         if (activeEffects.length > 0) {
             this.isPieceDisabled = Math.max(...activeEffects.map(findMaxValueId));
-            await pool.query<RowDataPacket[] & GoldenEyePieceType[]>('UPDATE pieces SET pieces.PieceIsDisabled = ? WHERE pieces.pieceId = ?', [this.isPieceDisabled, this.pieceId]);
+            // await pool.query<RowDataPacket[] & GoldenEyePieceType[]>('UPDATE pieces SET pieces.PieceIsDisabled = ? WHERE pieces.pieceId = ?', [this.isPieceDisabled, this.pieceId]);
         }
+
+        // this.priorityEffect();
 
         return this;
     }
@@ -294,21 +284,35 @@ export class Piece implements PieceType {
         inserts = [gameId];
         type QueryResult = {
             pieceId: PieceType['pieceId'];
-            goldenEyeId: GoldenEyeType['goldenEyeId'];
+            effectId: GoldenEyeType['goldenEyeId'];
         };
-        const [piecesStuck] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
-        const allPiecesStuck = [];
-        for (let x = 0; x < piecesStuck.length; x++) {
-            allPiecesStuck.push(piecesStuck[x]);
+        const [goldenEyePiecesStuck] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
+        const allPiecesStuck: { pieceId: number; effectId: number; }[] = [];
+        for (let x = 0; x < goldenEyePiecesStuck.length; x++) {
+            allPiecesStuck.push({ pieceId: goldenEyePiecesStuck[x].pieceId, effectId: goldenEyePiecesStuck[x].goldenEyeId });
+        }
+
+        // newsEffect query
+        queryString =
+            'SELECT pieceId, newsEffectId FROM newsEffectPieces NATURAL JOIN pieces WHERE newsEffectPieces.pieceId = pieces.pieceId AND pieces.pieceGameId = ?';
+        inserts = [gameId];
+        type NewsQueryResult = {
+            pieceId: PieceType['pieceId'];
+            effectId: NewsEffectType['newsEffectId'];
+        };
+        const [newsEffectPiecesStuck] = await pool.query<RowDataPacket[] & NewsQueryResult[]>(queryString, inserts);
+        for (let x = 0; x < newsEffectPiecesStuck.length; x++) {
+            allPiecesStuck.push({ pieceId: newsEffectPiecesStuck[x].pieceId, effectId: newsEffectPiecesStuck[x].newsEffectId });
         }
 
         // format for the client state
         const allPieces: { [positionIndex: number]: PieceType[] } = {};
         for (let x = 0; x < results.length; x++) {
             const currentPiece = results[x];
+
             const stuckPiece = allPiecesStuck.find(obj => obj.pieceId === currentPiece.pieceId);
             if (stuckPiece !== undefined) {
-                currentPiece.isPieceDisabled = stuckPiece.goldenEyeId;
+                currentPiece.isPieceDisabled = stuckPiece.effectId;
             } else {
                 // set to false or not stuck
                 currentPiece.isPieceDisabled = 0;
@@ -345,6 +349,7 @@ export class Piece implements PieceType {
             }
         }
 
+        // TODO possibly set unstuck piece isPieceDisabled variable to 0 here
         return allPieces;
     }
 
@@ -865,13 +870,13 @@ export class Piece implements PieceType {
         return listOfDeletedPieces;
     }
 
-    async updateNewsEffects(gameId: GameType['gameId'], effectId: number) {
-        const conn = await pool.getConnection();
+    // async updateNewsEffects(gameId: GameType['gameId'], effectId: number) {
+    //     const conn = await pool.getConnection();
 
-        if (this.isPieceDisabled === 0) {
-            const queryString = 'UPDATE pieces SET pieceIsDisabled = ? WHERE pieceGameId = ? AND pieceId = ?';
-            const inserts = [effectId, gameId, this.pieceId];
-            await conn.query(queryString, inserts);
-        }
-    }
+    //     if (this.isPieceDisabled === 0) {
+    //         const queryString = 'UPDATE pieces SET pieceIsDisabled = ? WHERE pieceGameId = ? AND pieceId = ?';
+    //         const inserts = [effectId, gameId, this.pieceId];
+    //         await conn.query(queryString, inserts);
+    //     }
+    // }
 }

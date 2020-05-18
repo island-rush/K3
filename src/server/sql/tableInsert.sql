@@ -84,7 +84,6 @@ CREATE TABLE IF NOT EXISTS pieces (
     pieceVisible INT(1) NOT NULL,
     pieceMoves INT(2) NOT NULL,
     pieceFuel INT(2) NOT NULL,
-    isPieceDisabled INT(1) NOT NULL,
     FOREIGN KEY (pieceGameId) REFERENCES games (gameId) ON DELETE CASCADE,
     FOREIGN KEY (pieceContainerId) REFERENCES pieces (pieceId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
@@ -329,3 +328,10 @@ CREATE TABLE IF NOT EXISTS newsEffectPieces(
     FOREIGN KEY (pieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
     PRIMARY KEY (newsEffectId, pieceId)
 );
+/* 
+CREATE TABLE IF NOT EXISTS newsEffectPositions(
+	newsEffectId INT(8) NOT NULL,
+    positionId INT(8) NOT NULL,
+    FOREIGN KEY (newsEffectId) REFERENCES newsEffects (newsEffectId) ON DELETE CASCADE,
+    PRIMARY KEY (newsEffectId)
+); */
