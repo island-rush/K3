@@ -1,16 +1,14 @@
 import { RowDataPacket, OkPacket } from 'mysql2/promise';
-import { LIST_ALL_POSITIONS_TYPE } from '../../constants';
-import { typhoonArea } from '../../constants/news';
+import { LIST_ALL_POSITIONS_TYPE, TYPE_FREEZE_POSITIONS, TYPE_REMOVE_POINTS, TYPE_DISABLE_PIECES, TYPE_DELETE_PIECES, TYPE_HUMANITARIAN, TYPHOON_ROUNDS } from '../../constants';
+import { TYPHOON_AREA } from '../../constants/news';
 // eslint-disable-next-line import/no-useless-path-segments
 import { pool } from '../';
 import { Piece } from '.';
 // import { LIST_ALL_POSITIONS_TYPE } from '../../constants';
 import { GameType, PieceType, NewsEffectType } from '../../types';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-// let currentNewsId = -1;
 let typhoonCalled = false;
-const TYPHOON_ROUNDS = 3;
+// const TYPHOON_ROUNDS = 3;
 
 type CurrentNewsEffect = {
     newsEffectId: number,
@@ -27,10 +25,9 @@ export const getNewsEffect = async () => {
 };
 
 // insert isPieceDisabled pieces into the newsEffectPieces database table
-const disableEffectedPiece = async (pieceId: number, newsEffectId: number) => {
+export const disableEffectedPiece = async (pieceId: number, newsEffectId: number) => {
     if (newsEffectId >= 0) {
         const inserts = [newsEffectId, pieceId];
-        // TODO add NewsEffectElementId to this insert
         const queryString = 'INSERT INTO newsEffectPieces (newsEffectId, pieceId) VALUES (?,?)';
         const [results] = await pool.query<OkPacket>(queryString, inserts);
         await new Piece(pieceId).init();
@@ -38,13 +35,13 @@ const disableEffectedPiece = async (pieceId: number, newsEffectId: number) => {
     }
 };
 
-// // Cannot set a disabled position in the newsEffectPieces table because of foreign key pointing to pieceId
-// const setDisabledPosition = async (positionId: number, newsEffectId: number) => {
-//     const inserts = [newsEffectId, positionId];
-//     const queryString = 'INSERT INTO newsEffectPositions (newsEffectId, positionId) VALUES (?,?)';
-//     const [results] = await pool.query<OkPacket>(queryString, inserts);
-//     console.log(results);
-// };
+// Cannot set a disabled position in the newsEffectPieces table because of foreign key pointing to pieceId
+const setDisabledPosition = async (positionId: number, newsEffectId: number) => {
+    const inserts = [newsEffectId, positionId];
+    const queryString = 'INSERT INTO newsEffectPositions (newsEffectId, positionId) VALUES (?,?)';
+    const [results] = await pool.query<OkPacket>(queryString, inserts);
+    console.log(results);
+};
 
 const getNewsIds = (checkResults: RowDataPacket[] & NewsEffectType[]) => {
     const newsIds = [];
@@ -55,7 +52,7 @@ const getNewsIds = (checkResults: RowDataPacket[] & NewsEffectType[]) => {
 };
 
 // insert newsEffect into NewsEffect table before possibly inserting disabled pieces into newsEffectPieces table
-const insertNewsEffect = async (newsEffectGameId: GameType['gameId'], newsId: number, roundsLeft: number) => {
+const insertNewsEffect = async (newsEffectGameId: GameType['gameId'], newsId: number, roundsLeft: number, newsEffectType: number) => {
     const checkQueryString = 'SELECT * FROM newsEffects WHERE newsId = ? AND newsEffectGameId = ?';
     const checkInserts = [newsId, newsEffectGameId];
     const [checkResults] = await pool.query<RowDataPacket[] & NewsEffectType[]>(checkQueryString, checkInserts);
@@ -63,8 +60,9 @@ const insertNewsEffect = async (newsEffectGameId: GameType['gameId'], newsId: nu
     // if (checkResults.length > 0) {
         const newsIds = getNewsIds(checkResults);
         if (!newsIds.includes(newsId)) {
-            const queryString = 'INSERT INTO newsEffects (newsId, newsEffectGameId, roundsLeft) VALUES (?,?,?)';
-            const inserts = [newsId, newsEffectGameId, roundsLeft];
+            const queryString = 'INSERT INTO newsEffects (newsId, newsEffectGameId, roundsLeft, newsEffectType) VALUES (?,?,?,?)';
+            // const inserts = [newsId, newsEffectGameId, roundsLeft, NEWS_EFFECTS[newsEffectType]];
+            const inserts = [newsId, newsEffectGameId, roundsLeft, newsEffectType];
             const [results] = await pool.query<OkPacket>(queryString, inserts);
             return results.insertId;
         }
@@ -72,16 +70,19 @@ const insertNewsEffect = async (newsEffectGameId: GameType['gameId'], newsId: nu
     return -1;
 };
 
+// const setTyphoonPositions = async (newsEffectId: number) => {
+//     TYPHOON_AREA.forEach(async (pos) => {
+//         await setDisabledPosition(pos, newsEffectId);
+//     });
+// };
+
 const checkTyphoonHit = async (gameId: GameType['gameId'], newsId: number, newsEffectId: number) => {
-    const listOfTyphoon: LIST_ALL_POSITIONS_TYPE[] = [];
+    // const listOfTyphoon: LIST_ALL_POSITIONS_TYPE[] = [];
     if (typhoonCalled === false) {
         typhoonCalled = true;
-        // const queryString = 'SELECT pieceId, piecePositionId FROM pieces WHERE pieceGameId = ?';
         const queryString = 'SELECT pieceId, piecePositionId FROM pieces WHERE pieceGameId = ? AND piecePositionId IN (?) AND pieceTypeId IN (?)';
-        // 120, 315 and 316 added to typhoonArea for testing purposes
-        // const typhoonArea = [120, 285, 286, 287, 304, 305, 306, 307, 315, 316, 308, 326, 242, 361, 370, 373, 374, 375, 378, 388, 391, 392, 395, 405, 408, 409, 410, 411, 473, 474, 475, 490, 493, 506, 510, 524, 527, 528, 530, 540, 547, 558, 565, 575, 580, 593, 597, 608, 609, 610, 614, 627, 628, 629, 631, 645, 646, 647, 663, 680, 697, 713];
         const marineTypes = [13, 14, 15, 16];
-        const inserts = [gameId, typhoonArea, marineTypes];
+        const inserts = [gameId, TYPHOON_AREA, marineTypes];
 
         type QueryResult = {
             pieceId: PieceType['pieceId'];
@@ -89,19 +90,22 @@ const checkTyphoonHit = async (gameId: GameType['gameId'], newsId: number, newsE
         };
         const [results] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
 
-        // Disable selected pieces for
+        // Disable selected pieces
         if (results.length !== 0 && newsEffectId >= 0) {
             results.forEach(async (resultItem) => {
-                listOfTyphoon.push(resultItem.pieceId);
+                // listOfTyphoon.push(resultItem.pieceId);
                 const { pieceId } = resultItem;
                 await disableEffectedPiece(pieceId, newsEffectId);
             });
         }
-        currentNewsEffect.effectedPositions = typhoonArea;
-        currentNewsEffect.effectedPieces = listOfTyphoon;
+        currentNewsEffect.effectedPositions = TYPHOON_AREA;
+        // currentNewsEffect.effectedPieces = listOfTyphoon;
+        TYPHOON_AREA.forEach(async (pos) => {
+            await setDisabledPosition(pos, newsEffectId);
+        });
     }
     // returned for debugging purposes
-    return listOfTyphoon;
+    // return listOfTyphoon;
 };
 
 export const receiveNews = async (newsTitle: string, gameId: number, newsId: number) => {
@@ -115,27 +119,34 @@ export const receiveNews = async (newsTitle: string, gameId: number, newsId: num
     let newsEffectId = -1;
     switch (newsTitle) {
         case 'Apollo, Oh No! Solar Flare causes disruption.':
-            newsEffectId = await insertNewsEffect(gameId, newsId, TYPHOON_ROUNDS);
-            retVal = checkTyphoonHit(gameId, newsId, newsEffectId);
+            newsEffectId = await insertNewsEffect(gameId, newsId, TYPHOON_ROUNDS, TYPE_FREEZE_POSITIONS);
+            // setTyphoonPositions(newsEffectId);
+            checkTyphoonHit(gameId, newsId, newsEffectId);
             return retVal;
+            // newsEffectId = await insertNewsEffect(gameId, newsId, 3, TYPE_OTHER);
+            // // TODO Apollo effect
+            // return retVal;
         case 'Typhoon Lagoon':
-            newsEffectId = await insertNewsEffect(gameId, newsId, TYPHOON_ROUNDS);
-            retVal = checkTyphoonHit(gameId, newsId, newsEffectId);
+            newsEffectId = await insertNewsEffect(gameId, newsId, TYPHOON_ROUNDS, TYPE_FREEZE_POSITIONS);
+            // setTyphoonPositions(newsEffectId);
+            checkTyphoonHit(gameId, newsId, newsEffectId);
             return retVal;
         case 'Tsunami!':
-            newsEffectId = await insertNewsEffect(gameId, newsId, TYPHOON_ROUNDS);
-            // retVal = checkTyphoonHit(gameId, newsId, newsEffectId);
+
+            newsEffectId = await insertNewsEffect(gameId, newsId, 3, TYPE_HUMANITARIAN);
+            // Tsunami H.R. Republic chance of losing pieces
             return retVal;
         case 'April Showers Bring... Terror?':
-            newsEffectId = await insertNewsEffect(gameId, newsId, TYPHOON_ROUNDS);
+            newsEffectId = await insertNewsEffect(gameId, newsId, 3, TYPE_REMOVE_POINTS);
             // loseSixPoints(gameId);
             return retVal;
         case 'Who Put Coke in the JP-8?':
-            // No taking off, landing, or refueling
+            // No taking off, landing, or refueling at Lion and Fuller Airfields
             return retVal;
         case 'Contanminated Water!':
             return retVal;
         case '"Have You Seen My Wrench?"':
+            newsEffectId = await insertNewsEffect(gameId, newsId, 3, TYPE_DISABLE_PIECES);
             // Disable all helicopters for one team // one turn
             return retVal;
         case 'Diphtheria Oubreak':
@@ -149,6 +160,7 @@ export const receiveNews = async (newsTitle: string, gameId: number, newsId: num
         case 'A Major Shake-up':
             return retVal;
         case 'Military Coup':
+            newsEffectId = await insertNewsEffect(gameId, newsId, 3, TYPE_DELETE_PIECES);
             return retVal;
         case 'Hurrican Kristin':
             return retVal;

@@ -318,6 +318,7 @@ CREATE TABLE IF NOT EXISTS newsEffects (
     newsId INT(8) NOT NULL,
     newsEffectGameId INT(8) NOT NULL,
     roundsLeft INT(4) NOT NULL,
+    newsEffectType INT(4) NOT NULL,
     FOREIGN KEY (newsId) REFERENCES news (newsId) ON DELETE CASCADE
 ) AUTO_INCREMENT=1;
 
@@ -328,10 +329,10 @@ CREATE TABLE IF NOT EXISTS newsEffectPieces(
     FOREIGN KEY (pieceId) REFERENCES pieces (pieceId) ON DELETE CASCADE,
     PRIMARY KEY (newsEffectId, pieceId)
 );
-/* 
+
 CREATE TABLE IF NOT EXISTS newsEffectPositions(
 	newsEffectId INT(8) NOT NULL,
     positionId INT(8) NOT NULL,
     FOREIGN KEY (newsEffectId) REFERENCES newsEffects (newsEffectId) ON DELETE CASCADE,
-    PRIMARY KEY (newsEffectId)
-); */
+    PRIMARY KEY (newsEffectId, positionId)
+);

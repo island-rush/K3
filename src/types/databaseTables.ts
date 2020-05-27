@@ -93,11 +93,17 @@ export type NewsEffectPieceType = {
     pieceId: number;
 };
 
+export type NewsEffectPositionType = {
+    newsEffectId: number;
+    positionId: number;
+};
+
 export type NewsEffectType = {
     newsEffectId: number;
     newsId: number;
     newsEffectGameId: number;
     roundsLeft:number;
+    newsEffectType:number;
 };
 
 export type PieceType = {

@@ -1,9 +1,9 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, LIST_ALL_POSITIONS_TYPE, NO_PARENT_VALUE } from '../../constants';
+import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, LIST_ALL_POSITIONS_TYPE, NO_PARENT_VALUE, NEWS_EFFECTS, TYPE_FREEZE_POSITIONS } from '../../constants';
 // prettier-ignore
-import { AtcScrambleType, BiologicalWeaponsType, BlueOrRedTeamId, GameType, GoldenEyeType, NukeType, PieceType, PlanType, RemoteSensingType, NewsEffectType } from '../../types';
+import { AtcScrambleType, BiologicalWeaponsType, BlueOrRedTeamId, GameType, GoldenEyeType, NukeType, PieceType, PlanType, RemoteSensingType, NewsEffectType, NewsEffectPositionType } from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
 
@@ -55,9 +55,14 @@ export class Piece implements PieceType {
             }
         }
 
+
         if (newsEffectRows.length > 0) {
             for (let x = 0; x < newsEffectRows.length; x++) {
+                const newsEffectValue = NEWS_EFFECTS[newsEffectRows[x].newsEffectType];
+                const freezeType = NEWS_EFFECTS[TYPE_FREEZE_POSITIONS];
+                if (newsEffectValue === freezeType) {
                 activeEffects.push({ id: newsEffectRows[x].newsEffectId, rounds: newsEffectRows[x].roundsLeft });
+                }
             }
         }
 
@@ -66,9 +71,9 @@ export class Piece implements PieceType {
             return activeEffects[0].id;
         };
 
+        // If there are any active effects on this piece to disable it set its value to the effect with the most rounds left
         if (activeEffects.length > 0) {
             this.isPieceDisabled = Math.max(...activeEffects.map(findMaxValueId));
-            // await pool.query<RowDataPacket[] & GoldenEyePieceType[]>('UPDATE pieces SET pieces.PieceIsDisabled = ? WHERE pieces.pieceId = ?', [this.isPieceDisabled, this.pieceId]);
         }
 
         // this.priorityEffect();
@@ -219,6 +224,43 @@ export class Piece implements PieceType {
         // TODO: referencing another table here...(could change to put into the plans class)
         const deletePlansQuery = 'DELETE FROM plans WHERE planGameId = ? AND planMovementOrder = ?';
         await conn.query(deletePlansQuery, inserts);
+
+        // handle if piece moved into newsEffect disabled position
+        const disabledPositions: number[] = [];
+        const newsEffectQuery = 'SELECT * FROM newsEffects WHERE newsEffectGameId = ?';
+        const newsInserts = [gameId];
+        const [newsResults] = await conn.query<RowDataPacket[] & NewsEffectType[]>(newsEffectQuery, newsInserts);
+
+        for (let z = 0; z < newsResults.length; z++) {
+            if (newsResults.length > 0) {
+                const newsEffectValue = NEWS_EFFECTS[newsResults[z].newsEffectType];
+                const freezeType = NEWS_EFFECTS[TYPE_FREEZE_POSITIONS];
+                if (newsEffectValue === freezeType) {
+                    const positionQuery = 'SELECT positionId FROM newsEffectPositions WHERE newsEffectId = ?';
+                    const positionInserts = [newsResults[z].newsEffectId];
+                    const [positionResults] = await conn.query<RowDataPacket[] & NewsEffectPositionType[]>(positionQuery, positionInserts);
+                    for (let x = 0; x < positionResults.length; x++) {
+                        const effectedPosition = positionResults[x];
+                        const { positionId } = effectedPosition;
+                        disabledPositions.push(positionId);
+                    }
+                    const selectQuery = 'SELECT pieceId FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?)';
+                    const pieceInserts = [gameId, disabledPositions];
+                    const disabledPieces = await conn.query<RowDataPacket[] & PieceType[]>(selectQuery, pieceInserts);
+
+                    for (let x = 0; x < disabledPieces.length; x++) {
+                        // const insertQuery = 'INSERT INTO newsEffectPieces (newsEffectId, pieceId) VALUES (?,?)';
+                        const insertQuery = 'INSERT INTO newseffectpieces (newsEffectId, pieceId) SELECT ?,? WHERE NOT EXISTS (SELECT * FROM newseffectpieces WHERE newsEffectId = ? AND pieceID = ?);';
+                        const disabledPiece: any = disabledPieces[x];
+                        const { pieceId } = disabledPiece;
+                        const { newsEffectId } = newsResults[z];
+                        const intoInserts = [newsEffectId, pieceId, newsEffectId, pieceId];
+                        await pool.query<OkPacket>(insertQuery, intoInserts);
+                        await new Piece(pieceId).init();
+                    }
+                }
+            }
+        }
 
         // handle if the pieces moved into a bio / nuclear place
         let queryString = 'SELECT * FROM biologicalWeapons WHERE gameId = ? AND activated = 1';
