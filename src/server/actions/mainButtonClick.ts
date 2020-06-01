@@ -147,6 +147,7 @@ export const mainButtonClick = async (session: SocketSession) => {
 
     await thisGame.addPoints();
     await thisGame.setPhase(NEWS_PHASE_ID);
+    // await decreaseNewsEffect(gameId);
 
     const newsPhaseAction: NewsPhaseAction = {
         type: NEWS_PHASE,

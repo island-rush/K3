@@ -7,6 +7,8 @@ import { gameInitialNews, gameInitialPieces } from '../../admin';
 import { pool } from '../../database';
 import { GameProperties } from './GameProperties';
 import { initialStateAction } from './initialStateAction';
+// eslint-disable-next-line import/no-useless-path-segments
+import { receiveNews } from '../../classes';
 
 /**
  * Represents a row in the games table in the database.
@@ -50,18 +52,21 @@ export class Game extends GameProperties implements GameType {
         await pool.query(queryString, inserts);
 
         type SubNewsType = {
+            newsId: number;
             newsTitle: string;
             newsInfo: string;
         };
 
         // Grab the next news
-        queryString = 'SELECT newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
+        queryString = 'SELECT newsId, newsTitle, newsInfo FROM news WHERE newsGameId = ? ORDER BY newsOrder ASC LIMIT 1';
         const [resultNews] = await pool.query<RowDataPacket[] & SubNewsType[]>(queryString, inserts);
 
-        const { newsTitle, newsInfo } =
+        const { newsId, newsTitle, newsInfo } =
             resultNews[0] !== undefined
                 ? resultNews[0]
-                : { newsTitle: 'No More News', newsInfo: "Obviously you've been playing this game too long..." };
+                : { newsId: -1, newsTitle: 'No More News', newsInfo: "Obviously you've been playing this game too long..." };
+
+        receiveNews(newsTitle, this.gameId, newsId);
 
         return {
             isMinimized: false,

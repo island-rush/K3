@@ -68,7 +68,7 @@ export const confirmPlan = async (session: SocketSession, action: ConfirmPlanReq
         sendUserFeedback(socketId, "Piece doesn't fall under your control");
         return;
     }
-
+    console.log(thisPiece);
     if (isPieceDisabled) {
         sendUserFeedback(socketId, 'Piece is disabled from game effect (probably golden eye)');
         return;

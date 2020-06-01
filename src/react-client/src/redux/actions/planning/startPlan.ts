@@ -49,8 +49,9 @@ export const startPlan = () => {
             return;
         }
 
-        if (selectedPiece.isPieceDisabled) {
-            dispatch(setUserfeedbackAction('Piece is disabled from something (probably goldeneye)'));
+        console.log(selectedPiece);
+        if (0 < selectedPiece.isPieceDisabled) {
+            dispatch(setUserfeedbackAction('Piece is disabled'));
             return;
         }
 

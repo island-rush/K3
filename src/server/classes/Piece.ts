@@ -1,9 +1,9 @@
 // prettier-ignore
 import { OkPacket, RowDataPacket } from 'mysql2/promise';
 // prettier-ignore
-import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, LIST_ALL_POSITIONS_TYPE, NO_PARENT_VALUE } from '../../constants';
+import { ACTIVATED, AIRBORN_ISR_TYPE_ID, AIR_REFUELING_SQUADRON_ID, ALL_AIRFIELD_LOCATIONS, ALL_LAND_POSITIONS, ARMY_INFANTRY_COMPANY_TYPE_ID, ARTILLERY_BATTERY_TYPE_ID, ATTACK_HELICOPTER_TYPE_ID, A_C_CARRIER_TYPE_ID, BLUE_TEAM_ID, BOMBER_TYPE_ID, C_130_TYPE_ID, DESTROYER_TYPE_ID, distanceMatrix, DRAGON_ISLAND_ID, EAGLE_ISLAND_ID, FULLER_ISLAND_ID, HR_REPUBLIC_ISLAND_ID, ISLAND_POSITIONS, KEONI_ISLAND_ID, LIGHT_INFANTRY_VEHICLE_CONVOY_TYPE_ID, LION_ISLAND_ID, LIST_ALL_PIECES, MARINE_INFANTRY_COMPANY_TYPE_ID, MC_12_TYPE_ID, MISSILE_TYPE_ID, MONTAVILLE_ISLAND_ID, NOYARC_ISLAND_ID, NUKE_RANGE, PIECES_WITH_FUEL, RADAR_TYPE_ID, RED_TEAM_ID, REMOTE_SENSING_RANGE, RICO_ISLAND_ID, SAM_SITE_TYPE_ID, SHOR_ISLAND_ID, SOF_TEAM_TYPE_ID, STEALTH_BOMBER_TYPE_ID, STEALTH_FIGHTER_TYPE_ID, SUBMARINE_TYPE_ID, TACTICAL_AIRLIFT_SQUADRON_TYPE_ID, TAMU_ISLAND_ID, TANK_COMPANY_TYPE_ID, TRANSPORT_TYPE_ID, TYPE_AIR_PIECES, TYPE_FUEL, TYPE_GROUND_PIECES, TYPE_MOVES, VISIBILITY_MATRIX, LIST_ALL_POSITIONS_TYPE, NO_PARENT_VALUE, NEWS_EFFECTS, TYPE_FREEZE_POSITIONS } from '../../constants';
 // prettier-ignore
-import { AtcScrambleType, BiologicalWeaponsType, BlueOrRedTeamId, GameType, GoldenEyeType, NukeType, PieceType, PlanType, RemoteSensingType } from '../../types';
+import { AtcScrambleType, BiologicalWeaponsType, BlueOrRedTeamId, GameType, GoldenEyeType, NukeType, PieceType, PlanType, RemoteSensingType, NewsEffectType, NewsEffectPositionType } from '../../types';
 import { pool } from '../database';
 import { Game } from './Game';
 
@@ -21,7 +21,7 @@ export class Piece implements PieceType {
     pieceMoves: PieceType['pieceMoves'];
     pieceFuel: PieceType['pieceFuel'];
     pieceContents?: PieceType['pieceContents'];
-    isPieceDisabled?: PieceType['isPieceDisabled'];
+    isPieceDisabled: PieceType['isPieceDisabled'];
 
     constructor(pieceId: PieceType['pieceId']) {
         this.pieceId = pieceId;
@@ -31,8 +31,8 @@ export class Piece implements PieceType {
      * Gets information from database about this piece.
      */
     async init() {
-        let queryString = 'SELECT * FROM pieces WHERE pieceId = ?';
-        let inserts = [this.pieceId];
+        const queryString = 'SELECT * FROM pieces WHERE pieceId = ?';
+        const inserts = [this.pieceId];
         const [pieceRows] = await pool.query<RowDataPacket[] & PieceType[]>(queryString, inserts);
 
         if (pieceRows.length !== 1) {
@@ -41,11 +41,42 @@ export class Piece implements PieceType {
 
         Object.assign(this, pieceRows[0]);
 
-        queryString = 'SELECT * FROM goldenEyePieces WHERE pieceId = ?';
-        inserts = [this.pieceId];
-        const [goldenRows] = await pool.query<RowDataPacket[] & GoldenEyeType[]>(queryString, inserts);
+        // Set initial value
+        this.isPieceDisabled = 0;
 
-        this.isPieceDisabled = goldenRows.length !== 0;
+        // select any active effects on this piece then add them to activeEffects
+        const [goldeneyeRows] = await pool.query<RowDataPacket[] & GoldenEyeType[]>('SELECT * FROM goldenEye WHERE goldeneyeId IN (SELECT goldeneyeId FROM goldeneyePieces WHERE pieceId = ?)', this.pieceId);
+        const [newsEffectRows] = await pool.query<RowDataPacket[] & NewsEffectType[]>('SELECT * FROM newsEffects WHERE newsEffectId IN (SELECT newsEffectId FROM newsEffectPieces WHERE pieceId = ?)', this.pieceId);
+
+        const activeEffects: { id: number; rounds: number; }[] = [];
+        if (goldeneyeRows.length > 0) {
+            for (let x = 0; x < goldeneyeRows.length; x++) {
+                activeEffects.push({ id: goldeneyeRows[x].goldenEyeId, rounds: goldeneyeRows[x].roundsLeft });
+            }
+        }
+
+
+        if (newsEffectRows.length > 0) {
+            for (let x = 0; x < newsEffectRows.length; x++) {
+                const newsEffectValue = NEWS_EFFECTS[newsEffectRows[x].newsEffectType];
+                const freezeType = NEWS_EFFECTS[TYPE_FREEZE_POSITIONS];
+                if (newsEffectValue === freezeType) {
+                activeEffects.push({ id: newsEffectRows[x].newsEffectId, rounds: newsEffectRows[x].roundsLeft });
+                }
+            }
+        }
+
+        const findMaxValueId = () => {
+            activeEffects.sort((a, b) => a.rounds - b.rounds);
+            return activeEffects[0].id;
+        };
+
+        // If there are any active effects on this piece to disable it set its value to the effect with the most rounds left
+        if (activeEffects.length > 0) {
+            this.isPieceDisabled = Math.max(...activeEffects.map(findMaxValueId));
+        }
+
+        // this.priorityEffect();
 
         return this;
     }
@@ -194,6 +225,43 @@ export class Piece implements PieceType {
         const deletePlansQuery = 'DELETE FROM plans WHERE planGameId = ? AND planMovementOrder = ?';
         await conn.query(deletePlansQuery, inserts);
 
+        // handle if piece moved into newsEffect disabled position
+        const disabledPositions: number[] = [];
+        const newsEffectQuery = 'SELECT * FROM newsEffects WHERE newsEffectGameId = ?';
+        const newsInserts = [gameId];
+        const [newsResults] = await conn.query<RowDataPacket[] & NewsEffectType[]>(newsEffectQuery, newsInserts);
+
+        for (let z = 0; z < newsResults.length; z++) {
+            if (newsResults.length > 0) {
+                const newsEffectValue = NEWS_EFFECTS[newsResults[z].newsEffectType];
+                const freezeType = NEWS_EFFECTS[TYPE_FREEZE_POSITIONS];
+                if (newsEffectValue === freezeType) {
+                    const positionQuery = 'SELECT positionId FROM newsEffectPositions WHERE newsEffectId = ?';
+                    const positionInserts = [newsResults[z].newsEffectId];
+                    const [positionResults] = await conn.query<RowDataPacket[] & NewsEffectPositionType[]>(positionQuery, positionInserts);
+                    for (let x = 0; x < positionResults.length; x++) {
+                        const effectedPosition = positionResults[x];
+                        const { positionId } = effectedPosition;
+                        disabledPositions.push(positionId);
+                    }
+                    const selectQuery = 'SELECT pieceId FROM pieces WHERE pieceGameId = ? AND piecePositionId in (?)';
+                    const pieceInserts = [gameId, disabledPositions];
+                    const disabledPieces = await conn.query<RowDataPacket[] & PieceType[]>(selectQuery, pieceInserts);
+
+                    for (let x = 0; x < disabledPieces.length; x++) {
+                        // const insertQuery = 'INSERT INTO newsEffectPieces (newsEffectId, pieceId) VALUES (?,?)';
+                        const insertQuery = 'INSERT INTO newseffectpieces (newsEffectId, pieceId) SELECT ?,? WHERE NOT EXISTS (SELECT * FROM newseffectpieces WHERE newsEffectId = ? AND pieceID = ?);';
+                        const disabledPiece: any = disabledPieces[x];
+                        const { pieceId } = disabledPiece;
+                        const { newsEffectId } = newsResults[z];
+                        const intoInserts = [newsEffectId, pieceId, newsEffectId, pieceId];
+                        await pool.query<OkPacket>(insertQuery, intoInserts);
+                        await new Piece(pieceId).init();
+                    }
+                }
+            }
+        }
+
         // handle if the pieces moved into a bio / nuclear place
         let queryString = 'SELECT * FROM biologicalWeapons WHERE gameId = ? AND activated = 1';
         const moreInserts = [gameId];
@@ -254,22 +322,42 @@ export class Piece implements PieceType {
 
         // TODO: dealing with weird datatype with join...
         queryString =
-            'SELECT pieceId FROM goldenEyePieces NATURAL JOIN pieces WHERE goldenEyePieces.pieceId = pieces.pieceId AND pieces.pieceGameId = ?';
+            'SELECT pieceId, goldenEyeId FROM goldenEyePieces NATURAL JOIN pieces WHERE goldenEyePieces.pieceId = pieces.pieceId AND pieces.pieceGameId = ?';
         inserts = [gameId];
-        const [pieceIdsStuck] = await pool.query<RowDataPacket[]>(queryString, inserts);
-        const allPieceIdsStuck = [];
-        for (let x = 0; x < pieceIdsStuck.length; x++) {
-            allPieceIdsStuck.push(pieceIdsStuck[x].pieceId);
+        type QueryResult = {
+            pieceId: PieceType['pieceId'];
+            effectId: GoldenEyeType['goldenEyeId'];
+        };
+        const [goldenEyePiecesStuck] = await pool.query<RowDataPacket[] & QueryResult[]>(queryString, inserts);
+        const allPiecesStuck: { pieceId: number; effectId: number; }[] = [];
+        for (let x = 0; x < goldenEyePiecesStuck.length; x++) {
+            allPiecesStuck.push({ pieceId: goldenEyePiecesStuck[x].pieceId, effectId: goldenEyePiecesStuck[x].goldenEyeId });
+        }
+
+        // newsEffect query
+        queryString =
+            'SELECT pieceId, newsEffectId FROM newsEffectPieces NATURAL JOIN pieces WHERE newsEffectPieces.pieceId = pieces.pieceId AND pieces.pieceGameId = ?';
+        inserts = [gameId];
+        type NewsQueryResult = {
+            pieceId: PieceType['pieceId'];
+            effectId: NewsEffectType['newsEffectId'];
+        };
+        const [newsEffectPiecesStuck] = await pool.query<RowDataPacket[] & NewsQueryResult[]>(queryString, inserts);
+        for (let x = 0; x < newsEffectPiecesStuck.length; x++) {
+            allPiecesStuck.push({ pieceId: newsEffectPiecesStuck[x].pieceId, effectId: newsEffectPiecesStuck[x].newsEffectId });
         }
 
         // format for the client state
         const allPieces: { [positionIndex: number]: PieceType[] } = {};
         for (let x = 0; x < results.length; x++) {
             const currentPiece = results[x];
-            if (allPieceIdsStuck.includes(currentPiece.pieceId)) {
-                currentPiece.isPieceDisabled = true;
+
+            const stuckPiece = allPiecesStuck.find(obj => obj.pieceId === currentPiece.pieceId);
+            if (stuckPiece !== undefined) {
+                currentPiece.isPieceDisabled = stuckPiece.effectId;
             } else {
-                currentPiece.isPieceDisabled = false;
+                // set to false or not stuck
+                currentPiece.isPieceDisabled = 0;
             }
             currentPiece.pieceContents = { pieces: [] };
             if (!allPieces[currentPiece.piecePositionId]) {
@@ -303,6 +391,7 @@ export class Piece implements PieceType {
             }
         }
 
+        // TODO possibly set unstuck piece isPieceDisabled variable to 0 here
         return allPieces;
     }
 
@@ -822,4 +911,14 @@ export class Piece implements PieceType {
 
         return listOfDeletedPieces;
     }
+
+    // async updateNewsEffects(gameId: GameType['gameId'], effectId: number) {
+    //     const conn = await pool.getConnection();
+
+    //     if (this.isPieceDisabled === 0) {
+    //         const queryString = 'UPDATE pieces SET pieceIsDisabled = ? WHERE pieceGameId = ? AND pieceId = ?';
+    //         const inserts = [effectId, gameId, this.pieceId];
+    //         await conn.query(queryString, inserts);
+    //     }
+    // }
 }
