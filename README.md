@@ -12,7 +12,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-NodeJS is used on both the server and client. NPM is used for installing and dependency tracking. It should, however, be included when you install Node. MySQL is used for the database. This can be installed locally or accessed externally.
+NodeJS is used as the overall backend, and also serves frontend files. NPM is used for installing and dependency tracking. It should, however, be included when you install Node. MySQL is used for the database. This can be installed locally or accessed externally.
 
 ```
 node
